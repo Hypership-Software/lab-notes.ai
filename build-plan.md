@@ -317,7 +317,7 @@ export function getPlaybookSlugs(): readonly string[]
 
   The imports may fail until Task 3 creates content. Use a temporary schema-valid fixture local to the registry test, not an incomplete production playbook.
 
-- [ ] Create `scripts/validate-content.mts` to parse all registered definitions, detect duplicate IDs, verify local sample SHA-256 values, verify every recorded finding citation, and exit non-zero with source-specific messages.
+- [ ] Create `scripts/validate-content.mts` to parse all registered definitions, detect duplicate slugs and source IDs, verify local sample SHA-256 values, and exit non-zero with source-specific messages. Extend this validator in Task 5 to verify recorded findings and citations after their fixture schemas exist.
 
   Expose testable functions and keep only the CLI entry point responsible for process exit:
 
