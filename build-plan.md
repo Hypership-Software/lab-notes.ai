@@ -373,7 +373,7 @@ export function getPlaybookSlugs(): readonly string[]
 
 ### Steps
 
-- [ ] Write the inventory test first. Assert the exact slug set, count of seventeen, one and only one `recorded-demo`, sixteen `assessed` entries, no `live-local` or `partner` demo, and `very-high` risk plus `demo.availability: "none"` for `violence-risk-research`.
+- [ ] Write the inventory test first. Assert the exact slug set, count of seventeen, seventeen honest `assessed` entries, no public demo yet, and `very-high` risk plus `demo.availability: "none"` for `violence-risk-research`. Task 10 promotes Policy Evidence to the single `recorded-demo` only after its fixtures, output, citations, and hashes exist.
 
   ```ts
   const expectedSlugs = [
@@ -403,7 +403,7 @@ export function getPlaybookSlugs(): readonly string[]
   npm run test -- content/playbooks/content.test.ts
   ```
 
-- [ ] Write `policy-evidence/playbook.ts` as the complete reference definition. Use `maturity: "recorded-demo"`, `dataAccessibility: "public-readonly"`, `risk: "moderate"`, and `demo.availability: "recorded"`. The public benefit must be qualitative. The supported decision is whether a theme deserves further policy-team investigation, not what policy to adopt.
+- [ ] Write `policy-evidence/playbook.ts` as the complete assessed reference definition. Use `maturity: "assessed"`, `dataAccessibility: "public-readonly"`, `risk: "moderate"`, and `demo.availability: "none"` until Task 10 records and verifies the exemplar. The public benefit must be qualitative. The supported decision is whether a theme deserves further policy-team investigation, not what policy to adopt.
 
 - [ ] Add the two initial official references to the policy-evidence source register:
 
