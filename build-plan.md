@@ -700,31 +700,156 @@ export function getCatalogueFilterOptions(
 **Files**
 
 - Create: `app/playbooks/[slug]/page.tsx`
-- Create: `app/playbooks/[slug]/loading.tsx`
 - Create: `app/not-found.tsx`
 - Create: `features/playbooks/detail/playbook-detail.tsx`
 - Create: `features/playbooks/detail/metadata-rail.tsx`
 - Create: `features/playbooks/detail/source-register.tsx`
 - Create: `features/playbooks/detail/maturity-ladder.tsx`
 - Create: `features/playbooks/detail/demo-readiness.tsx`
+- Create: `features/playbooks/detail/synthetic-data-method.tsx`
+- Create: `features/playbooks/detail/evaluation-evidence.tsx`
 - Create: `features/playbooks/detail/implementation-index.tsx`
+- Create: `features/playbooks/detail/review-status.ts`
+- Create: `features/playbooks/detail/review-status.test.ts`
+- Create: `features/playbooks/detail/detail-primitives.test.tsx`
 - Create: `features/playbooks/detail/playbook-detail.test.tsx`
+- Modify: `app/globals.css`
 
-### Steps
+### Interfaces
 
-- [ ] Write tests first for the fixed eleven-section order, plain-English summary before technical detail, source publisher/title/access/reuse/caveat display, current maturity and missing-next-rung evidence, non-AI baseline, risk reasons, oversight and redress, recorded-demo action, no-demo reason, and last-reviewed date.
+Derive component inputs from `Playbook`; do not define a second detail-page content model.
+
+```ts
+export type ReviewStatus =
+  | { status: "current"; reviewedAt: string; reviewDueAt: string }
+  | { status: "review-needed"; reviewedAt: string; reviewDueAt: string }
+
+export function getReviewStatus(
+  lastReviewed: string,
+  now: Date,
+): ReviewStatus
+
+export function MetadataRail(props: {
+  playbook: Playbook
+  reviewStatus: ReviewStatus
+}): ReactNode
+
+export function SourceRegister(props: {
+  sources: Playbook["officialSources"]
+}): ReactNode
+
+export function MaturityLadder(props: {
+  maturity: Playbook["maturity"]
+  nextValidationSteps: Playbook["nextValidationSteps"]
+}): ReactNode
+
+export function DemoReadiness(props: {
+  demo: Playbook["demo"]
+  nextValidationSteps: Playbook["nextValidationSteps"]
+}): ReactNode
+
+export function SyntheticDataMethod(props: {
+  syntheticData: Playbook["syntheticData"]
+}): ReactNode
+
+export function EvaluationEvidence(props: {
+  evaluation: Playbook["evaluation"]
+}): ReactNode
+
+export function ImplementationIndex(props: {
+  implementation: Playbook["implementation"]
+  references: Playbook["references"]
+}): ReactNode
+
+export function PlaybookDetail(props: {
+  playbook: Playbook
+  reviewStatus: ReviewStatus
+}): ReactNode
+```
+
+### 7.1 Make review status deterministic
+
+- [ ] Write `review-status.test.ts` first. Cover the day before, exact twelve-month anniversary, first day after the anniversary, and a leap-day review. The exact anniversary remains current; only a later UTC date is review-needed. Pass `now` explicitly instead of mocking global time.
 
 - [ ] Run the focused test and confirm failure.
 
   ```bash
-  npm run test -- features/playbooks/detail
+  npm run test -- features/playbooks/detail/review-status.test.ts
   ```
 
-- [ ] Implement the detail primitives as Server Components. Use a semantic definition list for metadata, a table on wide layouts with a stacked representation at narrow widths for sources, and ordered headings matching `DESIGN.md` section 7.
+- [ ] Implement `getReviewStatus`. Parse the ISO date at UTC midnight, calculate the calendar anniversary in UTC, and clamp 29 February to the last valid day of February in a non-leap year. Return the recorded and due dates as ISO dates so presentation code can format them without losing provenance.
 
-- [ ] Implement the dynamic page with build-time slugs and generated metadata.
+- [ ] Run the focused test and commit the pure date rule.
 
-  ```ts
+  ```bash
+  npm run test -- features/playbooks/detail/review-status.test.ts
+  git add features/playbooks/detail/review-status.ts features/playbooks/detail/review-status.test.ts
+  git commit -m "feat: define playbook review status"
+  ```
+
+### 7.2 Build the reusable dossier primitives
+
+- [ ] Write `detail-primitives.test.tsx` first. Assert that:
+
+  - metadata exposes maturity, data accessibility, risk and reasons, sector, technical patterns, the exact review date, and review-needed text when applicable;
+  - every source dossier exposes publisher, jurisdiction, title, canonical link, type, covered period, access date, reuse status, purpose, transformations, caveats, and optional local sample/hash together;
+  - the maturity ladder marks exactly one current rung and presents `nextValidationSteps` as work still required;
+  - `DemoReadiness` handles `none`, `recorded`, `live-local`, and `partner` exhaustively, including warnings and limitations;
+  - synthetic-data and evaluation components render every discriminated-union variant without implying unavailable evidence;
+  - the implementation index exposes architecture, inputs, outputs, reusable parts, partner requirements, and references.
+
+- [ ] Run the focused test and confirm failure.
+
+  ```bash
+  npm run test -- features/playbooks/detail/detail-primitives.test.tsx
+  ```
+
+- [ ] Implement the primitives as Server Components. Reuse `StatusBadge`, `RiskBadge`, `ExternalLink`, and `ProvenanceLabel`. Render sources once as an ordered list of `<article>` dossiers containing definition lists; use CSS Grid to make them compact on wide layouts and stack the same markup on narrow layouts.
+
+- [ ] Keep schema variants exhaustive. Use `never` assertions in `DemoReadiness`, `SyntheticDataMethod`, and `EvaluationEvidence` so a new variant fails typecheck until its public explanation is designed.
+
+- [ ] Run the focused test and commit the primitives.
+
+  ```bash
+  npm run test -- features/playbooks/detail/detail-primitives.test.tsx
+  git add features/playbooks/detail
+  git commit -m "feat: add playbook dossier primitives"
+  ```
+
+### 7.3 Compose the fixed evidence sequence
+
+- [ ] Write `playbook-detail.test.tsx` first using a registered playbook fixture. Assert one `h1`; the exact eleven `h2` headings in the order specified by `DESIGN.md`; the summary before technical detail; and visible problem, intended users, supported decision, public benefit, synthetic method, non-AI baseline, evaluation state, limitations, failure modes, human-review point, escalation, and redress.
+
+- [ ] Run the focused test and confirm failure.
+
+  ```bash
+  npm run test -- features/playbooks/detail/playbook-detail.test.tsx
+  ```
+
+- [ ] Implement `PlaybookDetail` as one semantic document. Give each numbered section a stable fragment ID. Preserve the document order at every breakpoint; the desktop metadata rail, narrative column, and evidence notes are visual CSS-grid placements rather than duplicate markup.
+
+- [ ] Extend `app/globals.css` only with selectors required by the dossier layout, using the existing design tokens. Include visible focus states, print-safe borders, forced-colours support, readable measures, and responsive stacking without horizontal overflow.
+
+- [ ] Run the focused detail tests and commit the composition.
+
+  ```bash
+  npm run test -- features/playbooks/detail
+  git add features/playbooks/detail app/globals.css
+  git commit -m "feat: compose comparable playbook dossiers"
+  ```
+
+### 7.4 Add the static route, metadata, and 404
+
+- [ ] Implement the parameterised route with build-time slugs and generated metadata. Use Next.js's generated route helper so the route parameter stays coupled to the file-system route.
+
+  ```tsx
+  import type { Metadata } from "next"
+  import { notFound } from "next/navigation"
+
+  import { PlaybookDetail } from "@/features/playbooks/detail/playbook-detail"
+  import { getReviewStatus } from "@/features/playbooks/detail/review-status"
+  import { getPlaybook, getPlaybookSlugs } from "@/lib/playbooks/registry"
+
   export const dynamicParams = false
 
   export function generateStaticParams() {
@@ -733,9 +858,7 @@ export function getCatalogueFilterOptions(
 
   export async function generateMetadata({
     params,
-  }: {
-    params: Promise<{ slug: string }>
-  }): Promise<Metadata> {
+  }: PageProps<"/playbooks/[slug]">): Promise<Metadata> {
     const { slug } = await params
     const playbook = getPlaybook(slug)
     if (!playbook) return {}
@@ -744,34 +867,45 @@ export function getCatalogueFilterOptions(
 
   export default async function PlaybookPage({
     params,
-  }: {
-    params: Promise<{ slug: string }>
-  }) {
+  }: PageProps<"/playbooks/[slug]">) {
     const { slug } = await params
     const playbook = getPlaybook(slug)
     if (!playbook) notFound()
-    return <PlaybookDetail playbook={playbook} />
+
+    return (
+      <PlaybookDetail
+        playbook={playbook}
+        reviewStatus={getReviewStatus(playbook.lastReviewed, new Date())}
+      />
+    )
   }
   ```
 
-- [ ] Build the designed `app/not-found.tsx` with one sentence, a catalogue link, and no search-engine jargon. The loading route may use a static dossier skeleton but must not conceal content that is already local at build time.
+- [ ] Build `app/not-found.tsx` with a plain-English sentence and one catalogue link. Do not add `app/playbooks/[slug]/loading.tsx`: every dossier is local, validated, and statically rendered.
 
-- [ ] Make source entries address staleness. If `lastReviewed` is more than twelve months before the build's UTC date, display **Review needed** with the exact recorded date. Unit-test the date function using a passed `now` value rather than mocking global time.
-
-- [ ] Run focused tests, content validation, typecheck, and production build. Confirm all seventeen paths appear in build output and an unknown slug returns 404.
+- [ ] Run focused tests, content validation, type generation/typecheck, lint, and the production build. Confirm the build emits the static playbook route and the registry still contains seventeen unique slugs.
 
   ```bash
   npm run test -- features/playbooks/detail
   npm run validate:content
   npm run typecheck
+  npm run lint
   npm run build
   ```
 
-- [ ] Commit the detail route.
+- [ ] Start the production server and perform a bounded manual verification: one assessed dossier at desktop and mobile widths, print preview, keyboard focus order, forced colours, JavaScript disabled, every external-source accessible name, and an unknown slug returning HTTP 404. This is a manual acceptance pass, not an automated browser-test suite.
+
+- [ ] Run the Impeccable interface detector once against the completed route, resolve real findings, then run the full repository check.
 
   ```bash
-  git add app/playbooks/[slug] app/not-found.tsx features/playbooks/detail
-  git commit -m "feat: add comparable playbook dossiers"
+  npm run check
+  ```
+
+- [ ] Commit the route and final presentation changes.
+
+  ```bash
+  git add app/playbooks/[slug]/page.tsx app/not-found.tsx app/globals.css features/playbooks/detail
+  git commit -m "feat: publish static playbook dossiers"
   ```
 
 ---

@@ -173,6 +173,21 @@ Every playbook page uses this order:
 
 The order is a governance feature: attractive output may not appear without its data and evidence context nearby.
 
+### Detail-page rendering contract
+
+The eleven-section sequence is also the document order. Each page has one `h1`, one labelled section for every item above, and stable fragment IDs so a source, caveat, or implementation note can be linked directly. The small-screen reading order is the source of truth; the desktop 3/6/3 dossier layout is produced with CSS Grid, not a second copy of the content or breakpoint-driven DOM reordering.
+
+**At a glance** contains maturity, data accessibility, risk, sector, technical patterns, and review status. The summary immediately below the title is the first explanatory prose. The source register and evaluation evidence remain in their numbered sections rather than being promoted into decorative sidebars ahead of the problem statement.
+
+The page renders every state in the content schema:
+
+- `none` explains the evidence, data, or risk barrier and presents the next validation steps;
+- `recorded` links to the checked-in demonstration and states its recording date, model label, and limitations;
+- `live-local` links to local setup guidance and shows the supplied warning;
+- `partner` explains why a controlled integration is required.
+
+The maturity ladder marks the current rung and uses `nextValidationSteps` as the evidence for what remains to reach a more credible state. It must not imply that later rungs have been achieved.
+
 ## 8. Catalogue inventory
 
 The initial inventory translates the strategy examples into contribution-sized playbooks. Names are working, plain-English labels rather than claims about deployed systems. Data accessibility and risk are provisional assessments until each source register is researched.
@@ -290,6 +305,8 @@ Every official source entry records:
 - caveats and staleness notes.
 
 A source URL alone is insufficient. If reuse terms are unclear, the playbook records that uncertainty and commits only a minimal fact or structure necessary for analysis.
+
+The interface presents sources as an ordered list of semantic source dossiers. Each dossier uses a heading, an external link, and a definition list for publisher, jurisdiction, source type, covered period, access date, reuse status, local sample and hash when present, purpose, transformations, and caveats. Wide layouts may arrange those fields in a compact grid; narrow layouts stack the same elements. Do not maintain separate table and mobile-card markup.
 
 ### One-off sourcing approach
 
@@ -512,8 +529,8 @@ The implementation uses `next/font/google` for deterministic font loading and ex
 
 - 12-column desktop grid, 6-column tablet grid, 4-column mobile grid.
 - Maximum content width: `90rem`; long-form measure remains narrower.
-- Standard desktop detail layout: 3-column metadata rail, 6-column narrative, 3-column evidence notes.
-- Mobile order: title and status, plain-English narrative, demonstration, evidence, metadata, technical detail.
+- Standard desktop detail layout: 3-column metadata rail, 6-column narrative, 3-column evidence notes. Visual placement never changes the semantic section order.
+- Mobile order: title, summary, and status followed by the fixed eleven-section playbook sequence. Metadata and evidence remain inside their corresponding sections.
 - Spacing uses a 4px base with principal steps of `4, 8, 12, 16, 24, 32, 48, 64, 96px`.
 - Corners are modest: `4px` for evidence markers, `8px` for controls and sheets, `12px` maximum for large working surfaces.
 - Shadows are rare and indicate an active layer; structure normally comes from background, rules, and spacing.
@@ -605,7 +622,7 @@ These terms appear in navigation, legends, downloadable filenames, and accessibl
 
 ### Dates and staleness
 
-Display source access date and playbook review date in human-readable form while keeping ISO dates in metadata. A playbook more than twelve months past `lastReviewed` displays a review-needed note; it does not silently disappear.
+Display source access date and playbook review date in human-readable form while keeping ISO dates in metadata. Treat `lastReviewed` as a UTC calendar date. A playbook remains current through its twelve-month anniversary and displays **Review needed** only after that date; anniversary calculation clamps leap-day reviews to the final valid day of February. The status includes the exact recorded review date and never implies that an external source was checked live.
 
 ## 15. States and failure handling
 
@@ -633,7 +650,7 @@ Display source access date and playbook review date in human-readable form while
 
 ### Loading
 
-Most content is build-time data and should not need route-level spinners. Use a skeleton only for genuine client transitions. Never replace the core explanation with a loading state.
+Playbook detail content is local, validated, and rendered at build time, so the detail route has no `loading.tsx` boundary or dossier skeleton. Add a loading treatment only if a future client transition performs genuine asynchronous work, and never replace the core explanation with a loading state.
 
 ## 16. Accessibility and inclusion
 
