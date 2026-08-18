@@ -88,7 +88,7 @@ tests/                         unit and focused semantic component checks
 
   ```bash
   npm install zod
-  npm install -D vitest @vitejs/plugin-react jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom @testing-library/user-event vite-tsconfig-paths tsx
+  npm install -D vitest @vitejs/plugin-react@^5.2.0 jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom @testing-library/user-event tsx
   ```
 
 - [ ] Confirm the existing accessibility lint layer rather than adding a second tool.
@@ -108,11 +108,13 @@ tests/                         unit and focused semantic component checks
 
   ```ts
   import react from "@vitejs/plugin-react"
-  import tsconfigPaths from "vite-tsconfig-paths"
   import { defineConfig } from "vitest/config"
 
   export default defineConfig({
-    plugins: [tsconfigPaths(), react()],
+    plugins: [react()],
+    resolve: {
+      tsconfigPaths: true,
+    },
     test: {
       environment: "jsdom",
       setupFiles: ["./vitest.setup.ts"],
