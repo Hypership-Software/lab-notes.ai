@@ -7,3 +7,19 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+# Project rules
+
+- Read `PRODUCT.md`, `DESIGN.md`, and `build-plan.md` before changing product behaviour, content structure, or visual design.
+- Keep this repository as one Next.js application with one package manifest and one deployment unit. Feature and content folders are internal module boundaries, not separate apps or packages.
+- Public-facing content must use plain English. Technical implementation detail should be available through progressive disclosure and repository links.
+- Every playbook must use the shared typed schema and retain the fixed provenance, baseline, evaluation, risk, human-oversight, and limitation fields.
+- Hosted examples use one-off, permissible official source samples to inform deterministic synthetic fixtures. Do not add production data pipelines, runtime model calls, or required API keys without an approved design change.
+- Visibly distinguish official source samples, synthetic working data, recorded AI-assisted output, deterministic non-AI baselines, and human review state.
+- Never commit secrets, credentials, private endpoints, personal names, personal local paths, or sensitive person-level data.
+- Add shadcn/ui primitives through the CLI and keep generated primitives separate from project-specific components.
+- Prefer Server Components. Add `"use client"` only at the smallest interactive boundary.
+- Domain logic must remain framework-agnostic and receive unit tests. Synchronous components may receive focused semantic component tests; async Server Components are verified through typecheck, production builds, and manual route review.
+- Do not add Playwright or another automated browser-test harness. Accessibility automation comes from the existing Next.js ESLint configuration, including `eslint-plugin-jsx-a11y`; complete flows, no-JavaScript readability, keyboard use, zoom, reduced motion, and forced colours are release-review checks.
+- WCAG 2.2 AA, keyboard operation, visible focus, reduced motion, forced colours, 200% zoom, and a no-JavaScript core explanation are acceptance requirements.
+- Keep local Superpowers working specifications in `docs/superpowers/`; that directory is intentionally ignored. Product, design, and build-plan documents at the repository root are tracked project artefacts.
