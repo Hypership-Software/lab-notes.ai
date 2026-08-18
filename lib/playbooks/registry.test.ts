@@ -125,16 +125,17 @@ describe("createPlaybookRegistry", () => {
     expect(registry.getPlaybook("missing-service")).toBeUndefined()
   })
 
-  it("projects catalogue summaries without the full narrative or source register", () => {
+  it("projects searchable catalogue summaries without the source register", () => {
     const registry = createPlaybookRegistry([alpha])
     const [summary] = registry.getPlaybookSummaries()
 
     expect(summary).toMatchObject({
       slug: "alpha-service",
       title: "Alpha Service",
+      problem:
+        "A public-service team needs a clearer and more inspectable evidence process.",
       maturity: "assessed",
     })
-    expect(summary).not.toHaveProperty("problem")
     expect(summary).not.toHaveProperty("officialSources")
     expect(Object.isFrozen(registry.getPlaybookSummaries())).toBe(true)
   })

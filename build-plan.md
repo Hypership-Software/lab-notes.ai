@@ -629,7 +629,7 @@ export function getCatalogueFilterOptions(
 
 ### Steps
 
-- [ ] Write component tests first. Cover the home-page evidence chain order, the primary catalogue action, the recorded-demo label, all seventeen catalogue items without active filters, result-count announcement, filter clearing, accessible dossier-row names, and the method page's five evidence-maturity rungs.
+- [ ] Write component tests first. Cover the home-page evidence chain order, the primary catalogue action, the Policy Evidence assessment label and recording barrier, all seventeen catalogue items without active filters, result-count announcement, filter clearing, accessible dossier-row names, and the method page's five evidence-maturity rungs.
 
 - [ ] Run the tests and confirm failure.
 
@@ -643,7 +643,7 @@ export function getCatalogueFilterOptions(
 
   1. proposition and independence qualifier;
   2. evidence chain;
-  3. Policy Evidence Workbench feature with a **Recorded demonstration** label;
+  3. Policy Evidence Workbench feature with its current **Assessed concept** label and a plain recording-readiness barrier until Task 10;
   4. a short catalogue preview representing different maturity, risk, and data-access conditions;
   5. method and contribution prompts.
 

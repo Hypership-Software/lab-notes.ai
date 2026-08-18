@@ -1,69 +1,109 @@
-import Image from "next/image";
+import { ArrowRight, FileSearch, Scale } from "lucide-react"
+import Link from "next/link"
 
-export default function Home() {
+import { EvidenceChain } from "@/components/site/evidence-chain"
+import { RiskBadge } from "@/components/site/risk-badge"
+import { StatusBadge } from "@/components/site/status-badge"
+import { getPlaybook } from "@/lib/playbooks/registry"
+
+export default function HomePage() {
+  const exemplar = getPlaybook("policy-evidence")
+
+  if (!exemplar) throw new Error("Policy Evidence playbook is not registered")
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="page-shell home-page">
+      <section className="home-intro" aria-labelledby="home-title">
+        <div className="home-intro__copy">
+          <h1 id="home-title">Public-service AI ideas, made inspectable.</h1>
+          <p className="home-intro__lede">
+            Seventeen proposals from Northern Ireland&apos;s draft AI strategy,
+            translated into plain-English playbooks with sources, data reality,
+            safer baselines, risks, and a practical route to validation.
+          </p>
+          <div className="action-row">
+            <Link className="primary-action" href="/playbooks">
+              Explore the playbooks
+              <ArrowRight aria-hidden="true" />
+            </Link>
+            <Link className="secondary-action" href="/method">
+              Read the method
+            </Link>
+          </div>
+        </div>
+        <aside className="inventory-note" aria-label="Current catalogue state">
+          <p className="inventory-note__title">Current evidence state</p>
+          <dl>
+            <div>
+              <dt>Strategy proposals</dt>
+              <dd>17</dd>
+            </div>
+            <div>
+              <dt>Assessed concepts</dt>
+              <dd>17</dd>
+            </div>
+            <div>
+              <dt>Recorded demonstrations</dt>
+              <dd>0</dd>
+            </div>
+          </dl>
+          <p>
+            Nothing here is presented as a deployed service. Maturity changes only
+            when the supporting artefacts exist.
+          </p>
+        </aside>
+      </section>
+
+      <EvidenceChain />
+
+      <section className="exemplar-section" aria-labelledby="exemplar-title">
+        <div className="section-heading">
+          <div>
+            <h2 id="exemplar-title">The first full exemplar</h2>
+            <p>
+              Policy Evidence Workbench will prove the complete pattern without a
+              live model, private data, or required API key.
+            </p>
+          </div>
+          <StatusBadge maturity={exemplar.maturity} />
+        </div>
+
+        <div className="exemplar-dossier">
+          <div className="exemplar-dossier__main">
+            <FileSearch aria-hidden="true" />
+            <h3>{exemplar.title}</h3>
+            <p>{exemplar.summary}</p>
+            <p className="decision-statement">
+              <strong>Supports review:</strong> {exemplar.supportedDecision}
+            </p>
+          </div>
+          <div className="exemplar-dossier__evidence">
+            <RiskBadge
+              level={exemplar.risk.level}
+              reasons={exemplar.risk.reasons}
+              descriptionId="home-exemplar-risk-reasons"
+            />
+            <p>{exemplar.demo.availability === "none" && exemplar.demo.reason}</p>
+            <Link href={`/playbooks/${exemplar.slug}`}>
+              Inspect the assessed playbook
+              <ArrowRight aria-hidden="true" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-close" aria-labelledby="home-close-title">
+        <Scale aria-hidden="true" />
+        <div>
+          <h2 id="home-close-title">AI is optional. Evidence is not.</h2>
+          <p>
+            Every future example must retain a deterministic non-AI baseline and
+            may conclude that data, service design, or human coordination should
+            come first.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+        <Link href="/contribute">See how to contribute</Link>
+      </section>
     </div>
-  );
+  )
 }
