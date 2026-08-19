@@ -23,7 +23,7 @@ function fixtureRows(syntheticData: Playbook["syntheticData"]) {
           </div>
           <div>
             <dt>Fixture</dt>
-            <dd>{syntheticData.fixturePath}</dd>
+            <dd data-technical>{syntheticData.fixturePath}</dd>
           </div>
         </>
       )

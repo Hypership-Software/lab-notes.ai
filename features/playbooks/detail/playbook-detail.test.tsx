@@ -15,19 +15,30 @@ const reviewStatus = {
   reviewDueAt: "2027-08-18",
 } as const
 
-const expectedHeadings = [
-  "At a glance",
-  "The public-service problem",
-  "Intended user and supported decision",
-  "Demonstration or demonstration-readiness assessment",
-  "Official sources",
-  "Source sample and synthetic-data method",
-  "Non-AI baseline",
-  "Evaluation and evidence maturity",
-  "Risks, human oversight, contestability, and redress",
-  "Technical implementation",
-  "References and contribution path",
-]
+// [fragment ID, heading] pairs transcribed from the spec's fixed
+// information architecture table
+// (docs/superpowers/specs/2026-08-18-playbook-detail-route-design.md:29-40),
+// so the tests pin the contract itself rather than merely the component's
+// self-consistency.
+const expectedSections = [
+  ["at-a-glance", "At a glance"],
+  ["public-service-problem", "The public-service problem"],
+  ["users-and-decision", "Intended user and supported decision"],
+  [
+    "demonstration-readiness",
+    "Demonstration or demonstration-readiness assessment",
+  ],
+  ["official-sources", "Official sources"],
+  ["synthetic-data-method", "Source sample and synthetic-data method"],
+  ["non-ai-baseline", "Non-AI baseline"],
+  ["evaluation-and-maturity", "Evaluation and evidence maturity"],
+  [
+    "risks-and-oversight",
+    "Risks, human oversight, contestability, and redress",
+  ],
+  ["technical-implementation", "Technical implementation"],
+  ["references-and-contribution", "References and contribution path"],
+] as const
 
 describe("PlaybookDetail", () => {
   it("renders one title and the fixed evidence sequence", () => {
@@ -38,7 +49,7 @@ describe("PlaybookDetail", () => {
       screen
         .getAllByRole("heading", { level: 2 })
         .map(({ textContent }) => textContent),
-    ).toEqual(expectedHeadings)
+    ).toEqual(expectedSections.map(([, heading]) => heading))
   })
 
   it("keeps plain-English evidence before technical implementation", () => {
@@ -69,17 +80,22 @@ describe("PlaybookDetail", () => {
     expect(screen.getAllByText(playbook.risk.reasons[0])).toHaveLength(1)
   })
 
-  it("offers a contents list that matches the document without JavaScript", () => {
+  it("offers a contents list whose fragment IDs match the spec's deep-link contract, without JavaScript", () => {
     render(<PlaybookDetail playbook={playbook} reviewStatus={reviewStatus} />)
 
     const contents = screen.getByRole("navigation", { name: "On this page" })
     const links = within(contents).getAllByRole("link")
     expect(links).toHaveLength(11)
 
-    for (const link of links) {
-      const fragment = link.getAttribute("href") ?? ""
-      expect(fragment.startsWith("#")).toBe(true)
-      expect(document.getElementById(fragment.slice(1))).not.toBeNull()
+    // Pin both the exact fragment ID and its heading text against the spec
+    // table, in document order — not just that each href resolves to *some*
+    // element within the same, possibly-drifted, document.
+    expect(links.map((link) => [link.getAttribute("href"), link.textContent])).toEqual(
+      expectedSections.map(([id, heading]) => [`#${id}`, heading]),
+    )
+
+    for (const [id] of expectedSections) {
+      expect(document.getElementById(id)).not.toBeNull()
     }
   })
 
@@ -122,11 +138,14 @@ describe("PlaybookDetail", () => {
     const references = screen.getByRole("region", {
       name: "References and contribution path",
     })
-    expect(within(references).queryByRole("list")).not.toBeInTheDocument()
-    expect(
-      within(references).getByRole("link", {
-        name: "Contribute an improvement to this playbook",
-      }),
-    ).toBeVisible()
+    // Assert on the actual invariant (no link other than /contribute), not
+    // on the absence of a `list` role — a proxy that would break the moment
+    // this section gained any other list that isn't a reference list.
+    const links = within(references).getAllByRole("link")
+    expect(links).toHaveLength(1)
+    expect(links[0]).toHaveAccessibleName(
+      "Contribute an improvement to this playbook",
+    )
+    expect(links[0]).toHaveAttribute("href", "/contribute")
   })
 })

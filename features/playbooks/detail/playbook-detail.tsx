@@ -14,11 +14,14 @@ import type { ReviewStatus } from "./review-status"
 import { SourceRegister } from "./source-register"
 import { SyntheticDataMethod } from "./synthetic-data-method"
 
-// Placement lanes for the desktop 12-column grid: a 3-column metadata rail,
-// a 6-column narrative, and a 3-column evidence column. CSS Grid places each
-// section by an explicit column range (no `order`), so document order stays
-// the single source of reading order at every breakpoint; only the visual
-// column assignment differs.
+// Placement lanes for the desktop 12-column grid: a 3-column metadata rail
+// (`rail`), a 6-column narrative lane for plain-English sections
+// (`narrative`), and the dense, evidence-heavy sections (`evidence`) span
+// both the narrative and evidence bands — 9 columns — so hashes, source
+// paths, and definition lists never sit alone in a 3-column-wide lane.
+// CSS Grid places each section by an explicit column range (no `order`), so
+// document order stays the single source of reading order at every
+// breakpoint; only the visual column assignment differs.
 type SectionPlacement = "rail" | "narrative" | "evidence"
 
 type Section = {
@@ -51,7 +54,7 @@ export function PlaybookDetail({
       content: <p className="reading-width">{playbook.problem}</p>,
     },
     {
-      id: "intended-user-and-supported-decision",
+      id: "users-and-decision",
       heading: "Intended user and supported decision",
       placement: "narrative",
       content: (
@@ -98,7 +101,7 @@ export function PlaybookDetail({
       ),
     },
     {
-      id: "source-sample-and-synthetic-data-method",
+      id: "synthetic-data-method",
       heading: "Source sample and synthetic-data method",
       placement: "evidence",
       content: <SyntheticDataMethod syntheticData={playbook.syntheticData} />,
@@ -123,7 +126,7 @@ export function PlaybookDetail({
       ),
     },
     {
-      id: "evaluation-and-evidence-maturity",
+      id: "evaluation-and-maturity",
       heading: "Evaluation and evidence maturity",
       placement: "evidence",
       content: (
@@ -137,7 +140,7 @@ export function PlaybookDetail({
       ),
     },
     {
-      id: "risks-human-oversight-contestability-and-redress",
+      id: "risks-and-oversight",
       heading: "Risks, human oversight, contestability, and redress",
       placement: "narrative",
       content: (
@@ -168,7 +171,7 @@ export function PlaybookDetail({
           </ul>
           <ProvenanceLabel kind="review" />
           <h3>Human oversight</h3>
-          <dl>
+          <dl className="human-oversight">
             <div>
               <dt>Responsible role</dt>
               <dd>{playbook.humanOversight.responsibleRole}</dd>
@@ -196,7 +199,7 @@ export function PlaybookDetail({
       content: <ImplementationIndex implementation={playbook.implementation} />,
     },
     {
-      id: "references-and-contribution-path",
+      id: "references-and-contribution",
       heading: "References and contribution path",
       placement: "narrative",
       content: (

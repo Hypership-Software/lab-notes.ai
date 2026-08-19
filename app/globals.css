@@ -1171,7 +1171,12 @@
   font-size: clamp(1.5rem, 2.5vw, 2.25rem);
 }
 
-.playbook-detail__section h3 {
+/* Direct-child combinator only: this composes the document's own h3s
+   (Supported decision, Public benefit, the baseline name, Human oversight),
+   not the h3s nested inside SourceRegister, DemoReadiness, or MaturityLadder
+   — those sit deeper than a direct child of the section and must keep each
+   primitive's own heading rhythm. */
+.playbook-detail__section > h3 {
   margin: 1.5rem 0 0.5rem;
   font-size: 1.1rem;
 }
@@ -1184,8 +1189,13 @@
   grid-column: 4 / span 6;
 }
 
+/* The dense, evidence-heavy sections (official sources, synthetic-data
+   method, evaluation and maturity, technical implementation) span the
+   narrative and evidence bands together — 9 of 12 columns — so hashes,
+   paths, and definition-list values get real width instead of being
+   stranded alone in a 3-column lane. */
 .playbook-detail__section--evidence {
-  grid-column: 10 / span 3;
+  grid-column: 4 / span 9;
 }
 
 .metadata-rail {
@@ -1201,19 +1211,6 @@
 .metadata-rail > div {
   display: grid;
   gap: 0.3rem;
-}
-
-.metadata-rail dt {
-  color: var(--muted-ink);
-  font-size: 0.72rem;
-  font-weight: 750;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.metadata-rail dd {
-  margin: 0;
-  font-size: 0.925rem;
 }
 
 .source-register {
@@ -1236,25 +1233,16 @@
   font-size: 1.15rem;
 }
 
+/* `auto-fit`/`minmax` rather than a fixed two-column track: this dl now
+   lives in the 9-column evidence lane, but the column count must still
+   answer to the dossier's own rendered width (accounting for its padding),
+   not an approximated viewport breakpoint — below two genuinely-fit 16rem
+   columns it collapses to one on its own, no media query required. */
 .source-dossier dl {
   margin: 1rem 0 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
   gap: 0.75rem 1.5rem;
-}
-
-.source-dossier dt {
-  color: var(--muted-ink);
-  font-size: 0.72rem;
-  font-weight: 750;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.source-dossier dd {
-  margin: 0;
-  font-size: 0.9rem;
-  overflow-wrap: anywhere;
 }
 
 .demo-readiness {
@@ -1282,17 +1270,51 @@
   overflow-wrap: anywhere;
 }
 
-.implementation-index dl {
+.evaluation-evidence > * + * {
+  margin-top: 1.5rem;
+}
+
+.evaluation-questions,
+.evaluation-limitations {
+  margin: 0.5rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.maturity-ladder-block > * + * {
+  margin-top: 1rem;
+}
+
+.maturity-next-steps {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.synthetic-data-method dl,
+.evaluation-metrics dl,
+.implementation-index dl,
+.human-oversight {
   margin: 1rem 0 0;
 }
 
-.implementation-index dl > div {
+.synthetic-data-method dl > div,
+.evaluation-metrics dl > div,
+.implementation-index dl > div,
+.human-oversight > div {
   padding-block: 0.6rem;
   border-top: 1px solid var(--line);
 }
 
-.implementation-index dt {
-  margin-bottom: 0.3rem;
+/* One shared definition-list treatment for every dt/dd pair this route
+   renders — metadata rail, source dossier, synthetic-data method,
+   evaluation metrics, implementation index, and human oversight — so a
+   dossier built for comparability presents one label/value structure
+   throughout, not a different one per component. */
+.metadata-rail dt,
+.source-dossier dt,
+.synthetic-data-method dt,
+.evaluation-metrics dt,
+.implementation-index dt,
+.human-oversight dt {
   color: var(--muted-ink);
   font-size: 0.72rem;
   font-weight: 750;
@@ -1300,13 +1322,37 @@
   text-transform: uppercase;
 }
 
-.implementation-index dd {
+.metadata-rail dd,
+.source-dossier dd,
+.synthetic-data-method dd,
+.evaluation-metrics dd,
+.implementation-index dd,
+.human-oversight dd {
   margin: 0;
+  font-size: 0.925rem;
+}
+
+/* Rows that stack dt above dd in plain block flow (rather than metadata
+   rail's/source dossier's own grid-gap spacing) need the gap set directly
+   on the term. */
+.synthetic-data-method dt,
+.evaluation-metrics dt,
+.implementation-index dt,
+.human-oversight dt {
+  margin-bottom: 0.3rem;
 }
 
 .implementation-index dd ul {
   margin: 0;
   padding-left: 1.25rem;
+}
+
+/* Hashes and file paths are marked `data-technical` at the source
+   (`source-register.tsx`, `synthetic-data-method.tsx`); this is the one
+   rule that wrapping requires beyond the existing `[data-technical]`
+   monospace treatment in the base layer. */
+dd[data-technical] {
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 64rem) {

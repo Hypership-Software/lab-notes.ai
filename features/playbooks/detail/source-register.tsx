@@ -55,11 +55,11 @@ export function SourceRegister({
                 <>
                   <div>
                     <dt>Local sample</dt>
-                    <dd>{source.localSamplePath}</dd>
+                    <dd data-technical>{source.localSamplePath}</dd>
                   </div>
                   <div>
                     <dt>SHA-256</dt>
-                    <dd>{source.sha256}</dd>
+                    <dd data-technical>{source.sha256}</dd>
                   </div>
                 </>
               ) : null}
