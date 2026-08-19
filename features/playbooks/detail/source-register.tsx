@@ -5,24 +5,7 @@ import { formatUtcDate } from "@/lib/format-date"
 import type { Playbook } from "@/lib/playbooks/schema"
 import { sourceTypeLabel } from "@/lib/playbooks/vocabulary"
 
-function sourceList(term: string, items: readonly string[]) {
-  if (items.length === 0) {
-    return null
-  }
-
-  return (
-    <div>
-      <dt>{term}</dt>
-      <dd>
-        <ul>
-          {items.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </dd>
-    </div>
-  )
-}
+import { DefinitionListRow } from "./definition-list-row"
 
 export function SourceRegister({
   sources,
@@ -84,8 +67,11 @@ export function SourceRegister({
                 <dt>Purpose</dt>
                 <dd>{source.purpose}</dd>
               </div>
-              {sourceList("Transformations", source.transformations)}
-              {sourceList("Caveats", source.caveats)}
+              <DefinitionListRow
+                term="Transformations"
+                items={source.transformations}
+              />
+              <DefinitionListRow term="Caveats" items={source.caveats} />
             </dl>
           </article>
         </li>

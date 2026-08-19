@@ -1,6 +1,7 @@
 import Link from "next/link"
 import type { ReactNode } from "react"
 
+import { ProvenanceLabel } from "@/components/site/provenance-label"
 import { assertNever } from "@/lib/assert-never"
 import { formatUtcDate } from "@/lib/format-date"
 import type { Playbook } from "@/lib/playbooks/schema"
@@ -18,7 +19,7 @@ export function DemoReadiness({
         <div className="demo-readiness" data-demo-availability="none">
           <h3>No demonstration yet</h3>
           <p>{demo.reason}</p>
-          <p>Work still required to reach a more credible maturity state:</p>
+          <p>What still needs to happen before a demonstration can exist:</p>
           <ul>
             {nextValidationSteps.map((step) => (
               <li key={step}>{step}</li>
@@ -29,14 +30,16 @@ export function DemoReadiness({
     case "recorded":
       return (
         <div className="demo-readiness" data-demo-availability="recorded">
+          <ProvenanceLabel kind="recorded" />
           <h3>Recorded demonstration</h3>
           <p>
             Recorded on{" "}
             <time dateTime={demo.recordedAt}>
               {formatUtcDate(demo.recordedAt)}
             </time>{" "}
-            using {demo.modelLabel}.
+            using {demo.modelLabel}, version {demo.modelVersion}.
           </p>
+          <p>Known limitations of this recording:</p>
           <ul>
             {demo.limitations.map((limitation) => (
               <li key={limitation}>{limitation}</li>
@@ -50,6 +53,9 @@ export function DemoReadiness({
         <div className="demo-readiness" data-demo-availability="live-local">
           <h3>Local demonstration only</h3>
           <p>{demo.warning}</p>
+          <p>
+            Local setup guidance: <code>{demo.setupPath}</code>
+          </p>
           <Link href={demo.route}>Open the local demonstration</Link>
         </div>
       )

@@ -4,24 +4,7 @@ import { ProvenanceLabel } from "@/components/site/provenance-label"
 import { assertNever } from "@/lib/assert-never"
 import type { Playbook } from "@/lib/playbooks/schema"
 
-function optionalListRow(term: string, items: readonly string[]) {
-  if (items.length === 0) {
-    return null
-  }
-
-  return (
-    <div>
-      <dt>{term}</dt>
-      <dd>
-        <ul>
-          {items.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </dd>
-    </div>
-  )
-}
+import { DefinitionListRow } from "./definition-list-row"
 
 function fixtureRows(syntheticData: Playbook["syntheticData"]) {
   switch (syntheticData.status) {
@@ -62,15 +45,18 @@ export function SyntheticDataMethod({
         <p>No synthetic fixture has been generated yet</p>
       ) : null}
       <dl>
-        {optionalListRow(
-          "Source characteristics",
-          syntheticData.sourceCharacteristics,
-        )}
-        {optionalListRow("Approximations", syntheticData.approximations)}
-        {optionalListRow("Alterations", syntheticData.alterations)}
-        {optionalListRow("Exclusions", syntheticData.exclusions)}
+        <DefinitionListRow
+          term="Source characteristics"
+          items={syntheticData.sourceCharacteristics}
+        />
+        <DefinitionListRow
+          term="Approximations"
+          items={syntheticData.approximations}
+        />
+        <DefinitionListRow term="Alterations" items={syntheticData.alterations} />
+        <DefinitionListRow term="Exclusions" items={syntheticData.exclusions} />
         {fixtureRows(syntheticData)}
-        {optionalListRow("Limitations", syntheticData.limitations)}
+        <DefinitionListRow term="Limitations" items={syntheticData.limitations} />
       </dl>
     </div>
   )

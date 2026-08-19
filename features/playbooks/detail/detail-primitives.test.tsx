@@ -156,7 +156,15 @@ describe("playbook detail primitives", () => {
   it("leaves risk reasons to the risks section", () => {
     render(<MetadataRail playbook={playbook} reviewStatus={reviewStatus} />)
 
-    expect(screen.queryByText(playbook.risk.reasons[0])).not.toBeInTheDocument()
+    // Scoped past the RiskBadge's own screen-reader-only description (which
+    // legitimately contains every reason, joined, for assistive technology)
+    // so this asserts the real invariant — no *visible* duplicate — rather
+    // than an accident of this fixture happening to have two reasons.
+    expect(
+      screen.queryByText(playbook.risk.reasons[0], {
+        ignore: "script, style, .sr-only",
+      }),
+    ).not.toBeInTheDocument()
   })
 
   it("renders every source field in one semantic dossier", () => {
@@ -244,6 +252,77 @@ describe("playbook detail primitives", () => {
     },
   )
 
+  it("marks a recorded demonstration as AI-assisted and states its model version", () => {
+    const recordedDemo = {
+      availability: "recorded",
+      route: demoRoute,
+      recordedOutputId: "recorded-output",
+      label: "Recorded demonstration",
+      recordedAt: "2026-08-18",
+      modelLabel: "Documented model",
+      modelVersion: "7",
+      promptSha256: hash,
+      inputSha256: hash,
+      limitations: [
+        "The recorded fixture cannot establish operational performance.",
+      ],
+    } satisfies Playbook["demo"]
+
+    render(
+      <DemoReadiness
+        demo={recordedDemo}
+        nextValidationSteps={playbook.nextValidationSteps}
+      />,
+    )
+
+    expect(screen.getByText("Recorded AI-assisted output")).toBeVisible()
+    expect(screen.getByText(/version 7/)).toBeVisible()
+    expect(
+      screen.getByText("Known limitations of this recording:"),
+    ).toBeVisible()
+  })
+
+  it("shows the local setup guidance path for a live-local demonstration", () => {
+    const liveLocalDemo = {
+      availability: "live-local",
+      route: demoRoute,
+      setupPath: "docs/local-demo.md",
+      warning:
+        "Local output is unverified and must not inform a public-service decision.",
+    } satisfies Playbook["demo"]
+
+    render(
+      <DemoReadiness
+        demo={liveLocalDemo}
+        nextValidationSteps={playbook.nextValidationSteps}
+      />,
+    )
+
+    expect(screen.getByText("docs/local-demo.md")).toBeVisible()
+  })
+
+  it("gives the none-availability next steps their own wording, distinct from the maturity ladder's", () => {
+    const noneDemo = {
+      availability: "none",
+      reason:
+        "Evidence and data gates are not complete enough for a demonstration.",
+    } satisfies Playbook["demo"]
+
+    render(
+      <DemoReadiness
+        demo={noneDemo}
+        nextValidationSteps={playbook.nextValidationSteps}
+      />,
+    )
+
+    expect(screen.getByText(playbook.nextValidationSteps[0])).toBeVisible()
+    expect(
+      screen.queryByText(
+        "Work still required to reach a more credible maturity state:",
+      ),
+    ).not.toBeInTheDocument()
+  })
+
   it("states that a planned synthetic method has produced no fixture", () => {
     render(<SyntheticDataMethod syntheticData={playbook.syntheticData} />)
 
@@ -275,7 +354,18 @@ describe("playbook detail primitives", () => {
     expect(screen.getByText(notRunEvaluation.reason)).toBeVisible()
     expect(screen.getByText(notRunEvaluation.questions[0])).toBeVisible()
     expect(screen.getByText(notRunEvaluation.limitations[0])).toBeVisible()
-    expect(screen.queryByText("Metrics")).not.toBeInTheDocument()
+    // Discriminates against the evaluated variants (queryByText("Metrics")
+    // would pass vacuously, since no state ever renders that literal word):
+    // a not-run evaluation must not leak a metric name that belongs to a
+    // fixture- or partner-evaluated render.
+    expect(screen.queryByText(metric.name)).not.toBeInTheDocument()
+  })
+
+  it("labels the evaluation questions and limitations lists", () => {
+    render(<EvaluationEvidence evaluation={notRunEvaluation} />)
+
+    expect(screen.getByText("Evaluation questions")).toBeVisible()
+    expect(screen.getByText("Limitations")).toBeVisible()
   })
 
   it("shows fixture-evaluated metrics and the labelled fixture", () => {

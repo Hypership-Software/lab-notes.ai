@@ -4,60 +4,64 @@ import { ExternalLink } from "@/components/site/external-link"
 import { assertNever } from "@/lib/assert-never"
 import type { Playbook } from "@/lib/playbooks/schema"
 
-function statusNote(evaluation: Playbook["evaluation"]) {
-  switch (evaluation.status) {
-    case "not-run":
-      return (
-        <>
-          <p>Evaluation not available</p>
-          <p>{evaluation.reason}</p>
-        </>
-      )
-    case "fixture-evaluated":
-    case "partner-evaluated":
-      return null
-    default:
-      return assertNever(evaluation)
-  }
+type EvaluationMetric = Playbook["evaluation"]["metrics"][number]
+
+function metricRows(metrics: readonly EvaluationMetric[]) {
+  return metrics.map((metric) => (
+    <div key={metric.id}>
+      <dt>{metric.name}</dt>
+      <dd>{metric.definition}</dd>
+    </div>
+  ))
 }
 
-function metricRows(evaluation: Playbook["evaluation"]) {
+// One switch over `evaluation.status` producing everything that differs
+// between variants: the not-run explanation, and the metrics block (which
+// shares its row markup across the two evaluated variants and only differs
+// in its trailing element — a labelled-fixture row or a link to partner
+// evidence).
+function evaluationDetails(evaluation: Playbook["evaluation"]): {
+  note: ReactNode
+  metricsBlock: ReactNode
+} {
   switch (evaluation.status) {
     case "not-run":
-      return null
+      return {
+        note: (
+          <>
+            <p>Evaluation not available</p>
+            <p>{evaluation.reason}</p>
+          </>
+        ),
+        metricsBlock: null,
+      }
     case "fixture-evaluated":
-      return (
-        <div className="evaluation-metrics">
-          <dl>
-            {evaluation.metrics.map((metric) => (
-              <div key={metric.id}>
-                <dt>{metric.name}</dt>
-                <dd>{metric.definition}</dd>
+      return {
+        note: null,
+        metricsBlock: (
+          <div className="evaluation-metrics">
+            <dl>
+              {metricRows(evaluation.metrics)}
+              <div>
+                <dt>Labelled fixture</dt>
+                <dd>{evaluation.labelledFixtureId}</dd>
               </div>
-            ))}
-            <div>
-              <dt>Labelled fixture</dt>
-              <dd>{evaluation.labelledFixtureId}</dd>
-            </div>
-          </dl>
-        </div>
-      )
+            </dl>
+          </div>
+        ),
+      }
     case "partner-evaluated":
-      return (
-        <div className="evaluation-metrics">
-          <dl>
-            {evaluation.metrics.map((metric) => (
-              <div key={metric.id}>
-                <dt>{metric.name}</dt>
-                <dd>{metric.definition}</dd>
-              </div>
-            ))}
-          </dl>
-          <ExternalLink href={evaluation.evidenceUrl}>
-            Published evaluation evidence
-          </ExternalLink>
-        </div>
-      )
+      return {
+        note: null,
+        metricsBlock: (
+          <div className="evaluation-metrics">
+            <dl>{metricRows(evaluation.metrics)}</dl>
+            <ExternalLink href={evaluation.evidenceUrl}>
+              Published evaluation evidence
+            </ExternalLink>
+          </div>
+        ),
+      }
     default:
       return assertNever(evaluation)
   }
@@ -68,20 +72,28 @@ export function EvaluationEvidence({
 }: {
   evaluation: Playbook["evaluation"]
 }): ReactNode {
+  const { note, metricsBlock } = evaluationDetails(evaluation)
+
   return (
     <div className="evaluation-evidence">
-      {statusNote(evaluation)}
-      <ul className="evaluation-questions">
-        {evaluation.questions.map((question) => (
-          <li key={question}>{question}</li>
-        ))}
-      </ul>
-      {metricRows(evaluation)}
-      <ul className="evaluation-limitations">
-        {evaluation.limitations.map((limitation) => (
-          <li key={limitation}>{limitation}</li>
-        ))}
-      </ul>
+      {note}
+      <div>
+        <p>Evaluation questions</p>
+        <ul className="evaluation-questions">
+          {evaluation.questions.map((question) => (
+            <li key={question}>{question}</li>
+          ))}
+        </ul>
+      </div>
+      {metricsBlock}
+      <div>
+        <p>Limitations</p>
+        <ul className="evaluation-limitations">
+          {evaluation.limitations.map((limitation) => (
+            <li key={limitation}>{limitation}</li>
+          ))}
+        </ul>
+      </div>
     </div>
   )
 }
