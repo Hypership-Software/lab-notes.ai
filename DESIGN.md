@@ -186,7 +186,9 @@ The page renders every state in the content schema:
 - `live-local` links to local setup guidance and shows the supplied warning;
 - `partner` explains why a controlled integration is required.
 
-The maturity ladder marks the current rung and uses `nextValidationSteps` as the evidence for what remains to reach a more credible state. It must not imply that later rungs have been achieved.
+The maturity ladder marks the current rung and uses `nextValidationSteps` as the evidence for what remains to reach a more credible state. It must not imply that later rungs have been achieved. It reuses the ladder presentation and accessible name already established on the method page, so the site has one ladder treatment rather than two.
+
+Because the sequence is long, the dossier opens with a contents block between the title and the first section: a labelled `nav` containing an ordered list of the eleven fragment links in document order. Its label is a paragraph rather than a heading, so the document still carries exactly eleven section headings. It is plain server-rendered anchors — no JavaScript, no scroll observation, no active-section highlighting — and the contents list and the sections are generated from one definition so they cannot drift apart.
 
 ## 8. Catalogue inventory
 
@@ -620,9 +622,13 @@ Provenance labels are literal and persistent:
 
 These terms appear in navigation, legends, downloadable filenames, and accessible names where relevant.
 
+Controlled vocabularies — maturity, data accessibility, risk, and source type — have exactly one definition in the application, keyed by the content schema's own values. A filter chip, a catalogue row, a badge, and a dossier field describe the same value with the same words, and a new schema value fails a test rather than rendering a blank label.
+
 ### Dates and staleness
 
-Display source access date and playbook review date in human-readable form while keeping ISO dates in metadata. Treat `lastReviewed` as a UTC calendar date. A playbook remains current through its twelve-month anniversary and displays **Review needed** only after that date; anniversary calculation clamps leap-day reviews to the final valid day of February. The status includes the exact recorded review date and never implies that an external source was checked live.
+Display source access date and playbook review date in human-readable form while keeping ISO dates in metadata. One shared UTC formatter renders every date as `18 August 2026`, and the ISO value always remains in `<time dateTime>`. Treat `lastReviewed` as a UTC calendar date. A playbook remains current through its twelve-month anniversary and displays **Review needed** only after that date; anniversary calculation clamps leap-day reviews to the final valid day of February. The status includes the exact recorded review date and never implies that an external source was checked live.
+
+Review status is calculated at build time, so the recorded review date and the review-due date are the primary signal and the flag is secondary. Never show the flag without both dates: a deployment older than the review window would otherwise assert **Current** with nothing for the reader to check it against.
 
 ## 15. States and failure handling
 

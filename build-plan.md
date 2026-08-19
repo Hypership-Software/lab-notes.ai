@@ -713,7 +713,13 @@ export function getCatalogueFilterOptions(
 - Create: `features/playbooks/detail/review-status.test.ts`
 - Create: `features/playbooks/detail/detail-primitives.test.tsx`
 - Create: `features/playbooks/detail/playbook-detail.test.tsx`
+- Create: `lib/playbooks/vocabulary.ts`
+- Create: `lib/playbooks/vocabulary.test.ts`
+- Create: `lib/format-date.ts`
+- Create: `lib/format-date.test.ts`
+- Create: `lib/assert-never.ts`
 - Modify: `app/globals.css`
+- Modify: `lib/playbooks/schema.ts`, `components/site/status-badge.tsx`, `components/site/risk-badge.tsx`, `features/playbooks/catalogue/filter-options.ts`, `features/playbooks/catalogue/playbook-dossier-row.tsx`, `app/method/page.tsx` (adopt the shared vocabulary and date helper)
 
 ### Interfaces
 
@@ -767,7 +773,31 @@ export function PlaybookDetail(props: {
 }): ReactNode
 ```
 
-### 7.1 Make review status deterministic
+### 7.1 Centralise the shared vocabulary and date presentation
+
+- [ ] Write `lib/playbooks/vocabulary.test.ts` and `lib/format-date.test.ts` first. Assert that the maturity ladder covers `maturityValues` in order, that the maturity, data-accessibility, risk, and source-type records are keyed exactly by the schema's exported values, and that one shared UTC formatter renders `2026-08-18` as `18 August 2026`.
+
+- [ ] Run the focused tests and confirm failure.
+
+  ```bash
+  npm run test -- lib/playbooks/vocabulary.test.ts lib/format-date.test.ts
+  ```
+
+- [ ] Implement `lib/playbooks/vocabulary.ts` (schema-keyed text only, no JSX), `lib/format-date.ts` (one `Intl.DateTimeFormat` at UTC), and `lib/assert-never.ts`. Export `isoDateSchema` from `lib/playbooks/schema.ts` and use it for `accessedAt`, `recordedAt`, and `lastReviewed`.
+
+- [ ] Migrate every existing consumer: `status-badge.tsx`, `risk-badge.tsx`, `filter-options.ts`, `playbook-dossier-row.tsx`, and `app/method/page.tsx`. Maturity labels are currently defined three times and data-accessibility labels twice with divergent wording (**Open** against **Open data**); resolve that in favour of **Open data** so a filter chip and a dossier row describe the same value identically. Keep the method page's existing `.maturity-ladder` markup and `aria-label="Evidence maturity"` unchanged.
+
+- [ ] Run the full test suite, typecheck, and lint. Every existing test must still pass unchanged, because the catalogue, site-shell, and evidence-chain tests already assert these labels.
+
+  ```bash
+  npm run test
+  npm run typecheck
+  npm run lint
+  git add lib components/site features/playbooks/catalogue app/method/page.tsx
+  git commit -m "refactor: centralise playbook vocabulary and date presentation"
+  ```
+
+### 7.2 Make review status deterministic
 
 - [ ] Write `review-status.test.ts` first. Cover the day before, exact twelve-month anniversary, first day after the anniversary, and a leap-day review. The exact anniversary remains current; only a later UTC date is review-needed. Pass `now` explicitly instead of mocking global time.
 
@@ -777,7 +807,7 @@ export function PlaybookDetail(props: {
   npm run test -- features/playbooks/detail/review-status.test.ts
   ```
 
-- [ ] Implement `getReviewStatus`. Parse the ISO date at UTC midnight, calculate the calendar anniversary in UTC, and clamp 29 February to the last valid day of February in a non-leap year. Return the recorded and due dates as ISO dates so presentation code can format them without losing provenance.
+- [ ] Implement `getReviewStatus`. Validate the input with the exported `isoDateSchema` rather than a second hand-rolled date parser; Zod's ISO date check is calendar-aware, so `2026-02-31` and `2100-02-29` are already rejected. Calculate the calendar anniversary in UTC and clamp 29 February to the last valid day of February in a non-leap year. Return the recorded and due dates as ISO dates so presentation code can format them without losing provenance. Both dates are always shown in text, because this status is computed from the build clock.
 
 - [ ] Run the focused test and commit the pure date rule.
 
@@ -787,11 +817,11 @@ export function PlaybookDetail(props: {
   git commit -m "feat: define playbook review status"
   ```
 
-### 7.2 Build the reusable dossier primitives
+### 7.3 Build the reusable dossier primitives
 
 - [ ] Write `detail-primitives.test.tsx` first. Assert that:
 
-  - metadata exposes maturity, data accessibility, risk and reasons, sector, technical patterns, the exact review date, and review-needed text when applicable;
+  - metadata exposes maturity, data accessibility, the risk badge, sector, technical patterns, both review dates, and review-needed text when applicable, while risk *reasons* stay in the risks section so they are neither duplicated nor announced twice;
   - every source dossier exposes publisher, jurisdiction, title, canonical link, type, covered period, access date, reuse status, purpose, transformations, caveats, and optional local sample/hash together;
   - the maturity ladder marks exactly one current rung and presents `nextValidationSteps` as work still required;
   - `DemoReadiness` handles `none`, `recorded`, `live-local`, and `partner` exhaustively, including warnings and limitations;
@@ -804,7 +834,9 @@ export function PlaybookDetail(props: {
   npm run test -- features/playbooks/detail/detail-primitives.test.tsx
   ```
 
-- [ ] Implement the primitives as Server Components. Reuse `StatusBadge`, `RiskBadge`, `ExternalLink`, and `ProvenanceLabel`. Render sources once as an ordered list of `<article>` dossiers containing definition lists; use CSS Grid to make them compact on wide layouts and stack the same markup on narrow layouts.
+- [ ] Implement the primitives as Server Components. Reuse `StatusBadge`, `RiskBadge`, `ExternalLink`, `ProvenanceLabel`, the shared vocabulary, `formatUtcDate`, and `assertNever`; define no local label map, date formatter, or exhaustiveness helper. Render sources once as an ordered list of `<article>` dossiers containing definition lists; use CSS Grid to make them compact on wide layouts and stack the same markup on narrow layouts. Assert on roles, accessible names, and visible text — the repository uses no `data-testid` and should not start here.
+
+- [ ] Render every genuinely optional field honestly. `localSamplePath` and `sha256` appear only together; empty `transformations`, `caveats`, `references`, `partnerRequirements`, and `not-run` metrics omit their own label and list. The eleven sections themselves are unconditional, and no placeholder, dash, or zero stands in for missing evidence.
 
 - [ ] Keep schema variants exhaustive. Use `never` assertions in `DemoReadiness`, `SyntheticDataMethod`, and `EvaluationEvidence` so a new variant fails typecheck until its public explanation is designed.
 
@@ -816,7 +848,7 @@ export function PlaybookDetail(props: {
   git commit -m "feat: add playbook dossier primitives"
   ```
 
-### 7.3 Compose the fixed evidence sequence
+### 7.4 Compose the fixed evidence sequence
 
 - [ ] Write `playbook-detail.test.tsx` first using a registered playbook fixture. Assert one `h1`; the exact eleven `h2` headings in the order specified by `DESIGN.md`; the summary before technical detail; and visible problem, intended users, supported decision, public benefit, synthetic method, non-AI baseline, evaluation state, limitations, failure modes, human-review point, escalation, and redress.
 
@@ -826,9 +858,11 @@ export function PlaybookDetail(props: {
   npm run test -- features/playbooks/detail/playbook-detail.test.tsx
   ```
 
-- [ ] Implement `PlaybookDetail` as one semantic document. Give each numbered section a stable fragment ID. Preserve the document order at every breakpoint; the desktop metadata rail, narrative column, and evidence notes are visual CSS-grid placements rather than duplicate markup.
+- [ ] Implement `PlaybookDetail` as one semantic document. Define the eleven sections once, as data, and render both the contents list and the document body from that definition so they cannot drift. Give each numbered section a stable fragment ID. Preserve the document order at every breakpoint; the desktop metadata rail, narrative column, and evidence notes are visual CSS-grid placements rather than duplicate markup.
 
-- [ ] Extend `app/globals.css` only with selectors required by the dossier layout, using the existing design tokens. Include visible focus states, print-safe borders, forced-colours support, readable measures, and responsive stacking without horizontal overflow.
+- [ ] Add the JavaScript-free contents block between the title and the first section: a labelled `nav` with an ordered list of the eleven fragment links, its label a paragraph rather than a heading so the document keeps exactly eleven `h2` elements.
+
+- [ ] Extend `app/globals.css` only with selectors required by the dossier layout, using the existing design tokens. Reuse the shipped composition rather than restating it: the route wraps content in `.page-shell` as `/playbooks` and `/method` do, the header reuses `.page-intro`, prose reuses `.reading-width`, and the ladder reuses `.maturity-ladder` with added current-rung and future-rung rules. Extend the existing `@media print`, `(forced-colors: active)`, and `(prefers-reduced-motion: reduce)` blocks instead of adding a second set, and do not name a class that no stylesheet defines. Include visible focus states, print-safe borders, readable measures, and responsive stacking without horizontal overflow.
 
 - [ ] Run the focused detail tests and commit the composition.
 
@@ -838,7 +872,7 @@ export function PlaybookDetail(props: {
   git commit -m "feat: compose comparable playbook dossiers"
   ```
 
-### 7.4 Add the static route, metadata, and 404
+### 7.5 Add the static route, metadata, and 404
 
 - [ ] Implement the parameterised route with build-time slugs and generated metadata. Use Next.js's generated route helper so the route parameter stays coupled to the file-system route.
 
@@ -881,7 +915,9 @@ export function PlaybookDetail(props: {
   }
   ```
 
-- [ ] Build `app/not-found.tsx` with a plain-English sentence and one catalogue link. Do not add `app/playbooks/[slug]/loading.tsx`: every dossier is local, validated, and statically rendered.
+- [ ] Build `app/not-found.tsx` with a plain-English sentence and one catalogue link. Keep the copy generic, because this file also serves every unmatched URL in the application, and export no `metadata`: Next.js documents metadata exports only for the experimental `global-not-found.js`, and 404 responses already receive `noindex`.
+
+- [ ] Do not add `app/playbooks/[slug]/loading.tsx`: every dossier is local, validated, and statically rendered, and the absent Suspense boundary is also what keeps an unknown slug a real HTTP 404. Next.js returns 404 for a non-streamed not-found response and 200 with `noindex` once streaming has begun.
 
 - [ ] Run focused tests, content validation, type generation/typecheck, lint, and the production build. Confirm the build emits the static playbook route and the registry still contains seventeen unique slugs.
 

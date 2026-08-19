@@ -45,3 +45,6 @@ next-env.d.ts
 
 # Local git worktrees
 /.worktrees/
+
+# Local Impeccable hook cache
+/.impeccable/
