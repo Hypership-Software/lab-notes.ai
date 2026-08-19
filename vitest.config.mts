@@ -11,5 +11,6 @@ export default defineConfig({
     exclude: [...configDefaults.exclude, ".worktrees/**"],
     include: ["**/*.test.{ts,tsx}"],
     setupFiles: ["./vitest.setup.ts"],
+    env: { TZ: "Pacific/Auckland" },
   },
 })

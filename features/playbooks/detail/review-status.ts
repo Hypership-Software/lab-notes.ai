@@ -8,6 +8,8 @@ const pad = (value: number) => String(value).padStart(2, "0")
 
 // Day 0 of the following month is the last day of the target month, which is
 // how a 29 February review clamps to 28 February in a non-leap due year.
+// Note: `month` is 1-indexed (the calendar month from the ISO date string),
+// unlike Date.UTC's 0-indexed month parameter used inside this function.
 function lastDayOfUtcMonth(year: number, month: number) {
   return new Date(Date.UTC(year, month, 0)).getUTCDate()
 }

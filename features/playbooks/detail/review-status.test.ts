@@ -46,4 +46,14 @@ describe("getReviewStatus", () => {
       "lastReviewed must be an ISO calendar date",
     )
   })
+
+  it("uses UTC date, not local time, for anniversary cutoff", () => {
+    // Test suite TZ is pinned to Pacific/Auckland (UTC+12/+13).
+    // 2026-08-18T23:59:59Z is 2026-08-19 locally, but the UTC calendar
+    // date is still 2026-08-18 — which is the anniversary. Without UTC guards,
+    // any swap of getUTC* → get* would wrongly report review-needed here.
+    expect(
+      getReviewStatus("2025-08-18", new Date("2026-08-18T23:59:59Z")),
+    ).toMatchObject({ status: "current" })
+  })
 })
