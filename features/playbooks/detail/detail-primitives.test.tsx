@@ -405,34 +405,22 @@ describe("playbook detail primitives", () => {
   })
 
   it("leads the implementation section with its plain-English summary", () => {
-    render(
-      <ImplementationIndex
-        implementation={playbook.implementation}
-        references={playbook.references}
-      />,
-    )
+    render(<ImplementationIndex implementation={playbook.implementation} />)
 
     expect(screen.getByText(playbook.implementation.summary)).toBeVisible()
     expect(screen.getByText(playbook.implementation.architecture)).toBeVisible()
     expect(
       screen.getByText(playbook.implementation.reusableParts[0]),
     ).toBeVisible()
-    expect(screen.getByRole("link", { name: /contribute/i })).toHaveAttribute(
-      "href",
-      "/contribute",
-    )
   })
 
-  it("omits empty reference and partner-requirement blocks", () => {
+  it("omits an empty partner-requirement block", () => {
     render(
       <ImplementationIndex
         implementation={{ ...playbook.implementation, partnerRequirements: [] }}
-        references={[]}
       />,
     )
 
-    expect(screen.queryByText("References")).not.toBeInTheDocument()
     expect(screen.queryByText("Partner requirements")).not.toBeInTheDocument()
-    expect(screen.getByRole("link", { name: /contribute/i })).toBeVisible()
   })
 })

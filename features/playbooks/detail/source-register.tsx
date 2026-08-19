@@ -16,7 +16,7 @@ export function SourceRegister({
     <ol className="source-register">
       {sources.map((source) => (
         <li key={source.id}>
-          <article>
+          <article className="source-dossier">
             <h3>
               <ExternalLink href={source.canonicalUrl}>
                 {source.title}
