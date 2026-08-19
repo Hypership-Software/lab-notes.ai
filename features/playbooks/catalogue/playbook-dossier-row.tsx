@@ -3,22 +3,9 @@ import Link from "next/link"
 
 import { RiskBadge } from "@/components/site/risk-badge"
 import { StatusBadge } from "@/components/site/status-badge"
-import type { Playbook, PlaybookSummary } from "@/lib/playbooks/schema"
-
-const dataLabel: Record<Playbook["dataAccessibility"], string> = {
-  open: "Open data",
-  "public-readonly": "Public, reuse to confirm",
-  partial: "Partly accessible",
-  restricted: "Partner data required",
-  unknown: "Access not yet assessed",
-}
-
-const dateFormatter = new Intl.DateTimeFormat("en-GB", {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-  timeZone: "UTC",
-})
+import { formatUtcDate } from "@/lib/format-date"
+import type { PlaybookSummary } from "@/lib/playbooks/schema"
+import { dataAccessibilityLabel } from "@/lib/playbooks/vocabulary"
 
 export function PlaybookDossierRow({ playbook }: { playbook: PlaybookSummary }) {
   const riskDescriptionId = `${playbook.slug}-risk-reasons`
@@ -42,7 +29,7 @@ export function PlaybookDossierRow({ playbook }: { playbook: PlaybookSummary }) 
           <dt>Data access</dt>
           <dd className="data-access-label">
             <Database aria-hidden="true" />
-            {dataLabel[playbook.dataAccessibility]}
+            {dataAccessibilityLabel[playbook.dataAccessibility]}
           </dd>
         </div>
         <div>
@@ -63,7 +50,7 @@ export function PlaybookDossierRow({ playbook }: { playbook: PlaybookSummary }) 
           <dt>Last reviewed</dt>
           <dd>
             <time dateTime={playbook.lastReviewed}>
-              {dateFormatter.format(new Date(`${playbook.lastReviewed}T00:00:00Z`))}
+              {formatUtcDate(playbook.lastReviewed)}
             </time>
           </dd>
         </div>

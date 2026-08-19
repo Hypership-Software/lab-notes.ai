@@ -1,33 +1,12 @@
 import type { Metadata } from "next"
 
+import { maturityLadder } from "@/lib/playbooks/vocabulary"
+
 export const metadata: Metadata = {
   title: "Method",
   description:
     "How the playbooks handle official sources, synthetic data, baselines, evaluation, risk, and evidence maturity.",
 }
-
-const maturity = [
-  {
-    title: "Assessed concept",
-    description: "The problem, data reality, risks, baseline, and next checks are documented.",
-  },
-  {
-    title: "Recorded demonstration",
-    description: "Checked-in output is replayed against deterministic synthetic fixtures.",
-  },
-  {
-    title: "Partner-ready",
-    description: "A data-owning partner has reviewed interfaces and validation protocols.",
-  },
-  {
-    title: "Operational pilot",
-    description: "The system has been tested in a governed real-world setting.",
-  },
-  {
-    title: "Evaluated service",
-    description: "Operational outcomes and harms have received independent evaluation.",
-  },
-]
 
 export default function MethodPage() {
   return (
@@ -44,12 +23,12 @@ export default function MethodPage() {
       <section className="method-section" aria-labelledby="maturity-title">
         <h2 id="maturity-title">Evidence maturity</h2>
         <ol className="maturity-ladder" aria-label="Evidence maturity">
-          {maturity.map((item, index) => (
-            <li key={item.title}>
+          {maturityLadder.map((rung, index) => (
+            <li key={rung.value}>
               <span aria-hidden="true">{index + 1}</span>
               <div>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
+                <h3>{rung.label}</h3>
+                <p>{rung.description}</p>
               </div>
             </li>
           ))}

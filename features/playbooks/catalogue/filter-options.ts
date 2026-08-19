@@ -1,4 +1,9 @@
 import type { Playbook, PlaybookSummary } from "@/lib/playbooks/schema"
+import {
+  dataAccessibilityLabel,
+  maturityLabel,
+  riskLabel,
+} from "@/lib/playbooks/vocabulary"
 
 export type CatalogueFilterOption<Value extends string = string> = {
   value: Value
@@ -15,29 +20,6 @@ export type CatalogueFilterOptions = {
 }
 
 const collator = new Intl.Collator("en-GB", { sensitivity: "base" })
-
-const dataLabels: Record<Playbook["dataAccessibility"], string> = {
-  open: "Open",
-  "public-readonly": "Public, reuse to confirm",
-  partial: "Partly accessible",
-  restricted: "Partner data required",
-  unknown: "Access not yet assessed",
-}
-
-const maturityLabels: Record<Playbook["maturity"], string> = {
-  assessed: "Assessed concept",
-  "recorded-demo": "Recorded demonstration",
-  "partner-ready": "Partner-ready",
-  "operational-pilot": "Operational pilot",
-  "evaluated-service": "Evaluated service",
-}
-
-const riskLabels: Record<Playbook["risk"]["level"], string> = {
-  low: "Low risk",
-  moderate: "Moderate risk",
-  high: "High risk",
-  "very-high": "Very high risk",
-}
 
 function countValues(values: readonly string[]) {
   const counts = new Map<string, number>()
@@ -74,15 +56,15 @@ export function getCatalogueFilterOptions(
     ),
     dataAccessibility: controlledOptions(
       playbooks.map((playbook) => playbook.dataAccessibility),
-      dataLabels,
+      dataAccessibilityLabel,
     ),
     maturity: controlledOptions(
       playbooks.map((playbook) => playbook.maturity),
-      maturityLabels,
+      maturityLabel,
     ),
     risk: controlledOptions(
       playbooks.map((playbook) => playbook.risk.level),
-      riskLabels,
+      riskLabel,
     ),
   }
 }

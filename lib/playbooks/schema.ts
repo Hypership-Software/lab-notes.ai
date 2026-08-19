@@ -22,6 +22,8 @@ const relativePathSchema = z
 const sentenceSchema = z.string().trim().min(10)
 const nonEmptyList = <T extends z.ZodType>(item: T) => z.array(item).min(1)
 
+export const isoDateSchema = z.iso.date()
+
 export const maturityValues = [
   "assessed",
   "recorded-demo",
@@ -40,6 +42,14 @@ export const dataAccessibilityValues = [
 
 export const riskValues = ["low", "moderate", "high", "very-high"] as const
 
+export const sourceTypeValues = [
+  "strategy",
+  "consultation-report",
+  "dataset",
+  "guidance",
+  "research",
+] as const
+
 export const demoAvailabilityValues = [
   "none",
   "recorded",
@@ -54,15 +64,9 @@ export const sourceSchema = z
     jurisdiction: z.string().trim().min(2),
     title: z.string().trim().min(4),
     canonicalUrl: z.url(),
-    sourceType: z.enum([
-      "strategy",
-      "consultation-report",
-      "dataset",
-      "guidance",
-      "research",
-    ]),
+    sourceType: z.enum(sourceTypeValues),
     coveredPeriod: z.string().trim().min(1),
-    accessedAt: z.iso.date(),
+    accessedAt: isoDateSchema,
     reuseStatus: z.string().trim().min(4),
     localSamplePath: relativePathSchema.optional(),
     sha256: sha256Schema.optional(),
@@ -186,7 +190,7 @@ const demoRecordedSchema = z.strictObject({
   route: z.string().regex(/^\/playbooks\/[a-z0-9]+(?:-[a-z0-9]+)*\/demo$/),
   recordedOutputId: slugSchema,
   label: z.literal("Recorded demonstration"),
-  recordedAt: z.iso.date(),
+  recordedAt: isoDateSchema,
   modelLabel: z.string().trim().min(3),
   modelVersion: z.string().trim().min(1),
   promptSha256: sha256Schema,
@@ -239,7 +243,7 @@ export const playbookSchema = z
     implementation: implementationSchema,
     references: z.array(referenceSchema),
     demo: demoSchema,
-    lastReviewed: z.iso.date(),
+    lastReviewed: isoDateSchema,
   })
   .superRefine((playbook, context) => {
     const sourceIds = playbook.officialSources.map((source) => source.id)

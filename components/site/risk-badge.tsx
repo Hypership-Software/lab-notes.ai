@@ -2,13 +2,7 @@ import { ShieldAlert } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import type { Playbook } from "@/lib/playbooks/schema"
-
-const riskLabel: Record<Playbook["risk"]["level"], string> = {
-  low: "Low risk",
-  moderate: "Moderate risk",
-  high: "High risk",
-  "very-high": "Very high risk",
-}
+import { riskLabel } from "@/lib/playbooks/vocabulary"
 
 type RiskBadgeProps = {
   level: Playbook["risk"]["level"]
