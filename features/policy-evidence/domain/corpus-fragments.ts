@@ -1,6 +1,14 @@
 import type { CorpusStance, CorpusTheme } from "./types"
 
-/** How a respondent positions their view. One of these opens each document. */
+/**
+ * How a respondent positions their view. One of these opens each document.
+ *
+ * Constraint: every framing must be able to take an embedded question
+ * ("how X", "whether X", "what X") as its complement, because that is how
+ * every entry in `themeSubjects` is phrased. A framing that instead demands
+ * a declarative complement ("...because X did happen") will read as
+ * ungrammatical once concatenated with a `themeSubjects` entry.
+ */
 export const stanceFraming: Record<CorpusStance, readonly string[]> = {
   supportive: [
     "Respondents supported the proposal and said",
@@ -9,10 +17,10 @@ export const stanceFraming: Record<CorpusStance, readonly string[]> = {
     "Respondents agreed with the aim, observing",
   ],
   critical: [
-    "Respondents objected to the proposal because",
-    "A number of responses raised concerns that",
-    "Several responses disagreed, arguing",
-    "Respondents challenged the approach on the grounds that",
+    "Respondents objected that the proposal never says",
+    "A number of responses said the proposal fails to explain",
+    "Several responses disagreed, and questioned",
+    "Respondents challenged the approach for not addressing",
   ],
   mixed: [
     "Responses were divided, with some noting",
