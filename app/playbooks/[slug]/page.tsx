@@ -1,0 +1,42 @@
+import type { Metadata } from "next"
+import { notFound } from "next/navigation"
+
+import { PlaybookDetail } from "@/features/playbooks/detail/playbook-detail"
+import { getReviewStatus } from "@/features/playbooks/detail/review-status"
+import { getPlaybook, getPlaybookSlugs } from "@/lib/playbooks/registry"
+
+export const dynamicParams = false
+
+export function generateStaticParams() {
+  return getPlaybookSlugs().map((slug) => ({ slug }))
+}
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/playbooks/[slug]">): Promise<Metadata> {
+  const { slug } = await params
+  const playbook = getPlaybook(slug)
+  if (!playbook) return {}
+
+  return {
+    title: playbook.title,
+    description: playbook.summary,
+  }
+}
+
+export default async function PlaybookPage({
+  params,
+}: PageProps<"/playbooks/[slug]">) {
+  const { slug } = await params
+  const playbook = getPlaybook(slug)
+  if (!playbook) notFound()
+
+  return (
+    <div className="page-shell playbook-detail-page">
+      <PlaybookDetail
+        playbook={playbook}
+        reviewStatus={getReviewStatus(playbook.lastReviewed, new Date())}
+      />
+    </div>
+  )
+}
