@@ -1043,14 +1043,20 @@ committed file rather than trusting it at authoring time.
 - Modify: `features/policy-evidence/domain/types.ts`
 - Create: `features/policy-evidence/domain/run-baseline.ts`
 - Create: `features/policy-evidence/domain/run-baseline.test.ts`
-- Create: `features/policy-evidence/domain/recorded-analysis.ts`
-- Create: `features/policy-evidence/domain/recorded-analysis.test.ts`
 - Create: `features/policy-evidence/domain/evaluate-analysis.ts`
 - Create: `features/policy-evidence/domain/evaluate-analysis.test.ts`
-- Create: `content/playbooks/policy-evidence/fixtures/recorded/analysis.json`
-- Create: `content/playbooks/policy-evidence/fixtures/recorded/manifest.ts`
-- Create: `content/playbooks/policy-evidence/fixtures/evaluation/gold.json`
-- Create: `content/playbooks/policy-evidence/fixtures/evaluation/manifest.ts`
+- Create: `features/policy-evidence/domain/baseline-evaluation.test.ts`
+- Create: `features/policy-evidence/domain/recorded-analysis.ts`
+- Create: `features/policy-evidence/domain/recorded-analysis.test.ts`
+- Create: `content/playbooks/policy-evidence/policy-evidence.gold.json`
+- Modify: `content/playbooks/policy-evidence/playbook.ts`
+- Modify: `content/playbooks/define-assessed-playbook.ts`
+
+Committed artefacts stay flat and named for the playbook, as the dataset does:
+`policy-evidence.gold.json` sits beside `policy-evidence.data.json`. The
+expectation set is hand-labelled, so it carries no manifest and no hash for the
+same reason the dataset does not; `evaluationGoldSchema` is what guards it, and
+`baseline-evaluation.test.ts` parses the committed file through it.
 
 ### Public interfaces
 
@@ -1070,49 +1076,68 @@ export type Finding = {
   limitations: string[]
 }
 
-export type AnalysisResult = {
-  kind: "baseline" | "recorded-ai-assisted"
-  findings: Finding[]
-  inputSha256: string
-}
+// A discriminated union, not a shared shape. Only the recorded branch records
+// `inputSha256`: the baseline is computed from the corpus in the same process
+// that reads it, so a hash over its input attests to nothing, while a recorded
+// output was produced elsewhere and the hash is the only thing tying it to this
+// exact dataset.
+export type AnalysisResult =
+  | { kind: "baseline"; vocabularyVersion: string; findings: Finding[] }
+  | { kind: "recorded-ai-assisted"; inputSha256: string; findings: Finding[] }
 
 export type EvaluationResult = {
-  citationPrecision: { numerator: number; denominator: number; value: number | null }
-  evidenceCoverage: { numerator: number; denominator: number; value: number | null }
+  citationPrecision: Metric
+  evidenceCoverage: Metric
   unsupportedFindingCount: number
   brokenReferenceCount: number
+  findingsWithoutGoldCase: FindingId[]
   cases: EvaluationCaseResult[]
   limitations: string[]
 }
 
-export function runBaseline(corpus: readonly CorpusDocument[]): AnalysisResult
-export function loadRecordedAnalysis(): AnalysisResult
+export function runBaseline(corpus: readonly CorpusDocument[]): BaselineAnalysis
 export function evaluateAnalysis(
   analysis: AnalysisResult,
   gold: readonly EvaluationCase[],
   corpus: readonly CorpusDocument[],
 ): EvaluationResult
+export function parseRecordedAnalysis(
+  rawManifest: unknown,
+  rawAnalysis: unknown,
+  corpus: readonly CorpusDocument[],
+): ParseResult
 ```
+
+`Metric` always carries its numerator and denominator, and `value` is `null`
+rather than `0` for an empty denominator: "could not be measured" and "measured
+as nothing" are different claims.
+
+An `EvaluationCase` joins to a finding by `findingId`, which is what forces the
+baseline and any recorded analysis to agree on identifiers and so makes them
+comparable. A finding the expectation set never labelled is reported in
+`findingsWithoutGoldCase` and excluded from precision, because crediting or
+penalising unreviewed work would make the metric a claim about a judgement
+nobody made.
 
 ### Steps
 
-- [ ] Write baseline tests first. Cover phrase matching, normalised punctuation and case, matched-excerpt citations, stable finding order, no duplicate document citation per finding, empty corpus, and byte-for-byte identical results for identical input.
+- [ ] Write baseline tests first. Cover phrase matching, normalised punctuation and case, a term refused inside a longer word, matched-excerpt citations at exact offsets, stable finding order, no duplicate document citation per finding, empty corpus, and identical results for identical input.
 
-- [ ] Implement the baseline with a visible, versioned controlled vocabulary for the six themes. Score exact phrases and tokens, retain the highest-scoring cited excerpts, and break ties by theme order then document ID. Do not use embeddings, fuzzy model calls, or hidden heuristics.
+- [ ] Implement the baseline as a visible, versioned controlled vocabulary for the six themes, and nothing else: no embeddings, no model call, no learned weights. Score exact phrases and tokens by word count, cite the sentence enclosing the strongest match so a citation reads as evidence, and break ties by score then document ID. Return findings in theme declaration order rather than ranked by match count — ranking would read as a claim about which concern matters most, which a word list cannot support and which this playbook explicitly disclaims.
 
-- [ ] Write evaluation tests first. Cover all-correct, unsupported finding, missing expected evidence, broken document ID, mismatched quote offsets, no predicted citations, no gold citations, and explicit `null` metric values for zero denominators.
+- [ ] Write evaluation tests first. Cover all-correct, an unexpected citation, a missing expected document, an unsupported finding, a broken document ID, mismatched quote offsets, offsets past the end of the document, a finding with no gold case, a gold case whose finding is absent, and explicit `null` metric values for zero denominators.
 
-- [ ] Implement citation-integrity validation before computing metrics. A citation is valid only if the document exists and `document.text.slice(start, end) === quote`.
+- [ ] Implement citation-integrity validation before computing metrics. A citation is valid only if the document exists and `document.text.slice(start, end) === quote`. Never re-derive the quote from the offsets: that would make every citation agree with itself. An invalid citation is counted as a broken reference and excluded from both metrics rather than scored.
 
-- [ ] Create `gold.json` as a small labelled set with rationales. Labels refer only to synthetic document IDs. The file must contain enough positive and negative cases to exercise every metric branch.
+- [ ] Author `policy-evidence.gold.json` as a labelled expectation per theme, each with a rationale a reader can disagree with. Every document in the dataset is labelled exactly once, and the labels agree with the `theme` recorded on each document. Record in the playbook's evaluation limitations that the labels were written by the same author as the dataset, so they are not an independent judgement.
 
-- [ ] Produce one recorded AI-assisted result outside the hosted runtime using the exact committed synthetic corpus and an openly licensed model running locally. Keep the one-off runner and any downloaded weights outside the repository; they are recording tools, not application dependencies. Remove machine details, operator identity, request identifiers, and any credential material. The recorded output must be structured to the `AnalysisResult` contract and must include at least one known, visible weakness so the human-review path is meaningful.
+- [ ] Pin the baseline's published numbers in `baseline-evaluation.test.ts` by running the real baseline over the committed dataset and expectation set. Assert the exact precision and coverage numerators and denominators, the one response missed because it raises its theme in different words, and the three responses attributed to a theme their author did not intend. Editing the vocabulary, the dataset, or the labels is allowed; changing a published result without noticing is not.
 
-- [ ] Create `manifest.ts` for the recorded result. Set `label` to `Recorded AI-assisted output`, `procedureVersion` to `policy-evidence-v1`, and `liveService` to `false`. Record the actual UTC recording date, exact open-model identifier and version, input corpus SHA-256, versioned procedure SHA-256, and output SHA-256 as literals from the completed local recording. Validate each value with a schema; do not commit an incomplete manifest or relabel hand-authored output as model-generated.
+- [ ] Keep the playbook's `evaluation.status` at `not-run` and replace its reason with what has actually been measured. The comparison this playbook promises is between the baseline and a recorded AI-assisted analysis; half of it does not exist, so a `fixture-evaluated` status would advertise an evaluation of the exemplar when only its control arm has been measured. Task 10 promotes it once both arms exist.
 
-- [ ] Add tests that load and validate the recorded result, assert every citation resolves to a document in the committed dataset, assert the recorded prompt and input hashes, ensure the label is exact, and ensure the UI-facing limitations contain **Not operationally validated**.
+- [ ] Implement `parseRecordedAnalysis` and its manifest schema before any recording exists, and test it against a hand-built recording. Every manifest field is required with no default: this is the one place the repository makes a claim about a model rather than about its own code, so an incomplete manifest is a refusal. Prove that a wrong label, a `liveService: true` claim, a missing model identifier, an input hash disagreeing with the output, limitations omitting **Not operationally validated**, an unresolvable citation, and an empty finding list are each rejected, and that every problem is reported rather than only the first.
 
-- [ ] Run all policy-evidence domain tests and content integrity validation.
+- [ ] Run the domain tests and content integrity validation.
 
   ```bash
   npm run test -- features/policy-evidence/domain
@@ -1120,12 +1145,18 @@ export function evaluateAnalysis(
   npm run typecheck
   ```
 
-- [ ] Commit domain behaviour and recorded evidence separately from UI.
+### Outstanding: the recording itself
 
-  ```bash
-  git add features/policy-evidence/domain content/playbooks/policy-evidence/fixtures
-  git commit -m "feat: add policy evidence analysis and evaluation"
-  ```
+This is the only part of Task 9 that cannot be done inside the repository, and
+it blocks Task 10's recorded-output stages.
+
+- [ ] Produce one recorded AI-assisted result outside the hosted runtime, using the exact committed `policy-evidence.data.json` and an openly licensed model running locally. Keep the one-off runner and any downloaded weights outside the repository; they are recording tools, not application dependencies. Remove machine details, operator identity, request identifiers, and any credential material. The output must satisfy `recordedAnalysisSchema`, must use the same `F-<theme>` finding identifiers as the baseline so the two are comparable, and must include at least one known, visible weakness so the human-review path is meaningful.
+
+- [ ] Commit the recording as `policy-evidence.recorded.json` with a `policy-evidence.recorded.manifest.ts` carrying the real UTC recording date, exact open-model identifier and version, `procedureVersion`, input dataset SHA-256, procedure SHA-256, and output SHA-256 as literals from the completed run. Do not commit an incomplete manifest, and do not relabel hand-authored output as model-generated: `parseRecordedAnalysis` is written to refuse both.
+
+- [ ] Add a test that loads the committed recording through `parseRecordedAnalysis` against the committed dataset and asserts it is accepted, then evaluate it with `evaluateAnalysis` and pin its metrics beside the baseline's.
+
+- [ ] Commit domain behaviour and recorded evidence separately from UI.
 
 ---
 

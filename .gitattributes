@@ -6,3 +6,4 @@
 # their diffs stay readable across platforms.
 content/playbooks/**/fixtures/** text eol=lf
 content/playbooks/**/*.data.json text eol=lf
+content/playbooks/**/*.gold.json text eol=lf

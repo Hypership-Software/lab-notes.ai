@@ -34,6 +34,20 @@ export type AssessedPlaybookSpec = {
   failureModes: string[]
   nextValidationSteps: string[]
   demoBarrier: string
+  /**
+   * Replaces the shared sentence explaining why `evaluation.status` is
+   * `not-run`. A playbook that has measured something real, such as its non-AI
+   * baseline, needs to say so here rather than leave the reader with the
+   * default "nothing has been measured" reading.
+   */
+  evaluationReason?: string
+  /**
+   * Replaces the shared evaluation limitations. Required alongside
+   * `evaluationReason` once a labelled fixture exists: the default sentence
+   * says there is no labelled fixture to evaluate, which stops being true the
+   * moment one is committed.
+   */
+  evaluationLimitations?: string[]
   responsibleRole: string
   partnerRequirements: string[]
   additionalSources?: OfficialSource[]
@@ -169,10 +183,11 @@ export function defineAssessedPlaybook(spec: AssessedPlaybookSpec) {
         "Can affected people understand, question, and seek correction of consequential outputs?",
       ],
       metrics: [],
-      limitations: [
+      limitations: spec.evaluationLimitations ?? [
         "There is no implementation or labelled fixture to evaluate at assessed maturity.",
       ],
       reason:
+        spec.evaluationReason ??
         "The playbook records a problem, evidence boundary, and validation path rather than a tested result.",
     },
     humanOversight: {

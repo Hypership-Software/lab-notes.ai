@@ -50,12 +50,18 @@ export const policyEvidence = defineAssessedPlaybook({
     "Quoted text may be accurate while the surrounding interpretation is not.",
   ],
   nextValidationSteps: [
-    "Record the deterministic keyword-grouping baseline and the protocol for comparing it with any later generated analysis.",
     "Co-design the review and evaluation protocol with policy and public-engagement specialists.",
     "Record a bounded output only after its prompt, inputs, and citations can be checked in together.",
   ],
+  evaluationReason:
+    "The non-AI baseline has been measured against a hand-labelled expectation set covering all twenty responses, and its citation precision, evidence coverage, misses, and false attributions are reproduced by the test suite. The playbook stays not-run because the comparison it promises is between that baseline and a recorded AI-assisted analysis, and no such recording exists yet.",
+  evaluationLimitations: [
+    "The expectation set was written by the same author as the responses it labels, so it records one person's intent rather than an independent judgement.",
+    "Only the non-AI baseline has been measured; there is no recorded AI-assisted analysis to compare it against.",
+    "Citation precision and evidence coverage test whether findings point at the agreed evidence, not whether an analysis is useful, fair, or safe for real consultation responses.",
+  ],
   demoBarrier:
-    "The synthetic dataset is now in place; the recorded workbench is not published until the baseline, prompt, output, citations, and evaluation are complete.",
+    "The synthetic dataset, the non-AI baseline, and the evaluation are in place. The recorded workbench is not published until an AI-assisted analysis has been recorded against this exact dataset and compared with the baseline.",
   responsibleRole: "Responsible policy lead",
   partnerRequirements: [
     "Policy-method review",
