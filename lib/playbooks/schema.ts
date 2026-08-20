@@ -116,6 +116,11 @@ export const syntheticDataSchema = z.discriminatedUnion("status", [
     seed: z.number().int().nonnegative(),
     generatorVersion: z.string().trim().min(1),
     fixturePath: relativePathSchema,
+    fixtureSha256: sha256Schema,
+    // A corpus may not claim to be available without a hash-verified record of
+    // the structural basis it was generated from.
+    structureNotePath: relativePathSchema,
+    structureNoteSha256: sha256Schema,
   }),
 ])
 

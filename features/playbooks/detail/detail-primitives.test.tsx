@@ -64,6 +64,10 @@ const availableSyntheticData = {
   generatorVersion: "1",
   fixturePath:
     "content/playbooks/policy-evidence/fixtures/synthetic/corpus.json",
+  fixtureSha256: hash,
+  structureNotePath:
+    "content/playbooks/policy-evidence/fixtures/synthetic/structure.md",
+  structureNoteSha256: hash,
 } satisfies Playbook["syntheticData"]
 
 const metric = {

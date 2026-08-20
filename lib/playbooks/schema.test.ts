@@ -52,6 +52,10 @@ const validInput = {
     seed: 20260818,
     generatorVersion: "1.0.0",
     fixturePath: "content/playbooks/policy-evidence/synthetic/corpus.json",
+    fixtureSha256: sha256,
+    structureNotePath:
+      "content/playbooks/policy-evidence/synthetic/consultation-analysis-structure.md",
+    structureNoteSha256: sha256,
     sourceCharacteristics: ["Document structure", "Public-service vocabulary"],
     approximations: ["Theme frequency is illustrative rather than measured."],
     alterations: ["All entities and response text are invented."],
@@ -188,5 +192,50 @@ describe("playbookSchema", () => {
     delete source.sha256
 
     expect(playbookSchema.safeParse(input).success).toBe(false)
+  })
+
+  it("requires fixture and structure-note hashes for an available corpus", () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { fixtureSha256, structureNotePath, structureNoteSha256, ...incomplete } =
+      validInput.syntheticData as Record<string, unknown>
+
+    const result = playbookSchema.safeParse({
+      ...validInput,
+      syntheticData: incomplete,
+    })
+
+    expect(result.success).toBe(false)
+  })
+
+  it("rejects a structure-note path that escapes the repository", () => {
+    const result = playbookSchema.safeParse({
+      ...validInput,
+      syntheticData: {
+        ...validInput.syntheticData,
+        structureNotePath: "../outside/note.md",
+      },
+    })
+
+    expect(result.success).toBe(false)
+  })
+
+  it("still accepts a planned corpus with no hashes", () => {
+    const result = playbookSchema.safeParse({
+      ...validInput,
+      maturity: "assessed",
+      demo: { availability: "none", reason: "The necessary data is restricted." },
+      syntheticData: {
+        status: "planned",
+        label: "Synthetic working data",
+        method: "Derive invented responses once a permissible structural basis exists.",
+        sourceCharacteristics: ["Document structure"],
+        approximations: ["Theme frequency would be illustrative."],
+        alterations: ["All response text would be invented."],
+        exclusions: ["Names", "Contact details"],
+        limitations: ["No fixture exists yet, so nothing can be measured."],
+      },
+    })
+
+    expect(result.success).toBe(true)
   })
 })
