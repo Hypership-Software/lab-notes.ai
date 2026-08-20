@@ -4,16 +4,25 @@ import type { CorpusStance, CorpusTheme } from "./types"
  * How a respondent positions their view. One of these opens each document.
  *
  * Constraint: every framing, for all four stances, must be able to take an
- * interrogative complement ("whether X", "what X", "how X") as its object,
- * because that is how every entry in `themeSubjects` is phrased. A framing
- * that instead demands a declarative complement (e.g. "...because X did
- * happen", "...and said X was true") will read as ungrammatical once
- * concatenated with a `themeSubjects` entry. This has already broken twice:
- * once for `critical` (verbs like "objected... because", "argued") and once
- * for `supportive`/`mixed` (verbs like "said", "added", "noting",
- * "observing" that take a declarative, not interrogative, complement).
- * `generate-synthetic-corpus.test.ts` has a regression test asserting this
- * across the whole generated corpus — keep it passing.
+ * interrogative complement ("whether X", "what X", "how X", "who X",
+ * "which X", ...) as its object, because that is how every entry in
+ * `themeSubjects` is phrased. A framing that instead demands a declarative
+ * complement (e.g. "...because X did happen", "...and said X was true")
+ * will read as ungrammatical once concatenated with a `themeSubjects`
+ * entry. This has broken three times: `critical` (verbs like
+ * "objected... because", "argued"), `supportive`/`mixed` (verbs like
+ * "said", "added", "noting", "observing"), and then a too-narrow guard test
+ * that missed "saying"/"argued"/"warning" and the "who"/"which"-led
+ * subjects.
+ *
+ * `generate-synthetic-corpus.test.ts` has two guards, not one: a scan of
+ * actual generated documents (a sample, limited to whatever a given seed
+ * happens to produce) and an exhaustive test that composes every entry of
+ * `stanceFraming` against every entry of `themeSubjects` directly. Only the
+ * exhaustive test is a durable guarantee — it cannot be dodged by seed
+ * luck — so a new framing that cannot take an interrogative complement
+ * fails it immediately, regardless of whether any seed ever happens to
+ * generate that exact pairing.
  */
 export const stanceFraming: Record<CorpusStance, readonly string[]> = {
   supportive: [

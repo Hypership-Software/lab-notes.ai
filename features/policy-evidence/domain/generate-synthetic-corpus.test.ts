@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest"
 
 import { sensitiveKeyPattern, findPersonalDataShape } from "@/lib/privacy-patterns"
 
+import { stanceFraming, themeSubjects } from "./corpus-fragments"
 import { generateSyntheticCorpus } from "./generate-synthetic-corpus"
 import {
   corpusSchema,
@@ -76,6 +77,48 @@ const forbiddenNames = [
   "O'Neill",
   "Kelly",
 ]
+
+// Every `themeSubjects` entry is phrased as an interrogative clause ("how X",
+// "whether X", "who X", "which X", ...). A `stanceFraming` entry whose verb
+// demands a declarative complement instead (e.g. "...because X", "...and
+// said X") reads as ungrammatical once concatenated with a `themeSubjects`
+// entry. This list must cover the real defect surface, not a sample: it has
+// already been too narrow once, missing "saying"/"argued"/"warning" (the
+// literal pre-fix `mixed` framings) and the "who"/"which" subjects that
+// appear in `corpus-fragments.ts`.
+const declarativeOnlyComplements = [
+  "said",
+  "saying",
+  "added",
+  "adding",
+  "noting",
+  "noted",
+  "observing",
+  "observed",
+  "arguing",
+  "argued",
+  "warning",
+  "warned",
+  "stating",
+  "stated",
+  "commenting",
+  "commented",
+  "because",
+  "on the grounds that",
+  "concerns that",
+]
+const interrogativeWords = ["whether", "what", "how", "who", "which", "when", "where", "why"]
+
+const forbiddenComplementPatterns = declarativeOnlyComplements.flatMap((complement) =>
+  interrogativeWords.map(
+    (word) =>
+      new RegExp(`\\b${complement.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s+${word}\\b`, "i"),
+  ),
+)
+
+function findForbiddenComplementMatch(text: string): RegExp | undefined {
+  return forbiddenComplementPatterns.find((pattern) => pattern.test(text))
+}
 
 describe("generateSyntheticCorpus", () => {
   it("is stable across repeated calls with the recorded seed", () => {
@@ -220,43 +263,16 @@ describe("generateSyntheticCorpus", () => {
     }
   })
 
-  it("never pairs a declarative-only complement with an interrogative subject", () => {
-    // Every `themeSubjects` entry is phrased as an interrogative clause
-    // ("how X", "whether X", "what X"). A stance framing whose verb demands
-    // a declarative complement instead (e.g. "...because X", "...and said
-    // X") reads as ungrammatical once the generator concatenates
-    // {framing} + {subject}. This defect class has escaped review twice
-    // (round 1: `critical`; round 2: `supportive`/`mixed`) while all other
-    // tests passed, because nothing asserted prose grammar. Scan the actual
-    // generated text directly so a future framing regression is caught
-    // regardless of which stance introduces it.
-    const declarativeOnlyComplements = [
-      "said",
-      "added",
-      "noting",
-      "observing",
-      "arguing",
-      "because",
-      "on the grounds that",
-      "concerns that",
-    ]
-    const interrogativeWords = ["whether", "what", "how"]
-
-    const forbiddenPatterns = declarativeOnlyComplements.flatMap((complement) =>
-      interrogativeWords.map(
-        (word) =>
-          new RegExp(
-            `\\b${complement.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s+${word}\\b`,
-            "i",
-          ),
-      ),
-    )
-
+  it("never pairs a declarative-only complement with an interrogative subject in the generated corpus", () => {
+    // Scans the actual generated document text across a few different
+    // seeds/configs, as a check on the real shipped output. This is a
+    // sample, not a proof: it only inspects pairings the given seeds
+    // happen to produce. The next test is the exhaustive, durable guard.
     for (const config of [committedConfig, contrastingConfig, unevenConfig]) {
       const documents = generateSyntheticCorpus(config)
 
       const offending = documents.flatMap((document) => {
-        const matched = forbiddenPatterns.find((pattern) => pattern.test(document.text))
+        const matched = findForbiddenComplementMatch(document.text)
         return matched
           ? [`${document.id} (matched /${matched.source}/i): "${document.text}"`]
           : []
@@ -264,6 +280,31 @@ describe("generateSyntheticCorpus", () => {
 
       expect(offending).toEqual([])
     }
+  })
+
+  it("composes every authored stance framing against every authored theme subject without a declarative/interrogative mismatch", () => {
+    // Exhaustive check at the source: every `stanceFraming` entry composed
+    // against every `themeSubjects` entry (4 stances x 4 framings x 6
+    // themes x 6 subjects), independent of the generator and of any seed.
+    // A bad framing cannot hide behind seed luck here, which is what makes
+    // this guard durable rather than sampled.
+    const offending = corpusStanceValues.flatMap((stance) =>
+      stanceFraming[stance].flatMap((framing) =>
+        corpusThemeValues.flatMap((theme) =>
+          themeSubjects[theme].flatMap((subject) => {
+            const composed = `${framing} ${subject}`
+            const matched = findForbiddenComplementMatch(composed)
+            return matched
+              ? [
+                  `stance="${stance}" theme="${theme}" framing="${framing}" subject="${subject}" (matched /${matched.source}/i): "${composed}"`,
+                ]
+              : []
+          }),
+        ),
+      ),
+    )
+
+    expect(offending).toEqual([])
   })
 
   it("gives every document distinct text", () => {
