@@ -1,6 +1,8 @@
 import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import type { PlaybookInput } from "@/lib/playbooks/schema"
 
+import type { SyntheticCorpusManifest } from "./policy-evidence/fixtures/synthetic/manifest"
+
 type DataAccessibility = PlaybookInput["dataAccessibility"]
 type RiskLevel = PlaybookInput["risk"]["level"]
 type OfficialSource = PlaybookInput["officialSources"][number]
@@ -37,6 +39,23 @@ export type AssessedPlaybookSpec = {
   responsibleRole: string
   partnerRequirements: string[]
   additionalSources?: OfficialSource[]
+  /**
+   * Supplied only by a playbook whose synthetic corpus actually exists. It
+   * emits `syntheticData.status: "available"` and replaces the planned-state
+   * prose, including `implementation.summary`, which sits outside
+   * `syntheticData` but makes the same future-tense claim.
+   *
+   * Maturity, demo availability, and evaluation state are deliberately not
+   * overridable here: the schema forbids a recorded demonstration until the
+   * recorded output exists, which is Task 9's work.
+   */
+  syntheticCorpus?: {
+    manifest: SyntheticCorpusManifest
+    approximations: string[]
+    alterations: string[]
+    limitations: string[]
+    implementationSummary: string
+  }
 }
 
 const strategyUrl =
@@ -65,6 +84,54 @@ export function defineAssessedPlaybook(spec: AssessedPlaybookSpec) {
     ],
   }
 
+  type SyntheticData = PlaybookInput["syntheticData"]
+  type PlannedSyntheticData = Extract<SyntheticData, { status: "planned" }>
+
+  // Not `as const`: the schema's input type expects mutable `string[]`
+  // arrays, and a whole-object `as const` would freeze them into readonly
+  // tuples that no longer satisfy it.
+  const plannedSyntheticData: PlannedSyntheticData = {
+    status: "planned",
+    label: "Synthetic working data",
+    method: spec.syntheticMethod,
+    sourceCharacteristics: [
+      "Only the structure, units, categories, and ranges verified in permissible official sources.",
+    ],
+    approximations: [
+      "Frequencies and relationships would be illustrative unless supported by a cited aggregate statistic.",
+    ],
+    alterations: [
+      "Entity identifiers, events, measurements, and text would be deliberately invented.",
+    ],
+    exclusions: [
+      "Names, contact details, exact addresses, rare personal combinations, and source records about individuals.",
+    ],
+    limitations: [
+      "No synthetic fixture exists at assessed maturity, and future synthetic data could not establish operational effectiveness or fairness.",
+    ],
+  }
+
+  const syntheticData: SyntheticData = spec.syntheticCorpus
+    ? {
+        status: "available",
+        label: "Synthetic working data",
+        // Read from the same per-playbook field as the planned branch: the
+        // sentence is corrected in place rather than duplicated here.
+        method: spec.syntheticMethod,
+        sourceCharacteristics: plannedSyntheticData.sourceCharacteristics,
+        approximations: spec.syntheticCorpus.approximations,
+        alterations: spec.syntheticCorpus.alterations,
+        exclusions: plannedSyntheticData.exclusions,
+        limitations: spec.syntheticCorpus.limitations,
+        seed: spec.syntheticCorpus.manifest.seed,
+        generatorVersion: spec.syntheticCorpus.manifest.generatorVersion,
+        fixturePath: spec.syntheticCorpus.manifest.fixturePath,
+        fixtureSha256: spec.syntheticCorpus.manifest.fixtureSha256,
+        structureNotePath: spec.syntheticCorpus.manifest.structureNotePath,
+        structureNoteSha256: spec.syntheticCorpus.manifest.structureNoteSha256,
+      }
+    : plannedSyntheticData
+
   return definePlaybook({
     schemaVersion: 1,
     slug: spec.slug,
@@ -86,26 +153,7 @@ export function defineAssessedPlaybook(spec: AssessedPlaybookSpec) {
       mitigations: spec.mitigations,
     },
     officialSources: [strategySource, ...(spec.additionalSources ?? [])],
-    syntheticData: {
-      status: "planned",
-      label: "Synthetic working data",
-      method: spec.syntheticMethod,
-      sourceCharacteristics: [
-        "Only the structure, units, categories, and ranges verified in permissible official sources.",
-      ],
-      approximations: [
-        "Frequencies and relationships would be illustrative unless supported by a cited aggregate statistic.",
-      ],
-      alterations: [
-        "Entity identifiers, events, measurements, and text would be deliberately invented.",
-      ],
-      exclusions: [
-        "Names, contact details, exact addresses, rare personal combinations, and source records about individuals.",
-      ],
-      limitations: [
-        "No synthetic fixture exists at assessed maturity, and future synthetic data could not establish operational effectiveness or fairness.",
-      ],
-    },
+    syntheticData,
     nonAiBaseline: spec.baseline,
     evaluation: {
       status: "not-run",
@@ -135,6 +183,7 @@ export function defineAssessedPlaybook(spec: AssessedPlaybookSpec) {
     nextValidationSteps: spec.nextValidationSteps,
     implementation: {
       summary:
+        spec.syntheticCorpus?.implementationSummary ??
         "A future proof of concept would use a small permissible source sample to shape deterministic synthetic fixtures and an inspectable comparison baseline.",
       architecture:
         "Typed static content and fixtures inside the shared Next.js application, with framework-agnostic domain functions and no required live service.",

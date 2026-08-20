@@ -67,4 +67,47 @@ describe("playbook content inventory", () => {
       )
     }
   })
+
+  it("declares the policy-evidence corpus as available without claiming a demonstration", () => {
+    const playbook = getAllPlaybooks().find(
+      (candidate) => candidate.slug === "policy-evidence",
+    )
+
+    expect(playbook?.syntheticData.status).toBe("available")
+    // The corpus existing is not evidence that anything was demonstrated.
+    expect(playbook?.maturity).toBe("assessed")
+    expect(playbook?.demo.availability).toBe("none")
+  })
+
+  it("keeps every other playbook's synthetic data planned", () => {
+    const others = getAllPlaybooks().filter(
+      (candidate) => candidate.slug !== "policy-evidence",
+    )
+
+    expect(others).toHaveLength(16)
+    expect(others.every((playbook) => playbook.syntheticData.status === "planned")).toBe(
+      true,
+    )
+  })
+
+  it("does not describe the policy-evidence corpus in the conditional future", () => {
+    const playbook = getAllPlaybooks().find(
+      (candidate) => candidate.slug === "policy-evidence",
+    )
+    const synthetic = playbook?.syntheticData
+
+    const prose = [
+      synthetic?.method,
+      ...(synthetic?.approximations ?? []),
+      ...(synthetic?.alterations ?? []),
+      ...(synthetic?.limitations ?? []),
+      playbook?.implementation.summary,
+      playbook?.demo.availability === "none" ? playbook.demo.reason : undefined,
+    ].filter((value): value is string => typeof value === "string")
+
+    for (const sentence of prose) {
+      expect(sentence).not.toMatch(/\bwould be\b|\bfuture proof of concept\b/i)
+      expect(sentence).not.toMatch(/no synthetic fixture exists/i)
+    }
+  })
 })

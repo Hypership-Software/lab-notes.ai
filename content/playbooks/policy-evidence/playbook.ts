@@ -1,4 +1,5 @@
 import { defineAssessedPlaybook } from "../define-assessed-playbook"
+import { policyEvidenceCorpusManifest } from "./fixtures/synthetic/manifest"
 
 export const policyEvidence = defineAssessedPlaybook({
   slug: "policy-evidence",
@@ -30,7 +31,7 @@ export const policyEvidence = defineAssessedPlaybook({
   sourceRationale:
     "The report frames these as efficiency opportunities but does not establish that automated synthesis is appropriate for a particular consultation.",
   syntheticMethod:
-    "Use a fixed seed to combine invented positions, themes, document lengths, and writing styles derived only from an approved structural sample.",
+    "A recorded seed allocates forty-eight invented consultation responses across six themes and four positions, then composes each response from sentence fragments authored in this repository.",
   baseline: {
     name: "Reviewed keyword grouping",
     description:
@@ -50,12 +51,12 @@ export const policyEvidence = defineAssessedPlaybook({
     "Quoted text may be accurate while the surrounding interpretation is not.",
   ],
   nextValidationSteps: [
-    "Confirm a permissible methodology excerpt and document its reuse terms.",
+    "Record the deterministic keyword-grouping baseline and the protocol for comparing it with any later generated analysis.",
     "Co-design the review and evaluation protocol with policy and public-engagement specialists.",
     "Record a bounded output only after its prompt, inputs, citations, and hashes can be checked in together.",
   ],
   demoBarrier:
-    "The recorded workbench is not published until its synthetic corpus, baseline, prompt, output, citations, evaluation, and hashes are complete.",
+    "The synthetic corpus is now in place; the recorded workbench is not published until the baseline, prompt, output, citations, evaluation, and their hashes are complete.",
   responsibleRole: "Responsible policy lead",
   partnerRequirements: [
     "Policy-method review",
@@ -102,4 +103,18 @@ export const policyEvidence = defineAssessedPlaybook({
       ],
     },
   ],
+  syntheticCorpus: {
+    manifest: policyEvidenceCorpusManifest,
+    approximations: [
+      "Theme and position counts are an exact allocation chosen so that every category appears, not a measured frequency from any real consultation.",
+    ],
+    alterations: [
+      "Every response, position, and phrasing is invented; no respondent text, organisation, or place is used.",
+    ],
+    limitations: [
+      "A synthetic fixture now exists and can be regenerated exactly, and it still cannot establish operational effectiveness, fairness, or readiness for use with real responses.",
+    ],
+    implementationSummary:
+      "The exemplar runs on a documented structural basis and a deterministic synthetic corpus held in this repository; the comparison baseline, recorded output, citations, and evaluation are still outstanding.",
+  },
 })
