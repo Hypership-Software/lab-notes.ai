@@ -195,9 +195,10 @@ describe("playbookSchema", () => {
   })
 
   it("requires fixture and structure-note hashes for an available corpus", () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { fixtureSha256, structureNotePath, structureNoteSha256, ...incomplete } =
-      validInput.syntheticData as Record<string, unknown>
+    const incomplete = { ...validInput.syntheticData } as Record<string, unknown>
+    delete incomplete.fixtureSha256
+    delete incomplete.structureNotePath
+    delete incomplete.structureNoteSha256
 
     const result = playbookSchema.safeParse({
       ...validInput,
