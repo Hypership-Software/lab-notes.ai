@@ -1,0 +1,386 @@
+[
+  {
+    "id": "SYN-0001",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "accountability",
+    "stance": "supportive",
+    "text": "Respondents agreed with the aim, observing how a decision could be explained to the person affected, and warned that unclear ownership tends to surface only after a failure."
+  },
+  {
+    "id": "SYN-0002",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "procurement-and-reuse",
+    "stance": "mixed",
+    "text": "Responses were divided, with some noting how dependence on a single supplier would be avoided. They said lock-in is easier to create than to undo."
+  },
+  {
+    "id": "SYN-0003",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "access-to-services",
+    "stance": "uncertain",
+    "text": "A number of responses said they could not judge how someone would reach a person rather than an automated channel. They wanted assurance that no one would be left without a route in."
+  },
+  {
+    "id": "SYN-0004",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "workforce-capability",
+    "stance": "mixed",
+    "text": "Responses were divided, with some noting what training frontline staff would receive before any change, and asked how success would be judged in practice."
+  },
+  {
+    "id": "SYN-0005",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "workforce-capability",
+    "stance": "supportive",
+    "text": "Several responses welcomed the direction and added whether staff can override an automated recommendation, and asked that it be resolved before responsibilities move."
+  },
+  {
+    "id": "SYN-0006",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "workforce-capability",
+    "stance": "supportive",
+    "text": "Several responses welcomed the direction and added what training frontline staff would receive before any change, and suggested involving staff in the design rather than the rollout."
+  },
+  {
+    "id": "SYN-0007",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "data-governance",
+    "stance": "critical",
+    "text": "Several responses disagreed, arguing whether the lawful basis for reuse has been established, noting that a privacy notice is not the same as a safeguard."
+  },
+  {
+    "id": "SYN-0008",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "procurement-and-reuse",
+    "stance": "supportive",
+    "text": "Several responses welcomed the direction and added how much of the work would remain publicly owned, and asked for the reasoning to be published with the decision."
+  },
+  {
+    "id": "SYN-0009",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "access-to-services",
+    "stance": "uncertain",
+    "text": "Several responses said it was not yet clear whether opening hours match when people can actually seek help, and suggested the point be tested with people who rely on the service."
+  },
+  {
+    "id": "SYN-0010",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "access-to-services",
+    "stance": "critical",
+    "text": "Several responses disagreed, arguing how the change would affect people who need help in another language, particularly for people who already find the system hard to use."
+  },
+  {
+    "id": "SYN-0011",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "workforce-capability",
+    "stance": "uncertain",
+    "text": "Several responses said it was not yet clear who would be accountable when guidance and practice disagree. They noted that goodwill is not a substitute for capacity."
+  },
+  {
+    "id": "SYN-0012",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "environmental-cost",
+    "stance": "critical",
+    "text": "A number of responses raised concerns that what the running cost would be once the service is in use, and asked how the cost would be reviewed once in service."
+  },
+  {
+    "id": "SYN-0013",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "procurement-and-reuse",
+    "stance": "critical",
+    "text": "Several responses disagreed, arguing whether smaller organisations could realistically bid. They said lock-in is easier to create than to undo."
+  },
+  {
+    "id": "SYN-0014",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "procurement-and-reuse",
+    "stance": "uncertain",
+    "text": "Respondents were unsure and asked what happens to the service if a contract ends, and asked for the reasoning to be published with the decision."
+  },
+  {
+    "id": "SYN-0015",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "access-to-services",
+    "stance": "uncertain",
+    "text": "A number of responses said they could not judge whether opening hours match when people can actually seek help, and suggested the point be tested with people who rely on the service."
+  },
+  {
+    "id": "SYN-0016",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "accountability",
+    "stance": "critical",
+    "text": "Several responses disagreed, arguing how a decision could be explained to the person affected, and asked what an affected person could do to challenge it."
+  },
+  {
+    "id": "SYN-0017",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "data-governance",
+    "stance": "mixed",
+    "text": "Responses were divided, with some noting whether the lawful basis for reuse has been established, noting that a privacy notice is not the same as a safeguard."
+  },
+  {
+    "id": "SYN-0018",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "workforce-capability",
+    "stance": "uncertain",
+    "text": "A number of responses said they could not judge how new processes would be tested with the people who use them, and asked how success would be judged in practice."
+  },
+  {
+    "id": "SYN-0019",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "data-governance",
+    "stance": "critical",
+    "text": "Respondents challenged the approach on the grounds that whether the lawful basis for reuse has been established, noting that a privacy notice is not the same as a safeguard."
+  },
+  {
+    "id": "SYN-0020",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "accountability",
+    "stance": "mixed",
+    "text": "Responses were divided, with some noting what record would exist of how a conclusion was reached, and asked what an affected person could do to challenge it."
+  },
+  {
+    "id": "SYN-0021",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "access-to-services",
+    "stance": "mixed",
+    "text": "Responses were divided, with some noting whether opening hours match when people can actually seek help, particularly for people who already find the system hard to use."
+  },
+  {
+    "id": "SYN-0022",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "data-governance",
+    "stance": "mixed",
+    "text": "Responses were divided, with some noting how people would be told what is held about them, noting that a privacy notice is not the same as a safeguard."
+  },
+  {
+    "id": "SYN-0023",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "accountability",
+    "stance": "mixed",
+    "text": "Respondents supported the aim but qualified it, saying whether published reporting would show what actually happened, and warned that unclear ownership tends to surface only after a failure."
+  },
+  {
+    "id": "SYN-0024",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "access-to-services",
+    "stance": "critical",
+    "text": "A number of responses raised concerns that how people without reliable internet access would be supported, and asked for this to be set out before any change begins."
+  },
+  {
+    "id": "SYN-0025",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "data-governance",
+    "stance": "mixed",
+    "text": "Views differed: some responses argued whether data would be shared beyond the original purpose, and asked who would check that the rule is actually followed."
+  },
+  {
+    "id": "SYN-0026",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "procurement-and-reuse",
+    "stance": "mixed",
+    "text": "Respondents supported the aim but qualified it, saying how much of the work would remain publicly owned, and asked for the reasoning to be published with the decision."
+  },
+  {
+    "id": "SYN-0027",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "procurement-and-reuse",
+    "stance": "supportive",
+    "text": "Respondents agreed with the aim, observing whether smaller organisations could realistically bid. They said lock-in is easier to create than to undo."
+  },
+  {
+    "id": "SYN-0028",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "procurement-and-reuse",
+    "stance": "uncertain",
+    "text": "Several responses said it was not yet clear whether the work could be reused by other public bodies, and asked for the reasoning to be published with the decision."
+  },
+  {
+    "id": "SYN-0029",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "access-to-services",
+    "stance": "mixed",
+    "text": "Respondents accepted parts of the proposal while warning whether a single point of contact would reduce repeated form filling. They wanted assurance that no one would be left without a route in."
+  },
+  {
+    "id": "SYN-0030",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "workforce-capability",
+    "stance": "supportive",
+    "text": "Several responses welcomed the direction and added how specialist knowledge would be retained as roles change, and suggested involving staff in the design rather than the rollout."
+  },
+  {
+    "id": "SYN-0031",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "environmental-cost",
+    "stance": "uncertain",
+    "text": "Respondents sought clarification about how energy use would be reported over time. They said the comparison should include doing less, not only doing more."
+  },
+  {
+    "id": "SYN-0032",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "accountability",
+    "stance": "supportive",
+    "text": "There was broad agreement, with respondents noting how an independent review could examine the process, and asked what an affected person could do to challenge it."
+  },
+  {
+    "id": "SYN-0033",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "procurement-and-reuse",
+    "stance": "critical",
+    "text": "Several responses disagreed, arguing whether smaller organisations could realistically bid, and suggested the terms be written to allow reuse from the start."
+  },
+  {
+    "id": "SYN-0034",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "data-governance",
+    "stance": "supportive",
+    "text": "There was broad agreement, with respondents noting whether data would be shared beyond the original purpose. They wanted this settled before any information is collected."
+  },
+  {
+    "id": "SYN-0035",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "workforce-capability",
+    "stance": "supportive",
+    "text": "Several responses welcomed the direction and added whether staff can override an automated recommendation, and asked how success would be judged in practice."
+  },
+  {
+    "id": "SYN-0036",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "accountability",
+    "stance": "mixed",
+    "text": "Responses were divided, with some noting how a complaint would be escalated and resolved. They said responsibility should rest with a named role."
+  },
+  {
+    "id": "SYN-0037",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "environmental-cost",
+    "stance": "supportive",
+    "text": "There was broad agreement, with respondents noting whether the change would reduce or increase overall demand. They said the comparison should include doing less, not only doing more."
+  },
+  {
+    "id": "SYN-0038",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "workforce-capability",
+    "stance": "critical",
+    "text": "A number of responses raised concerns that whether staff can override an automated recommendation, and asked how success would be judged in practice."
+  },
+  {
+    "id": "SYN-0039",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "environmental-cost",
+    "stance": "critical",
+    "text": "A number of responses raised concerns that whether a less resource-intensive option was considered, and noted that a benefit case should carry its own running cost."
+  },
+  {
+    "id": "SYN-0040",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "data-governance",
+    "stance": "supportive",
+    "text": "There was broad agreement, with respondents noting which information would be kept and for how long, and asked for the position to be published rather than assumed."
+  },
+  {
+    "id": "SYN-0041",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "environmental-cost",
+    "stance": "uncertain",
+    "text": "Respondents were unsure and asked what the running cost would be once the service is in use, and noted that a benefit case should carry its own running cost."
+  },
+  {
+    "id": "SYN-0042",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "environmental-cost",
+    "stance": "critical",
+    "text": "Respondents objected to the proposal because how energy use would be reported over time, and noted that a benefit case should carry its own running cost."
+  },
+  {
+    "id": "SYN-0043",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "accountability",
+    "stance": "uncertain",
+    "text": "Respondents were unsure and asked whether published reporting would show what actually happened. They said responsibility should rest with a named role."
+  },
+  {
+    "id": "SYN-0044",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "access-to-services",
+    "stance": "uncertain",
+    "text": "Respondents sought clarification about whether a single point of contact would reduce repeated form filling, and asked for this to be set out before any change begins."
+  },
+  {
+    "id": "SYN-0045",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "environmental-cost",
+    "stance": "critical",
+    "text": "Respondents objected to the proposal because whether a less resource-intensive option was considered. They said the comparison should include doing less, not only doing more."
+  },
+  {
+    "id": "SYN-0046",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "accountability",
+    "stance": "mixed",
+    "text": "Respondents accepted parts of the proposal while warning how an independent review could examine the process, and warned that unclear ownership tends to surface only after a failure."
+  },
+  {
+    "id": "SYN-0047",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "environmental-cost",
+    "stance": "uncertain",
+    "text": "Several responses said it was not yet clear whether the environmental impact was assessed alongside the benefit, and noted that a benefit case should carry its own running cost."
+  },
+  {
+    "id": "SYN-0048",
+    "synthetic": true,
+    "disclosure": "Synthetic working data",
+    "theme": "data-governance",
+    "stance": "supportive",
+    "text": "There was broad agreement, with respondents noting how information would be corrected once an error is found. They wanted this settled before any information is collected."
+  }
+]

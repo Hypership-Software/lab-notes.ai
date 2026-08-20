@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs"
+
 import { describe, expect, it } from "vitest"
 
 import { sensitiveKeyPattern, findPersonalDataShape } from "@/lib/privacy-patterns"
@@ -248,5 +250,18 @@ describe("generateSyntheticCorpus", () => {
         generateSyntheticCorpus({ ...committedConfig, ...override }),
       ).toThrow(message)
     }
+  })
+
+  it("reproduces the committed fixture byte for byte", () => {
+    // Read raw bytes rather than importing the JSON: an import parses the file
+    // and destroys the exact formatting the recorded hash is taken over.
+    const committed = readFileSync(
+      "content/playbooks/policy-evidence/fixtures/synthetic/corpus.json",
+      "utf8",
+    )
+
+    expect(`${JSON.stringify(generateSyntheticCorpus(committedConfig), null, 2)}\n`).toBe(
+      committed,
+    )
   })
 })
