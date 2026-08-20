@@ -57,8 +57,37 @@ const minimalSource = {
   sha256: undefined,
 } satisfies Playbook["officialSources"][number]
 
+// A minimal, self-contained "planned" synthetic-data fixture. It is
+// deliberately not read off the live policy-evidence registry entry: that
+// playbook's corpus is now available (see the policy-evidence-corpus plan),
+// so its own syntheticData is no longer a "planned" example, and this
+// component test should not depend on which state the real playbook happens
+// to be in. The two paths below are inert display strings the component
+// never reads from disk — they do not need to name real committed files.
+const plannedSyntheticData = {
+  status: "planned",
+  label: "Synthetic working data",
+  method:
+    "Combine invented positions, themes, and phrasing derived only from an approved structural sample.",
+  sourceCharacteristics: [
+    "Only the structure, units, categories, and ranges verified in permissible official sources.",
+  ],
+  approximations: [
+    "Frequencies and relationships would be illustrative unless supported by a cited aggregate statistic.",
+  ],
+  alterations: [
+    "Entity identifiers, events, measurements, and text would be deliberately invented.",
+  ],
+  exclusions: [
+    "Names, contact details, exact addresses, rare personal combinations, and source records about individuals.",
+  ],
+  limitations: [
+    "No synthetic fixture exists at assessed maturity, and future synthetic data could not establish operational effectiveness or fairness.",
+  ],
+} satisfies Playbook["syntheticData"]
+
 const availableSyntheticData = {
-  ...playbook.syntheticData,
+  ...plannedSyntheticData,
   status: "available",
   seed: 42,
   generatorVersion: "1",
@@ -328,13 +357,15 @@ describe("playbook detail primitives", () => {
   })
 
   it("states that a planned synthetic method has produced no fixture", () => {
-    render(<SyntheticDataMethod syntheticData={playbook.syntheticData} />)
+    render(<SyntheticDataMethod syntheticData={plannedSyntheticData} />)
 
-    expect(screen.getByText(playbook.syntheticData.method)).toBeVisible()
+    expect(screen.getByText(plannedSyntheticData.method)).toBeVisible()
     expect(
       screen.getByText("No synthetic fixture has been generated yet"),
     ).toBeVisible()
-    expect(screen.getByText(playbook.syntheticData.limitations[0])).toBeVisible()
+    expect(
+      screen.getByText(plannedSyntheticData.limitations[0]),
+    ).toBeVisible()
     expect(screen.queryByText("Seed")).not.toBeInTheDocument()
     expect(screen.queryByText("Fixture")).not.toBeInTheDocument()
   })
