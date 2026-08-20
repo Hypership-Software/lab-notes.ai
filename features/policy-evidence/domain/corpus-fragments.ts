@@ -3,18 +3,24 @@ import type { CorpusStance, CorpusTheme } from "./types"
 /**
  * How a respondent positions their view. One of these opens each document.
  *
- * Constraint: every framing must be able to take an embedded question
- * ("how X", "whether X", "what X") as its complement, because that is how
- * every entry in `themeSubjects` is phrased. A framing that instead demands
- * a declarative complement ("...because X did happen") will read as
- * ungrammatical once concatenated with a `themeSubjects` entry.
+ * Constraint: every framing, for all four stances, must be able to take an
+ * interrogative complement ("whether X", "what X", "how X") as its object,
+ * because that is how every entry in `themeSubjects` is phrased. A framing
+ * that instead demands a declarative complement (e.g. "...because X did
+ * happen", "...and said X was true") will read as ungrammatical once
+ * concatenated with a `themeSubjects` entry. This has already broken twice:
+ * once for `critical` (verbs like "objected... because", "argued") and once
+ * for `supportive`/`mixed` (verbs like "said", "added", "noting",
+ * "observing" that take a declarative, not interrogative, complement).
+ * `generate-synthetic-corpus.test.ts` has a regression test asserting this
+ * across the whole generated corpus — keep it passing.
  */
 export const stanceFraming: Record<CorpusStance, readonly string[]> = {
   supportive: [
-    "Respondents supported the proposal and said",
-    "There was broad agreement, with respondents noting",
-    "Several responses welcomed the direction and added",
-    "Respondents agreed with the aim, observing",
+    "Respondents supported the proposal but wanted clarity on",
+    "There was broad agreement, though respondents queried",
+    "Several responses welcomed the direction and sought detail on",
+    "Respondents agreed with the aim, while questioning",
   ],
   critical: [
     "Respondents objected that the proposal never says",
@@ -23,10 +29,10 @@ export const stanceFraming: Record<CorpusStance, readonly string[]> = {
     "Respondents challenged the approach for not addressing",
   ],
   mixed: [
-    "Responses were divided, with some noting",
-    "Respondents supported the aim but qualified it, saying",
-    "Views differed: some responses argued",
-    "Respondents accepted parts of the proposal while warning",
+    "Responses were divided over",
+    "Respondents supported the aim but were split on",
+    "Views differed on",
+    "Respondents accepted parts of the proposal while disputing",
   ],
   uncertain: [
     "Respondents were unsure and asked",

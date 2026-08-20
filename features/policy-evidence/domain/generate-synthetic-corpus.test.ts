@@ -220,6 +220,52 @@ describe("generateSyntheticCorpus", () => {
     }
   })
 
+  it("never pairs a declarative-only complement with an interrogative subject", () => {
+    // Every `themeSubjects` entry is phrased as an interrogative clause
+    // ("how X", "whether X", "what X"). A stance framing whose verb demands
+    // a declarative complement instead (e.g. "...because X", "...and said
+    // X") reads as ungrammatical once the generator concatenates
+    // {framing} + {subject}. This defect class has escaped review twice
+    // (round 1: `critical`; round 2: `supportive`/`mixed`) while all other
+    // tests passed, because nothing asserted prose grammar. Scan the actual
+    // generated text directly so a future framing regression is caught
+    // regardless of which stance introduces it.
+    const declarativeOnlyComplements = [
+      "said",
+      "added",
+      "noting",
+      "observing",
+      "arguing",
+      "because",
+      "on the grounds that",
+      "concerns that",
+    ]
+    const interrogativeWords = ["whether", "what", "how"]
+
+    const forbiddenPatterns = declarativeOnlyComplements.flatMap((complement) =>
+      interrogativeWords.map(
+        (word) =>
+          new RegExp(
+            `\\b${complement.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s+${word}\\b`,
+            "i",
+          ),
+      ),
+    )
+
+    for (const config of [committedConfig, contrastingConfig, unevenConfig]) {
+      const documents = generateSyntheticCorpus(config)
+
+      const offending = documents.flatMap((document) => {
+        const matched = forbiddenPatterns.find((pattern) => pattern.test(document.text))
+        return matched
+          ? [`${document.id} (matched /${matched.source}/i): "${document.text}"`]
+          : []
+      })
+
+      expect(offending).toEqual([])
+    }
+  })
+
   it("gives every document distinct text", () => {
     const texts = generateSyntheticCorpus(committedConfig).map(
       (document) => document.text,

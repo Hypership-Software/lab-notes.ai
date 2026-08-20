@@ -5,7 +5,7 @@
     "disclosure": "Synthetic working data",
     "theme": "accountability",
     "stance": "supportive",
-    "text": "Respondents agreed with the aim, observing how a decision could be explained to the person affected, and warned that unclear ownership tends to surface only after a failure."
+    "text": "Respondents agreed with the aim, while questioning how a decision could be explained to the person affected, and warned that unclear ownership tends to surface only after a failure."
   },
   {
     "id": "SYN-0002",
@@ -13,7 +13,7 @@
     "disclosure": "Synthetic working data",
     "theme": "procurement-and-reuse",
     "stance": "mixed",
-    "text": "Responses were divided, with some noting how dependence on a single supplier would be avoided. They said lock-in is easier to create than to undo."
+    "text": "Responses were divided over how dependence on a single supplier would be avoided. They said lock-in is easier to create than to undo."
   },
   {
     "id": "SYN-0003",
@@ -29,7 +29,7 @@
     "disclosure": "Synthetic working data",
     "theme": "workforce-capability",
     "stance": "mixed",
-    "text": "Responses were divided, with some noting what training frontline staff would receive before any change, and asked how success would be judged in practice."
+    "text": "Responses were divided over what training frontline staff would receive before any change, and asked how success would be judged in practice."
   },
   {
     "id": "SYN-0005",
@@ -37,7 +37,7 @@
     "disclosure": "Synthetic working data",
     "theme": "workforce-capability",
     "stance": "supportive",
-    "text": "Several responses welcomed the direction and added whether staff can override an automated recommendation, and asked that it be resolved before responsibilities move."
+    "text": "Several responses welcomed the direction and sought detail on whether staff can override an automated recommendation, and asked that it be resolved before responsibilities move."
   },
   {
     "id": "SYN-0006",
@@ -45,7 +45,7 @@
     "disclosure": "Synthetic working data",
     "theme": "workforce-capability",
     "stance": "supportive",
-    "text": "Several responses welcomed the direction and added what training frontline staff would receive before any change, and suggested involving staff in the design rather than the rollout."
+    "text": "Several responses welcomed the direction and sought detail on what training frontline staff would receive before any change, and suggested involving staff in the design rather than the rollout."
   },
   {
     "id": "SYN-0007",
@@ -61,7 +61,7 @@
     "disclosure": "Synthetic working data",
     "theme": "procurement-and-reuse",
     "stance": "supportive",
-    "text": "Several responses welcomed the direction and added how much of the work would remain publicly owned, and asked for the reasoning to be published with the decision."
+    "text": "Several responses welcomed the direction and sought detail on how much of the work would remain publicly owned, and asked for the reasoning to be published with the decision."
   },
   {
     "id": "SYN-0009",
@@ -133,7 +133,7 @@
     "disclosure": "Synthetic working data",
     "theme": "data-governance",
     "stance": "mixed",
-    "text": "Responses were divided, with some noting whether the lawful basis for reuse has been established, noting that a privacy notice is not the same as a safeguard."
+    "text": "Responses were divided over whether the lawful basis for reuse has been established, noting that a privacy notice is not the same as a safeguard."
   },
   {
     "id": "SYN-0018",
@@ -157,7 +157,7 @@
     "disclosure": "Synthetic working data",
     "theme": "accountability",
     "stance": "mixed",
-    "text": "Responses were divided, with some noting what record would exist of how a conclusion was reached, and asked what an affected person could do to challenge it."
+    "text": "Responses were divided over what record would exist of how a conclusion was reached, and asked what an affected person could do to challenge it."
   },
   {
     "id": "SYN-0021",
@@ -165,7 +165,7 @@
     "disclosure": "Synthetic working data",
     "theme": "access-to-services",
     "stance": "mixed",
-    "text": "Responses were divided, with some noting whether opening hours match when people can actually seek help, particularly for people who already find the system hard to use."
+    "text": "Responses were divided over whether opening hours match when people can actually seek help, particularly for people who already find the system hard to use."
   },
   {
     "id": "SYN-0022",
@@ -173,7 +173,7 @@
     "disclosure": "Synthetic working data",
     "theme": "data-governance",
     "stance": "mixed",
-    "text": "Responses were divided, with some noting how people would be told what is held about them, noting that a privacy notice is not the same as a safeguard."
+    "text": "Responses were divided over how people would be told what is held about them, noting that a privacy notice is not the same as a safeguard."
   },
   {
     "id": "SYN-0023",
@@ -181,7 +181,7 @@
     "disclosure": "Synthetic working data",
     "theme": "accountability",
     "stance": "mixed",
-    "text": "Respondents supported the aim but qualified it, saying whether published reporting would show what actually happened, and warned that unclear ownership tends to surface only after a failure."
+    "text": "Respondents supported the aim but were split on whether published reporting would show what actually happened, and warned that unclear ownership tends to surface only after a failure."
   },
   {
     "id": "SYN-0024",
@@ -197,7 +197,7 @@
     "disclosure": "Synthetic working data",
     "theme": "data-governance",
     "stance": "mixed",
-    "text": "Views differed: some responses argued whether data would be shared beyond the original purpose, and asked who would check that the rule is actually followed."
+    "text": "Views differed on whether data would be shared beyond the original purpose, and asked who would check that the rule is actually followed."
   },
   {
     "id": "SYN-0026",
@@ -205,7 +205,7 @@
     "disclosure": "Synthetic working data",
     "theme": "procurement-and-reuse",
     "stance": "mixed",
-    "text": "Respondents supported the aim but qualified it, saying how much of the work would remain publicly owned, and asked for the reasoning to be published with the decision."
+    "text": "Respondents supported the aim but were split on how much of the work would remain publicly owned, and asked for the reasoning to be published with the decision."
   },
   {
     "id": "SYN-0027",
@@ -213,7 +213,7 @@
     "disclosure": "Synthetic working data",
     "theme": "procurement-and-reuse",
     "stance": "supportive",
-    "text": "Respondents agreed with the aim, observing whether smaller organisations could realistically bid. They said lock-in is easier to create than to undo."
+    "text": "Respondents agreed with the aim, while questioning whether smaller organisations could realistically bid. They said lock-in is easier to create than to undo."
   },
   {
     "id": "SYN-0028",
@@ -229,7 +229,7 @@
     "disclosure": "Synthetic working data",
     "theme": "access-to-services",
     "stance": "mixed",
-    "text": "Respondents accepted parts of the proposal while warning whether a single point of contact would reduce repeated form filling. They wanted assurance that no one would be left without a route in."
+    "text": "Respondents accepted parts of the proposal while disputing whether a single point of contact would reduce repeated form filling. They wanted assurance that no one would be left without a route in."
   },
   {
     "id": "SYN-0030",
@@ -237,7 +237,7 @@
     "disclosure": "Synthetic working data",
     "theme": "workforce-capability",
     "stance": "supportive",
-    "text": "Several responses welcomed the direction and added how specialist knowledge would be retained as roles change, and suggested involving staff in the design rather than the rollout."
+    "text": "Several responses welcomed the direction and sought detail on how specialist knowledge would be retained as roles change, and suggested involving staff in the design rather than the rollout."
   },
   {
     "id": "SYN-0031",
@@ -253,7 +253,7 @@
     "disclosure": "Synthetic working data",
     "theme": "accountability",
     "stance": "supportive",
-    "text": "There was broad agreement, with respondents noting how an independent review could examine the process, and asked what an affected person could do to challenge it."
+    "text": "There was broad agreement, though respondents queried how an independent review could examine the process, and asked what an affected person could do to challenge it."
   },
   {
     "id": "SYN-0033",
@@ -269,7 +269,7 @@
     "disclosure": "Synthetic working data",
     "theme": "data-governance",
     "stance": "supportive",
-    "text": "There was broad agreement, with respondents noting whether data would be shared beyond the original purpose. They wanted this settled before any information is collected."
+    "text": "There was broad agreement, though respondents queried whether data would be shared beyond the original purpose. They wanted this settled before any information is collected."
   },
   {
     "id": "SYN-0035",
@@ -277,7 +277,7 @@
     "disclosure": "Synthetic working data",
     "theme": "workforce-capability",
     "stance": "supportive",
-    "text": "Several responses welcomed the direction and added whether staff can override an automated recommendation, and asked how success would be judged in practice."
+    "text": "Several responses welcomed the direction and sought detail on whether staff can override an automated recommendation, and asked how success would be judged in practice."
   },
   {
     "id": "SYN-0036",
@@ -285,7 +285,7 @@
     "disclosure": "Synthetic working data",
     "theme": "accountability",
     "stance": "mixed",
-    "text": "Responses were divided, with some noting how a complaint would be escalated and resolved. They said responsibility should rest with a named role."
+    "text": "Responses were divided over how a complaint would be escalated and resolved. They said responsibility should rest with a named role."
   },
   {
     "id": "SYN-0037",
@@ -293,7 +293,7 @@
     "disclosure": "Synthetic working data",
     "theme": "environmental-cost",
     "stance": "supportive",
-    "text": "There was broad agreement, with respondents noting whether the change would reduce or increase overall demand. They said the comparison should include doing less, not only doing more."
+    "text": "There was broad agreement, though respondents queried whether the change would reduce or increase overall demand. They said the comparison should include doing less, not only doing more."
   },
   {
     "id": "SYN-0038",
@@ -317,7 +317,7 @@
     "disclosure": "Synthetic working data",
     "theme": "data-governance",
     "stance": "supportive",
-    "text": "There was broad agreement, with respondents noting which information would be kept and for how long, and asked for the position to be published rather than assumed."
+    "text": "There was broad agreement, though respondents queried which information would be kept and for how long, and asked for the position to be published rather than assumed."
   },
   {
     "id": "SYN-0041",
@@ -365,7 +365,7 @@
     "disclosure": "Synthetic working data",
     "theme": "accountability",
     "stance": "mixed",
-    "text": "Respondents accepted parts of the proposal while warning how an independent review could examine the process, and warned that unclear ownership tends to surface only after a failure."
+    "text": "Respondents accepted parts of the proposal while disputing how an independent review could examine the process, and warned that unclear ownership tends to surface only after a failure."
   },
   {
     "id": "SYN-0047",
@@ -381,6 +381,6 @@
     "disclosure": "Synthetic working data",
     "theme": "data-governance",
     "stance": "supportive",
-    "text": "There was broad agreement, with respondents noting how information would be corrected once an error is found. They wanted this settled before any information is collected."
+    "text": "There was broad agreement, though respondents queried how information would be corrected once an error is found. They wanted this settled before any information is collected."
   }
 ]
