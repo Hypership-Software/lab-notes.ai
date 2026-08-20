@@ -1,7 +1,9 @@
+import { indexCorpus, isCitationIntact } from "./citation-integrity"
 import type {
   AnalysisResult,
   Citation,
   CorpusDocument,
+  CorpusDocumentId,
   EvaluationCase,
   Finding,
   FindingId,
@@ -25,12 +27,12 @@ export type EvaluationCaseResult = {
   label: string
   /** False when the analysis produced no finding for this expectation at all. */
   findingPresent: boolean
-  expectedDocumentIds: string[]
+  expectedDocumentIds: CorpusDocumentId[]
   /** Documents cited by valid citations, deduplicated and sorted. */
-  citedDocumentIds: string[]
-  matchedDocumentIds: string[]
-  missedDocumentIds: string[]
-  unexpectedDocumentIds: string[]
+  citedDocumentIds: CorpusDocumentId[]
+  matchedDocumentIds: CorpusDocumentId[]
+  missedDocumentIds: CorpusDocumentId[]
+  unexpectedDocumentIds: CorpusDocumentId[]
 }
 
 export type EvaluationResult = {
@@ -61,21 +63,6 @@ function metric(numerator: number, denominator: number): Metric {
 }
 
 /**
- * A citation is valid only if its document exists and the recorded quote is
- * exactly what those offsets select. Anything else is a broken reference: the
- * quote is never re-derived from the offsets, because that would make every
- * citation agree with itself and the check meaningless.
- */
-function isIntact(citation: Citation, corpus: ReadonlyMap<string, CorpusDocument>) {
-  const document = corpus.get(citation.documentId)
-
-  if (!document) return false
-  if (citation.end > document.text.length) return false
-
-  return document.text.slice(citation.start, citation.end) === citation.quote
-}
-
-/**
  * Check every finding's citations against the corpus, then score the analysis
  * against a hand-labelled expectation set.
  *
@@ -88,7 +75,7 @@ export function evaluateAnalysis(
   gold: readonly EvaluationCase[],
   corpus: readonly CorpusDocument[],
 ): EvaluationResult {
-  const documents = new Map(corpus.map((document) => [document.id, document]))
+  const documents = indexCorpus(corpus)
   const goldByFinding = new Map(gold.map((entry) => [entry.findingId, entry]))
   const findingsById = new Map<FindingId, Finding>(
     analysis.findings.map((finding) => [finding.id, finding]),
@@ -105,7 +92,7 @@ export function evaluateAnalysis(
     const valid: Citation[] = []
 
     for (const citation of finding.evidence) {
-      if (isIntact(citation, documents)) {
+      if (isCitationIntact(citation, documents)) {
         valid.push(citation)
       } else {
         brokenReferenceCount += 1

@@ -1,53 +1,78 @@
 import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import type { PlaybookInput } from "@/lib/playbooks/schema"
 
-type DataAccessibility = PlaybookInput["dataAccessibility"]
-type RiskLevel = PlaybookInput["risk"]["level"]
+type Risk = PlaybookInput["risk"]
 type OfficialSource = PlaybookInput["officialSources"][number]
+type SyntheticData = PlaybookInput["syntheticData"]
+type PlannedSyntheticData = Extract<SyntheticData, { status: "planned" }>
+type AvailableSyntheticData = Extract<SyntheticData, { status: "available" }>
+type NotRunEvaluation = Extract<
+  PlaybookInput["evaluation"],
+  { status: "not-run" }
+>
+type NoDemo = Extract<PlaybookInput["demo"], { availability: "none" }>
+type BaselineOnlyDemo = Extract<
+  PlaybookInput["demo"],
+  { availability: "baseline-only" }
+>
 
-export type AssessedPlaybookSpec = {
-  slug: string
-  title: string
-  summary: string
-  sector: string
-  tags: string[]
-  technicalPatterns: string[]
-  problem: string
-  intendedUsers: string[]
-  affectedGroups: string[]
-  supportedDecision: string
-  publicBenefit: string
-  dataAccessibility: DataAccessibility
-  riskLevel: RiskLevel
-  riskReasons: string[]
-  mitigations: string[]
+/**
+ * What an author writes for an assessed playbook, and nothing more.
+ *
+ * Every field is projected from the slot in `PlaybookInput` it ends up filling,
+ * so the spec cannot drift from the schema and each entry says where its value
+ * lands. The shape is flatter than the schema on purpose — authors write
+ * `riskLevel`, not `risk.level` — but the types underneath are the schema's own.
+ *
+ * Fields the factory supplies (maturity, oversight prose, the shared strategy
+ * source, the standard evaluation questions) are deliberately absent: an
+ * assessed playbook does not get to choose them.
+ */
+export type AssessedPlaybookSpec = Pick<
+  PlaybookInput,
+  | "slug"
+  | "title"
+  | "summary"
+  | "sector"
+  | "tags"
+  | "technicalPatterns"
+  | "problem"
+  | "intendedUsers"
+  | "affectedGroups"
+  | "supportedDecision"
+  | "publicBenefit"
+  | "dataAccessibility"
+  | "limitations"
+  | "failureModes"
+  | "nextValidationSteps"
+> & {
+  riskLevel: Risk["level"]
+  riskReasons: Risk["reasons"]
+  mitigations: Risk["mitigations"]
+  /** Named in the shared strategy source's `purpose` sentence. */
   sourceApplication: string
+  /** Follows `sourceApplication` in the same sentence. */
   sourceRationale: string
-  syntheticMethod: string
-  baseline: {
-    name: string
-    description: string
-    method: string
-    limitations: string[]
-  }
-  limitations: string[]
-  failureModes: string[]
-  nextValidationSteps: string[]
-  demoBarrier: string
+  syntheticMethod: SyntheticData["method"]
+  baseline: PlaybookInput["nonAiBaseline"]
+  responsibleRole: PlaybookInput["humanOversight"]["responsibleRole"]
+  partnerRequirements: PlaybookInput["implementation"]["partnerRequirements"]
+  demoBarrier: NoDemo["reason"]
+  additionalSources?: OfficialSource[]
   /**
    * Replaces the shared sentence explaining why `evaluation.status` is
    * `not-run`. A playbook that has measured something real, such as its non-AI
    * baseline, needs to say so here rather than leave the reader with the
    * default "nothing has been measured" reading.
    */
-  evaluationReason?: string
+  evaluationReason?: NotRunEvaluation["reason"]
   /**
    * Replaces the shared evaluation limitations. Required alongside
    * `evaluationReason` once a labelled fixture exists: the default sentence
    * says there is no labelled fixture to evaluate, which stops being true the
    * moment one is committed.
    */
-  evaluationLimitations?: string[]
+  evaluationLimitations?: NotRunEvaluation["limitations"]
   /**
    * Publishes a hosted example that runs only the deterministic non-AI
    * baseline. Supplying it replaces the `none` demo state built from
@@ -57,14 +82,10 @@ export type AssessedPlaybookSpec = {
    * Maturity is unaffected and stays `assessed`: a baseline demonstration makes
    * no claim about a model, so it is not evidence of one.
    */
-  baselineDemo?: {
-    method: string
-    vocabularyVersion: string
-    limitations: string[]
-  }
-  responsibleRole: string
-  partnerRequirements: string[]
-  additionalSources?: OfficialSource[]
+  baselineDemo?: Pick<
+    BaselineOnlyDemo,
+    "method" | "vocabularyVersion" | "limitations"
+  >
   /**
    * Supplied only by a playbook whose synthetic dataset actually exists. It
    * emits `syntheticData.status: "available"` and replaces the planned-state
@@ -80,14 +101,16 @@ export type AssessedPlaybookSpec = {
    * overridable here: the schema forbids a recorded demonstration until the
    * recorded output exists, which is Task 9's work.
    */
-  syntheticDataset?: {
-    dataPath: string
-    structureNotePath: string
-    sourceCharacteristics: string[]
-    approximations: string[]
-    alterations: string[]
-    limitations: string[]
-    implementationSummary: string
+  syntheticDataset?: Pick<
+    AvailableSyntheticData,
+    | "dataPath"
+    | "structureNotePath"
+    | "sourceCharacteristics"
+    | "approximations"
+    | "alterations"
+    | "limitations"
+  > & {
+    implementationSummary: PlaybookInput["implementation"]["summary"]
   }
 }
 
@@ -116,9 +139,6 @@ export function defineAssessedPlaybook(spec: AssessedPlaybookSpec) {
       "The source does not specify an implementation, dataset, model, or evaluation design.",
     ],
   }
-
-  type SyntheticData = PlaybookInput["syntheticData"]
-  type PlannedSyntheticData = Extract<SyntheticData, { status: "planned" }>
 
   // Not `as const`: the schema's input type expects mutable `string[]`
   // arrays, and a whole-object `as const` would freeze them into readonly

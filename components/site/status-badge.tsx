@@ -8,8 +8,8 @@ import {
 import type { LucideIcon } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import type { Playbook } from "@/lib/playbooks/schema"
-import { maturityLadder } from "@/lib/playbooks/vocabulary"
+import type { Maturity } from "@/lib/playbooks/schema"
+import { maturityRung } from "@/lib/playbooks/vocabulary"
 
 const icon = {
   assessed: BookOpenCheck,
@@ -17,14 +17,10 @@ const icon = {
   "partner-ready": Handshake,
   "operational-pilot": RadioTower,
   "evaluated-service": ClipboardCheck,
-} satisfies Record<Playbook["maturity"], LucideIcon>
+} satisfies Record<Maturity, LucideIcon>
 
-const rungByValue = Object.fromEntries(
-  maturityLadder.map((rung) => [rung.value, rung]),
-) as Record<Playbook["maturity"], (typeof maturityLadder)[number]>
-
-export function StatusBadge({ maturity }: { maturity: Playbook["maturity"] }) {
-  const rung = rungByValue[maturity]
+export function StatusBadge({ maturity }: { maturity: Maturity }) {
+  const rung = maturityRung[maturity]
   const Icon = icon[maturity]
 
   return (

@@ -3,7 +3,7 @@ import Link from "next/link"
 import { notFound } from "next/navigation"
 
 import { DemoReadiness } from "@/features/playbooks/detail/demo-readiness"
-import { PolicyEvidenceWorkbench } from "@/features/policy-evidence/components/policy-evidence-workbench"
+import { renderHostedDemo } from "@/features/playbooks/hosted-demos"
 import { getPlaybook, getPlaybookSlugs } from "@/lib/playbooks/registry"
 
 export const dynamicParams = false
@@ -42,9 +42,8 @@ export default async function PlaybookDemoPage({
   const playbook = getPlaybook(slug)
   if (!playbook) notFound()
 
-  if (playbook.demo.availability === "baseline-only") {
-    return <PolicyEvidenceWorkbench playbook={playbook} />
-  }
+  const hostedDemo = renderHostedDemo(playbook)
+  if (hostedDemo) return hostedDemo
 
   return (
     <div className="page-shell demo-unavailable-page">

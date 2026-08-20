@@ -1,6 +1,7 @@
 import { z } from "zod"
 
 import { findPersonalDataShape } from "@/lib/privacy-patterns"
+import { kebabSlugPattern, sha256Schema } from "@/lib/schema-primitives"
 
 export const corpusThemeValues = [
   "access-to-services",
@@ -54,18 +55,14 @@ export const corpusSchema = z
   .superRefine((documents, context) => {
     const ids = documents.map((document) => document.id)
 
-    if (new Set(ids).size !== ids.length) {
-      // Find the index of the first duplicate
-      const seen = new Set<string>()
-      let duplicateIndex = 0
-      for (let i = 0; i < ids.length; i++) {
-        if (seen.has(ids[i])) {
-          duplicateIndex = i
-          break
-        }
-        seen.add(ids[i])
-      }
+    const seen = new Set<string>()
+    const duplicateIndex = ids.findIndex((id) => {
+      if (seen.has(id)) return true
+      seen.add(id)
+      return false
+    })
 
+    if (duplicateIndex !== -1) {
       context.addIssue({
         code: "custom",
         message: "Corpus identifiers must be unique",
@@ -88,6 +85,7 @@ export const corpusSchema = z
 export type CorpusTheme = (typeof corpusThemeValues)[number]
 export type CorpusStance = (typeof corpusStanceValues)[number]
 export type CorpusDocument = z.infer<typeof corpusDocumentSchema>
+export type CorpusDocumentId = CorpusDocument["id"]
 
 /**
  * An exact span of one corpus document. `quote` is stored alongside the offsets
@@ -117,7 +115,7 @@ export const citationSchema = z
  */
 export const findingIdSchema = z.templateLiteral([
   "F-",
-  z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use a kebab-case finding slug"),
+  z.string().regex(kebabSlugPattern, "Use a kebab-case finding slug"),
 ])
 
 export const findingSchema = z.strictObject({
@@ -145,7 +143,7 @@ export const baselineAnalysisSchema = z.strictObject({
 
 export const recordedAnalysisSchema = z.strictObject({
   kind: z.literal("recorded-ai-assisted"),
-  inputSha256: z.string().regex(/^[a-f0-9]{64}$/, "Use a lowercase SHA-256 digest"),
+  inputSha256: sha256Schema,
   findings: z.array(findingSchema),
 })
 

@@ -4,11 +4,10 @@ import {
   dataAccessibilityValues,
   maturityValues,
   riskValues,
+  type DataAccessibility,
+  type Maturity,
+  type RiskLevel,
 } from "@/lib/playbooks/schema"
-
-type DataAccessibility = (typeof dataAccessibilityValues)[number]
-type Maturity = (typeof maturityValues)[number]
-type Risk = (typeof riskValues)[number]
 
 export type CatalogueQuery = {
   query: string
@@ -16,7 +15,7 @@ export type CatalogueQuery = {
   patterns: string[]
   dataAccessibility: DataAccessibility[]
   maturity: Maturity[]
-  risk: Risk[]
+  risk: RiskLevel[]
 }
 
 const shortTextSchema = z.string().trim().min(1).max(80)

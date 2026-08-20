@@ -1,12 +1,11 @@
 import { z } from "zod"
 
-const slugSchema = z
-  .string()
-  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use a lowercase kebab-case slug")
-
-const sha256Schema = z
-  .string()
-  .regex(/^[a-f0-9]{64}$/, "Use a lowercase SHA-256 digest")
+import {
+  isoDateSchema,
+  kebabSlugSchema as slugSchema,
+  kebabSlugSource,
+  sha256Schema,
+} from "@/lib/schema-primitives"
 
 const relativePathSchema = z
   .string()
@@ -22,7 +21,17 @@ const relativePathSchema = z
 const sentenceSchema = z.string().trim().min(10)
 const nonEmptyList = <T extends z.ZodType>(item: T) => z.array(item).min(1)
 
-export const isoDateSchema = z.iso.date()
+/**
+ * The route a hosted demonstration must be published at. Built from the slug
+ * pattern so a change to what counts as a slug cannot leave the route contract
+ * accepting a shape the slug field rejects.
+ */
+const demoRouteSchema = z
+  .string()
+  .regex(
+    new RegExp(`^/playbooks/${kebabSlugSource}/demo$`),
+    "Use the playbook's own demo route",
+  )
 
 export const maturityValues = [
   "assessed",
@@ -48,14 +57,6 @@ export const sourceTypeValues = [
   "dataset",
   "guidance",
   "research",
-] as const
-
-export const demoAvailabilityValues = [
-  "none",
-  "baseline-only",
-  "recorded",
-  "live-local",
-  "partner",
 ] as const
 
 export const sourceSchema = z
@@ -189,7 +190,7 @@ const demoNoneSchema = z.strictObject({
 
 const demoRecordedSchema = z.strictObject({
   availability: z.literal("recorded"),
-  route: z.string().regex(/^\/playbooks\/[a-z0-9]+(?:-[a-z0-9]+)*\/demo$/),
+  route: demoRouteSchema,
   recordedOutputId: slugSchema,
   label: z.literal("Recorded demonstration"),
   recordedAt: isoDateSchema,
@@ -215,7 +216,7 @@ const demoRecordedSchema = z.strictObject({
  */
 const demoBaselineOnlySchema = z.strictObject({
   availability: z.literal("baseline-only"),
-  route: z.string().regex(/^\/playbooks\/[a-z0-9]+(?:-[a-z0-9]+)*\/demo$/),
+  route: demoRouteSchema,
   label: z.literal("Baseline demonstration"),
   method: sentenceSchema,
   vocabularyVersion: z.string().trim().min(1),
@@ -224,7 +225,7 @@ const demoBaselineOnlySchema = z.strictObject({
 
 const demoLiveLocalSchema = z.strictObject({
   availability: z.literal("live-local"),
-  route: z.string().regex(/^\/playbooks\/[a-z0-9]+(?:-[a-z0-9]+)*\/demo$/),
+  route: demoRouteSchema,
   setupPath: relativePathSchema,
   warning: sentenceSchema,
 })
@@ -345,3 +346,29 @@ export type PlaybookSummary = Pick<
   | "demo"
   | "lastReviewed"
 >
+
+/**
+ * Named projections of the playbook contract.
+ *
+ * Every consumer reads its types from here rather than re-deriving them from
+ * the underlying value tuples, so a maturity rung or risk level is one type
+ * with one name wherever it appears.
+ */
+export type Maturity = Playbook["maturity"]
+export type DataAccessibility = Playbook["dataAccessibility"]
+export type RiskLevel = Playbook["risk"]["level"]
+export type PlaybookRisk = Playbook["risk"]
+export type OfficialSource = Playbook["officialSources"][number]
+export type SourceType = OfficialSource["sourceType"]
+export type SyntheticData = Playbook["syntheticData"]
+export type NonAiBaseline = Playbook["nonAiBaseline"]
+export type Evaluation = Playbook["evaluation"]
+export type PlaybookDemo = Playbook["demo"]
+export type DemoAvailability = PlaybookDemo["availability"]
+
+/**
+ * A demonstration this application has to render a page for, narrowed by the
+ * presence of a route. `none` and `partner` describe why there is nothing to
+ * open; every other variant promises a hosted page at its own route.
+ */
+export type HostedDemo = Extract<PlaybookDemo, { route: string }>

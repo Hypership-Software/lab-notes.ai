@@ -2,6 +2,8 @@ import type { ReactNode } from "react"
 
 import type { EvidenceThreadModel } from "../domain/build-evidence-threads"
 
+import type { DocumentElementId } from "./element-ids"
+
 /**
  * The fixed order in which a finding is traced back to its evidence. Every
  * stage is labelled in text: the numbers and the connector rule are decoration
@@ -26,7 +28,7 @@ export function EvidenceThread({
   thread: EvidenceThreadModel
   /** The playbook's own synthetic-data method sentence, shown as stage four. */
   syntheticMethod: string
-  documentElementId: (documentId: string) => string
+  documentElementId: DocumentElementId
   /** Stage six. Passed in so the thread itself stays free of client state. */
   reviewSlot: ReactNode
 }): ReactNode {

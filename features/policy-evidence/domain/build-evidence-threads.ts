@@ -1,3 +1,4 @@
+import { indexCorpus, isCitationIntact } from "./citation-integrity"
 import type { EvaluationCaseResult, EvaluationResult } from "./evaluate-analysis"
 import type {
   AnalysisResult,
@@ -45,7 +46,7 @@ export function buildEvidenceThreads(
   evaluation: EvaluationResult,
   corpus: readonly CorpusDocument[],
 ): EvidenceThreadModel[] {
-  const documents = new Map(corpus.map((document) => [document.id, document]))
+  const documents = indexCorpus(corpus)
   const casesByFinding = new Map(gold.map((entry) => [entry.findingId, entry]))
   const resultsByCase = new Map(
     evaluation.cases.map((entry) => [entry.caseId, entry]),
@@ -56,18 +57,11 @@ export function buildEvidenceThreads(
 
     return {
       finding,
-      citations: finding.evidence.map((citation) => {
-        const document = documents.get(citation.documentId)
-
-        return {
-          citation,
-          document,
-          intact:
-            document !== undefined &&
-            citation.end <= document.text.length &&
-            document.text.slice(citation.start, citation.end) === citation.quote,
-        }
-      }),
+      citations: finding.evidence.map((citation) => ({
+        citation,
+        document: documents.get(citation.documentId),
+        intact: isCitationIntact(citation, documents),
+      })),
       evaluationCase,
       caseResult: evaluationCase
         ? resultsByCase.get(evaluationCase.id)

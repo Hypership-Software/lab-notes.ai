@@ -1,4 +1,12 @@
-import type { Playbook } from "./schema"
+import { toRecord } from "@/lib/to-record"
+
+import {
+  maturityValues,
+  type DataAccessibility,
+  type Maturity,
+  type RiskLevel,
+  type SourceType,
+} from "./schema"
 
 export const maturityLadder = [
   {
@@ -31,19 +39,30 @@ export const maturityLadder = [
       "Operational outcomes and harms have received independent evaluation.",
   },
 ] as const satisfies readonly {
-  value: Playbook["maturity"]
+  value: Maturity
   label: string
   description: string
 }[]
 
-export const maturityLabel = Object.fromEntries(
-  maturityLadder.map((rung) => [rung.value, rung.label]),
-) as Record<Playbook["maturity"], string>
+export type MaturityRung = (typeof maturityLadder)[number]
 
-export const dataAccessibilityLabel: Record<
-  Playbook["dataAccessibility"],
-  string
-> = {
+/**
+ * The ladder indexed by rung. Built here rather than in each component that
+ * needs a label or a description, so there is one lookup and one place a
+ * missing rung is caught.
+ */
+export const maturityRung = toRecord(maturityValues, (value): MaturityRung => {
+  const rung = maturityLadder.find((entry) => entry.value === value)
+  if (!rung) throw new Error(`The maturity ladder has no rung for "${value}"`)
+  return rung
+})
+
+export const maturityLabel = toRecord(
+  maturityValues,
+  (value) => maturityRung[value].label,
+)
+
+export const dataAccessibilityLabel: Record<DataAccessibility, string> = {
   open: "Open data",
   "public-readonly": "Public, reuse to confirm",
   partial: "Partly accessible",
@@ -51,17 +70,14 @@ export const dataAccessibilityLabel: Record<
   unknown: "Access not yet assessed",
 }
 
-export const riskLabel: Record<Playbook["risk"]["level"], string> = {
+export const riskLabel: Record<RiskLevel, string> = {
   low: "Low risk",
   moderate: "Moderate risk",
   high: "High risk",
   "very-high": "Very high risk",
 }
 
-export const sourceTypeLabel: Record<
-  Playbook["officialSources"][number]["sourceType"],
-  string
-> = {
+export const sourceTypeLabel: Record<SourceType, string> = {
   strategy: "Strategy",
   "consultation-report": "Consultation report",
   dataset: "Dataset",

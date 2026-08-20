@@ -4,6 +4,8 @@ import { ProvenanceLabel } from "@/components/site/provenance-label"
 
 import type { CorpusDocument } from "../domain/types"
 
+import type { DocumentElementId } from "./element-ids"
+
 const stanceLabels: Record<CorpusDocument["stance"], string> = {
   supportive: "Supportive",
   critical: "Critical",
@@ -25,7 +27,7 @@ export function SyntheticCorpusInspector({
 }: {
   corpus: readonly CorpusDocument[]
   /** Builds the anchor an evidence thread links back to. */
-  documentElementId: (documentId: string) => string
+  documentElementId: DocumentElementId
 }): ReactNode {
   return (
     <div className="corpus-inspector">

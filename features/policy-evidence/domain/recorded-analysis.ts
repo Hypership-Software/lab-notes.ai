@@ -1,14 +1,14 @@
 import { z } from "zod"
 
+import { assertNever } from "@/lib/assert-never"
+import { isoDateSchema, sha256Schema } from "@/lib/schema-primitives"
+
+import { checkCitation, indexCorpus } from "./citation-integrity"
 import {
   recordedAnalysisSchema,
   type CorpusDocument,
   type RecordedAnalysis,
 } from "./types"
-
-const sha256Schema = z
-  .string()
-  .regex(/^[a-f0-9]{64}$/, "Use a lowercase SHA-256 digest")
 
 /**
  * The statement the interface must carry beside any recorded model output. It is
@@ -37,7 +37,7 @@ export const recordedAnalysisManifestSchema = z.strictObject({
   procedureVersion: z.string().trim().min(1),
   liveService: z.literal(false),
   /** UTC calendar date of the recording. */
-  recordedAt: z.iso.date(),
+  recordedAt: isoDateSchema,
   modelIdentifier: z.string().trim().min(3),
   modelVersion: z.string().trim().min(1),
   inputSha256: sha256Schema,
@@ -119,37 +119,38 @@ export function parseRecordedAnalysis(
   }
 
   if (analysisResult.success) {
-    const documents = new Map(corpus.map((document) => [document.id, document]))
+    const documents = indexCorpus(corpus)
 
     for (const finding of analysisResult.data.findings) {
       for (const citation of finding.evidence) {
-        const document = documents.get(citation.documentId)
+        const check = checkCitation(citation, documents)
 
-        if (!document) {
-          errors.push(
-            `analysis.${finding.id}: citation names ${citation.documentId}, which is not in the corpus`,
-          )
-          continue
-        }
-
-        if (
-          citation.end > document.text.length ||
-          document.text.slice(citation.start, citation.end) !== citation.quote
-        ) {
-          errors.push(
-            `analysis.${finding.id}: citation into ${citation.documentId} does not match the text at those offsets`,
-          )
+        switch (check.status) {
+          case "intact":
+            break
+          case "unknown-document":
+            errors.push(
+              `analysis.${finding.id}: citation names ${citation.documentId}, which is not in the corpus`,
+            )
+            break
+          case "quote-mismatch":
+            errors.push(
+              `analysis.${finding.id}: citation into ${citation.documentId} does not match the text at those offsets`,
+            )
+            break
+          default:
+            assertNever(check)
         }
       }
     }
   }
 
-  if (errors.length > 0) return { ok: false, errors }
+  if (!manifestResult.success || !analysisResult.success || errors.length > 0) {
+    return { ok: false, errors }
+  }
 
-  // Both parses succeeded, which the error list above would otherwise have
-  // recorded, so the non-null assertions here cannot fire.
   return {
     ok: true,
-    value: { manifest: manifestResult.data!, analysis: analysisResult.data! },
+    value: { manifest: manifestResult.data, analysis: analysisResult.data },
   }
 }

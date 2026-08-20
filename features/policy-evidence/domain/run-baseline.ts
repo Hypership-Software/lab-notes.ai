@@ -1,8 +1,11 @@
+import { toRecord } from "@/lib/to-record"
+
 import {
   corpusThemeValues,
   type BaselineAnalysis,
   type Citation,
   type CorpusDocument,
+  type CorpusDocumentId,
   type CorpusTheme,
   type Finding,
 } from "./types"
@@ -134,26 +137,17 @@ function termPattern(term: string): RegExp {
 
 type CompiledTerm = { term: string; weight: number; pattern: RegExp }
 
-function compileVocabulary(): Record<CorpusTheme, readonly CompiledTerm[]> {
-  // Built by iterating `corpusThemeValues`, so every key is populated before
-  // this returns. Starting from `{}` rather than `Object.fromEntries` keeps the
-  // theme keys in the type instead of widening them to `string`.
-  const compiled = {} as Record<CorpusTheme, readonly CompiledTerm[]>
-
-  for (const theme of corpusThemeValues) {
-    compiled[theme] = themeVocabulary[theme].map((term) => ({
+const compiledVocabulary = toRecord(
+  corpusThemeValues,
+  (theme): readonly CompiledTerm[] =>
+    themeVocabulary[theme].map((term) => ({
       term,
       // A multi-word phrase is stronger evidence than a bare token, so it is
       // worth its length. Nothing subtler is justified by a word list.
       weight: term.split(/[^a-z0-9]+/).filter(Boolean).length,
       pattern: termPattern(term),
-    }))
-  }
-
-  return compiled
-}
-
-const compiledVocabulary = compileVocabulary()
+    })),
+)
 
 /**
  * Expand a match to the sentence containing it, so a citation reads as evidence
@@ -186,7 +180,7 @@ function enclosingSentence(text: string, matchStart: number, matchEnd: number) {
 }
 
 type DocumentMatch = {
-  documentId: CorpusDocument["id"]
+  documentId: CorpusDocumentId
   score: number
   citation: Citation
 }

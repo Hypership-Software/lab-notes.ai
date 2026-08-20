@@ -34,12 +34,12 @@ export function WorkbenchClient({
     threads[0]?.finding.id,
   )
   const [dispositions, setDispositions] = useState<
-    Record<string, ReviewDisposition>
+    Partial<Record<FindingId, ReviewDisposition>>
   >({})
   const [resetPending, setResetPending] = useState(false)
 
   const reviewedCount = Object.values(dispositions).filter(
-    (disposition) => disposition !== "unreviewed",
+    (disposition) => disposition !== undefined && disposition !== "unreviewed",
   ).length
 
   return (

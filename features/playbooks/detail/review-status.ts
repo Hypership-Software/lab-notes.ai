@@ -1,4 +1,4 @@
-import { isoDateSchema } from "@/lib/playbooks/schema"
+import { isoDateSchema } from "@/lib/schema-primitives"
 
 export type ReviewStatus =
   | { status: "current"; reviewedAt: string; reviewDueAt: string }

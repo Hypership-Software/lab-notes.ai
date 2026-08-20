@@ -1,10 +1,14 @@
-import type { Playbook, PlaybookSummary } from "@/lib/playbooks/schema"
+import type {
+  DataAccessibility,
+  Maturity,
+  PlaybookSummary,
+} from "@/lib/playbooks/schema"
 
 import type { CatalogueQuery } from "./catalogue-query"
 
 const collator = new Intl.Collator("en-GB", { sensitivity: "base" })
 
-const maturityRank: Record<Playbook["maturity"], number> = {
+const maturityRank: Record<Maturity, number> = {
   "recorded-demo": 0,
   assessed: 1,
   "partner-ready": 2,
@@ -12,7 +16,7 @@ const maturityRank: Record<Playbook["maturity"], number> = {
   "evaluated-service": 4,
 }
 
-const dataAccessibilityRank: Record<Playbook["dataAccessibility"], number> = {
+const dataAccessibilityRank: Record<DataAccessibility, number> = {
   open: 0,
   "public-readonly": 1,
   partial: 2,

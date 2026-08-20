@@ -1,11 +1,11 @@
 import { ShieldAlert } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
-import type { Playbook } from "@/lib/playbooks/schema"
+import type { RiskLevel } from "@/lib/playbooks/schema"
 import { riskLabel } from "@/lib/playbooks/vocabulary"
 
 type RiskBadgeProps = {
-  level: Playbook["risk"]["level"]
+  level: RiskLevel
   reasons: readonly string[]
   descriptionId?: string
 }

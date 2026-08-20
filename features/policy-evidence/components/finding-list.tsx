@@ -6,6 +6,8 @@ import {
 } from "../domain/review-disposition"
 import type { Finding, FindingId } from "../domain/types"
 
+import type { ThreadElementId } from "./element-ids"
+
 /**
  * The list of findings, doubling as the page's finding navigation.
  *
@@ -24,9 +26,9 @@ export function FindingList({
 }: {
   findings: readonly Finding[]
   activeFindingId: FindingId | undefined
-  dispositions: Record<string, ReviewDisposition>
+  dispositions: Partial<Record<FindingId, ReviewDisposition>>
   onSelect: (findingId: FindingId) => void
-  threadElementId: (findingId: string) => string
+  threadElementId: ThreadElementId
 }): ReactNode {
   return (
     <nav className="finding-list" aria-label="Findings">

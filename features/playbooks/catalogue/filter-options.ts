@@ -1,4 +1,9 @@
-import type { Playbook, PlaybookSummary } from "@/lib/playbooks/schema"
+import type {
+  DataAccessibility,
+  Maturity,
+  PlaybookSummary,
+  RiskLevel,
+} from "@/lib/playbooks/schema"
 import {
   dataAccessibilityLabel,
   maturityLabel,
@@ -14,15 +19,15 @@ export type CatalogueFilterOption<Value extends string = string> = {
 export type CatalogueFilterOptions = {
   sectors: CatalogueFilterOption[]
   patterns: CatalogueFilterOption[]
-  dataAccessibility: CatalogueFilterOption<Playbook["dataAccessibility"]>[]
-  maturity: CatalogueFilterOption<Playbook["maturity"]>[]
-  risk: CatalogueFilterOption<Playbook["risk"]["level"]>[]
+  dataAccessibility: CatalogueFilterOption<DataAccessibility>[]
+  maturity: CatalogueFilterOption<Maturity>[]
+  risk: CatalogueFilterOption<RiskLevel>[]
 }
 
 const collator = new Intl.Collator("en-GB", { sensitivity: "base" })
 
-function countValues(values: readonly string[]) {
-  const counts = new Map<string, number>()
+function countValues<Value extends string>(values: readonly Value[]) {
+  const counts = new Map<Value, number>()
   for (const value of values) counts.set(value, (counts.get(value) ?? 0) + 1)
   return counts
 }
@@ -36,13 +41,9 @@ function textOptions(values: readonly string[]) {
 function controlledOptions<Value extends string>(
   values: readonly Value[],
   labels: Record<Value, string>,
-) {
+): CatalogueFilterOption<Value>[] {
   return [...countValues(values)]
-    .map(([value, count]) => ({
-      value: value as Value,
-      label: labels[value as Value],
-      count,
-    }))
+    .map(([value, count]) => ({ value, label: labels[value], count }))
     .sort((left, right) => collator.compare(left.label, right.label))
 }
 
