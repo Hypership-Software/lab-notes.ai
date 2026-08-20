@@ -73,6 +73,12 @@ describe("corpusSchema", () => {
   it("rejects duplicate identifiers", () => {
     const result = corpusSchema.safeParse([validDocument, { ...validDocument }])
     expect(result.success).toBe(false)
+    if (!result.success) {
+      const duplicateIssue = result.error.issues.find(
+        (issue) => issue.message === "Corpus identifiers must be unique",
+      )
+      expect(duplicateIssue?.path).toEqual([1])
+    }
   })
 
   it("rejects documents that are not sorted by identifier", () => {
@@ -81,6 +87,12 @@ describe("corpusSchema", () => {
       { ...validDocument, id: "SYN-0001" },
     ])
     expect(result.success).toBe(false)
+    if (!result.success) {
+      const sortIssue = result.error.issues.find(
+        (issue) => issue.message === "Corpus documents must be sorted by identifier",
+      )
+      expect(sortIssue?.path).toEqual([0])
+    }
   })
 
   it("accepts a sorted, unique corpus", () => {

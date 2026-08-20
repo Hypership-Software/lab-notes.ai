@@ -54,18 +54,32 @@ export const corpusSchema = z
     const ids = documents.map((document) => document.id)
 
     if (new Set(ids).size !== ids.length) {
+      // Find the index of the first duplicate
+      const seen = new Set<string>()
+      let duplicateIndex = 0
+      for (let i = 0; i < ids.length; i++) {
+        if (seen.has(ids[i])) {
+          duplicateIndex = i
+          break
+        }
+        seen.add(ids[i])
+      }
+
       context.addIssue({
         code: "custom",
         message: "Corpus identifiers must be unique",
+        path: [duplicateIndex],
       })
     }
 
     const sorted = [...ids].sort()
 
-    if (ids.some((id, index) => id !== sorted[index])) {
+    const mismatchIndex = ids.findIndex((id, index) => id !== sorted[index])
+    if (mismatchIndex !== -1) {
       context.addIssue({
         code: "custom",
         message: "Corpus documents must be sorted by identifier",
+        path: [mismatchIndex],
       })
     }
   })
