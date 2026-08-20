@@ -1036,10 +1036,29 @@
   margin-top: 0.35rem;
 }
 
+/* The current rung is marked on its own number rather than with a thick
+   accent border down one side. A full ring reads as "you are here" on a
+   numbered ladder, it keeps a boundary on all four sides in print and in
+   forced-colours mode — where the `--accent` tint is discarded — and it
+   cannot be mistaken for a link the way an underlined heading can. The
+   visible "Current maturity" line and `aria-current="step"` remain the
+   primary non-visual signals; the tint only reinforces them.
+   Padding and margin cancel out so the tint gains breathing room without
+   jogging this rung's text out of line with the others. */
 .maturity-ladder li[aria-current="step"] {
-  padding-left: 0.75rem;
-  border-left: 3px solid var(--evidence);
+  padding-inline: 0.75rem;
+  margin-inline: -0.75rem;
   background: var(--accent);
+}
+
+.maturity-ladder li[aria-current="step"] > span {
+  justify-self: start;
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  block-size: 2rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
 }
 
 .maturity-ladder li[aria-current="step"] ~ li h3,
@@ -1548,7 +1567,7 @@ dd[data-technical] {
   .metadata-rail,
   .source-dossier,
   .demo-readiness,
-  .maturity-ladder li[aria-current="step"] {
+  .maturity-ladder li[aria-current="step"] > span {
     border-color: CanvasText;
     forced-color-adjust: auto;
   }
