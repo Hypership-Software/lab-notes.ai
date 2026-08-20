@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { validateContent } from "./validate-content.mts"
+import { validateContent } from "./validate-content-core"
 
 describe("validateContent", () => {
   it("reports no errors for the committed content", async () => {
