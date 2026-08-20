@@ -198,5 +198,10 @@ export function generateSyntheticCorpus(
     }
   })
 
-  return documents.sort((left, right) => left.id.localeCompare(right.id))
+  // Plain ASCII comparison, not localeCompare: ids are fixed-width zero-padded
+  // ASCII (SYN-0001..SYN-9999), so `<`/`>` is already a correct total order,
+  // and it stays correct regardless of runtime locale/ICU configuration.
+  return documents.sort((left, right) =>
+    left.id < right.id ? -1 : left.id > right.id ? 1 : 0,
+  )
 }
