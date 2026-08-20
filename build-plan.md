@@ -950,31 +950,46 @@ export function PlaybookDetail(props: {
 
 **Files**
 
-- Create: `content/playbooks/policy-evidence/fixtures/source/consultation-methodology-excerpt.txt`
-- Create: `content/playbooks/policy-evidence/fixtures/source/source-manifest.ts`
+- Create: `content/playbooks/policy-evidence/fixtures/synthetic/consultation-analysis-structure.md`
 - Create: `content/playbooks/policy-evidence/fixtures/synthetic/corpus.json`
-- Create: `content/playbooks/policy-evidence/fixtures/synthetic/synthetic-manifest.ts`
+- Create: `content/playbooks/policy-evidence/fixtures/synthetic/manifest.ts`
 - Create: `features/policy-evidence/domain/types.ts`
+- Create: `features/policy-evidence/domain/types.test.ts`
+- Create: `features/policy-evidence/domain/corpus-fragments.ts`
 - Create: `features/policy-evidence/domain/generate-synthetic-corpus.ts`
 - Create: `features/policy-evidence/domain/generate-synthetic-corpus.test.ts`
 - Create: `scripts/generate-policy-evidence-fixtures.mts`
+- Modify: `scripts/validate-content.mts`
 - Modify: `content/playbooks/policy-evidence/playbook.ts`
+- Modify: `content/playbooks/define-assessed-playbook.ts`
+- Modify: `lib/playbooks/schema.ts`
+- Modify: `.gitattributes`
+
+There is no `fixtures/source/` directory. Nothing here is a downloaded excerpt: the consultation-analysis structure that shapes the generator is authored prose describing the headings, stages, and vocabulary observed in a public report, not a verbatim extract, so it is attached to the synthetic provenance (`syntheticData.structureNotePath` / `structureNoteSha256`) rather than filed as an `officialSources` local sample. The report itself stays an `officialSources` entry with only a canonical link and a `reuseStatus` explaining that no respondent text is copied.
 
 ### Public interfaces
 
 ```ts
-export type CorpusDocument = {
-  id: `SYN-${string}`
-  synthetic: true
-  text: string
-  tags: string[]
-  disclosure: "Synthetic working data"
-}
+export const corpusDocumentSchema = z.strictObject({
+  id: z.string().regex(/^SYN-\d{4}$/, "Use a zero-padded SYN identifier"),
+  synthetic: z.literal(true),
+  disclosure: z.literal("Synthetic working data"),
+  theme: z.enum(corpusThemeValues),
+  stance: z.enum(corpusStanceValues),
+  text: corpusTextSchema,
+})
+
+export const corpusSchema = z
+  .array(corpusDocumentSchema)
+  .min(1)
+  .superRefine(/* unique identifiers, ascending sort order */)
+
+export type CorpusDocument = z.infer<typeof corpusDocumentSchema>
 
 export type SyntheticCorpusConfig = {
   seed: number
   size: number
-  topicWeights: Record<string, number>
+  themeWeights: Record<CorpusTheme, number>
 }
 
 export function generateSyntheticCorpus(
@@ -982,30 +997,26 @@ export function generateSyntheticCorpus(
 ): CorpusDocument[]
 ```
 
+The document contract is schema-first: `corpusSchema` is the one place that enforces the disclosure literal, the `synthetic: true` literal, the identifier shape, uniqueness, and sort order, so nothing downstream hand-rolls those checks. `theme` and `stance` are typed enums, not free-text `tags`.
+
 ### Steps
 
-- [ ] Verify the official response-report page and PDF are accessible on the implementation date. Record the canonical publication page, document URL, publisher, publication date, access date, and visible reuse statement. If redistribution of the PDF text is not clearly permitted, paraphrase only the minimal methodology structure and set `reuseStatus` to explain why no verbatim source text is committed.
+- [ ] Verify the official response-report page is accessible on the implementation date and record the canonical publication page, publisher, publication date, access date, and reuse statement as an `officialSources` entry with no local sample path or hash — the report is used only to study structure, not to supply text.
 
-- [ ] Create `consultation-methodology-excerpt.txt` containing only the smallest permissible excerpt needed to establish that consultation responses may be manually reviewed and grouped into topics or themes. It must contain no real respondent text, contact information, signature, or local path.
+- [ ] Author `consultation-analysis-structure.md` describing, in this project's own words, the headings, analytical stages, and public-sector consultation vocabulary a policy team's manual method would use. It must contain no respondent text, contact information, signature, or local path, and no sentence copied from the source report.
 
-- [ ] Compute the excerpt hash from repository root and record it in both `source-manifest.ts` and the playbook source entry.
-
-  PowerShell:
-
-  ```powershell
-  (Get-FileHash -Algorithm SHA256 content/playbooks/policy-evidence/fixtures/source/consultation-methodology-excerpt.txt).Hash.ToLowerInvariant()
-  ```
+- [ ] Write the corpus contract in `types.ts` before the generator: `corpusThemeValues`, `corpusStanceValues`, `corpusDocumentSchema`, and `corpusSchema`, with person-shaped text rejected at the contract boundary via the shared `findPersonalDataShape` check rather than re-implemented per caller.
 
 - [ ] Write the generator tests before the generator. Assert:
 
   - the fixed seed produces byte-for-byte stable output;
   - changing the seed changes at least one document;
-  - IDs are unique and begin `SYN-`;
+  - IDs are unique, zero-padded, and sorted ascending;
   - every record has `synthetic: true` and the exact disclosure label;
   - the corpus contains no key resembling a person identifier;
-  - text contains no email, phone number, URL, exact address, National Insurance number pattern, or Health and Care number pattern;
-  - configured topic weights stay within a documented tolerance;
-  - invalid size, negative weights, or an empty topic set throws a descriptive error.
+  - text contains no email, phone number, URL, National Insurance number pattern, or Health and Care number pattern;
+  - theme and stance counts match an exact largest-remainder allocation, so the assertion is equality, not a tolerance;
+  - invalid size, non-positive weight, or a theme allocated zero documents throws a descriptive error.
 
 - [ ] Run the focused test and confirm failure.
 
@@ -1013,7 +1024,7 @@ export function generateSyntheticCorpus(
   npm run test -- features/policy-evidence/domain/generate-synthetic-corpus.test.ts
   ```
 
-- [ ] Implement a local deterministic pseudo-random generator, such as `mulberry32`, so fixture generation does not depend on library version behaviour. Keep sentence fragments authored in the repository and combine them by stable topic templates. Do not generate human names or simulated biographies.
+- [ ] Implement a local deterministic pseudo-random generator, `mulberry32`, so fixture generation does not depend on library version behaviour. Apportion theme and stance counts with exact largest-remainder allocation, keep sentence fragments authored in `corpus-fragments.ts`, and combine them by stable theme templates. Do not generate human names or simulated biographies.
 
   ```ts
   function mulberry32(seed: number) {
@@ -1026,30 +1037,28 @@ export function generateSyntheticCorpus(
   }
   ```
 
-- [ ] Use a corpus size of 48 with a recorded integer seed. Cover six themes relevant to a strategy consultation: access to services, workforce capability, data governance, accountability, procurement and reuse, and environmental cost. Include supportive, critical, mixed, and uncertain statements. The corpus must not imitate a named real respondent.
+- [ ] Use a corpus size of 48 with a recorded integer seed. Cover six themes relevant to a strategy consultation: access to services, workforce capability, data governance, accountability, procurement and reuse, and environmental cost. Include supportive, critical, mixed, and uncertain stances. The corpus must not imitate a named real respondent.
 
-- [ ] Create `scripts/generate-policy-evidence-fixtures.mts` to call the pure generator, stable-sort records, write formatted JSON with a final newline, and report its SHA-256. The script is an explicit development utility, not a live data pipeline.
+- [ ] Create `scripts/generate-policy-evidence-fixtures.mts` to call the pure generator, write formatted JSON with a final newline, and report the SHA-256 of both the corpus and the structure note. The script is an explicit development utility, not a live data pipeline.
+
+- [ ] Pin `content/playbooks/policy-evidence/fixtures/**` to LF in `.gitattributes`. Without it, `core.autocrlf` rewrites the fixtures to CRLF on a Windows checkout and every recorded SHA-256 mismatches on a fresh clone while still matching on Linux CI.
 
 - [ ] Run the generator twice and prove the second run produces no diff.
 
   ```bash
-  npm run test -- features/policy-evidence/domain/generate-synthetic-corpus.test.ts
   npx tsx scripts/generate-policy-evidence-fixtures.mts
-  git diff -- content/playbooks/policy-evidence/fixtures/synthetic/corpus.json
+  git diff --exit-code -- content/playbooks/policy-evidence/fixtures/synthetic/corpus.json
   npx tsx scripts/generate-policy-evidence-fixtures.mts
   git diff --exit-code -- content/playbooks/policy-evidence/fixtures/synthetic/corpus.json
   ```
 
-- [ ] Write `synthetic-manifest.ts` with seed, generator version, corpus hash, source characteristics used, approximations, deliberate alterations, exclusions, limitations, and the statement that the fixture cannot establish efficacy, fairness, or operational readiness.
+- [ ] Write `manifest.ts` with the seed, generator version, and the fixture and structure-note paths and hashes, and record the source characteristics, approximations, deliberate alterations, exclusions, and limitations on the playbook's `syntheticCorpus` spec. `syntheticData` becomes `"available"` for this playbook, but `maturity` stays `"assessed"` and `demo.availability` stays `"none"`: the schema couples maturity and demo state to the recorded analysis, prompt, and evaluation, which are still outstanding.
 
-- [ ] Extend `scripts/validate-content.mts` to check source and synthetic hashes, exact disclosure labels, and forbidden field names.
+- [ ] Extend `scripts/validate-content.mts` to check the fixture and structure-note hashes through the same helper used for source samples, run a full `corpusSchema` parse of the committed corpus, and scan the parsed keys against `sensitiveKeyPattern`.
 
-- [ ] Commit the source and synthetic fixtures without the downloaded full PDF.
+- [ ] Confirm the check catches a corrupted fixture before trusting it: corrupt `corpus.json`, confirm `npm run validate:content` fails naming the playbook and the file, then restore it with `git checkout --` and confirm validation passes again.
 
-  ```bash
-  git add content/playbooks/policy-evidence features/policy-evidence/domain scripts
-  git commit -m "feat: add reproducible policy evidence fixtures"
-  ```
+- [ ] Commit the work. It lands as multiple commits rather than one, each following its own red-green-refactor cycle: the shared privacy patterns and fixture line-ending pin, the corpus contract, the generator and its fixtures, the playbook declaration, and finally the content-validation wiring.
 
 ---
 
