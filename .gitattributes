@@ -1,0 +1,4 @@
+# Fixture hashes are recorded over LF content. Without this, core.autocrlf
+# rewrites these files to CRLF on a Windows checkout and every recorded
+# SHA-256 mismatches on a fresh clone while still matching on Linux CI.
+content/playbooks/policy-evidence/fixtures/** text eol=lf

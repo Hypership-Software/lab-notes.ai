@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import { getAllPlaybooks, getPlaybookSlugs } from "@/lib/playbooks/registry"
+import { sensitiveKeyPattern } from "@/lib/privacy-patterns"
 
 const expectedSlugs = [
   "adaptive-tutoring",
@@ -24,9 +25,6 @@ const expectedSlugs = [
 
 const bannedClaimPattern =
   /\b(guarantees?|proven|will (?:save|improve|reduce)|better outcomes?|transformative)\b/i
-
-const sensitiveKeyPattern =
-  /^(fullName|email|phone|address|nationalInsuranceNumber|healthAndCareNumber|dateOfBirth)$/i
 
 function collectKeys(value: unknown): string[] {
   if (Array.isArray(value)) return value.flatMap(collectKeys)
