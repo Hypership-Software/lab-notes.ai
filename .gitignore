@@ -48,3 +48,6 @@ next-env.d.ts
 
 # Local Impeccable hook cache
 /.impeccable/
+
+# Local Superpowers SDD workspace
+/.superpowers/
