@@ -52,6 +52,7 @@ export const sourceTypeValues = [
 
 export const demoAvailabilityValues = [
   "none",
+  "baseline-only",
   "recorded",
   "live-local",
   "partner",
@@ -199,6 +200,28 @@ const demoRecordedSchema = z.strictObject({
   limitations: nonEmptyList(sentenceSchema),
 })
 
+/**
+ * A hosted example that runs only the deterministic non-AI baseline over a
+ * playbook's synthetic dataset. No model is involved, so there is no model
+ * identifier, no prompt, and nothing recorded: the page computes its result from
+ * committed data every time it renders.
+ *
+ * This is a weaker claim than `recorded`, not a stronger one, and it stays
+ * compatible with `assessed` maturity. It exists because the baseline is a
+ * publishable artefact in its own right — a playbook can show the task, the
+ * evidence trail, and the honest limits of a keyword method without ever
+ * asserting anything about AI. `vocabularyVersion` is recorded because the
+ * result on the page depends on which word list produced it.
+ */
+const demoBaselineOnlySchema = z.strictObject({
+  availability: z.literal("baseline-only"),
+  route: z.string().regex(/^\/playbooks\/[a-z0-9]+(?:-[a-z0-9]+)*\/demo$/),
+  label: z.literal("Baseline demonstration"),
+  method: sentenceSchema,
+  vocabularyVersion: z.string().trim().min(1),
+  limitations: nonEmptyList(sentenceSchema),
+})
+
 const demoLiveLocalSchema = z.strictObject({
   availability: z.literal("live-local"),
   route: z.string().regex(/^\/playbooks\/[a-z0-9]+(?:-[a-z0-9]+)*\/demo$/),
@@ -213,6 +236,7 @@ const demoPartnerSchema = z.strictObject({
 
 export const demoSchema = z.discriminatedUnion("availability", [
   demoNoneSchema,
+  demoBaselineOnlySchema,
   demoRecordedSchema,
   demoLiveLocalSchema,
   demoPartnerSchema,
@@ -253,6 +277,19 @@ export const playbookSchema = z
         code: "custom",
         path: ["officialSources"],
         message: "Official source IDs must be unique within a playbook",
+      })
+    }
+
+    // A baseline demonstration reads the playbook's synthetic dataset on every
+    // render, so it cannot be offered before that dataset exists.
+    if (
+      playbook.demo.availability === "baseline-only" &&
+      playbook.syntheticData.status !== "available"
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["demo"],
+        message: "A baseline demonstration requires an available synthetic dataset",
       })
     }
 

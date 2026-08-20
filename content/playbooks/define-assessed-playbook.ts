@@ -48,6 +48,20 @@ export type AssessedPlaybookSpec = {
    * moment one is committed.
    */
   evaluationLimitations?: string[]
+  /**
+   * Publishes a hosted example that runs only the deterministic non-AI
+   * baseline. Supplying it replaces the `none` demo state built from
+   * `demoBarrier`, which still describes what is missing before a recorded
+   * AI-assisted demonstration can exist.
+   *
+   * Maturity is unaffected and stays `assessed`: a baseline demonstration makes
+   * no claim about a model, so it is not evidence of one.
+   */
+  baselineDemo?: {
+    method: string
+    vocabularyVersion: string
+    limitations: string[]
+  }
   responsibleRole: string
   partnerRequirements: string[]
   additionalSources?: OfficialSource[]
@@ -225,10 +239,19 @@ export function defineAssessedPlaybook(spec: AssessedPlaybookSpec) {
         kind: "official",
       },
     ],
-    demo: {
-      availability: "none",
-      reason: spec.demoBarrier,
-    },
+    demo: spec.baselineDemo
+      ? {
+          availability: "baseline-only",
+          route: `/playbooks/${spec.slug}/demo`,
+          label: "Baseline demonstration",
+          method: spec.baselineDemo.method,
+          vocabularyVersion: spec.baselineDemo.vocabularyVersion,
+          limitations: spec.baselineDemo.limitations,
+        }
+      : {
+          availability: "none",
+          reason: spec.demoBarrier,
+        },
     lastReviewed: "2026-08-18",
   })
 }

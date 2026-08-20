@@ -27,6 +27,26 @@ export function DemoReadiness({
           </ul>
         </div>
       )
+    case "baseline-only":
+      return (
+        <div className="demo-readiness" data-demo-availability="baseline-only">
+          <ProvenanceLabel kind="baseline" />
+          <h3>Baseline demonstration</h3>
+          <p>{demo.method}</p>
+          <p>
+            No model is involved. The page computes this result from committed
+            synthetic data using controlled vocabulary{" "}
+            <span data-technical>{demo.vocabularyVersion}</span>.
+          </p>
+          <p>Known limitations of this demonstration:</p>
+          <ul>
+            {demo.limitations.map((limitation) => (
+              <li key={limitation}>{limitation}</li>
+            ))}
+          </ul>
+          <Link href={demo.route}>Open the baseline demonstration</Link>
+        </div>
+      )
     case "recorded":
       return (
         <div className="demo-readiness" data-demo-availability="recorded">

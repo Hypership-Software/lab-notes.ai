@@ -1165,17 +1165,51 @@ it blocks Task 10's recorded-output stages.
 **Files**
 
 - Create: `app/playbooks/[slug]/demo/page.tsx`
+- Create: `features/policy-evidence/fixtures.ts`
+- Create: `features/policy-evidence/domain/build-evidence-threads.ts`
+- Create: `features/policy-evidence/domain/build-evidence-threads.test.ts`
+- Create: `features/policy-evidence/domain/review-disposition.ts`
 - Create: `features/policy-evidence/components/policy-evidence-workbench.tsx`
 - Create: `features/policy-evidence/components/workbench-client.tsx`
-- Create: `features/policy-evidence/components/recorded-demo-banner.tsx`
-- Create: `features/policy-evidence/components/source-inspector.tsx`
+- Create: `features/policy-evidence/components/element-ids.ts`
+- Create: `features/policy-evidence/components/baseline-demo-banner.tsx`
 - Create: `features/policy-evidence/components/synthetic-corpus-inspector.tsx`
 - Create: `features/policy-evidence/components/finding-list.tsx`
 - Create: `features/policy-evidence/components/evidence-thread.tsx`
 - Create: `features/policy-evidence/components/finding-review-controls.tsx`
-- Create: `features/policy-evidence/components/baseline-comparison.tsx`
 - Create: `features/policy-evidence/components/evaluation-summary.tsx`
 - Create: `features/policy-evidence/components/policy-evidence-workbench.test.tsx`
+- Modify: `lib/playbooks/schema.ts` (the `baseline-only` demo state)
+- Modify: `features/playbooks/detail/demo-readiness.tsx`
+- Modify: `content/playbooks/define-assessed-playbook.ts`
+- Modify: `content/playbooks/policy-evidence/playbook.ts`
+- Modify: `app/page.tsx`
+- Modify: `app/globals.css`
+
+There is no `source-inspector.tsx`: the detail route's `SourceRegister` and
+`SyntheticDataMethod` already render exactly what this page needs, and a second
+component making the same claims in different words is how two parts of a
+provenance-focused site start disagreeing.
+
+### The `baseline-only` demo state
+
+The four original demo states could not describe this page. `recorded` requires
+a model identifier, prompt hash, and recorded output; `none` publishes nothing;
+`live-local` and `partner` are elsewhere. A hosted example that runs only the
+deterministic non-AI baseline over committed synthetic data needed its own
+state, so `demoAvailabilityValues` gains `baseline-only`.
+
+It is a weaker claim than `recorded`, not a stronger one:
+
+- it carries `label: "Baseline demonstration"`, a distinct literal, so it can
+  never be mistaken for `"Recorded demonstration"` in content or in a test;
+- it records `vocabularyVersion`, because the result on the page depends on
+  which word list produced it;
+- it leaves `maturity` at `assessed`, because running no model is not evidence
+  of one, and the existing refinement already refuses `recorded-demo` maturity
+  without recorded metadata;
+- a new refinement refuses it unless `syntheticData.status` is `"available"`,
+  since the page reads that dataset on every render.
 
 ### Client-state contract
 
@@ -1186,61 +1220,53 @@ export type ReviewDisposition =
   | "unsupported"
   | "specialist-review"
 
+// No `comparisonMode`. Comparison needs two analyses and only the baseline
+// exists; a mode selector over one arm would imply the other was coming back.
 export type WorkbenchState = {
-  activeFindingId: string
+  activeFindingId: FindingId | undefined
   dispositions: Record<string, ReviewDisposition>
-  comparisonMode: "recorded" | "baseline" | "side-by-side"
+  resetPending: boolean
 }
 ```
 
 ### Steps
 
-- [ ] Write component tests first for all nine hosted-flow stages: orientation, source label, synthetic label, baseline, recorded-output label, complete evidence thread, four disposition values, comparison, and reuse guidance.
+- [ ] Write component tests first for the hosted-flow stages this page can honestly show: orientation, the absence of any recorded or live AI label, the task and its disclaimers, the source label, the synthetic label, the whole dataset in the page, one finding per theme, the complete evidence thread in order, the four disposition values, metrics with numerators and denominators, and reuse guidance.
 
-- [ ] Add interaction tests for keyboard finding selection, citation focus, review-state change, reset confirmation, preserved active selection when comparison mode changes, and an accessible name that includes the finding and current disposition.
+- [ ] Add interaction tests for keyboard finding selection, review-state change reflected in both the legend and the finding list, the two-step reset confirmation including the cancel path, selection preserved when a different finding is reviewed, a citation link resolving to the response anchor, and a group name that includes the finding and its current disposition.
 
-- [ ] Run the focused test and confirm failure.
+- [ ] Implement `PolicyEvidenceWorkbench` as a Server Component. Both fixtures are parsed through their schemas at module load in `fixtures.ts`; the component runs the baseline, scores the evaluation, and joins the evidence threads. Nothing that produced a thread crosses into the browser.
 
-  ```bash
-  npm run test -- features/policy-evidence/components
-  ```
+- [ ] Keep `WorkbenchClient` the only client boundary, holding active finding, dispositions, and reset state. Render *every* thread regardless of selection: hiding the unselected ones would put the page's substance behind hydration, and the page must stay readable with JavaScript off. Selection is emphasis and movement, not disclosure.
 
-- [ ] Implement `PolicyEvidenceWorkbench` as a Server Component that loads and validates all fixtures, runs the baseline and evaluation, and renders the complete source, method, findings, and metrics in initial HTML.
+- [ ] Put shared anchor helpers in `element-ids.ts` with no `"use client"` directive. Exporting them from the client component makes them client references, and the server can no longer call them while rendering the corpus — which fails the build rather than degrading quietly.
 
-- [ ] Implement `WorkbenchClient` as the only broad client boundary. Keep only active finding, comparison mode, dispositions, and reset-dialog state in the browser. Do not send fixture parsing, baseline calculation, or content registry code to the client.
+- [ ] Add the persistent banner above every result, stating what the page is not before what it is: no model is involved, nothing is AI output recorded or live, and no part of it has been operationally validated.
 
-- [ ] Add the persistent banner above every result:
+- [ ] Implement `EvidenceThread` in this exact order: finding, citation, synthetic response cited, how that response was made, what a reader expected, your review. Every stage is labelled in text; the numbers and the connector rule may reinforce the order but never carry it. A citation that does not resolve stays visible and says so, because hiding it would leave a finding looking fully evidenced while the evaluation counts a broken reference.
 
-  > Recorded demonstration. This page replays checked-in output against synthetic working data. It is not a live service and has not been operationally validated.
+- [ ] Implement review controls as native radios in a fieldset whose legend names both the finding and the state currently chosen. No wording may imply approval, and the control says in place that states stay in the browser and reset on reload.
 
-- [ ] Implement `EvidenceThread` in this exact order: finding, citation, synthetic corpus excerpt, synthetic-method note, evaluation case, human disposition. Use linked IDs in text and accessible descriptions. Connector decoration may supplement but never replace the labels.
+- [ ] Implement the evaluation summary with explicit numerators and denominators, `Not available` for a zero denominator, a case-by-case table naming what was missed and what was cited unexpectedly, and the evaluation's own limitations.
 
-- [ ] Implement review controls as a radiogroup or single-select control with four text options. Dispositions are for local exploration and reset on refresh; no wording may imply final policy approval.
+- [ ] Implement the generic demo route. Render the workbench for a `baseline-only` playbook, and `DemoReadiness` with the specific reason and a back link for anything else. Unknown slugs use `notFound()`. Keep `generateStaticParams()` across all registry slugs so a direct `/demo` URL is a page explaining what is missing rather than a 404.
 
-- [ ] Implement baseline comparison with explicit numerator/denominator metrics and `Not available` when denominator is zero. When switching modes, keep the source corpus and evaluation definition unchanged.
+- [ ] Mark selection with a ring inside the existing border, never a thick accent down one edge, matching how the maturity ladder marks its current rung. Every state carried by colour is also written out in text.
 
-- [ ] Implement the generic demo route. For `policy-evidence`, render the workbench. For any playbook without a recorded demo, render `DemoReadiness` with the specific reason and a back link. Unknown slugs use `notFound()`.
-
-  Keep `generateStaticParams()` aligned with all registry slugs so direct `/demo` URLs never become an unhandled runtime path.
-
-- [ ] During the release review, disable JavaScript in the browser and confirm the recorded-demonstration disclosure, scenario, source, synthetic method, recorded findings, evidence thread, and evaluation remain readable. Interactive review controls may be absent.
+- [ ] During the release review, disable JavaScript and confirm the disclosure, task, source register, synthetic method, all twenty responses, all six findings, every evidence thread, and the evaluation remain readable. Interactive review controls may be inert.
 
 - [ ] Run focused tests, typecheck, lint, content validation, and build.
 
-  ```bash
-  npm run test -- features/policy-evidence
-  npm run validate:content
-  npm run typecheck
-  npm run lint
-  npm run build
-  ```
+### Outstanding: everything that needs the recording
 
-- [ ] Commit the complete exemplar interaction.
+Blocked on Task 9's recording. Each of these is a real hosted-flow stage that
+cannot be built yet, and none is stubbed:
 
-  ```bash
-  git add app/playbooks/[slug]/demo features/policy-evidence/components
-  git commit -m "feat: build the policy evidence workbench"
-  ```
+- [ ] Add the recorded-output stage: load the committed recording through `parseRecordedAnalysis`, render it beside the baseline, and label it `Recorded AI-assisted output`.
+
+- [ ] Add `baseline-comparison.tsx` and the `comparisonMode` state (`recorded`, `baseline`, `side-by-side`), keeping the dataset and evaluation definition unchanged across modes and preserving the active finding when the mode changes.
+
+- [ ] Promote the playbook to `recorded-demo` maturity with `demo.availability: "recorded"`, and move `evaluation.status` to `fixture-evaluated` once both arms of the comparison exist.
 
 ---
 

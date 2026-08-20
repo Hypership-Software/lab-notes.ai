@@ -1,3 +1,5 @@
+import { baselineVocabularyVersion } from "@/features/policy-evidence/domain/run-baseline"
+
 import { defineAssessedPlaybook } from "../define-assessed-playbook"
 
 export const policyEvidence = defineAssessedPlaybook({
@@ -62,6 +64,16 @@ export const policyEvidence = defineAssessedPlaybook({
   ],
   demoBarrier:
     "The synthetic dataset, the non-AI baseline, and the evaluation are in place. The recorded workbench is not published until an AI-assisted analysis has been recorded against this exact dataset and compared with the baseline.",
+  baselineDemo: {
+    method:
+      "Group twenty synthetic consultation responses under six themes using a reviewed list of words and phrases, and link every theme back to the exact sentence that matched.",
+    vocabularyVersion: baselineVocabularyVersion,
+    limitations: [
+      "This is the non-AI comparison on its own. No model has been run, so the page cannot yet show what an AI-assisted analysis would add or get wrong.",
+      "The word list misses a response that raises a theme in different words: one of the twenty is missed for exactly that reason, and the page names it.",
+      "Three responses are grouped under a theme their author did not intend, which is what a keyword method does rather than a defect in this one.",
+    ],
+  },
   responsibleRole: "Responsible policy lead",
   partnerRequirements: [
     "Policy-method review",

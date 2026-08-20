@@ -47,9 +47,20 @@ describe("playbook content inventory", () => {
     expect(playbooks.every((playbook) => playbook.maturity === "assessed")).toBe(
       true,
     )
+    // No playbook may claim a recorded demonstration: none has been recorded.
+    // A baseline demonstration is a weaker claim and does not move maturity.
     expect(
-      playbooks.every((playbook) => playbook.demo.availability === "none"),
+      playbooks.every((playbook) => playbook.demo.availability !== "recorded"),
     ).toBe(true)
+  })
+
+  it("publishes a demonstration only where a baseline can actually run", () => {
+    const withDemo = getAllPlaybooks().filter(
+      (playbook) => playbook.demo.availability !== "none",
+    )
+
+    expect(withDemo.map((playbook) => playbook.slug)).toEqual(["policy-evidence"])
+    expect(withDemo[0]?.demo.availability).toBe("baseline-only")
   })
 
   it("keeps violence-risk research assessment-only and very high risk", () => {
@@ -70,15 +81,16 @@ describe("playbook content inventory", () => {
     }
   })
 
-  it("declares the policy-evidence corpus as available without claiming a demonstration", () => {
+  it("declares the policy-evidence dataset available without claiming an AI demonstration", () => {
     const playbook = getAllPlaybooks().find(
       (candidate) => candidate.slug === "policy-evidence",
     )
 
     expect(playbook?.syntheticData.status).toBe("available")
-    // The corpus existing is not evidence that anything was demonstrated.
+    // A baseline demonstration runs no model, so it is not evidence of one and
+    // does not move maturity off `assessed`.
     expect(playbook?.maturity).toBe("assessed")
-    expect(playbook?.demo.availability).toBe("none")
+    expect(playbook?.demo.availability).toBe("baseline-only")
   })
 
   it("keeps every other playbook's synthetic data planned", () => {

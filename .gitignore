@@ -51,3 +51,4 @@ next-env.d.ts
 
 # Local Superpowers SDD workspace
 /.superpowers/
+bash.exe.stackdump

@@ -113,6 +113,22 @@ const demoCases = [
   },
   {
     demo: {
+      availability: "baseline-only",
+      route: demoRoute,
+      label: "Baseline demonstration",
+      method:
+        "Group the synthetic responses under six themes using a reviewed word list.",
+      vocabularyVersion: "1.0.0",
+      limitations: [
+        "No model has been run, so this cannot show what an analysis would add.",
+      ],
+    },
+    heading: "Baseline demonstration",
+    detail: /no model is involved/i,
+    action: "Open the baseline demonstration",
+  },
+  {
+    demo: {
       availability: "recorded",
       route: demoRoute,
       recordedOutputId: "recorded-output",

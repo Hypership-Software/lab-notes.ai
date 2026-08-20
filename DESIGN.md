@@ -182,6 +182,7 @@ The eleven-section sequence is also the document order. Each page has one `h1`, 
 The page renders every state in the content schema:
 
 - `none` explains the evidence, data, or risk barrier and presents the next validation steps;
+- `baseline-only` links to a hosted example that runs the deterministic non-AI baseline and nothing else, and states the controlled vocabulary version it used;
 - `recorded` links to the checked-in demonstration and states its recording date, model label, and limitations;
 - `live-local` links to local setup guidance and shows the supplied warning;
 - `partner` explains why a controlled integration is required.
@@ -282,11 +283,21 @@ Risk status always includes plain-English reasons and is never communicated by c
 #### Demo availability
 
 - `none` — assessed card and detail page only;
+- `baseline-only` — hosted example running the deterministic non-AI baseline over the synthetic dataset, with no model involved;
 - `recorded` — synthetic dataset plus checked-in recorded AI-assisted output;
 - `live-local` — future optional adapter that a developer may run locally with their own service and credentials;
 - `partner` — future controlled integration, not exposed publicly.
 
-The MVP may use only `none` and `recorded`.
+The MVP may use only `none`, `baseline-only`, and `recorded`.
+
+`baseline-only` is a weaker claim than `recorded`, not a step towards it on
+the maturity ladder. It carries its own label literal, records the vocabulary
+version that produced the result on the page, requires an available synthetic
+dataset, and leaves maturity at `assessed`: running no model is not evidence of
+one. It exists because the non-AI baseline is publishable in its own right. A
+playbook can show the task, the evidence trail, and the honest limits of a
+keyword method before anything cleverer exists, and a reader can see the
+comparison any AI-assisted analysis would have to beat.
 
 ## 10. Source and synthetic-data contract
 
@@ -360,7 +371,7 @@ The workbench supports research and synthesis. It does not decide policy, calcul
 1. **Orient** — read the task, maturity, limitations, and the recorded-demo label.
 2. **Inspect source** — view a small official public-document excerpt and its source-register entry.
 3. **Inspect synthetic corpus** — see how source-informed consultation responses were generated and labelled.
-4. **Run the baseline** — apply deterministic keyword and phrase grouping to the same corpus.
+4. **Run the baseline** — apply deterministic keyword and phrase grouping to the same corpus. Where no recorded analysis exists yet, this is the whole of the hosted result, and the page says so rather than implying an AI stage is merely hidden.
 5. **Open recorded analysis** — explore a previously generated, structured AI-assisted thematic analysis.
 6. **Follow an evidence thread** — move from finding to citation, source excerpt, synthetic-data note, evaluation item, and human disposition.
 7. **Review findings** — accept for further investigation, reject as unsupported, or flag for subject-matter review. State remains local to the browser and resets on refresh.
@@ -473,7 +484,7 @@ tests/
 
 ### Static routes
 
-`generateStaticParams` returns every registry slug for `/playbooks/[slug]`. `dynamicParams = false` makes unknown playbook paths a 404. The demo route uses the same set but renders an unavailable explanation unless `demo.availability === "recorded"`; direct access never produces a broken workbench.
+`generateStaticParams` returns every registry slug for `/playbooks/[slug]`. `dynamicParams = false` makes unknown playbook paths a 404. The demo route uses the same set but renders an unavailable explanation for any playbook whose demo is not published; direct access never produces a broken workbench.
 
 `generateMetadata` reads the same registry entry as the page. Metadata remains server-only and does not duplicate content literals.
 

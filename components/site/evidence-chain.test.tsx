@@ -31,7 +31,14 @@ describe("EvidenceChain", () => {
       "/playbooks",
     )
     expect(screen.getByText("Assessed concept")).toBeVisible()
-    expect(screen.getByText(/not published until/i)).toBeVisible()
+
+    // The exemplar offers a baseline demonstration, which runs no model. The
+    // home page must say what that demonstration actually does and must not
+    // let it read as a recorded AI demonstration.
+    expect(
+      screen.getByRole("link", { name: /try the baseline demonstration/i }),
+    ).toHaveAttribute("href", "/playbooks/policy-evidence/demo")
+    expect(screen.getByText(/reviewed list of words and phrases/i)).toBeVisible()
     expect(screen.queryByText("Recorded demonstration")).not.toBeInTheDocument()
   })
 })

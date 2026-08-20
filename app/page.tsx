@@ -83,7 +83,18 @@ export default function HomePage() {
               reasons={exemplar.risk.reasons}
               descriptionId="home-exemplar-risk-reasons"
             />
-            <p>{exemplar.demo.availability === "none" && exemplar.demo.reason}</p>
+            {exemplar.demo.availability === "none" ? (
+              <p>{exemplar.demo.reason}</p>
+            ) : null}
+            {exemplar.demo.availability === "baseline-only" ? (
+              <>
+                <p>{exemplar.demo.method}</p>
+                <Link href={exemplar.demo.route}>
+                  Try the baseline demonstration
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+              </>
+            ) : null}
             <Link href={`/playbooks/${exemplar.slug}`}>
               Inspect the assessed playbook
               <ArrowRight aria-hidden="true" />

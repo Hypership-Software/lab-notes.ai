@@ -130,6 +130,63 @@ describe("playbookSchema", () => {
     expect(playbook.demo.availability).toBe("recorded")
   })
 
+  it("accepts a baseline-only demonstration while maturity stays assessed", () => {
+    const input = cloneValidInput()
+    input.maturity = "assessed"
+    input.demo = {
+      availability: "baseline-only",
+      route: "/playbooks/policy-evidence/demo",
+      label: "Baseline demonstration",
+      method: "Group responses by a reviewed list of words and phrases.",
+      vocabularyVersion: "1.0.0",
+      limitations: ["No model has been run, so nothing here is AI output."],
+    }
+
+    const result = playbookSchema.safeParse(input)
+
+    expect(result.success).toBe(true)
+  })
+
+  it("refuses a baseline demonstration before a synthetic dataset exists", () => {
+    const input = cloneValidInput()
+    input.maturity = "assessed"
+    input.demo = {
+      availability: "baseline-only",
+      route: "/playbooks/policy-evidence/demo",
+      label: "Baseline demonstration",
+      method: "Group responses by a reviewed list of words and phrases.",
+      vocabularyVersion: "1.0.0",
+      limitations: ["No model has been run, so nothing here is AI output."],
+    }
+    input.syntheticData = {
+      status: "planned",
+      label: "Synthetic working data",
+      method: "Derive invented responses once a permissible basis exists.",
+      sourceCharacteristics: ["Document structure"],
+      approximations: ["Theme frequency would be illustrative."],
+      alterations: ["All response text would be invented."],
+      exclusions: ["Names", "Contact details"],
+      limitations: ["No dataset exists yet, so nothing can be measured."],
+    }
+
+    expect(playbookSchema.safeParse(input).success).toBe(false)
+  })
+
+  it("refuses a baseline demonstration that borrows the recorded label", () => {
+    const input = cloneValidInput()
+    input.maturity = "assessed"
+    input.demo = {
+      availability: "baseline-only",
+      route: "/playbooks/policy-evidence/demo",
+      label: "Recorded demonstration",
+      method: "Group responses by a reviewed list of words and phrases.",
+      vocabularyVersion: "1.0.0",
+      limitations: ["No model has been run, so nothing here is AI output."],
+    }
+
+    expect(playbookSchema.safeParse(input).success).toBe(false)
+  })
+
   it("rejects a malformed slug", () => {
     const input = cloneValidInput()
     input.slug = "Policy Evidence"

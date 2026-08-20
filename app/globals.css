@@ -1621,3 +1621,453 @@ dd[data-technical] {
     grid-column: 1;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Policy Evidence Workbench
+
+   The demo route. Every rule here assumes the page must stay readable with
+   styles off and with JavaScript off: nothing is hidden by default, selection
+   is shown with a border and a text label rather than colour alone, and the
+   stage numbers in an evidence thread are decoration on top of headings that
+   already say the same thing.
+   --------------------------------------------------------------------------- */
+
+.workbench-page__breadcrumb {
+  margin: 0 0 1rem;
+  font-size: 0.925rem;
+}
+
+.workbench-section {
+  margin-top: clamp(3rem, 6vw, 5.5rem);
+}
+
+.demo-banner {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding: 1.25rem 1.5rem;
+  border: 2px solid var(--evidence);
+  border-radius: 0.5rem;
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.demo-banner h2 {
+  margin: 0.6rem 0 0.5rem;
+  font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.4rem);
+}
+
+.demo-banner p {
+  max-width: 76ch;
+  margin: 0 0 0.6rem;
+}
+
+.demo-banner p:last-child {
+  margin-bottom: 0;
+}
+
+/* The synthetic corpus, read end to end. */
+
+.corpus-inspector__list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
+}
+
+.corpus-document {
+  height: 100%;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--surface);
+}
+
+.corpus-document h4 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.corpus-document__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0.75rem;
+  color: var(--muted-ink);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.corpus-document__disclosure {
+  padding: 0.15rem 0.45rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.25rem;
+}
+
+.corpus-document blockquote {
+  margin: 0;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--line-strong);
+}
+
+.corpus-document blockquote p {
+  margin: 0;
+  font-size: 0.925rem;
+}
+
+/* Finding navigation. */
+
+.finding-list ol {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+}
+
+.finding-list a {
+  display: grid;
+  gap: 0.25rem;
+  height: 100%;
+  padding: 0.75rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Selection is a ring drawn inside the existing border, not a tab down one
+   edge, matching how the maturity ladder marks its current rung. The state is
+   also written out in `.finding-list__disposition`, so nothing here is the only
+   carrier of the meaning. */
+.finding-list a[data-active="true"] {
+  border-color: var(--evidence);
+  outline: 2px solid var(--evidence);
+  outline-offset: -2px;
+  background: var(--accent);
+}
+
+.finding-list__label {
+  font-weight: 650;
+}
+
+.finding-list__count,
+.finding-list__disposition {
+  color: var(--muted-ink);
+  font-size: 0.78rem;
+}
+
+/* Client-side review state. */
+
+.workbench-client__review-state {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.25rem;
+  padding: 0.85rem 1rem;
+  border: 1px dashed var(--line-strong);
+  border-radius: 0.5rem;
+}
+
+.workbench-client__review-state p {
+  margin: 0;
+  font-size: 0.925rem;
+}
+
+.workbench-client__reset-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.workbench-client__review-state button {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.35rem;
+  background: var(--surface);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.workbench-client__review-state button:disabled {
+  color: var(--muted-ink);
+  cursor: not-allowed;
+}
+
+.workbench-client__thread {
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--surface);
+}
+
+.workbench-client__thread[data-active="true"] {
+  border-color: var(--evidence);
+  outline: 2px solid var(--evidence);
+  outline-offset: -2px;
+}
+
+.workbench-client__thread > h3 {
+  margin: 0;
+  font-size: clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem);
+}
+
+/* The evidence thread: six labelled stages in a fixed order. */
+
+.evidence-thread {
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evidence-thread__stage {
+  padding: 1rem 0 1rem 1.25rem;
+  border-top: 1px solid var(--line);
+  border-left: 2px solid var(--line);
+}
+
+.evidence-thread__stage:first-child {
+  border-top: 0;
+}
+
+.evidence-thread__stage h4 {
+  margin: 0 0 0.5rem;
+  color: var(--muted-ink);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.evidence-thread__stage p,
+.evidence-thread__stage li {
+  max-width: 76ch;
+  font-size: 0.925rem;
+}
+
+.evidence-thread__finding-summary {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.evidence-thread__citations,
+.evidence-thread__documents {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The same quotation rule the corpus list uses, so a citation and the response
+   it came from read as the same kind of thing. Kept neutral so that the broken
+   state below is the only coloured citation, and never the only signal: the
+   thread also says in words that the citation does not resolve. */
+.evidence-thread__citations blockquote,
+.evidence-thread__documents blockquote {
+  margin: 0 0 0.4rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid var(--line-strong);
+}
+
+.evidence-thread__citations blockquote p,
+.evidence-thread__documents blockquote p {
+  margin: 0;
+}
+
+.evidence-thread__citations li[data-citation-state="broken"] blockquote {
+  border-left-color: var(--danger);
+}
+
+.evidence-thread__broken {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.evidence-thread__case {
+  margin: 0.75rem 0 0;
+}
+
+.evidence-thread__case > div {
+  padding-block: 0.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.evidence-thread__case dt {
+  color: var(--muted-ink);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.evidence-thread__case dd {
+  margin: 0.25rem 0 0;
+  font-size: 0.925rem;
+}
+
+/* Review controls. */
+
+.review-controls {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.5rem;
+}
+
+.review-controls legend {
+  padding-inline: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.review-controls__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+}
+
+.review-controls__option {
+  display: flex;
+  gap: 0.4rem;
+  align-items: baseline;
+  font-size: 0.9rem;
+}
+
+.review-controls__description,
+.review-controls__caveat {
+  margin: 0.75rem 0 0;
+}
+
+.review-controls__caveat {
+  color: var(--muted-ink);
+  font-size: 0.85rem;
+}
+
+/* Evaluation. */
+
+.evaluation-summary__metrics {
+  display: grid;
+  gap: 0 2rem;
+  margin: 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+}
+
+.evaluation-summary__metrics > div {
+  padding-block: 0.8rem;
+  border-top: 1px solid var(--line);
+}
+
+.evaluation-summary__metrics dt {
+  color: var(--muted-ink);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.evaluation-summary__metrics dd {
+  margin: 0.35rem 0 0;
+}
+
+.evaluation-summary__metrics dd p {
+  max-width: 50ch;
+  margin: 0.35rem 0 0;
+  color: var(--muted-ink);
+  font-size: 0.875rem;
+}
+
+.metric__value strong {
+  font-size: clamp(1.4rem, 1.2rem + 0.8vw, 2rem);
+}
+
+.metric__working {
+  color: var(--muted-ink);
+  font-size: 0.925rem;
+}
+
+.metric__value[data-metric-state="unavailable"] {
+  font-weight: 650;
+}
+
+.evaluation-summary__cases {
+  margin-top: 2rem;
+  overflow-x: auto;
+}
+
+.evaluation-summary__cases table {
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.evaluation-summary__cases caption {
+  max-width: 70ch;
+  margin-bottom: 0.75rem;
+  color: var(--muted-ink);
+  font-size: 0.875rem;
+  text-align: left;
+}
+
+.evaluation-summary__cases th,
+.evaluation-summary__cases td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.evaluation-summary__cases thead th {
+  border-bottom: 2px solid var(--line-strong);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.evaluation-summary__limitations {
+  margin-top: 2rem;
+}
+
+.evaluation-summary__limitations li {
+  max-width: 76ch;
+  font-size: 0.925rem;
+}
+
+.evaluation-summary h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 60rem) {
+  .workbench-client__thread {
+    padding-inline: 1rem;
+  }
+
+  .workbench-client__review-state {
+    justify-content: flex-start;
+  }
+}
+
+@media (forced-colors: active) {
+  .demo-banner,
+  .corpus-document,
+  .finding-list a,
+  .workbench-client__thread,
+  .review-controls {
+    border-color: CanvasText;
+  }
+
+  .finding-list a[data-active="true"],
+  .workbench-client__thread[data-active="true"] {
+    border-left-color: Highlight;
+  }
+}
