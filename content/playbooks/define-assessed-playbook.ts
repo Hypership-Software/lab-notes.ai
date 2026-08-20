@@ -45,12 +45,18 @@ export type AssessedPlaybookSpec = {
    * prose, including `implementation.summary`, which sits outside
    * `syntheticData` but makes the same future-tense claim.
    *
+   * `sourceCharacteristics` is required here rather than reused from the
+   * planned branch: the planned sentence claims a structure "verified in
+   * permissible official sources," which is false for a corpus whose themes
+   * and positions this project authored itself.
+   *
    * Maturity, demo availability, and evaluation state are deliberately not
    * overridable here: the schema forbids a recorded demonstration until the
    * recorded output exists, which is Task 9's work.
    */
   syntheticCorpus?: {
     manifest: SyntheticCorpusManifest
+    sourceCharacteristics: string[]
     approximations: string[]
     alterations: string[]
     limitations: string[]
@@ -118,7 +124,12 @@ export function defineAssessedPlaybook(spec: AssessedPlaybookSpec) {
         // Read from the same per-playbook field as the planned branch: the
         // sentence is corrected in place rather than duplicated here.
         method: spec.syntheticMethod,
-        sourceCharacteristics: plannedSyntheticData.sourceCharacteristics,
+        // The planned-state sentence claims a structure "verified in
+        // permissible official sources." That is false once a corpus exists
+        // whose themes and positions this project authored, so an available
+        // corpus supplies its own sentence naming that basis instead of
+        // reusing the planned one.
+        sourceCharacteristics: spec.syntheticCorpus.sourceCharacteristics,
         approximations: spec.syntheticCorpus.approximations,
         alterations: spec.syntheticCorpus.alterations,
         exclusions: plannedSyntheticData.exclusions,

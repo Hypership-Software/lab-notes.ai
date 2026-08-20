@@ -105,6 +105,9 @@ export const policyEvidence = defineAssessedPlaybook({
   ],
   syntheticCorpus: {
     manifest: policyEvidenceCorpusManifest,
+    sourceCharacteristics: [
+      "The six themes and four positions are not verified in any official source: this project chose them, documented in consultation-analysis-structure.md, to give the corpus a realistic shape.",
+    ],
     approximations: [
       "Theme and position counts are an exact allocation chosen so that every category appears, not a measured frequency from any real consultation.",
     ],

@@ -118,14 +118,28 @@ function pick<T>(items: readonly T[], random: () => number): T {
   return items[Math.floor(random() * items.length)]
 }
 
+/**
+ * Fills a template's `{framing}` and `{subject}` placeholders. Exported so
+ * `generate-synthetic-corpus.test.ts` can run the exhaustive guard through
+ * the exact substitution the generator performs, rather than approximating
+ * it by concatenating framing and subject alone -- an approximation that
+ * previously left the whole `themeTemplates` tail (", and asked...", ", and
+ * suggested...", ", and warned...") unchecked.
+ */
+export function fillTemplate(template: string, framing: string, subject: string): string {
+  return template.replace("{framing}", framing).replace("{subject}", subject)
+}
+
 function composeText(
   theme: CorpusTheme,
   stance: CorpusStance,
   random: () => number,
 ): string {
-  return pick(themeTemplates[theme], random)
-    .replace("{framing}", pick(stanceFraming[stance], random))
-    .replace("{subject}", pick(themeSubjects[theme], random))
+  return fillTemplate(
+    pick(themeTemplates[theme], random),
+    pick(stanceFraming[stance], random),
+    pick(themeSubjects[theme], random),
+  )
 }
 
 export function generateSyntheticCorpus(

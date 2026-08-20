@@ -27,10 +27,10 @@ export const policyEvidenceCorpusManifest = {
   seed: policyEvidenceCorpusConfig.seed,
   generatorVersion: policyEvidenceCorpusConfig.generatorVersion,
   fixturePath: "content/playbooks/policy-evidence/fixtures/synthetic/corpus.json",
-  fixtureSha256: "4eab07a369d2439ba2a82192599dc37292d1e02d7fc16335930c46f1cd631d4a",
+  fixtureSha256: "7077d7f44ab8fcdce7262c16df04377e62b028bfa10e223d51d6db7acfc6f64e",
   structureNotePath:
     "content/playbooks/policy-evidence/fixtures/synthetic/consultation-analysis-structure.md",
-  structureNoteSha256: "4600a61b42e986d0244dcf640bd04b1165a143672fa1f93d0ddf323dbdad75b2",
+  structureNoteSha256: "0e26b790feb8e107a56b0497945ec8ed444878330e3091a12cb43ff795d99915",
 } as const
 
 export type SyntheticCorpusManifest = typeof policyEvidenceCorpusManifest

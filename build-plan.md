@@ -958,12 +958,16 @@ export function PlaybookDetail(props: {
 - Create: `features/policy-evidence/domain/corpus-fragments.ts`
 - Create: `features/policy-evidence/domain/generate-synthetic-corpus.ts`
 - Create: `features/policy-evidence/domain/generate-synthetic-corpus.test.ts`
+- Create: `lib/privacy-patterns.ts`
+- Create: `lib/privacy-patterns.test.ts`
 - Create: `scripts/generate-policy-evidence-fixtures.mts`
-- Modify: `scripts/validate-content.mts`
+- Create: `scripts/validate-content-core.ts`
+- Create: `scripts/validate-content.test.ts`
+- Modify: `scripts/validate-content.mts` (reduced to a thin CLI shim over `validate-content-core.ts`)
 - Modify: `content/playbooks/policy-evidence/playbook.ts`
 - Modify: `content/playbooks/define-assessed-playbook.ts`
 - Modify: `lib/playbooks/schema.ts`
-- Modify: `.gitattributes`
+- Create: `.gitattributes`
 
 There is no `fixtures/source/` directory. Nothing here is a downloaded excerpt: the consultation-analysis structure that shapes the generator is authored prose describing the headings, stages, and vocabulary observed in a public report, not a verbatim extract, so it is attached to the synthetic provenance (`syntheticData.structureNotePath` / `structureNoteSha256`) rather than filed as an `officialSources` local sample. The report itself stays an `officialSources` entry with only a canonical link and a `reuseStatus` explaining that no respondent text is copied.
 

@@ -4,8 +4,8 @@ import { describe, expect, it } from "vitest"
 
 import { sensitiveKeyPattern, findPersonalDataShape } from "@/lib/privacy-patterns"
 
-import { stanceFraming, themeSubjects } from "./corpus-fragments"
-import { generateSyntheticCorpus } from "./generate-synthetic-corpus"
+import { stanceFraming, themeSubjects, themeTemplates } from "./corpus-fragments"
+import { fillTemplate, generateSyntheticCorpus } from "./generate-synthetic-corpus"
 import {
   corpusSchema,
   corpusStanceValues,
@@ -282,26 +282,77 @@ describe("generateSyntheticCorpus", () => {
     }
   })
 
-  it("composes every authored stance framing against every authored theme subject without a declarative/interrogative mismatch", () => {
-    // Exhaustive check at the source: every `stanceFraming` entry composed
-    // against every `themeSubjects` entry (4 stances x 4 framings x 6
-    // themes x 6 subjects), independent of the generator and of any seed.
-    // A bad framing cannot hide behind seed luck here, which is what makes
-    // this guard durable rather than sampled.
+  it("composes every authored stance framing, theme subject, and theme template into grammatical text", () => {
+    // Exhaustive check at the source, routed through the generator's own
+    // substitution (`fillTemplate`), not an approximation of it: every
+    // `stanceFraming` entry x every `themeSubjects` entry x every
+    // `themeTemplates` entry for that theme (4 stances x 4 framings x 6
+    // themes x 6 subjects x 4 templates = 2304 combinations), independent of
+    // the generator and of any seed. A bad combination cannot hide behind
+    // seed luck here, which is what makes this guard durable rather than
+    // sampled.
+    //
+    // Composing only `${framing} ${subject}` (as this guard once did) is
+    // blind to the whole `themeTemplates` tail -- ", and asked...", ", and
+    // suggested...", ", and warned..." -- which is exactly where a
+    // non-agentive framing subject ("Views differed on...") produces "Views
+    // ... asked", a subject that cannot perform the verb. Routing through the
+    // real template closes that gap.
+    const offending: string[] = []
+
+    for (const stance of corpusStanceValues) {
+      for (const framing of stanceFraming[stance]) {
+        for (const theme of corpusThemeValues) {
+          for (const subject of themeSubjects[theme]) {
+            for (const template of themeTemplates[theme]) {
+              const composed = fillTemplate(template, framing, subject)
+
+              // A mistyped placeholder (e.g. `{framming}`) would otherwise
+              // ship a literal brace into public prose with nothing to catch
+              // it.
+              if (composed.includes("{") || composed.includes("}")) {
+                offending.push(
+                  `stance="${stance}" theme="${theme}" template="${template}" left an unfilled placeholder: "${composed}"`,
+                )
+                continue
+              }
+
+              const matched = findForbiddenComplementMatch(composed)
+
+              if (matched) {
+                offending.push(
+                  `stance="${stance}" theme="${theme}" framing="${framing}" subject="${subject}" template="${template}" (matched /${matched.source}/i): "${composed}"`,
+                )
+              }
+            }
+          }
+        }
+      }
+    }
+
+    expect(offending).toEqual([])
+  })
+
+  it("gives every stance framing an agent subject that can perform the template's chained verb", () => {
+    // Every `themeTemplates` entry chains a second verb onto the same,
+    // elided subject as the framing ("{framing} {subject}, and asked...",
+    // ", and suggested...", ", and warned..."). A framing opening with a
+    // non-agentive subject reads fine on its own ("Views differed on
+    // whether...") but produces "Views ... asked" once the template's tail
+    // is attached, and views cannot ask. Checking this directly against
+    // `stanceFraming`, independent of any template or subject, fails a
+    // future non-agentive framing at authoring time rather than only in a
+    // generated fixture.
+    const agentSubjectPattern =
+      /^(Respondents|Several responses|A number of responses|There was broad agreement)\b/
+
     const offending = corpusStanceValues.flatMap((stance) =>
-      stanceFraming[stance].flatMap((framing) =>
-        corpusThemeValues.flatMap((theme) =>
-          themeSubjects[theme].flatMap((subject) => {
-            const composed = `${framing} ${subject}`
-            const matched = findForbiddenComplementMatch(composed)
-            return matched
-              ? [
-                  `stance="${stance}" theme="${theme}" framing="${framing}" subject="${subject}" (matched /${matched.source}/i): "${composed}"`,
-                ]
-              : []
-          }),
+      stanceFraming[stance]
+        .filter((framing) => !agentSubjectPattern.test(framing))
+        .map(
+          (framing) =>
+            `stance="${stance}" framing="${framing}" does not open with an agent subject`,
         ),
-      ),
     )
 
     expect(offending).toEqual([])

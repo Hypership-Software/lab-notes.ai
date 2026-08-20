@@ -38,9 +38,9 @@ export const stanceFraming: Record<CorpusStance, readonly string[]> = {
     "Respondents challenged the approach for not addressing",
   ],
   mixed: [
-    "Responses were divided over",
+    "Respondents were divided over",
     "Respondents supported the aim but were split on",
-    "Views differed on",
+    "Respondents held differing views on",
     "Respondents accepted parts of the proposal while disputing",
   ],
   uncertain: [

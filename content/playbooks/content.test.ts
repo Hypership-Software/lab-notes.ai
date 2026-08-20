@@ -1,3 +1,5 @@
+import { readFile } from "node:fs/promises"
+
 import { describe, expect, it } from "vitest"
 
 import { getAllPlaybooks, getPlaybookSlugs } from "@/lib/playbooks/registry"
@@ -109,5 +111,21 @@ describe("playbook content inventory", () => {
       expect(sentence).not.toMatch(/\bwould be\b|\bfuture proof of concept\b/i)
       expect(sentence).not.toMatch(/no synthetic fixture exists/i)
     }
+  })
+
+  it("keeps the structure note's honesty claims intact", async () => {
+    // The note's authorship statement and its citation of the source it was
+    // informed by are load-bearing for the provenance contract: nothing else
+    // machine-checks that a future edit does not quietly turn this into (or
+    // leave it reading as) an official-source extract. Read from disk, not
+    // through any hashed import, so this test would still catch drift even
+    // if the manifest's structureNoteSha256 were updated to match it.
+    const note = await readFile(
+      "content/playbooks/policy-evidence/fixtures/synthetic/consultation-analysis-structure.md",
+      "utf8",
+    )
+
+    expect(note).toMatch(/this note is written by this project/i)
+    expect(note).toContain("circular-economy-consultation-report")
   })
 })

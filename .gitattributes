@@ -1,4 +1,7 @@
 # Fixture hashes are recorded over LF content. Without this, core.autocrlf
 # rewrites these files to CRLF on a Windows checkout and every recorded
-# SHA-256 mismatches on a fresh clone while still matching on Linux CI.
-content/playbooks/policy-evidence/fixtures/** text eol=lf
+# SHA-256 mismatches on a fresh clone while still matching on Linux CI. This
+# applies to any playbook's fixtures, not only policy-evidence:
+# localSamplePath/sha256 hash verification is a general mechanism, not
+# specific to one playbook.
+content/playbooks/**/fixtures/** text eol=lf

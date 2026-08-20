@@ -48,3 +48,10 @@ The corpus borrows the themes, the four broad positions a response can take,
 and this register of plain public-service English. It borrows no content. Every
 document in `corpus.json` is invented, is labelled `Synthetic working data`, and
 describes no real consultation, organisation, place, or person.
+
+The six themes and the four positions are not observed in the source report;
+they are chosen by this project, for this exemplar:
+
+- **Themes:** access to services, workforce capability, data governance,
+  accountability, procurement and reuse, and environmental cost.
+- **Positions:** supportive, critical, mixed, and uncertain.
