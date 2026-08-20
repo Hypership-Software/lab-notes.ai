@@ -373,7 +373,7 @@ export function getPlaybookSlugs(): readonly string[]
 
 ### Steps
 
-- [ ] Write the inventory test first. Assert the exact slug set, count of seventeen, seventeen honest `assessed` entries, no public demo yet, and `very-high` risk plus `demo.availability: "none"` for `violence-risk-research`. Task 10 promotes Policy Evidence to the single `recorded-demo` only after its fixtures, output, citations, and hashes exist.
+- [ ] Write the inventory test first. Assert the exact slug set, count of seventeen, seventeen honest `assessed` entries, no public demo yet, and `very-high` risk plus `demo.availability: "none"` for `violence-risk-research`. Task 10 promotes Policy Evidence to the single `recorded-demo` only after its dataset, output, citations, and evaluation exist.
 
   ```ts
   const expectedSlugs = [
@@ -410,7 +410,7 @@ export function getPlaybookSlugs(): readonly string[]
   1. Northern Ireland Department for the Economy, **AI Strategic Direction**, canonical page `https://www.economy-ni.gov.uk/publications/ai-strategic-direction`, used as public-service strategy context.
   2. Northern Ireland Department for the Economy, **Draft Circular Economy Strategy for Northern Ireland — Public Consultation Response Report**, canonical page `https://www.economy-ni.gov.uk/publications/draft-circular-economy-strategy-northern-ireland-public-consultation-response-report`, used only to establish an official consultation-analysis method and vocabulary.
 
-  Record exact access dates during implementation. Do not copy real consultation responses. Task 8 will add the small permitted methodology excerpt and its computed hash.
+  Record exact access dates during implementation. Do not copy real consultation responses. Task 8 will add the authored structure note describing the method it observed.
 
 - [ ] Write the other sixteen definitions as honest assessed concepts. Each must contain substantive plain-English content for all required fields, at least one official source, a feasible non-AI baseline, and explicit next validation questions. Set `demo.availability: "none"` and make the reason name the material data, risk, domain-validation, or evidence barrier.
 
@@ -946,21 +946,16 @@ export function PlaybookDetail(props: {
 
 ---
 
-## Task 8: Create the policy-evidence source sample and synthetic corpus
+## Task 8: Create the policy-evidence synthetic dataset
 
 **Files**
 
-- Create: `content/playbooks/policy-evidence/fixtures/synthetic/consultation-analysis-structure.md`
-- Create: `content/playbooks/policy-evidence/fixtures/synthetic/corpus.json`
-- Create: `content/playbooks/policy-evidence/fixtures/synthetic/manifest.ts`
+- Create: `content/playbooks/policy-evidence/consultation-analysis-structure.md`
+- Create: `content/playbooks/policy-evidence/policy-evidence.data.json`
 - Create: `features/policy-evidence/domain/types.ts`
 - Create: `features/policy-evidence/domain/types.test.ts`
-- Create: `features/policy-evidence/domain/corpus-fragments.ts`
-- Create: `features/policy-evidence/domain/generate-synthetic-corpus.ts`
-- Create: `features/policy-evidence/domain/generate-synthetic-corpus.test.ts`
 - Create: `lib/privacy-patterns.ts`
 - Create: `lib/privacy-patterns.test.ts`
-- Create: `scripts/generate-policy-evidence-fixtures.mts`
 - Create: `scripts/validate-content-core.ts`
 - Create: `scripts/validate-content.test.ts`
 - Modify: `scripts/validate-content.mts` (reduced to a thin CLI shim over `validate-content-core.ts`)
@@ -969,7 +964,25 @@ export function PlaybookDetail(props: {
 - Modify: `lib/playbooks/schema.ts`
 - Create: `.gitattributes`
 
-There is no `fixtures/source/` directory. Nothing here is a downloaded excerpt: the consultation-analysis structure that shapes the generator is authored prose describing the headings, stages, and vocabulary observed in a public report, not a verbatim extract, so it is attached to the synthetic provenance (`syntheticData.structureNotePath` / `structureNoteSha256`) rather than filed as an `officialSources` local sample. The report itself stays an `officialSources` entry with only a canonical link and a `reuseStatus` explaining that no respondent text is copied.
+The dataset is written by hand and committed as a single readable file. There is
+no generator, no seed, and no build step between the file and the page: the
+example imports `policy-evidence.data.json` directly. A generator would make the
+twenty documents reproducible, which nothing needs, at the cost of machinery
+that has to be understood before the data can be read or corrected.
+
+For the same reason the dataset carries no recorded hash. A hash asserts that a
+file is an unaltered copy of something derived elsewhere; an authored dataset is
+its own original, editing it is legitimate work, and a recorded hash over it
+would only ever fire as a false alarm. Hashing stays where the claim is real:
+`officialSources[].localSamplePath` with its `sha256`.
+
+There is no `fixtures/source/` directory. Nothing here is a downloaded excerpt:
+the consultation-analysis structure note is authored prose describing the
+headings, stages, and vocabulary observed in a public report, not a verbatim
+extract, so it is attached to the synthetic provenance
+(`syntheticData.structureNotePath`) rather than filed as an `officialSources`
+local sample. The report itself stays an `officialSources` entry with only a
+canonical link and a `reuseStatus` explaining that no respondent text is copied.
 
 ### Public interfaces
 
@@ -989,80 +1002,37 @@ export const corpusSchema = z
   .superRefine(/* unique identifiers, ascending sort order */)
 
 export type CorpusDocument = z.infer<typeof corpusDocumentSchema>
-
-export type SyntheticCorpusConfig = {
-  seed: number
-  size: number
-  themeWeights: Record<CorpusTheme, number>
-}
-
-export function generateSyntheticCorpus(
-  config: SyntheticCorpusConfig,
-): CorpusDocument[]
 ```
 
-The document contract is schema-first: `corpusSchema` is the one place that enforces the disclosure literal, the `synthetic: true` literal, the identifier shape, uniqueness, and sort order, so nothing downstream hand-rolls those checks. `theme` and `stance` are typed enums, not free-text `tags`.
+The document contract is schema-first: `corpusSchema` is the one place that
+enforces the disclosure literal, the `synthetic: true` literal, the identifier
+shape, uniqueness, and sort order, so nothing downstream hand-rolls those
+checks. `theme` and `stance` are typed enums, not free-text `tags`. Because the
+documents are hand-authored, this parse is the only thing standing between an
+author's edit and a published dataset, so content validation runs it over the
+committed file rather than trusting it at authoring time.
 
 ### Steps
 
 - [ ] Verify the official response-report page is accessible on the implementation date and record the canonical publication page, publisher, publication date, access date, and reuse statement as an `officialSources` entry with no local sample path or hash — the report is used only to study structure, not to supply text.
 
-- [ ] Author `consultation-analysis-structure.md` describing, in this project's own words, the headings, analytical stages, and public-sector consultation vocabulary a policy team's manual method would use. It must contain no respondent text, contact information, signature, or local path, and no sentence copied from the source report.
+- [ ] Author `consultation-analysis-structure.md` describing, in this project's own words, the headings, analytical stages, and public-sector consultation vocabulary a policy team's manual method would use. It must contain no respondent text, contact information, signature, or local path, and no sentence copied from the source report. It must state which parts of the shape come from the report and which the project chose for itself: the six themes and four positions are this project's own.
 
-- [ ] Write the corpus contract in `types.ts` before the generator: `corpusThemeValues`, `corpusStanceValues`, `corpusDocumentSchema`, and `corpusSchema`, with person-shaped text rejected at the contract boundary via the shared `findPersonalDataShape` check rather than re-implemented per caller.
+- [ ] Write the document contract in `types.ts` before the data: `corpusThemeValues`, `corpusStanceValues`, `corpusDocumentSchema`, and `corpusSchema`, with person-shaped text rejected at the contract boundary via the shared `findPersonalDataShape` check rather than re-implemented per caller.
 
-- [ ] Write the generator tests before the generator. Assert:
+- [ ] Write the contract tests first. Assert that IDs are unique, zero-padded, and sorted ascending; that every record carries `synthetic: true` and the exact disclosure label; that an unknown field is rejected; and that text containing an email, phone number, URL, National Insurance number pattern, or Health and Care number pattern fails to parse.
 
-  - the fixed seed produces byte-for-byte stable output;
-  - changing the seed changes at least one document;
-  - IDs are unique, zero-padded, and sorted ascending;
-  - every record has `synthetic: true` and the exact disclosure label;
-  - the corpus contains no key resembling a person identifier;
-  - text contains no email, phone number, URL, National Insurance number pattern, or Health and Care number pattern;
-  - theme and stance counts match an exact largest-remainder allocation, so the assertion is equality, not a tolerance;
-  - invalid size, non-positive weight, or a theme allocated zero documents throws a descriptive error.
+- [ ] Author twenty documents in `policy-evidence.data.json`, covering six themes relevant to a strategy consultation — access to services, workforce capability, data governance, accountability, procurement and reuse, and environmental cost — across supportive, critical, mixed, and uncertain positions. Each response must read like something a person or organisation would actually write: varied length, varied register, and at least one genuine minority position retained rather than averaged away. No response may imitate a named real respondent, and none may contain a numeral that could read as an identifier.
 
-- [ ] Run the focused test and confirm failure.
+- [ ] Record the dataset path, structure-note path, source characteristics, approximations, deliberate alterations, exclusions, and limitations on the playbook's `syntheticDataset` spec. The method sentence must say what the dataset stands in for and why it exists — that a visitor can try the task without holding a consultation mailbox — not merely how it was produced. `syntheticData` becomes `"available"` for this playbook, but `maturity` stays `"assessed"` and `demo.availability` stays `"none"`: the schema couples maturity and demo state to the recorded analysis, prompt, and evaluation, which are still outstanding.
 
-  ```bash
-  npm run test -- features/policy-evidence/domain/generate-synthetic-corpus.test.ts
-  ```
+- [ ] Pin `content/playbooks/**/*.data.json` and `content/playbooks/**/fixtures/**` to LF in `.gitattributes`. Datasets are pinned so their diffs stay readable across platforms; source samples are pinned because `core.autocrlf` would otherwise rewrite them to CRLF on a Windows checkout and every recorded SHA-256 would mismatch on a fresh clone while still matching on Linux CI.
 
-- [ ] Implement a local deterministic pseudo-random generator, `mulberry32`, so fixture generation does not depend on library version behaviour. Apportion theme and stance counts with exact largest-remainder allocation, keep sentence fragments authored in `corpus-fragments.ts`, and combine them by stable theme templates. Do not generate human names or simulated biographies.
+- [ ] Extend `scripts/validate-content.mts` to resolve the dataset and structure-note paths inside the repository root, confirm the structure note is readable, run a full `corpusSchema` parse of the committed dataset, and scan the parsed keys against `sensitiveKeyPattern`.
 
-  ```ts
-  function mulberry32(seed: number) {
-    return () => {
-      let value = (seed += 0x6d2b79f5)
-      value = Math.imul(value ^ (value >>> 15), value | 1)
-      value ^= value + Math.imul(value ^ (value >>> 7), value | 61)
-      return ((value ^ (value >>> 14)) >>> 0) / 4_294_967_296
-    }
-  }
-  ```
+- [ ] Prove each validation branch fails before trusting it. Build a temporary root holding a deliberately broken copy of the dataset and confirm `validateContent` names the playbook for invalid JSON, for a document that breaks the contract, and for text carrying a person-shaped value. Resolve the real content against the wrong root and confirm the missing dataset is reported by filename.
 
-- [ ] Use a corpus size of 48 with a recorded integer seed. Cover six themes relevant to a strategy consultation: access to services, workforce capability, data governance, accountability, procurement and reuse, and environmental cost. Include supportive, critical, mixed, and uncertain stances. The corpus must not imitate a named real respondent.
-
-- [ ] Create `scripts/generate-policy-evidence-fixtures.mts` to call the pure generator, write formatted JSON with a final newline, and report the SHA-256 of both the corpus and the structure note. The script is an explicit development utility, not a live data pipeline.
-
-- [ ] Pin `content/playbooks/policy-evidence/fixtures/**` to LF in `.gitattributes`. Without it, `core.autocrlf` rewrites the fixtures to CRLF on a Windows checkout and every recorded SHA-256 mismatches on a fresh clone while still matching on Linux CI.
-
-- [ ] Run the generator twice and prove the second run produces no diff.
-
-  ```bash
-  npx tsx scripts/generate-policy-evidence-fixtures.mts
-  git diff --exit-code -- content/playbooks/policy-evidence/fixtures/synthetic/corpus.json
-  npx tsx scripts/generate-policy-evidence-fixtures.mts
-  git diff --exit-code -- content/playbooks/policy-evidence/fixtures/synthetic/corpus.json
-  ```
-
-- [ ] Write `manifest.ts` with the seed, generator version, and the fixture and structure-note paths and hashes, and record the source characteristics, approximations, deliberate alterations, exclusions, and limitations on the playbook's `syntheticCorpus` spec. `syntheticData` becomes `"available"` for this playbook, but `maturity` stays `"assessed"` and `demo.availability` stays `"none"`: the schema couples maturity and demo state to the recorded analysis, prompt, and evaluation, which are still outstanding.
-
-- [ ] Extend `scripts/validate-content.mts` to check the fixture and structure-note hashes through the same helper used for source samples, run a full `corpusSchema` parse of the committed corpus, and scan the parsed keys against `sensitiveKeyPattern`.
-
-- [ ] Confirm the check catches a corrupted fixture before trusting it: corrupt `corpus.json`, confirm `npm run validate:content` fails naming the playbook and the file, then restore it with `git checkout --` and confirm validation passes again.
-
-- [ ] Commit the work. It lands as multiple commits rather than one, each following its own red-green-refactor cycle: the shared privacy patterns and fixture line-ending pin, the corpus contract, the generator and its fixtures, the playbook declaration, and finally the content-validation wiring.
+- [ ] Commit the work. It lands as multiple commits rather than one, each following its own red-green-refactor cycle: the shared privacy patterns and line-ending pin, the document contract, the authored dataset, the playbook declaration, and finally the content-validation wiring.
 
 ---
 
@@ -1140,7 +1110,7 @@ export function evaluateAnalysis(
 
 - [ ] Create `manifest.ts` for the recorded result. Set `label` to `Recorded AI-assisted output`, `procedureVersion` to `policy-evidence-v1`, and `liveService` to `false`. Record the actual UTC recording date, exact open-model identifier and version, input corpus SHA-256, versioned procedure SHA-256, and output SHA-256 as literals from the completed local recording. Validate each value with a schema; do not commit an incomplete manifest or relabel hand-authored output as model-generated.
 
-- [ ] Add tests that load and validate the recorded result, assert every citation, assert manifest hashes, ensure the label is exact, and ensure the UI-facing limitations contain **Not operationally validated**.
+- [ ] Add tests that load and validate the recorded result, assert every citation resolves to a document in the committed dataset, assert the recorded prompt and input hashes, ensure the label is exact, and ensure the UI-facing limitations contain **Not operationally validated**.
 
 - [ ] Run all policy-evidence domain tests and content integrity validation.
 
@@ -1438,7 +1408,7 @@ export type WorkbenchState = {
 
 - [ ] Verify fixture integrity independently:
 
-  - recompute source, corpus, prompt, recorded-output, and evaluation hashes;
+  - reparse the committed dataset against its contract and recompute source, prompt, recorded-output, and evaluation hashes;
   - confirm all citations match exact substring offsets;
   - regenerate the synthetic corpus twice with no diff;
   - confirm source samples contain no respondent text or metadata;
@@ -1459,7 +1429,7 @@ export type WorkbenchState = {
 
 - [ ] Ask a non-technical reviewer to use the Policy Evidence Workbench and answer the eight public questions in `DESIGN.md` section 2. Record only anonymised, non-sensitive findings in an issue or pull request. Treat inability to distinguish source, synthetic, baseline, and recorded output as a release blocker.
 
-- [ ] Ask a technical reviewer to find the schema, fixture generator, source register, baseline, recorded manifest, evaluation, and tests without guidance. Treat an ambiguous contribution path as a documentation defect.
+- [ ] Ask a technical reviewer to find the schema, synthetic dataset, source register, baseline, recorded manifest, evaluation, and tests without guidance. Treat an ambiguous contribution path as a documentation defect.
 
 - [ ] Review every user-facing claim against the repository evidence. Remove or qualify claims about accuracy, efficiency, savings, adoption, fairness, or outcomes that are not directly supported. Confirm all assessed concepts say what must be validated next.
 
@@ -1482,7 +1452,7 @@ export type WorkbenchState = {
 - [ ] Every playbook shows official sources, data accessibility, baseline, evaluation state, risks, human oversight, limitations, and next validation questions.
 - [ ] Policy Evidence Workbench runs without a key, live API, database, or private data.
 - [ ] Official source sample, synthetic corpus, recorded output, baseline, and human review state are visually and semantically distinct.
-- [ ] Synthetic data regenerates deterministically and all fixture hashes verify.
+- [ ] Every committed synthetic dataset parses against its contract, and all source-sample and recorded-output hashes verify.
 - [ ] Every recorded finding citation points to exact synthetic text.
 - [ ] The baseline is transparent and evaluated against the same labelled set.
 - [ ] The hosted page says **Recorded demonstration** and **Not operationally validated**.

@@ -1,8 +1,6 @@
 import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import type { PlaybookInput } from "@/lib/playbooks/schema"
 
-import type { SyntheticCorpusManifest } from "./policy-evidence/fixtures/synthetic/manifest"
-
 type DataAccessibility = PlaybookInput["dataAccessibility"]
 type RiskLevel = PlaybookInput["risk"]["level"]
 type OfficialSource = PlaybookInput["officialSources"][number]
@@ -40,22 +38,23 @@ export type AssessedPlaybookSpec = {
   partnerRequirements: string[]
   additionalSources?: OfficialSource[]
   /**
-   * Supplied only by a playbook whose synthetic corpus actually exists. It
+   * Supplied only by a playbook whose synthetic dataset actually exists. It
    * emits `syntheticData.status: "available"` and replaces the planned-state
    * prose, including `implementation.summary`, which sits outside
    * `syntheticData` but makes the same future-tense claim.
    *
    * `sourceCharacteristics` is required here rather than reused from the
    * planned branch: the planned sentence claims a structure "verified in
-   * permissible official sources," which is false for a corpus whose themes
+   * permissible official sources," which is false for a dataset whose themes
    * and positions this project authored itself.
    *
    * Maturity, demo availability, and evaluation state are deliberately not
    * overridable here: the schema forbids a recorded demonstration until the
    * recorded output exists, which is Task 9's work.
    */
-  syntheticCorpus?: {
-    manifest: SyntheticCorpusManifest
+  syntheticDataset?: {
+    dataPath: string
+    structureNotePath: string
     sourceCharacteristics: string[]
     approximations: string[]
     alterations: string[]
@@ -113,11 +112,11 @@ export function defineAssessedPlaybook(spec: AssessedPlaybookSpec) {
       "Names, contact details, exact addresses, rare personal combinations, and source records about individuals.",
     ],
     limitations: [
-      "No synthetic fixture exists at assessed maturity, and future synthetic data could not establish operational effectiveness or fairness.",
+      "No synthetic dataset exists at assessed maturity, and future synthetic data could not establish operational effectiveness or fairness.",
     ],
   }
 
-  const syntheticData: SyntheticData = spec.syntheticCorpus
+  const syntheticData: SyntheticData = spec.syntheticDataset
     ? {
         status: "available",
         label: "Synthetic working data",
@@ -125,21 +124,17 @@ export function defineAssessedPlaybook(spec: AssessedPlaybookSpec) {
         // sentence is corrected in place rather than duplicated here.
         method: spec.syntheticMethod,
         // The planned-state sentence claims a structure "verified in
-        // permissible official sources." That is false once a corpus exists
+        // permissible official sources." That is false once a dataset exists
         // whose themes and positions this project authored, so an available
-        // corpus supplies its own sentence naming that basis instead of
+        // dataset supplies its own sentence naming that basis instead of
         // reusing the planned one.
-        sourceCharacteristics: spec.syntheticCorpus.sourceCharacteristics,
-        approximations: spec.syntheticCorpus.approximations,
-        alterations: spec.syntheticCorpus.alterations,
+        sourceCharacteristics: spec.syntheticDataset.sourceCharacteristics,
+        approximations: spec.syntheticDataset.approximations,
+        alterations: spec.syntheticDataset.alterations,
         exclusions: plannedSyntheticData.exclusions,
-        limitations: spec.syntheticCorpus.limitations,
-        seed: spec.syntheticCorpus.manifest.seed,
-        generatorVersion: spec.syntheticCorpus.manifest.generatorVersion,
-        fixturePath: spec.syntheticCorpus.manifest.fixturePath,
-        fixtureSha256: spec.syntheticCorpus.manifest.fixtureSha256,
-        structureNotePath: spec.syntheticCorpus.manifest.structureNotePath,
-        structureNoteSha256: spec.syntheticCorpus.manifest.structureNoteSha256,
+        limitations: spec.syntheticDataset.limitations,
+        dataPath: spec.syntheticDataset.dataPath,
+        structureNotePath: spec.syntheticDataset.structureNotePath,
       }
     : plannedSyntheticData
 
@@ -194,15 +189,15 @@ export function defineAssessedPlaybook(spec: AssessedPlaybookSpec) {
     nextValidationSteps: spec.nextValidationSteps,
     implementation: {
       summary:
-        spec.syntheticCorpus?.implementationSummary ??
-        "A future proof of concept would use a small permissible source sample to shape deterministic synthetic fixtures and an inspectable comparison baseline.",
+        spec.syntheticDataset?.implementationSummary ??
+        "A future proof of concept would read a small synthetic dataset mirroring the published structure of a real source, so the pattern could be tried without access to that source, and compare it with an inspectable non-AI baseline.",
       architecture:
-        "Typed static content and fixtures inside the shared Next.js application, with framework-agnostic domain functions and no required live service.",
-      inputs: ["Versioned official source register", "Deterministic synthetic fixtures"],
+        "Typed static content and datasets inside the shared Next.js application, with framework-agnostic domain functions and no required live service.",
+      inputs: ["Versioned official source register", "Synthetic stand-in dataset"],
       outputs: ["Inspectable task-support result", "Evidence links", "Evaluation summary"],
       reusableParts: [
         "Source register",
-        "Synthetic-data manifest",
+        "Synthetic-data method note",
         "Non-AI comparison baseline",
         "Human-review and evaluation pattern",
       ],

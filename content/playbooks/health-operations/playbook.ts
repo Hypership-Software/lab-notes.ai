@@ -30,7 +30,7 @@ export const healthOperations = defineAssessedPlaybook({
   sourceRationale:
     "The strategy mentions discharge, bed demand, and allocation but does not define objectives, constraints, or safety measures.",
   syntheticMethod:
-    "Generate fixed-seed aggregate arrival, capacity, and pathway events with invented service identifiers and deliberately varied demand scenarios.",
+    "Stand in for the aggregate arrival, capacity, and pathway data a trust already holds, so the pattern could be tried without it: invented service identifiers and a small set of deliberately varied demand scenarios, shaped by whatever published structure can be recorded first.",
   baseline: {
     name: "Rolling aggregate forecast",
     description:

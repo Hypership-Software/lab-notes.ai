@@ -109,7 +109,7 @@ describe("playbook content inventory", () => {
 
     for (const sentence of prose) {
       expect(sentence).not.toMatch(/\bwould be\b|\bfuture proof of concept\b/i)
-      expect(sentence).not.toMatch(/no synthetic fixture exists/i)
+      expect(sentence).not.toMatch(/no synthetic dataset exists/i)
     }
   })
 
@@ -117,11 +117,10 @@ describe("playbook content inventory", () => {
     // The note's authorship statement and its citation of the source it was
     // informed by are load-bearing for the provenance contract: nothing else
     // machine-checks that a future edit does not quietly turn this into (or
-    // leave it reading as) an official-source extract. Read from disk, not
-    // through any hashed import, so this test would still catch drift even
-    // if the manifest's structureNoteSha256 were updated to match it.
+    // leave it reading as) an official-source extract. Content validation only
+    // proves the file is readable, so this is the check on what it says.
     const note = await readFile(
-      "content/playbooks/policy-evidence/fixtures/synthetic/consultation-analysis-structure.md",
+      "content/playbooks/policy-evidence/consultation-analysis-structure.md",
       "utf8",
     )
 

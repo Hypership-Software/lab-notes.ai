@@ -30,7 +30,7 @@ export const roadMaintenance = defineAssessedPlaybook({
   sourceRationale:
     "The strategy describes early defect detection and repair prioritisation without defining imagery, inspection standards, or allocation rules.",
   syntheticMethod:
-    "Generate invented road segments, inspection events, image-quality flags, defect categories, and maintenance constraints from a fixed seed.",
+    "Stand in for the inspection records a roads authority already holds, so the pattern could be tried without them: invented road segments, inspection events, image-quality flags, defect categories, and maintenance constraints, shaped by the published inspection standard.",
   baseline: {
     name: "Standards-based inspection queue",
     description:

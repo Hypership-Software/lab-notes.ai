@@ -48,8 +48,8 @@ export default function MethodPage() {
           <h3>No production data pipeline</h3>
           <p>
             A small permissible example may establish fields, units, vocabulary,
-            and constraints. The hosted playbook then runs on deterministic
-            fixtures rather than a changing public endpoint.
+            and constraints. The hosted playbook then reads a checked-in dataset
+            file rather than a changing public endpoint.
           </p>
         </div>
       </section>
@@ -58,9 +58,11 @@ export default function MethodPage() {
         <div>
           <h2 id="synthetic-title">Synthetic, and visibly so</h2>
           <p>
-            Synthetic working data uses a recorded seed, invented identifiers, and
-            documented approximations, alterations, exclusions, and limitations.
-            It cannot establish production performance or fairness.
+            Synthetic working data stands in for a real source, so an example can
+            be tried without an account, a key, or a data-sharing agreement. It
+            follows that source&rsquo;s published structure, and its approximations,
+            alterations, exclusions, and limitations are all recorded. It cannot
+            establish production performance or fairness.
           </p>
         </div>
         <div>

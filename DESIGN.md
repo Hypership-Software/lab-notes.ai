@@ -240,7 +240,7 @@ Each playbook lives at `content/playbooks/<slug>/playbook.ts`. A central registr
 | `dataAccessibility` | Realistic access level for necessary data |
 | `risk` | Provisional risk tier with reasons |
 | `officialSources` | Versioned source register entries |
-| `syntheticData` | Method, seed, boundaries, and labelling statement |
+| `syntheticData` | Method, dataset path, boundaries, and labelling statement |
 | `nonAiBaseline` | Existing or deterministic alternative used for comparison |
 | `evaluation` | Questions, metrics, labelled fixture, and result status |
 | `humanOversight` | Responsible role, review point, escalation, and redress path |
@@ -255,7 +255,7 @@ Each playbook lives at `content/playbooks/<slug>/playbook.ts`. A central registr
 #### Maturity
 
 1. `assessed` — the problem, data reality, risks, and likely implementation pattern are documented; no interactive result is claimed.
-2. `recorded-demo` — a bounded interaction uses synthetic fixtures and checked-in recorded output; there is no live model service.
+2. `recorded-demo` — a bounded interaction uses a synthetic dataset and checked-in recorded output; there is no live model service.
 3. `partner-ready` — the playbook has explicit validation protocols and interfaces ready for a data-owning partner. This state is not available in the MVP without partner review.
 4. `operational-pilot` — the system has been tested in a controlled real-world setting with governance and monitoring. A repository maintainer cannot self-declare this state.
 5. `evaluated-service` — operational outcomes and harms have been independently evaluated. A repository maintainer cannot self-declare this state.
@@ -282,7 +282,7 @@ Risk status always includes plain-English reasons and is never communicated by c
 #### Demo availability
 
 - `none` — assessed card and detail page only;
-- `recorded` — deterministic fixture plus checked-in recorded AI-assisted output;
+- `recorded` — synthetic dataset plus checked-in recorded AI-assisted output;
 - `live-local` — future optional adapter that a developer may run locally with their own service and credentials;
 - `partner` — future controlled integration, not exposed publicly.
 
@@ -314,22 +314,22 @@ The interface presents sources as an ordered list of semantic source dossiers. E
 
 The project deliberately does not build production data pipelines. A contributor may make a one-off retrieval from an official public source to understand fields, structure, vocabulary, categories, scale, and realistic constraints. They then commit only a small, permissible source sample and a source-register record.
 
-The example runs against synthetic fixtures, not the source service. This keeps the demo deterministic, reviewable, safe to fork, and independent of keys or changing endpoints.
+The example runs against a synthetic dataset that stands in for the source service. This is the point of the pattern rather than a limitation of it: a visitor can try the task without an account, an API key, or a data-sharing agreement, and the example stays reviewable, safe to fork, and independent of changing endpoints.
 
 ### Synthetic-data method
 
 Every synthetic dataset must:
 
-1. use a fixed, recorded seed;
+1. name the real source it stands in for, and be small enough to read in full;
 2. use invented entity IDs rather than human names, emails, phone numbers, exact addresses, or other person identifiers;
-3. derive only defensible structure, categories, distributions, or language characteristics from the recorded source sample;
+3. derive only defensible structure, categories, distributions, or language characteristics from that source, recorded in a structure note beside the data;
 4. document which characteristics were copied, approximated, deliberately altered, or excluded;
 5. include conspicuous `synthetic: true` metadata and a visible label in the interface;
-6. be reproducible from a checked-in generator or a documented deterministic transformation;
+6. be committed as a single readable `<slug>.data.json` file that the example reads directly, with no generator, seed, or build step between the file and the page;
 7. avoid rare combinations that could resemble or disclose a real individual;
 8. state that it cannot establish model efficacy, fairness, or production readiness.
 
-The repository keeps source samples, synthetic fixtures, recorded outputs, and evaluation labels in separate directories. Their visual treatment also remains distinct.
+The repository keeps source samples, synthetic datasets, recorded outputs, and evaluation labels separately identifiable, and their visual treatment remains distinct.
 
 ### Recorded AI-assisted output
 
@@ -402,7 +402,7 @@ The interface makes review a first-class action. Findings begin unreviewed. A re
 
 ### Runtime boundary
 
-The MVP is static-first. Content, source manifests, synthetic fixtures, and recorded outputs are imported at build time. Server Components render public pages by default. Client Components are limited to catalogue filters, evidence-thread selection, tabs or disclosure controls, and local review state.
+The MVP is static-first. Content, source registers, synthetic datasets, and recorded outputs are imported at build time. Server Components render public pages by default. Client Components are limited to catalogue filters, evidence-thread selection, tabs or disclosure controls, and local review state.
 
 There is no database, authentication layer, background worker, or public API route in the MVP.
 
@@ -410,7 +410,7 @@ There is no database, authentication layer, background worker, or public API rou
 flowchart LR
   A["Typed playbook definitions"] --> B["Validated registry"]
   C["Versioned source samples"] --> D["Playbook feature modules"]
-  E["Synthetic fixtures"] --> D
+  E["Synthetic dataset"] --> D
   F["Recorded analysis"] --> D
   B --> G["Server-rendered catalogue and detail pages"]
   D --> G
@@ -680,7 +680,7 @@ WCAG 2.2 AA is the minimum acceptance standard.
 
 - Commit no secrets, credentials, private endpoints, personal names, personal machine paths, or sensitive person-level records.
 - Treat all real consultation responses as potentially personal data unless an official, licensed, safely aggregate sample proves otherwise.
-- Synthetic fixtures must not contain realistic contact details or exact residential locations.
+- Synthetic datasets must not contain realistic contact details or exact residential locations.
 - Render fixture text as text, never raw HTML.
 - Do not accept arbitrary file upload or prompt input in the hosted MVP.
 - External links use safe rel attributes when opening a new context.
@@ -693,10 +693,10 @@ WCAG 2.2 AA is the minimum acceptance standard.
 ### Unit and schema tests
 
 - Every playbook parses against the current schema.
-- Slugs, source IDs, fixture IDs, and finding IDs are unique.
+- Slugs, source IDs, document IDs, and finding IDs are unique.
 - Demo routes and recorded outputs reference existing playbooks and fixtures.
-- Source sample and prompt hashes match recorded metadata.
-- Synthetic generation is deterministic for the recorded seed.
+- Source sample and prompt hashes match recorded metadata. Authored synthetic datasets carry no hash.
+- Every committed synthetic dataset parses against its typed contract.
 - The baseline is deterministic and returns cited evidence.
 - Evaluation handles zero denominators explicitly.
 - Catalogue filters are pure, composable, and URL-safe.
@@ -728,7 +728,7 @@ A contribution may improve an assessed playbook without building a demo. The sma
 A recorded demonstration additionally requires:
 
 - a permissible source sample or a clear reason no sample is committed;
-- deterministic synthetic fixtures and method documentation;
+- a readable synthetic dataset and its method documentation;
 - a meaningful non-AI baseline;
 - recorded output with input and prompt hashes;
 - a labelled evaluation fixture;
@@ -745,7 +745,7 @@ The repository uses the Apache License 2.0 for original code and documentation. 
 | Typed TypeScript content plus Zod | Strong contribution feedback and static generation without a CMS or extra build pipeline | Non-technical contribution volume makes a separate authoring layer necessary |
 | One complete exemplar | Proves the full contract without spreading effort across shallow demos | Policy Evidence Workbench passes the complete quality gate |
 | Recorded output, no hosted model calls | Reproducible, inspectable, safe, inexpensive, and key-free | A separately reviewed live adapter has a clear public benefit and abuse model |
-| One-off official samples plus synthetic fixtures | Avoids brittle pipelines and sensitive data while preserving realism | A data-owning partner sponsors a controlled integration |
+| One-off official samples plus synthetic datasets | Avoids brittle pipelines and sensitive data while preserving realism | A data-owning partner sponsors a controlled integration |
 | Deterministic non-AI baseline | Makes the value and limits of AI contestable | Never remove; improve when domain practice offers a better baseline |
 | Evidence Desk visual language | Signals scrutiny and provenance without pretending to be an official service | User research shows the metaphor obstructs comprehension |
 | Light mode first | Concentrates design and accessibility effort on one finished theme | Core routes pass accessibility and content-quality gates |
@@ -759,7 +759,7 @@ The MVP is complete when:
 - Policy Evidence Workbench completes the full source-to-review evidence thread without a network service or credential;
 - every official source, synthetic fixture, recorded result, and evaluation item is visibly distinct and internally linked;
 - a non-specialist can explain the exemplar's purpose and limitations after using the page;
-- a technical contributor can locate the schema, generator, baseline, evaluation, and tests without reverse engineering the app;
+- a technical contributor can locate the schema, dataset, baseline, evaluation, and tests without reverse engineering the app;
 - the site remains understandable without client JavaScript;
 - the quality gate passes in a clean checkout;
 - repository history and tracked files contain no personal names, personal local paths, secrets, or sensitive records.

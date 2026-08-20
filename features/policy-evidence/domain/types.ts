@@ -20,8 +20,9 @@ export const corpusStanceValues = [
 
 /**
  * Document text is checked against the shared person-shaped patterns here, at
- * the contract boundary, so the same rule applies to freshly generated
- * documents and to the committed fixture a later hand-edit might touch.
+ * the contract boundary. Every document in this project is hand-authored, so
+ * this is the check that stands between an author's edit and a public
+ * repository: content validation parses the committed dataset through it.
  */
 const corpusTextSchema = z
   .string()
@@ -87,9 +88,3 @@ export const corpusSchema = z
 export type CorpusTheme = (typeof corpusThemeValues)[number]
 export type CorpusStance = (typeof corpusStanceValues)[number]
 export type CorpusDocument = z.infer<typeof corpusDocumentSchema>
-
-export type SyntheticCorpusConfig = {
-  seed: number
-  size: number
-  themeWeights: Record<CorpusTheme, number>
-}

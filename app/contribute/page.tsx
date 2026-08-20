@@ -22,8 +22,8 @@ const tracks = [
   {
     title: "Build a recorded exemplar",
     description:
-      "Add permissible source structure, deterministic synthetic fixtures, a non-AI baseline, recorded output, citations, evaluation, and human review.",
-    requirement: "All artefacts and hashes must land together before maturity changes.",
+      "Record the published structure of a real source, add a small synthetic dataset that mirrors it, then a non-AI baseline, recorded output, citations, evaluation, and human review.",
+    requirement: "Every artefact must land together before maturity changes.",
   },
 ]
 

@@ -11,7 +11,7 @@ export const maturityLadder = [
     value: "recorded-demo",
     label: "Recorded demonstration",
     description:
-      "Checked-in output is replayed against deterministic synthetic fixtures.",
+      "Checked-in output is replayed against a checked-in synthetic dataset.",
   },
   {
     value: "partner-ready",

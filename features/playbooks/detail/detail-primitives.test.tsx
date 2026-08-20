@@ -82,21 +82,16 @@ const plannedSyntheticData = {
     "Names, contact details, exact addresses, rare personal combinations, and source records about individuals.",
   ],
   limitations: [
-    "No synthetic fixture exists at assessed maturity, and future synthetic data could not establish operational effectiveness or fairness.",
+    "No synthetic dataset exists at assessed maturity, and future synthetic data could not establish operational effectiveness or fairness.",
   ],
 } satisfies Playbook["syntheticData"]
 
 const availableSyntheticData = {
   ...plannedSyntheticData,
   status: "available",
-  seed: 42,
-  generatorVersion: "1",
-  fixturePath:
-    "content/playbooks/policy-evidence/fixtures/synthetic/corpus.json",
-  fixtureSha256: hash,
+  dataPath: "content/playbooks/policy-evidence/policy-evidence.data.json",
   structureNotePath:
-    "content/playbooks/policy-evidence/fixtures/synthetic/structure.md",
-  structureNoteSha256: hash,
+    "content/playbooks/policy-evidence/consultation-analysis-structure.md",
 } satisfies Playbook["syntheticData"]
 
 const metric = {
@@ -356,29 +351,30 @@ describe("playbook detail primitives", () => {
     ).not.toBeInTheDocument()
   })
 
-  it("states that a planned synthetic method has produced no fixture", () => {
+  it("states that a planned synthetic method has produced no dataset", () => {
     render(<SyntheticDataMethod syntheticData={plannedSyntheticData} />)
 
     expect(screen.getByText(plannedSyntheticData.method)).toBeVisible()
     expect(
-      screen.getByText("No synthetic fixture has been generated yet"),
+      screen.getByText("No synthetic dataset has been written yet"),
     ).toBeVisible()
     expect(
       screen.getByText(plannedSyntheticData.limitations[0]),
     ).toBeVisible()
-    expect(screen.queryByText("Seed")).not.toBeInTheDocument()
-    expect(screen.queryByText("Fixture")).not.toBeInTheDocument()
+    expect(screen.queryByText("Data file")).not.toBeInTheDocument()
+    expect(screen.queryByText("Structure note")).not.toBeInTheDocument()
   })
 
-  it("shows the seed, generator, and fixture path once a fixture exists", () => {
+  it("shows the data file and structure note once a dataset exists", () => {
     const { container } = render(
       <SyntheticDataMethod syntheticData={availableSyntheticData} />,
     )
 
-    expect(definitionValue(container, "Seed")).toHaveTextContent("42")
-    expect(definitionValue(container, "Generator version")).toHaveTextContent("1")
-    expect(definitionValue(container, "Fixture")).toHaveTextContent(
-      availableSyntheticData.fixturePath,
+    expect(definitionValue(container, "Data file")).toHaveTextContent(
+      availableSyntheticData.dataPath,
+    )
+    expect(definitionValue(container, "Structure note")).toHaveTextContent(
+      availableSyntheticData.structureNotePath,
     )
   })
 

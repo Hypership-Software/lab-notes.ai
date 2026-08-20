@@ -6,7 +6,7 @@ import type { Playbook } from "@/lib/playbooks/schema"
 
 import { DefinitionListRow } from "./definition-list-row"
 
-function fixtureRows(syntheticData: Playbook["syntheticData"]) {
+function datasetRows(syntheticData: Playbook["syntheticData"]) {
   switch (syntheticData.status) {
     case "planned":
       return null
@@ -14,16 +14,12 @@ function fixtureRows(syntheticData: Playbook["syntheticData"]) {
       return (
         <>
           <div>
-            <dt>Seed</dt>
-            <dd>{syntheticData.seed}</dd>
+            <dt>Data file</dt>
+            <dd data-technical>{syntheticData.dataPath}</dd>
           </div>
           <div>
-            <dt>Generator version</dt>
-            <dd>{syntheticData.generatorVersion}</dd>
-          </div>
-          <div>
-            <dt>Fixture</dt>
-            <dd data-technical>{syntheticData.fixturePath}</dd>
+            <dt>Structure note</dt>
+            <dd data-technical>{syntheticData.structureNotePath}</dd>
           </div>
         </>
       )
@@ -42,7 +38,7 @@ export function SyntheticDataMethod({
       <ProvenanceLabel kind="synthetic" />
       <p>{syntheticData.method}</p>
       {syntheticData.status === "planned" ? (
-        <p>No synthetic fixture has been generated yet</p>
+        <p>No synthetic dataset has been written yet</p>
       ) : null}
       <dl>
         <DefinitionListRow
@@ -55,7 +51,7 @@ export function SyntheticDataMethod({
         />
         <DefinitionListRow term="Alterations" items={syntheticData.alterations} />
         <DefinitionListRow term="Exclusions" items={syntheticData.exclusions} />
-        {fixtureRows(syntheticData)}
+        {datasetRows(syntheticData)}
         <DefinitionListRow term="Limitations" items={syntheticData.limitations} />
       </dl>
     </div>

@@ -30,7 +30,7 @@ export const wastewaterMonitoring = defineAssessedPlaybook({
   sourceRationale:
     "The strategy mentions abnormal flow, contamination, and spillovers but supplies no sensor specification or incident labels.",
   syntheticMethod:
-    "Generate fixed-seed multivariate sensor traces with declared seasonality, missingness, drift, maintenance events, and injected anomalies.",
+    "Stand in for the monitoring feed an operator already holds, so the pattern could be tried without access to it: short invented traces with declared seasonality, missingness, drift, maintenance events, and deliberately placed anomalies.",
   baseline: {
     name: "Reviewed threshold alerts",
     description:

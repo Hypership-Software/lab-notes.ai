@@ -113,14 +113,10 @@ export const syntheticDataSchema = z.discriminatedUnion("status", [
   z.strictObject({
     status: z.literal("available"),
     ...syntheticDataSharedShape,
-    seed: z.number().int().nonnegative(),
-    generatorVersion: z.string().trim().min(1),
-    fixturePath: relativePathSchema,
-    fixtureSha256: sha256Schema,
-    // A corpus may not claim to be available without a hash-verified record of
-    // the structural basis it was generated from.
+    dataPath: relativePathSchema,
+    // A dataset may not claim to be available without the note recording the
+    // structural basis it was authored against.
     structureNotePath: relativePathSchema,
-    structureNoteSha256: sha256Schema,
   }),
 ])
 

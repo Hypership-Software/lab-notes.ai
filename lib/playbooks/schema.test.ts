@@ -48,14 +48,10 @@ const validInput = {
   syntheticData: {
     status: "available",
     label: "Synthetic working data",
-    method: "Generate invented responses from a fixed set of themes and sentence patterns.",
-    seed: 20260818,
-    generatorVersion: "1.0.0",
-    fixturePath: "content/playbooks/policy-evidence/synthetic/corpus.json",
-    fixtureSha256: sha256,
+    method: "Write invented responses by hand against a fixed set of themes and positions.",
+    dataPath: "content/playbooks/policy-evidence/policy-evidence.data.json",
     structureNotePath:
-      "content/playbooks/policy-evidence/synthetic/consultation-analysis-structure.md",
-    structureNoteSha256: sha256,
+      "content/playbooks/policy-evidence/consultation-analysis-structure.md",
     sourceCharacteristics: ["Document structure", "Public-service vocabulary"],
     approximations: ["Theme frequency is illustrative rather than measured."],
     alterations: ["All entities and response text are invented."],
@@ -194,15 +190,37 @@ describe("playbookSchema", () => {
     expect(playbookSchema.safeParse(input).success).toBe(false)
   })
 
-  it("requires fixture and structure-note hashes for an available corpus", () => {
+  it("requires a structure-note path for an available dataset", () => {
     const incomplete = { ...validInput.syntheticData } as Record<string, unknown>
-    delete incomplete.fixtureSha256
     delete incomplete.structureNotePath
-    delete incomplete.structureNoteSha256
 
     const result = playbookSchema.safeParse({
       ...validInput,
       syntheticData: incomplete,
+    })
+
+    expect(result.success).toBe(false)
+  })
+
+  it("rejects an available dataset with no data path", () => {
+    const incomplete = { ...validInput.syntheticData } as Record<string, unknown>
+    delete incomplete.dataPath
+
+    const result = playbookSchema.safeParse({
+      ...validInput,
+      syntheticData: incomplete,
+    })
+
+    expect(result.success).toBe(false)
+  })
+
+  it("rejects a data path that escapes the repository", () => {
+    const result = playbookSchema.safeParse({
+      ...validInput,
+      syntheticData: {
+        ...validInput.syntheticData,
+        dataPath: "../outside/data.json",
+      },
     })
 
     expect(result.success).toBe(false)
@@ -220,7 +238,7 @@ describe("playbookSchema", () => {
     expect(result.success).toBe(false)
   })
 
-  it("still accepts a planned corpus with no hashes", () => {
+  it("still accepts a planned dataset with no paths", () => {
     const result = playbookSchema.safeParse({
       ...validInput,
       maturity: "assessed",
@@ -233,7 +251,7 @@ describe("playbookSchema", () => {
         approximations: ["Theme frequency would be illustrative."],
         alterations: ["All response text would be invented."],
         exclusions: ["Names", "Contact details"],
-        limitations: ["No fixture exists yet, so nothing can be measured."],
+        limitations: ["No dataset exists yet, so nothing can be measured."],
       },
     })
 

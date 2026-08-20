@@ -1,8 +1,10 @@
 # How published consultation analysis is structured
 
 This note is written by this project. It records the *shape* of published
-consultation analysis so that the synthetic corpus in this directory has a
-realistic structure instead of an invented one.
+consultation analysis so that the synthetic dataset beside it can stand in for
+real consultation responses: anyone can try the example without holding a
+consultation mailbox, and the structure they see is one a real report uses
+rather than one this project invented.
 
 It was informed by reading the `circular-economy-consultation-report` source
 recorded in this playbook's source register. It reproduces no text from that
@@ -42,12 +44,13 @@ sample of official material, and no respondent is represented.
 Respondent, response, consultation question, theme, sub-theme, minority view,
 representation, call for evidence, aggregate, verbatim, redaction.
 
-## What the synthetic corpus takes from this note
+## What the synthetic dataset takes from this note
 
-The corpus borrows the themes, the four broad positions a response can take,
+The dataset borrows the themes, the four broad positions a response can take,
 and this register of plain public-service English. It borrows no content. Every
-document in `corpus.json` is invented, is labelled `Synthetic working data`, and
-describes no real consultation, organisation, place, or person.
+document in `policy-evidence.data.json` is written by hand, is labelled
+`Synthetic working data`, and describes no real consultation, organisation,
+place, or person.
 
 The six themes and the four positions are not observed in the source report;
 they are chosen by this project, for this exemplar:

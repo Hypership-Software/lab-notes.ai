@@ -19,18 +19,36 @@ type HashCheck = {
 }
 
 /**
- * Resolve a repository-relative path, refuse anything escaping the root, and
- * compare a SHA-256 over raw bytes. Shared so source samples and synthetic
- * fixtures cannot drift apart in how strictly they are checked.
+ * Resolve a repository-relative path and refuse anything escaping the root.
+ * Every recorded path in the content layer goes through here, so a traversal
+ * attempt cannot reach the filesystem by way of one unguarded caller.
+ */
+function resolveInsideRoot(
+  rootDirectory: string,
+  relativePath: string,
+): string | undefined {
+  const resolved = path.resolve(rootDirectory, relativePath)
+  const relative = path.relative(rootDirectory, resolved)
+
+  if (relative.startsWith("..") || path.isAbsolute(relative)) return undefined
+
+  return resolved
+}
+
+/**
+ * Compare a SHA-256 over the raw bytes of a committed official source sample.
+ * This is the one place a hash is load-bearing: it asserts that a file really
+ * is an unaltered copy of what was downloaded. Synthetic datasets are authored
+ * here rather than derived, so editing one is legitimate work and a recorded
+ * hash over it would only ever fire as a false alarm.
  */
 async function checkFileHash(
   rootDirectory: string,
   { label, relativePath, expectedSha256 }: HashCheck,
 ): Promise<string | undefined> {
-  const resolved = path.resolve(rootDirectory, relativePath)
-  const relative = path.relative(rootDirectory, resolved)
+  const resolved = resolveInsideRoot(rootDirectory, relativePath)
 
-  if (relative.startsWith("..") || path.isAbsolute(relative)) {
+  if (!resolved) {
     return `${label}: path escapes the repository root`
   }
 
@@ -91,36 +109,39 @@ export async function validateContent(
     }
 
     if (playbook.syntheticData.status === "available") {
-      const { fixturePath, fixtureSha256, structureNotePath, structureNoteSha256 } =
-        playbook.syntheticData
+      const { dataPath, structureNotePath } = playbook.syntheticData
 
-      for (const check of [
-        {
-          label: `${playbook.slug}/corpus`,
-          relativePath: fixturePath,
-          expectedSha256: fixtureSha256,
-        },
-        {
-          label: `${playbook.slug}/structure-note`,
-          relativePath: structureNotePath,
-          expectedSha256: structureNoteSha256,
-        },
-      ]) {
-        const error = await checkFileHash(rootDirectory, check)
-        if (error) errors.push(error)
+      const structureNoteFile = resolveInsideRoot(rootDirectory, structureNotePath)
+
+      if (!structureNoteFile) {
+        errors.push(`${playbook.slug}/structure-note: path escapes the repository root`)
+      } else {
+        try {
+          await readFile(structureNoteFile)
+        } catch (error) {
+          const message = error instanceof Error ? error.message : "Unknown read error"
+          errors.push(
+            `${playbook.slug}/structure-note: cannot read ${structureNotePath} (${message})`,
+          )
+        }
       }
 
-      const fixtureFile = path.resolve(rootDirectory, fixturePath)
+      const dataFile = resolveInsideRoot(rootDirectory, dataPath)
+
+      if (!dataFile) {
+        errors.push(`${playbook.slug}/dataset: path escapes the repository root`)
+        continue
+      }
 
       try {
         const parsed = corpusSchema.safeParse(
-          JSON.parse(await readFile(fixtureFile, "utf8")),
+          JSON.parse(await readFile(dataFile, "utf8")),
         )
 
         if (!parsed.success) {
           errors.push(
-            `${playbook.slug}/corpus: ${parsed.error.issues
-              .map((issue) => `${issue.path.join(".") || "corpus"}: ${issue.message}`)
+            `${playbook.slug}/dataset: ${parsed.error.issues
+              .map((issue) => `${issue.path.join(".") || "dataset"}: ${issue.message}`)
               .join("; ")}`,
           )
         } else {
@@ -134,13 +155,13 @@ export async function validateContent(
 
           if (offendingKeys.length > 0) {
             errors.push(
-              `${playbook.slug}/corpus: person-shaped keys present (${offendingKeys.join(", ")})`,
+              `${playbook.slug}/dataset: person-shaped keys present (${offendingKeys.join(", ")})`,
             )
           }
         }
       } catch (error) {
         const message = error instanceof Error ? error.message : "Unknown read error"
-        errors.push(`${playbook.slug}/corpus: cannot parse ${fixturePath} (${message})`)
+        errors.push(`${playbook.slug}/dataset: cannot parse ${dataPath} (${message})`)
       }
     }
   }

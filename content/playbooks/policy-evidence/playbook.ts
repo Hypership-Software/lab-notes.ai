@@ -1,5 +1,4 @@
 import { defineAssessedPlaybook } from "../define-assessed-playbook"
-import { policyEvidenceCorpusManifest } from "./fixtures/synthetic/manifest"
 
 export const policyEvidence = defineAssessedPlaybook({
   slug: "policy-evidence",
@@ -31,7 +30,7 @@ export const policyEvidence = defineAssessedPlaybook({
   sourceRationale:
     "The report frames these as efficiency opportunities but does not establish that automated synthesis is appropriate for a particular consultation.",
   syntheticMethod:
-    "Configured weights fix an exact count of forty-eight invented consultation responses across six themes and four positions, and a recorded seed then composes each response from sentence fragments authored in this repository.",
+    "A stand-in for the consultation responses a department holds, so this example can be tried without access to any: twenty invented responses follow the headings, analytical stages, and plain public-service vocabulary of a published consultation response report, while the themes, positions, and wording are this project's own.",
   baseline: {
     name: "Reviewed keyword grouping",
     description:
@@ -53,10 +52,10 @@ export const policyEvidence = defineAssessedPlaybook({
   nextValidationSteps: [
     "Record the deterministic keyword-grouping baseline and the protocol for comparing it with any later generated analysis.",
     "Co-design the review and evaluation protocol with policy and public-engagement specialists.",
-    "Record a bounded output only after its prompt, inputs, citations, and hashes can be checked in together.",
+    "Record a bounded output only after its prompt, inputs, and citations can be checked in together.",
   ],
   demoBarrier:
-    "The synthetic corpus is now in place; the recorded workbench is not published until the baseline, prompt, output, citations, evaluation, and their hashes are complete.",
+    "The synthetic dataset is now in place; the recorded workbench is not published until the baseline, prompt, output, citations, and evaluation are complete.",
   responsibleRole: "Responsible policy lead",
   partnerRequirements: [
     "Policy-method review",
@@ -103,21 +102,23 @@ export const policyEvidence = defineAssessedPlaybook({
       ],
     },
   ],
-  syntheticCorpus: {
-    manifest: policyEvidenceCorpusManifest,
+  syntheticDataset: {
+    dataPath: "content/playbooks/policy-evidence/policy-evidence.data.json",
+    structureNotePath:
+      "content/playbooks/policy-evidence/consultation-analysis-structure.md",
     sourceCharacteristics: [
-      "The six themes and four positions are not verified in any official source: this project chose them, documented in consultation-analysis-structure.md, to give the corpus a realistic shape.",
+      "Document structure, analytical stages, and public-service vocabulary follow a published consultation response report, recorded in consultation-analysis-structure.md; the six themes and four positions are this project's own choice and are verified in no official source.",
     ],
     approximations: [
-      "Theme and position counts are an exact allocation chosen so that every category appears, not a measured frequency from any real consultation.",
+      "Twenty responses are enough to show the shape of the task and far too few to represent a consultation; how often each theme and position appears was chosen by the author, not measured in any real one.",
     ],
     alterations: [
       "Every response, position, and phrasing is invented; no respondent text, organisation, or place is used.",
     ],
     limitations: [
-      "A synthetic fixture now exists and can be regenerated exactly, but it still cannot establish operational effectiveness, fairness, or readiness for use with real responses.",
+      "The dataset mirrors the structure of real consultation analysis and not its content, volume, or difficulty, so it cannot establish operational effectiveness, fairness, or readiness for use with real responses.",
     ],
     implementationSummary:
-      "The exemplar is built on a documented structural basis and a deterministic synthetic corpus held in this repository; the comparison baseline, recorded output, citations, and evaluation are still outstanding.",
+      "The exemplar reads a small synthetic dataset shaped by a published consultation response report, so it runs with no account, key, or live call; the comparison baseline, recorded output, citations, and evaluation are still outstanding.",
   },
 })
