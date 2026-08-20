@@ -31,7 +31,7 @@ export const policyEvidence = defineAssessedPlaybook({
   sourceRationale:
     "The report frames these as efficiency opportunities but does not establish that automated synthesis is appropriate for a particular consultation.",
   syntheticMethod:
-    "A recorded seed allocates forty-eight invented consultation responses across six themes and four positions, then composes each response from sentence fragments authored in this repository.",
+    "Configured weights fix an exact count of forty-eight invented consultation responses across six themes and four positions, and a recorded seed then composes each response from sentence fragments authored in this repository.",
   baseline: {
     name: "Reviewed keyword grouping",
     description:
@@ -112,9 +112,9 @@ export const policyEvidence = defineAssessedPlaybook({
       "Every response, position, and phrasing is invented; no respondent text, organisation, or place is used.",
     ],
     limitations: [
-      "A synthetic fixture now exists and can be regenerated exactly, and it still cannot establish operational effectiveness, fairness, or readiness for use with real responses.",
+      "A synthetic fixture now exists and can be regenerated exactly, but it still cannot establish operational effectiveness, fairness, or readiness for use with real responses.",
     ],
     implementationSummary:
-      "The exemplar runs on a documented structural basis and a deterministic synthetic corpus held in this repository; the comparison baseline, recorded output, citations, and evaluation are still outstanding.",
+      "The exemplar is built on a documented structural basis and a deterministic synthetic corpus held in this repository; the comparison baseline, recorded output, citations, and evaluation are still outstanding.",
   },
 })
