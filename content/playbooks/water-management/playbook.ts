@@ -1,63 +1,74 @@
-import { defineAssessedPlaybook } from "../define-assessed-playbook"
+import { definePlaybook } from "@/lib/playbooks/define-playbook"
 
-export const waterManagement = defineAssessedPlaybook({
+import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
+
+export const waterManagement = definePlaybook({
+  schemaVersion: 2,
   slug: "water-management",
   title: "Water Resource Management",
   summary:
-    "Explore sensor-based support for flooding, pollution, and resource planning with explicit uncertainty and emergency fallbacks.",
+    "Find out which published figures a water team could actually put side by side — rainfall, river level, and how much is being taken out — and how coarse the stand-in version has to stay.",
   sector: "Infrastructure",
-  tags: ["water", "flooding", "pollution"],
-  technicalPatterns: ["time-series", "forecasting", "alerting"],
-  problem:
-    "Water teams must combine incomplete observations, forecasts, assets, environmental conditions, and competing demands.",
-  intendedUsers: ["Water resource planners", "Flood response teams", "Environmental regulators"],
-  affectedGroups: ["Communities, water users, and ecosystems affected by water decisions"],
-  supportedDecision:
-    "Which water event or resource scenario an authorised team should inspect and escalate.",
-  publicBenefit:
-    "Could make sensor evidence, uncertainty, and competing resource scenarios easier to compare.",
-  dataAccessibility: "partial",
-  riskLevel: "moderate",
-  riskReasons: [
-    "Missed or false signals can affect emergency response, pollution control, and resource availability.",
-    "Detailed network and asset information may be security-sensitive.",
-  ],
-  mitigations: [
-    "Keep emergency procedures and statutory thresholds authoritative.",
-    "Publish only abstract synthetic networks and retain authorised human escalation.",
-  ],
-  sourceApplication: "AI for water management",
-  sourceRationale:
-    "The strategy mentions flooding, pollution control, and resource allocation without defining a system boundary or decision horizon.",
-  syntheticMethod:
-    "Generate invented catchment, rainfall, level, quality, storage, and demand series with declared sensor outages and extreme events.",
-  baseline: {
-    name: "Threshold and water-balance model",
-    description:
-      "Documented limits and a simple inflow, storage, and outflow calculation provide the comparison.",
-    method:
-      "Apply statutory or partner-reviewed thresholds and show the terms in each synthetic balance calculation.",
-    limitations: ["Simplified balances and thresholds omit complex hydrology and operational dependencies."],
+  strategyExample: {
+    proposal:
+      "The draft strategy names AI for water management as a potential public-service application, covering flooding, pollution control, and how water is shared between users, without saying which of those decisions it means or how far ahead it is meant to look.",
+    draftReference: strategyDraftReference,
+    url: strategyDraftUrl,
   },
-  limitations: [
-    "Synthetic catchments cannot establish forecast skill or safe operational response.",
-    "Flooding, pollution, and allocation are distinct decisions that may require separate systems.",
+  dataSources: [
+    {
+      id: "dfi-rivers-water-level-network",
+      publisher: "Department for Infrastructure",
+      title: "DfI Rivers water level network",
+      url: "https://www.infrastructure-ni.gov.uk/articles/dfi-rivers-water-level-network",
+      covers:
+        "A network of around 130 hydrometric stations recording water levels in Northern Ireland's rivers and loughs, shown on a map viewer that also lets the station records be downloaded.",
+      access: "open",
+      relevance:
+        "It is the published level series this playbook's synthetic records stand in for, and it shows what is missing as clearly as what is there: levels are recorded here, rainfall is published by somebody else.",
+    },
+    {
+      id: "met-office-uk-regional-series",
+      publisher: "Met Office",
+      title: "UK and regional climate series",
+      url: "https://www.metoffice.gov.uk/research/climate/maps-and-data/uk-and-regional-series",
+      covers:
+        "Monthly, seasonal, and annual rainfall, temperature, and sunshine series for the UK and its regions, with the Northern Ireland rainfall series running from 1931 and downloadable as plain tables.",
+      access: "open",
+      relevance:
+        "It is where the rainfall side of this example would come from, at a regional monthly grain far coarser than any catchment decision needs, which is the gap the synthetic file makes visible.",
+    },
+    {
+      id: "daera-water-abstraction-licensing",
+      publisher: "Department of Agriculture, Environment and Rural Affairs",
+      title: "Abstraction and impoundment licensing requirements",
+      url: "https://www.daera-ni.gov.uk/articles/abstraction-and-impoundment-licensing-requirements",
+      covers:
+        "When taking water from a river, lough, or borehole has to be notified or licensed in Northern Ireland, the daily volume thresholds that trigger each step, and the sectors that abstract the most.",
+      access: "open",
+      relevance:
+        "Its daily volume thresholds are the bands the synthetic records use, so the competing-demand part of this example can be discussed in the units the rules already work in.",
+    },
   ],
-  failureModes: [
-    "A failed or drifting sensor may conceal a hazardous event.",
-    "Average performance may hide the extreme events that matter most for safety.",
+  syntheticData: {
+    status: "available",
+    dataPath: "content/playbooks/water-management/water-management.data.json",
+    method:
+      "Twenty invented monthly rows written by hand, four lettered catchments across one spring and summer, each row carrying a rainfall total, a river level described as a band against normal, and an abstraction band taken from the licensing thresholds.",
+    limitations: [
+      "The catchments are letters and the figures are invented, so nothing here describes rainfall, a river, or an abstraction anywhere in Northern Ireland.",
+      "Monthly rows cannot show a flood, which happens in hours, and a level band against normal is not a flow.",
+      "Flooding, pollution, and sharing water out are three different decisions, and one small table appearing to serve all three is part of what this example is meant to expose.",
+    ],
+  },
+  demo: {
+    status: "not-yet",
+    note: "A demo could work through a plain water balance for one catchment month and show the assumption behind every term, but nobody has built that here, and it would need one of the three decisions chosen first.",
+  },
+  caveats: [
+    "A missed or false signal here reaches emergency response, pollution control, and whether there is water to go round, and those costs do not fall on the same people.",
+    "Detail about assets and networks can be sensitive in itself, which is why the catchments in this file are letters.",
+    "A sensor that has failed or drifted can hide the event that matters most, and anything judged on average performance is being judged mostly on ordinary months.",
   ],
-  nextValidationSteps: [
-    "Select one decision horizon and identify authoritative thresholds, units, and fallback procedures.",
-    "Confirm permissible aggregate sensor data and representative failure scenarios.",
-    "Evaluate lead time, missed events, false alarms, uncertainty, and distributional impact.",
-  ],
-  demoBarrier:
-    "Flood, pollution, and allocation support must be separated and grounded in operator-reviewed thresholds and safe data semantics.",
-  responsibleRole: "Authorised water or flood operations lead",
-  partnerRequirements: [
-    "Water or flood operations partner",
-    "Environmental and emergency-planning review",
-    "Infrastructure security review",
-  ],
+  lastReviewed: "2026-08-21",
 })

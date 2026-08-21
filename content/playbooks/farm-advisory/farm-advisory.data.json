@@ -1,0 +1,150 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Eighteen invented field-group rows standing in for the soil analysis and cropping record a nutrient management plan asks a farm to hold, with six lettered groups, a soil pH, a nitrogen supply index, and a banded yield.",
+  "records": [
+    {
+      "id": "SYN-FA-01",
+      "fieldGroup": "Field group A",
+      "crop": "Grass silage",
+      "soilPh": 6.2,
+      "nitrogenBand": "index 1 (moderate)",
+      "yieldBand": "10-12 t DM/ha"
+    },
+    {
+      "id": "SYN-FA-02",
+      "fieldGroup": "Field group A",
+      "crop": "Grass silage",
+      "soilPh": 5.8,
+      "nitrogenBand": "index 0 (low)",
+      "yieldBand": "8-10 t DM/ha"
+    },
+    {
+      "id": "SYN-FA-03",
+      "fieldGroup": "Field group A",
+      "crop": "Permanent pasture",
+      "soilPh": 5.5,
+      "nitrogenBand": "index 0 (low)",
+      "yieldBand": "under 8 t DM/ha"
+    },
+    {
+      "id": "SYN-FA-04",
+      "fieldGroup": "Field group B",
+      "crop": "Spring barley",
+      "soilPh": 6.4,
+      "nitrogenBand": "index 1 (moderate)",
+      "yieldBand": "5-7 t/ha"
+    },
+    {
+      "id": "SYN-FA-05",
+      "fieldGroup": "Field group B",
+      "crop": "Spring barley",
+      "soilPh": 6.1,
+      "nitrogenBand": "index 0 (low)",
+      "yieldBand": "4-5 t/ha"
+    },
+    {
+      "id": "SYN-FA-06",
+      "fieldGroup": "Field group B",
+      "crop": "Oats",
+      "soilPh": 6.3,
+      "nitrogenBand": "index 1 (moderate)",
+      "yieldBand": "5-7 t/ha"
+    },
+    {
+      "id": "SYN-FA-07",
+      "fieldGroup": "Field group C",
+      "crop": "Winter wheat",
+      "soilPh": 6.8,
+      "nitrogenBand": "index 2 (high)",
+      "yieldBand": "8-10 t/ha"
+    },
+    {
+      "id": "SYN-FA-08",
+      "fieldGroup": "Field group C",
+      "crop": "Winter wheat",
+      "soilPh": 6.6,
+      "nitrogenBand": "index 2 (high)",
+      "yieldBand": "7-8 t/ha"
+    },
+    {
+      "id": "SYN-FA-09",
+      "fieldGroup": "Field group C",
+      "crop": "Forage maize",
+      "soilPh": 6.5,
+      "nitrogenBand": "index 1 (moderate)",
+      "yieldBand": "12-14 t DM/ha"
+    },
+    {
+      "id": "SYN-FA-10",
+      "fieldGroup": "Field group D",
+      "crop": "Potatoes",
+      "soilPh": 5.9,
+      "nitrogenBand": "index 1 (moderate)",
+      "yieldBand": "35-45 t/ha"
+    },
+    {
+      "id": "SYN-FA-11",
+      "fieldGroup": "Field group D",
+      "crop": "Potatoes",
+      "soilPh": 5.6,
+      "nitrogenBand": "index 0 (low)",
+      "yieldBand": "25-35 t/ha"
+    },
+    {
+      "id": "SYN-FA-12",
+      "fieldGroup": "Field group D",
+      "crop": "Spring barley",
+      "soilPh": 5.7,
+      "nitrogenBand": "index 0 (low)",
+      "yieldBand": "4-5 t/ha"
+    },
+    {
+      "id": "SYN-FA-13",
+      "fieldGroup": "Field group E",
+      "crop": "Grass silage",
+      "soilPh": 5.2,
+      "nitrogenBand": "index 0 (low)",
+      "yieldBand": "under 8 t DM/ha"
+    },
+    {
+      "id": "SYN-FA-14",
+      "fieldGroup": "Field group E",
+      "crop": "Permanent pasture",
+      "soilPh": 5.4,
+      "nitrogenBand": "index 0 (low)",
+      "yieldBand": "under 8 t DM/ha"
+    },
+    {
+      "id": "SYN-FA-15",
+      "fieldGroup": "Field group E",
+      "crop": "Permanent pasture",
+      "soilPh": 5.3,
+      "nitrogenBand": "index 1 (moderate)",
+      "yieldBand": "8-10 t DM/ha"
+    },
+    {
+      "id": "SYN-FA-16",
+      "fieldGroup": "Field group F",
+      "crop": "Grass silage",
+      "soilPh": 6.7,
+      "nitrogenBand": "index 2 (high)",
+      "yieldBand": "12-14 t DM/ha"
+    },
+    {
+      "id": "SYN-FA-17",
+      "fieldGroup": "Field group F",
+      "crop": "Forage maize",
+      "soilPh": 6.9,
+      "nitrogenBand": "index 2 (high)",
+      "yieldBand": "over 14 t DM/ha"
+    },
+    {
+      "id": "SYN-FA-18",
+      "fieldGroup": "Field group F",
+      "crop": "Oats",
+      "soilPh": 6.6,
+      "nitrogenBand": "index 1 (moderate)",
+      "yieldBand": "5-7 t/ha"
+    }
+  ]
+}

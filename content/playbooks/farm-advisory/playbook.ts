@@ -1,63 +1,63 @@
-import { defineAssessedPlaybook } from "../define-assessed-playbook"
+import { definePlaybook } from "@/lib/playbooks/define-playbook"
 
-export const farmAdvisory = defineAssessedPlaybook({
+import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
+
+export const farmAdvisory = definePlaybook({
+  schemaVersion: 2,
   slug: "farm-advisory",
   title: "Farm Advisory Support",
   summary:
-    "Assess decision support for yields, livestock, water, and fertiliser without presenting generic output as farm-specific advice.",
+    "Work out what a farm would have to be measured on before a general recommendation counted as advice for that farm, and keep the stand-in figures at field-group level.",
   sector: "Agriculture",
-  tags: ["farming", "precision-agriculture", "resources"],
-  technicalPatterns: ["forecasting", "recommendation", "geospatial"],
-  problem:
-    "Farm decisions combine weather, soils, crops, livestock, regulation, costs, and local knowledge under substantial uncertainty.",
-  intendedUsers: ["Farmers", "Agricultural advisers", "Environmental land managers"],
-  affectedGroups: ["Farm businesses, workers, animals, communities, and environments affected by farm decisions"],
-  supportedDecision:
-    "Which resource-use or monitoring question a farmer and qualified adviser should investigate further.",
-  publicBenefit:
-    "Could make assumptions and evidence behind advisory scenarios easier for farmers and advisers to scrutinise.",
-  dataAccessibility: "partial",
-  riskLevel: "moderate",
-  riskReasons: [
-    "Poor advice can affect livelihoods, animal welfare, water quality, soil, and regulatory compliance.",
-    "Data coverage and recommendations may favour farm types or equipment with better digital representation.",
-  ],
-  mitigations: [
-    "Use public aggregate data and invented holdings in any hosted example.",
-    "Keep decisions with farmers and qualified advisers and show uncertainty and local-data gaps.",
-  ],
-  sourceApplication: "AI for farming and precision agriculture",
-  sourceRationale:
-    "The strategy mentions yield, livestock, water, and fertiliser but does not define a farm decision, evidence source, or environmental constraint.",
-  syntheticMethod:
-    "Generate invented field, herd, weather, and input records from documented ranges, with fixed missing-data and extreme-weather cases.",
-  baseline: {
-    name: "Adviser-reviewed decision table",
-    description:
-      "Published guidance and explicit farm inputs produce a transparent set of considerations.",
-    method:
-      "Apply documented thresholds and conditions, showing which input and guidance statement triggered each suggestion.",
-    limitations: ["A decision table cannot capture every local condition, interaction, or changing market factor."],
+  strategyExample: {
+    proposal:
+      "The draft strategy names AI for farming and precision agriculture as a potential public-service application, mentioning yield, livestock, water, and fertiliser use, without naming a decision a farmer would actually take with it or the evidence it would rest on.",
+    draftReference: strategyDraftReference,
+    url: strategyDraftUrl,
   },
-  limitations: [
-    "Invented holdings cannot establish financial, environmental, yield, or animal-welfare effects.",
-    "A general model cannot replace site inspection, farmer knowledge, or regulated professional advice.",
+  dataSources: [
+    {
+      id: "daera-nutrient-management-plan",
+      publisher: "Department of Agriculture, Environment and Rural Affairs",
+      title: "Nutrient Management Plan",
+      url: "https://www.daera-ni.gov.uk/articles/nutrient-management-plan",
+      covers:
+        "What a nutrient management plan has to record field by field, including a valid soil nutrient analysis with phosphorus and pH, and the soil nitrogen supply index that fertiliser and manure decisions are set against.",
+      access: "open",
+      relevance:
+        "It defines the field-level measurements this example would depend on, which is why the synthetic records hold a soil pH and a nitrogen index and nothing about a holding or a person.",
+    },
+    {
+      id: "daera-agricultural-census",
+      publisher: "Department of Agriculture, Environment and Rural Affairs",
+      title: "Agricultural Census in Northern Ireland",
+      url: "https://www.daera-ni.gov.uk/articles/agricultural-census-northern-ireland",
+      covers:
+        "The June census of Northern Ireland farms, published each year with crop areas, livestock numbers, and farm labour, alongside data tables and an interactive report; the 2025 results counted about 25,800 farms working roughly a million hectares.",
+      access: "open",
+      relevance:
+        "It is the published picture of what is grown and kept here, and it sits at farm counts and hectares — several steps above the single field any recommendation would actually be about.",
+    },
   ],
-  failureModes: [
-    "Missing local soil or weather detail may make a suggestion unsuitable.",
-    "Optimising one input can shift cost or harm to water, emissions, biodiversity, or welfare.",
+  syntheticData: {
+    status: "available",
+    dataPath: "content/playbooks/farm-advisory/farm-advisory.data.json",
+    method:
+      "Eighteen invented field-group rows written by hand, six lettered groups each with a crop, a soil pH, a soil nitrogen supply index, and a banded yield, so an advisory question can be worked through without any real holding's records.",
+    limitations: [
+      "The groups are letters and the figures are invented, so nothing here is a measurement of any soil, crop, or yield.",
+      "Six lettered field groups cannot stand in for the range of farm types, soils, and weather here, and there is no authoritative guidance table sitting behind the rows.",
+      "A pH and an index leave out the weather, the livestock, the costs, and the local knowledge that decide whether a suggestion is any use on the day.",
+    ],
+  },
+  demo: {
+    status: "not-yet",
+    note: "A demo could show which field groups fall outside published pH and nutrient ranges and quote the range it used, but nobody has built that here, and it would need guidance an adviser had signed off first.",
+  },
+  caveats: [
+    "Getting this wrong reaches livelihoods, animal welfare, water quality, and soil, and the farm carries that cost rather than whoever built the tool.",
+    "Farms with fuller digital records are better represented in the data behind any tool like this, so its advice tends to fit those farms best.",
+    "Improving one input can quietly move the harm somewhere else — to water, emissions, biodiversity, or welfare — and no general model replaces walking the field or a qualified adviser.",
   ],
-  nextValidationSteps: [
-    "Choose one advisory question and identify authoritative guidance and open aggregate inputs.",
-    "Define environmental, welfare, economic, and uncertainty checks with farmers and advisers.",
-    "Test across diverse invented farm types and explicitly document where partner data is essential.",
-  ],
-  demoBarrier:
-    "The broad strategy entry must be narrowed to one adviser-reviewed decision with authoritative guidance and defensible data ranges.",
-  responsibleRole: "Farmer supported by a qualified agricultural adviser",
-  partnerRequirements: [
-    "Farmer and agricultural-adviser participation",
-    "Environmental and animal-welfare review",
-    "Authoritative guidance and aggregate data",
-  ],
+  lastReviewed: "2026-08-21",
 })

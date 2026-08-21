@@ -1,0 +1,166 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Twenty invented monthly rows standing in for the rainfall, river level, and abstraction picture a water team would have to assemble from three separate publishers, with four lettered catchments across one spring and summer.",
+  "records": [
+    {
+      "id": "SYN-WM-01",
+      "catchment": "Catchment A",
+      "month": "2025-03",
+      "rainfallMm": 96,
+      "riverLevelBand": "above normal",
+      "abstractionBand": "20-100 m3/day"
+    },
+    {
+      "id": "SYN-WM-02",
+      "catchment": "Catchment A",
+      "month": "2025-04",
+      "rainfallMm": 54,
+      "riverLevelBand": "normal",
+      "abstractionBand": "20-100 m3/day"
+    },
+    {
+      "id": "SYN-WM-03",
+      "catchment": "Catchment A",
+      "month": "2025-05",
+      "rainfallMm": 38,
+      "riverLevelBand": "below normal",
+      "abstractionBand": "20-100 m3/day"
+    },
+    {
+      "id": "SYN-WM-04",
+      "catchment": "Catchment A",
+      "month": "2025-06",
+      "rainfallMm": 22,
+      "riverLevelBand": "well below normal",
+      "abstractionBand": "over 100 m3/day"
+    },
+    {
+      "id": "SYN-WM-05",
+      "catchment": "Catchment A",
+      "month": "2025-07",
+      "rainfallMm": 41,
+      "riverLevelBand": "below normal",
+      "abstractionBand": "over 100 m3/day"
+    },
+    {
+      "id": "SYN-WM-06",
+      "catchment": "Catchment B",
+      "month": "2025-03",
+      "rainfallMm": 112,
+      "riverLevelBand": "well above normal",
+      "abstractionBand": "10-20 m3/day"
+    },
+    {
+      "id": "SYN-WM-07",
+      "catchment": "Catchment B",
+      "month": "2025-04",
+      "rainfallMm": 78,
+      "riverLevelBand": "normal",
+      "abstractionBand": "10-20 m3/day"
+    },
+    {
+      "id": "SYN-WM-08",
+      "catchment": "Catchment B",
+      "month": "2025-05",
+      "rainfallMm": 61,
+      "riverLevelBand": "normal",
+      "abstractionBand": "10-20 m3/day"
+    },
+    {
+      "id": "SYN-WM-09",
+      "catchment": "Catchment B",
+      "month": "2025-06",
+      "rainfallMm": 44,
+      "riverLevelBand": "below normal",
+      "abstractionBand": "10-20 m3/day"
+    },
+    {
+      "id": "SYN-WM-10",
+      "catchment": "Catchment B",
+      "month": "2025-07",
+      "rainfallMm": 69,
+      "riverLevelBand": "normal",
+      "abstractionBand": "10-20 m3/day"
+    },
+    {
+      "id": "SYN-WM-11",
+      "catchment": "Catchment C",
+      "month": "2025-03",
+      "rainfallMm": 84,
+      "riverLevelBand": "above normal",
+      "abstractionBand": "over 100 m3/day"
+    },
+    {
+      "id": "SYN-WM-12",
+      "catchment": "Catchment C",
+      "month": "2025-04",
+      "rainfallMm": 46,
+      "riverLevelBand": "normal",
+      "abstractionBand": "over 100 m3/day"
+    },
+    {
+      "id": "SYN-WM-13",
+      "catchment": "Catchment C",
+      "month": "2025-05",
+      "rainfallMm": 29,
+      "riverLevelBand": "below normal",
+      "abstractionBand": "over 100 m3/day"
+    },
+    {
+      "id": "SYN-WM-14",
+      "catchment": "Catchment C",
+      "month": "2025-06",
+      "rainfallMm": 18,
+      "riverLevelBand": "well below normal",
+      "abstractionBand": "over 100 m3/day"
+    },
+    {
+      "id": "SYN-WM-15",
+      "catchment": "Catchment C",
+      "month": "2025-07",
+      "rainfallMm": 33,
+      "riverLevelBand": "well below normal",
+      "abstractionBand": "over 100 m3/day"
+    },
+    {
+      "id": "SYN-WM-16",
+      "catchment": "Catchment D",
+      "month": "2025-03",
+      "rainfallMm": 130,
+      "riverLevelBand": "well above normal",
+      "abstractionBand": "under 10 m3/day"
+    },
+    {
+      "id": "SYN-WM-17",
+      "catchment": "Catchment D",
+      "month": "2025-04",
+      "rainfallMm": 91,
+      "riverLevelBand": "above normal",
+      "abstractionBand": "under 10 m3/day"
+    },
+    {
+      "id": "SYN-WM-18",
+      "catchment": "Catchment D",
+      "month": "2025-05",
+      "rainfallMm": 74,
+      "riverLevelBand": "normal",
+      "abstractionBand": "under 10 m3/day"
+    },
+    {
+      "id": "SYN-WM-19",
+      "catchment": "Catchment D",
+      "month": "2025-06",
+      "rainfallMm": 51,
+      "riverLevelBand": "normal",
+      "abstractionBand": "under 10 m3/day"
+    },
+    {
+      "id": "SYN-WM-20",
+      "catchment": "Catchment D",
+      "month": "2025-07",
+      "rainfallMm": 88,
+      "riverLevelBand": "above normal",
+      "abstractionBand": "under 10 m3/day"
+    }
+  ]
+}

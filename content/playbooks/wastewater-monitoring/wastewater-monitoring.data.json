@@ -1,0 +1,150 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Eighteen invented weekly effluent readings standing in for the monitoring feed a wastewater operator already holds, with six lettered works, a banded daily flow, and ammonia and phosphorus in milligrams per litre, so anomaly triage can be discussed without operational or network detail.",
+  "records": [
+    {
+      "id": "SYN-WW-01",
+      "site": "Works A",
+      "week": "2025-W18",
+      "flowBand": "10000-20000 m3/day",
+      "ammoniaMgPerL": 1.4,
+      "phosphorusMgPerL": 0.8
+    },
+    {
+      "id": "SYN-WW-02",
+      "site": "Works A",
+      "week": "2025-W19",
+      "flowBand": "10000-20000 m3/day",
+      "ammoniaMgPerL": 1.9,
+      "phosphorusMgPerL": 0.9
+    },
+    {
+      "id": "SYN-WW-03",
+      "site": "Works A",
+      "week": "2025-W20",
+      "flowBand": "over 20000 m3/day",
+      "ammoniaMgPerL": 3.6,
+      "phosphorusMgPerL": 1.5
+    },
+    {
+      "id": "SYN-WW-04",
+      "site": "Works B",
+      "week": "2025-W18",
+      "flowBand": "5000-10000 m3/day",
+      "ammoniaMgPerL": 0.9,
+      "phosphorusMgPerL": 0.6
+    },
+    {
+      "id": "SYN-WW-05",
+      "site": "Works B",
+      "week": "2025-W19",
+      "flowBand": "5000-10000 m3/day",
+      "ammoniaMgPerL": 1.1,
+      "phosphorusMgPerL": 0.7
+    },
+    {
+      "id": "SYN-WW-06",
+      "site": "Works B",
+      "week": "2025-W20",
+      "flowBand": "5000-10000 m3/day",
+      "ammoniaMgPerL": 1,
+      "phosphorusMgPerL": 0.6
+    },
+    {
+      "id": "SYN-WW-07",
+      "site": "Works C",
+      "week": "2025-W18",
+      "flowBand": "2500-5000 m3/day",
+      "ammoniaMgPerL": 2.2,
+      "phosphorusMgPerL": 1.1
+    },
+    {
+      "id": "SYN-WW-08",
+      "site": "Works C",
+      "week": "2025-W19",
+      "flowBand": "2500-5000 m3/day",
+      "ammoniaMgPerL": 5.8,
+      "phosphorusMgPerL": 2.4
+    },
+    {
+      "id": "SYN-WW-09",
+      "site": "Works C",
+      "week": "2025-W20",
+      "flowBand": "2500-5000 m3/day",
+      "ammoniaMgPerL": 2.4,
+      "phosphorusMgPerL": 1.2
+    },
+    {
+      "id": "SYN-WW-10",
+      "site": "Works D",
+      "week": "2025-W18",
+      "flowBand": "1000-2500 m3/day",
+      "ammoniaMgPerL": 0.7,
+      "phosphorusMgPerL": 0.5
+    },
+    {
+      "id": "SYN-WW-11",
+      "site": "Works D",
+      "week": "2025-W19",
+      "flowBand": "1000-2500 m3/day",
+      "ammoniaMgPerL": 0.6,
+      "phosphorusMgPerL": 0.4
+    },
+    {
+      "id": "SYN-WW-12",
+      "site": "Works D",
+      "week": "2025-W20",
+      "flowBand": "1000-2500 m3/day",
+      "ammoniaMgPerL": 0.8,
+      "phosphorusMgPerL": 0.5
+    },
+    {
+      "id": "SYN-WW-13",
+      "site": "Works E",
+      "week": "2025-W18",
+      "flowBand": "250-1000 m3/day",
+      "ammoniaMgPerL": 3.1,
+      "phosphorusMgPerL": 1.8
+    },
+    {
+      "id": "SYN-WW-14",
+      "site": "Works E",
+      "week": "2025-W19",
+      "flowBand": "250-1000 m3/day",
+      "ammoniaMgPerL": 3.4,
+      "phosphorusMgPerL": 1.9
+    },
+    {
+      "id": "SYN-WW-15",
+      "site": "Works E",
+      "week": "2025-W20",
+      "flowBand": "250-1000 m3/day",
+      "ammoniaMgPerL": 3,
+      "phosphorusMgPerL": 1.7
+    },
+    {
+      "id": "SYN-WW-16",
+      "site": "Works F",
+      "week": "2025-W18",
+      "flowBand": "under 250 m3/day",
+      "ammoniaMgPerL": 4.2,
+      "phosphorusMgPerL": 2.1
+    },
+    {
+      "id": "SYN-WW-17",
+      "site": "Works F",
+      "week": "2025-W19",
+      "flowBand": "under 250 m3/day",
+      "ammoniaMgPerL": 4,
+      "phosphorusMgPerL": 2
+    },
+    {
+      "id": "SYN-WW-18",
+      "site": "Works F",
+      "week": "2025-W20",
+      "flowBand": "under 250 m3/day",
+      "ammoniaMgPerL": 9.6,
+      "phosphorusMgPerL": 3.3
+    }
+  ]
+}

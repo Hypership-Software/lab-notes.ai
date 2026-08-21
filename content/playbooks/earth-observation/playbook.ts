@@ -1,63 +1,63 @@
-import { defineAssessedPlaybook } from "../define-assessed-playbook"
+import { definePlaybook } from "@/lib/playbooks/define-playbook"
 
-export const earthObservation = defineAssessedPlaybook({
+import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
+
+export const earthObservation = definePlaybook({
+  schemaVersion: 2,
   slug: "earth-observation",
   title: "Earth Observation for Public Services",
   summary:
-    "Explore transparent change-detection support for land use, habitats, and coasts using openly licensed imagery where possible.",
+    "Ask what a mapped change would have to show before an analyst could act on it, and keep the stand-in version at survey squares and broad habitat classes.",
   sector: "Environment",
-  tags: ["satellite", "land-use", "coastal-change"],
-  technicalPatterns: ["computer-vision", "change-detection", "geospatial"],
-  problem:
-    "Environmental teams need to review change across large areas while accounting for clouds, seasons, resolution, and uncertain labels.",
-  intendedUsers: ["Environmental analysts", "Land and coastal managers", "Remote-sensing specialists"],
-  affectedGroups: ["Communities and ecosystems affected by environmental planning or intervention"],
-  supportedDecision:
-    "Which mapped change a qualified analyst should verify against imagery and other evidence.",
-  publicBenefit:
-    "Could make environmental change candidates and their source imagery easier to inspect and prioritise for review.",
-  dataAccessibility: "open",
-  riskLevel: "moderate",
-  riskReasons: [
-    "Classification error can misdirect inspection, planning, or environmental intervention.",
-    "Fine-grained imagery may reveal sensitive sites or be misinterpreted without local context.",
-  ],
-  mitigations: [
-    "Use openly licensed imagery, show dates and uncertainty, and require analyst confirmation.",
-    "Avoid publishing sensitive habitat or infrastructure locations without review.",
-  ],
-  sourceApplication: "AI analysis of satellite data",
-  sourceRationale:
-    "The strategy mentions deforestation, land use, and coastal erosion but does not select imagery, labels, scale, or action.",
-  syntheticMethod:
-    "Create small invented raster tiles and change masks with fixed cloud, seasonal, resolution, and label-error scenarios.",
-  baseline: {
-    name: "Band-difference threshold",
-    description:
-      "A transparent difference measure highlights pixels that exceed a reviewed threshold.",
-    method:
-      "Align two synthetic observations, calculate a declared index difference, and show every thresholded area.",
-    limitations: ["Simple thresholds confuse seasonal, atmospheric, and sensor differences with real change."],
+  strategyExample: {
+    proposal:
+      "The draft strategy names AI analysis of satellite data as a potential public-service application, mentioning deforestation, land use, and coastal erosion, without choosing the imagery, the scale, or what anyone would do once a change was mapped.",
+    draftReference: strategyDraftReference,
+    url: strategyDraftUrl,
   },
-  limitations: [
-    "Synthetic tiles cannot establish performance across real sensors, landscapes, or seasons.",
-    "Observed surface change does not explain cause, ownership, legality, or required intervention.",
+  dataSources: [
+    {
+      id: "daera-ni-countryside-survey",
+      publisher: "Department of Agriculture, Environment and Rural Affairs",
+      title: "Northern Ireland Countryside Survey",
+      url: "https://www.daera-ni.gov.uk/articles/northern-ireland-countryside-survey",
+      covers:
+        "A repeated field survey of a random sample of 500 by 500 metre squares — 288 of them, about half a percent of Northern Ireland — mapping land cover and habitat by type and comparing each round with the last, from the baseline in the late 1980s to the 2023/24 cycle.",
+      access: "open",
+      relevance:
+        "It is the published measure of how land cover changes here, and it is fieldwork rather than imagery, which is the comparison any satellite-based claim in this example would have to face.",
+    },
+    {
+      id: "copernicus-corine-land-cover",
+      publisher: "Copernicus Land Monitoring Service",
+      title: "CORINE Land Cover",
+      url: "https://land.copernicus.eu/en/products/corine-land-cover",
+      covers:
+        "Europe-wide land cover and land cover change inventories built from satellite imagery against a fixed list of classes, free to download and free to use for any purpose.",
+      access: "open",
+      relevance:
+        "It is the openly licensed imagery-derived layer this example could genuinely start from, and its class list and smallest mapped area decide which changes it can pick up at all.",
+    },
   ],
-  failureModes: [
-    "Cloud, shadow, tide, crop cycle, or alignment error may appear as environmental change.",
-    "Coarse imagery may hide small but important changes.",
+  syntheticData: {
+    status: "available",
+    dataPath: "content/playbooks/earth-observation/earth-observation.data.json",
+    method:
+      "Twenty invented change rows written by hand, ten lettered tiles the size of a survey square, each with one broad habitat class and a hectares-changed figure for two periods, so change detection can be discussed without imagery or licence questions.",
+    limitations: [
+      "The tiles are numbers and the hectares are invented, so no row here says anything about land anywhere in Northern Ireland.",
+      "A hectares-changed figure has already thrown the picture away: cloud, shadow, tide, season, and alignment error are what a real pipeline argues about, and none of them survive into a table.",
+      "One class per tile is a fiction — a real square holds a mosaic — and where one class ends and the next begins is itself a judgement.",
+    ],
+  },
+  demo: {
+    status: "not-yet",
+    note: "A demo could sort these tiles by how much changed and name the class that moved, but nobody has built one here, and it would need a real imagery source and labels an analyst had checked.",
+  },
+  caveats: [
+    "A wrong class sends inspection, planning, or an intervention to the wrong field, and the map goes on looking authoritative either way.",
+    "Fine-grained imagery can expose sensitive habitats and sites, so what gets published needs deciding separately from whether the analysis works.",
+    "Surface change does not explain cause, ownership, or legality, and a coarse image can miss a small change that matters more than a large one.",
   ],
-  nextValidationSteps: [
-    "Select one openly licensed imagery source and a narrow analyst-reviewed change question.",
-    "Define spatial, seasonal, cloud, and ground-truth evaluation requirements.",
-    "Review publication risks for sensitive habitats, land, and infrastructure.",
-  ],
-  demoBarrier:
-    "The use case needs one bounded environmental question, verified open-imagery terms, and analyst-reviewed labels before a useful demo.",
-  responsibleRole: "Qualified environmental or remote-sensing analyst",
-  partnerRequirements: [
-    "Environmental domain partner",
-    "Remote-sensing specialist",
-    "Geospatial publication and licensing review",
-  ],
+  lastReviewed: "2026-08-21",
 })

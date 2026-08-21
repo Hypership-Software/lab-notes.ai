@@ -1,0 +1,146 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Twenty invented change rows standing in for what a land cover comparison reports, with ten lettered tiles the size of a survey square, one broad habitat class each, and a hectares-changed figure for two periods.",
+  "records": [
+    {
+      "id": "SYN-EO-01",
+      "tile": "Tile 01",
+      "period": "1998-2007",
+      "landCoverClass": "Improved grassland",
+      "changedHectares": 1.8
+    },
+    {
+      "id": "SYN-EO-02",
+      "tile": "Tile 01",
+      "period": "2007-2024",
+      "landCoverClass": "Improved grassland",
+      "changedHectares": 0.6
+    },
+    {
+      "id": "SYN-EO-03",
+      "tile": "Tile 02",
+      "period": "1998-2007",
+      "landCoverClass": "Broadleaved woodland",
+      "changedHectares": 0.4
+    },
+    {
+      "id": "SYN-EO-04",
+      "tile": "Tile 02",
+      "period": "2007-2024",
+      "landCoverClass": "Broadleaved woodland",
+      "changedHectares": 1.2
+    },
+    {
+      "id": "SYN-EO-05",
+      "tile": "Tile 03",
+      "period": "1998-2007",
+      "landCoverClass": "Bog",
+      "changedHectares": -2.1
+    },
+    {
+      "id": "SYN-EO-06",
+      "tile": "Tile 03",
+      "period": "2007-2024",
+      "landCoverClass": "Bog",
+      "changedHectares": -0.7
+    },
+    {
+      "id": "SYN-EO-07",
+      "tile": "Tile 04",
+      "period": "1998-2007",
+      "landCoverClass": "Arable and horticulture",
+      "changedHectares": -1.5
+    },
+    {
+      "id": "SYN-EO-08",
+      "tile": "Tile 04",
+      "period": "2007-2024",
+      "landCoverClass": "Arable and horticulture",
+      "changedHectares": 2.3
+    },
+    {
+      "id": "SYN-EO-09",
+      "tile": "Tile 05",
+      "period": "1998-2007",
+      "landCoverClass": "Built-up land and gardens",
+      "changedHectares": 0.9
+    },
+    {
+      "id": "SYN-EO-10",
+      "tile": "Tile 05",
+      "period": "2007-2024",
+      "landCoverClass": "Built-up land and gardens",
+      "changedHectares": 1.6
+    },
+    {
+      "id": "SYN-EO-11",
+      "tile": "Tile 06",
+      "period": "1998-2007",
+      "landCoverClass": "Neutral grassland",
+      "changedHectares": -0.8
+    },
+    {
+      "id": "SYN-EO-12",
+      "tile": "Tile 06",
+      "period": "2007-2024",
+      "landCoverClass": "Neutral grassland",
+      "changedHectares": -1.4
+    },
+    {
+      "id": "SYN-EO-13",
+      "tile": "Tile 07",
+      "period": "1998-2007",
+      "landCoverClass": "Coniferous woodland",
+      "changedHectares": 2.6
+    },
+    {
+      "id": "SYN-EO-14",
+      "tile": "Tile 07",
+      "period": "2007-2024",
+      "landCoverClass": "Coniferous woodland",
+      "changedHectares": -3.2
+    },
+    {
+      "id": "SYN-EO-15",
+      "tile": "Tile 08",
+      "period": "1998-2007",
+      "landCoverClass": "Fen, marsh and swamp",
+      "changedHectares": -0.3
+    },
+    {
+      "id": "SYN-EO-16",
+      "tile": "Tile 08",
+      "period": "2007-2024",
+      "landCoverClass": "Fen, marsh and swamp",
+      "changedHectares": -0.5
+    },
+    {
+      "id": "SYN-EO-17",
+      "tile": "Tile 09",
+      "period": "1998-2007",
+      "landCoverClass": "Dwarf shrub heath",
+      "changedHectares": -1.1
+    },
+    {
+      "id": "SYN-EO-18",
+      "tile": "Tile 09",
+      "period": "2007-2024",
+      "landCoverClass": "Dwarf shrub heath",
+      "changedHectares": -0.2
+    },
+    {
+      "id": "SYN-EO-19",
+      "tile": "Tile 10",
+      "period": "1998-2007",
+      "landCoverClass": "Standing open water",
+      "changedHectares": 0.2
+    },
+    {
+      "id": "SYN-EO-20",
+      "tile": "Tile 10",
+      "period": "2007-2024",
+      "landCoverClass": "Standing open water",
+      "changedHectares": 0.1
+    }
+  ]
+}
