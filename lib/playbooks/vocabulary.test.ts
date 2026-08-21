@@ -1,34 +1,25 @@
 import { describe, expect, it } from "vitest"
 
+import { accessValues } from "./schema"
 import {
-  dataAccessibilityValues,
-  maturityValues,
-  riskValues,
-  sourceTypeValues,
-} from "./schema"
-import {
-  dataAccessibilityLabel,
-  maturityLabel,
-  maturityLadder,
-  riskLabel,
-  sourceTypeLabel,
+  dataAccessLabels,
+  demoBadgeLabels,
+  syntheticDataBadgeLabels,
 } from "./vocabulary"
 
 describe("playbook vocabulary", () => {
-  it("describes every maturity value in schema order", () => {
-    expect(maturityLadder.map((rung) => rung.value)).toEqual([...maturityValues])
-    for (const rung of maturityLadder) {
-      expect(rung.label).not.toHaveLength(0)
-      expect(rung.description).not.toHaveLength(0)
-    }
+  it("labels every data-access value exactly once", () => {
+    expect(Object.keys(dataAccessLabels)).toEqual([...accessValues])
   })
 
-  it("labels every controlled value exactly once", () => {
-    expect(Object.keys(maturityLabel)).toEqual([...maturityValues])
-    expect(Object.keys(dataAccessibilityLabel)).toEqual([
-      ...dataAccessibilityValues,
+  it("labels every synthetic-data status exactly once", () => {
+    expect(Object.keys(syntheticDataBadgeLabels)).toEqual([
+      "available",
+      "not-responsible",
     ])
-    expect(Object.keys(riskLabel)).toEqual([...riskValues])
-    expect(Object.keys(sourceTypeLabel)).toEqual([...sourceTypeValues])
+  })
+
+  it("labels every demo status exactly once", () => {
+    expect(Object.keys(demoBadgeLabels)).toEqual(["available", "not-yet"])
   })
 })

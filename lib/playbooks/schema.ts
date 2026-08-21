@@ -4,7 +4,6 @@ import {
   isoDateSchema,
   kebabSlugSchema as slugSchema,
   kebabSlugSource,
-  sha256Schema,
 } from "@/lib/schema-primitives"
 
 const relativePathSchema = z
@@ -21,11 +20,6 @@ const relativePathSchema = z
 const sentenceSchema = z.string().trim().min(10)
 const nonEmptyList = <T extends z.ZodType>(item: T) => z.array(item).min(1)
 
-/**
- * The route a hosted demonstration must be published at. Built from the slug
- * pattern so a change to what counts as a slug cannot leave the route contract
- * accepting a shape the slug field rejects.
- */
 const demoRouteSchema = z
   .string()
   .regex(
@@ -33,291 +27,112 @@ const demoRouteSchema = z
     "Use the playbook's own demo route",
   )
 
-export const maturityValues = [
-  "assessed",
-  "recorded-demo",
-  "partner-ready",
-  "operational-pilot",
-  "evaluated-service",
+// The sector strings already used in content/playbooks, verbatim and
+// alphabetical (Task 2 Step 1 verifies). Do not invent a sector no playbook uses.
+export const sectorValues = [
+  "Agriculture",
+  "Citizen services",
+  "Communities",
+  "Community safety",
+  "Cross-government",
+  "Education",
+  "Environment",
+  "Health",
+  "Housing",
+  "Infrastructure",
+  "Justice",
+  "Justice and education",
+  "Transport",
 ] as const
 
-export const dataAccessibilityValues = [
-  "open",
-  "public-readonly",
-  "partial",
-  "restricted",
-  "unknown",
-] as const
+export const accessValues = ["open", "registration-or-key", "restricted"] as const
 
-export const riskValues = ["low", "moderate", "high", "very-high"] as const
-
-export const sourceTypeValues = [
-  "strategy",
-  "consultation-report",
-  "dataset",
-  "guidance",
-  "research",
-] as const
-
-export const sourceSchema = z
-  .strictObject({
-    id: slugSchema,
-    publisher: z.string().trim().min(2),
-    jurisdiction: z.string().trim().min(2),
-    title: z.string().trim().min(4),
-    canonicalUrl: z.url(),
-    sourceType: z.enum(sourceTypeValues),
-    coveredPeriod: z.string().trim().min(1),
-    accessedAt: isoDateSchema,
-    reuseStatus: z.string().trim().min(4),
-    localSamplePath: relativePathSchema.optional(),
-    sha256: sha256Schema.optional(),
-    purpose: sentenceSchema,
-    transformations: z.array(z.string().trim().min(4)),
-    caveats: z.array(z.string().trim().min(4)),
-  })
-  .superRefine((source, context) => {
-    if (Boolean(source.localSamplePath) !== Boolean(source.sha256)) {
-      context.addIssue({
-        code: "custom",
-        message: "A local sample path and SHA-256 must be supplied together",
-      })
-    }
-  })
-
-export const classificationSchema = z.strictObject({
-  sector: z.string().trim().min(2),
-  tags: nonEmptyList(slugSchema),
-  technicalPatterns: nonEmptyList(slugSchema),
-})
-
-export const riskSchema = z.strictObject({
-  level: z.enum(riskValues),
-  reasons: nonEmptyList(sentenceSchema),
-  mitigations: nonEmptyList(sentenceSchema),
-})
-
-const syntheticDataSharedShape = {
-  label: z.literal("Synthetic working data"),
-  method: sentenceSchema,
-  sourceCharacteristics: z.array(z.string().trim().min(3)),
-  approximations: z.array(z.string().trim().min(3)),
-  alterations: z.array(z.string().trim().min(3)),
-  exclusions: z.array(z.string().trim().min(3)),
-  limitations: nonEmptyList(sentenceSchema),
-}
-
-export const syntheticDataSchema = z.discriminatedUnion("status", [
-  z.strictObject({
-    status: z.literal("planned"),
-    ...syntheticDataSharedShape,
-  }),
-  z.strictObject({
-    status: z.literal("available"),
-    ...syntheticDataSharedShape,
-    dataPath: relativePathSchema,
-    // A dataset may not claim to be available without the note recording the
-    // structural basis it was authored against.
-    structureNotePath: relativePathSchema,
-  }),
-])
-
-export const nonAiBaselineSchema = z.strictObject({
-  name: z.string().trim().min(3),
-  description: sentenceSchema,
-  method: sentenceSchema,
-  limitations: nonEmptyList(sentenceSchema),
-})
-
-const evaluationSharedShape = {
-  questions: nonEmptyList(sentenceSchema),
-  metrics: z.array(
-    z.strictObject({
-      id: slugSchema,
-      name: z.string().trim().min(3),
-      definition: sentenceSchema,
-    }),
-  ),
-  limitations: nonEmptyList(sentenceSchema),
-}
-
-export const evaluationSchema = z.discriminatedUnion("status", [
-  z.strictObject({
-    status: z.literal("not-run"),
-    ...evaluationSharedShape,
-    reason: sentenceSchema,
-  }),
-  z.strictObject({
-    status: z.literal("fixture-evaluated"),
-    ...evaluationSharedShape,
-    metrics: nonEmptyList(evaluationSharedShape.metrics.element),
-    labelledFixtureId: slugSchema,
-  }),
-  z.strictObject({
-    status: z.literal("partner-evaluated"),
-    ...evaluationSharedShape,
-    metrics: nonEmptyList(evaluationSharedShape.metrics.element),
-    evidenceUrl: z.url(),
-  }),
-])
-
-export const humanOversightSchema = z.strictObject({
-  responsibleRole: z.string().trim().min(3),
-  reviewPoint: sentenceSchema,
-  escalation: sentenceSchema,
-  redress: sentenceSchema,
-})
-
-export const implementationSchema = z.strictObject({
-  summary: sentenceSchema,
-  architecture: sentenceSchema,
-  inputs: nonEmptyList(z.string().trim().min(3)),
-  outputs: nonEmptyList(z.string().trim().min(3)),
-  reusableParts: nonEmptyList(z.string().trim().min(3)),
-  partnerRequirements: z.array(z.string().trim().min(3)),
-})
-
-export const referenceSchema = z.strictObject({
-  title: z.string().trim().min(3),
+/** A — the example as the strategy draft gave it. Our words, their link. */
+export const strategyExampleSchema = z.strictObject({
+  proposal: sentenceSchema,
+  draftReference: z.string().trim().min(3),
   url: z.url(),
-  kind: z.enum(["official", "research", "project", "repository"]),
 })
 
-const demoNoneSchema = z.strictObject({
-  availability: z.literal("none"),
-  reason: sentenceSchema,
-})
-
-const demoRecordedSchema = z.strictObject({
-  availability: z.literal("recorded"),
-  route: demoRouteSchema,
-  recordedOutputId: slugSchema,
-  label: z.literal("Recorded demonstration"),
-  recordedAt: isoDateSchema,
-  modelLabel: z.string().trim().min(3),
-  modelVersion: z.string().trim().min(1),
-  promptSha256: sha256Schema,
-  inputSha256: sha256Schema,
-  limitations: nonEmptyList(sentenceSchema),
+/** B — one investigated source: what it covers, how open it is, why it fits. */
+export const dataSourceSchema = z.strictObject({
+  id: slugSchema,
+  publisher: z.string().trim().min(2),
+  title: z.string().trim().min(4),
+  url: z.url(),
+  covers: sentenceSchema,
+  access: z.enum(accessValues),
+  relevance: sentenceSchema,
 })
 
 /**
- * A hosted example that runs only the deterministic non-AI baseline over a
- * playbook's synthetic dataset. No model is involved, so there is no model
- * identifier, no prompt, and nothing recorded: the page computes its result from
- * committed data every time it renders.
- *
- * This is a weaker claim than `recorded`, not a stronger one, and it stays
- * compatible with `assessed` maturity. It exists because the baseline is a
- * publishable artefact in its own right — a playbook can show the task, the
- * evidence trail, and the honest limits of a keyword method without ever
- * asserting anything about AI. `vocabularyVersion` is recorded because the
- * result on the page depends on which word list produced it.
+ * C — either a committed synthetic dataset, or a plain statement of why a
+ * synthetic stand-in is not responsible in this domain and what a contributor
+ * would need instead. There is no third state: every playbook answers C.
  */
-const demoBaselineOnlySchema = z.strictObject({
-  availability: z.literal("baseline-only"),
-  route: demoRouteSchema,
-  label: z.literal("Baseline demonstration"),
-  method: sentenceSchema,
-  vocabularyVersion: z.string().trim().min(1),
-  limitations: nonEmptyList(sentenceSchema),
-})
+export const syntheticDataSchema = z.discriminatedUnion("status", [
+  z.strictObject({
+    status: z.literal("available"),
+    dataPath: relativePathSchema,
+    method: sentenceSchema,
+    limitations: nonEmptyList(sentenceSchema),
+  }),
+  z.strictObject({
+    status: z.literal("not-responsible"),
+    reason: sentenceSchema,
+    whatContributorsNeed: sentenceSchema,
+  }),
+])
 
-const demoLiveLocalSchema = z.strictObject({
-  availability: z.literal("live-local"),
-  route: demoRouteSchema,
-  setupPath: relativePathSchema,
-  warning: sentenceSchema,
-})
-
-const demoPartnerSchema = z.strictObject({
-  availability: z.literal("partner"),
-  reason: sentenceSchema,
-})
-
-export const demoSchema = z.discriminatedUnion("availability", [
-  demoNoneSchema,
-  demoBaselineOnlySchema,
-  demoRecordedSchema,
-  demoLiveLocalSchema,
-  demoPartnerSchema,
+/** D — a hosted demo or a one-sentence honest note that none exists yet. */
+export const demoSchema = z.discriminatedUnion("status", [
+  z.strictObject({
+    status: z.literal("available"),
+    route: demoRouteSchema,
+    howItWorks: sentenceSchema,
+  }),
+  z.strictObject({
+    status: z.literal("not-yet"),
+    note: sentenceSchema,
+  }),
 ])
 
 export const playbookSchema = z
   .strictObject({
-    schemaVersion: z.literal(1),
+    schemaVersion: z.literal(2),
     slug: slugSchema,
     title: z.string().trim().min(4),
     summary: sentenceSchema,
-    ...classificationSchema.shape,
-    problem: sentenceSchema,
-    intendedUsers: nonEmptyList(z.string().trim().min(3)),
-    affectedGroups: nonEmptyList(z.string().trim().min(3)),
-    supportedDecision: sentenceSchema,
-    publicBenefit: sentenceSchema,
-    maturity: z.enum(maturityValues),
-    dataAccessibility: z.enum(dataAccessibilityValues),
-    risk: riskSchema,
-    officialSources: nonEmptyList(sourceSchema),
+    sector: z.enum(sectorValues),
+    strategyExample: strategyExampleSchema,
+    dataSources: nonEmptyList(dataSourceSchema),
     syntheticData: syntheticDataSchema,
-    nonAiBaseline: nonAiBaselineSchema,
-    evaluation: evaluationSchema,
-    humanOversight: humanOversightSchema,
-    limitations: nonEmptyList(sentenceSchema),
-    failureModes: nonEmptyList(sentenceSchema),
-    nextValidationSteps: nonEmptyList(sentenceSchema),
-    implementation: implementationSchema,
-    references: z.array(referenceSchema),
     demo: demoSchema,
+    caveats: nonEmptyList(sentenceSchema),
     lastReviewed: isoDateSchema,
   })
   .superRefine((playbook, context) => {
-    const sourceIds = playbook.officialSources.map((source) => source.id)
+    const sourceIds = playbook.dataSources.map((source) => source.id)
     if (new Set(sourceIds).size !== sourceIds.length) {
       context.addIssue({
         code: "custom",
-        path: ["officialSources"],
-        message: "Official source IDs must be unique within a playbook",
+        path: ["dataSources"],
+        message: "Data source IDs must be unique within a playbook",
       })
     }
 
-    // A baseline demonstration reads the playbook's synthetic dataset on every
-    // render, so it cannot be offered before that dataset exists.
-    if (
-      playbook.demo.availability === "baseline-only" &&
-      playbook.syntheticData.status !== "available"
-    ) {
+    // The demo reads the playbook's dataset on every render, so it cannot be
+    // offered without one.
+    if (playbook.demo.status === "available" && playbook.syntheticData.status !== "available") {
       context.addIssue({
         code: "custom",
         path: ["demo"],
-        message: "A baseline demonstration requires an available synthetic dataset",
+        message: "An available demo requires an available synthetic dataset",
       })
     }
 
     if (
-      playbook.demo.availability === "recorded" &&
-      playbook.maturity === "assessed"
-    ) {
-      context.addIssue({
-        code: "custom",
-        path: ["maturity"],
-        message: "A recorded demonstration requires recorded-demo maturity or higher",
-      })
-    }
-
-    if (
-      playbook.maturity === "recorded-demo" &&
-      playbook.demo.availability !== "recorded"
-    ) {
-      context.addIssue({
-        code: "custom",
-        path: ["demo"],
-        message: "Recorded-demo maturity requires recorded demonstration metadata",
-      })
-    }
-
-    if (
-      "route" in playbook.demo &&
+      playbook.demo.status === "available" &&
       playbook.demo.route !== `/playbooks/${playbook.slug}/demo`
     ) {
       context.addIssue({
@@ -333,42 +148,11 @@ export type Playbook = z.output<typeof playbookSchema>
 
 export type PlaybookSummary = Pick<
   Playbook,
-  | "slug"
-  | "title"
-  | "summary"
-  | "problem"
-  | "sector"
-  | "tags"
-  | "technicalPatterns"
-  | "maturity"
-  | "dataAccessibility"
-  | "risk"
-  | "demo"
-  | "lastReviewed"
+  "slug" | "title" | "summary" | "sector" | "syntheticData" | "demo" | "lastReviewed"
 >
 
-/**
- * Named projections of the playbook contract.
- *
- * Every consumer reads its types from here rather than re-deriving them from
- * the underlying value tuples, so a maturity rung or risk level is one type
- * with one name wherever it appears.
- */
-export type Maturity = Playbook["maturity"]
-export type DataAccessibility = Playbook["dataAccessibility"]
-export type RiskLevel = Playbook["risk"]["level"]
-export type PlaybookRisk = Playbook["risk"]
-export type OfficialSource = Playbook["officialSources"][number]
-export type SourceType = OfficialSource["sourceType"]
+export type Sector = Playbook["sector"]
+export type DataAccess = (typeof accessValues)[number]
+export type DataSource = Playbook["dataSources"][number]
 export type SyntheticData = Playbook["syntheticData"]
-export type NonAiBaseline = Playbook["nonAiBaseline"]
-export type Evaluation = Playbook["evaluation"]
 export type PlaybookDemo = Playbook["demo"]
-export type DemoAvailability = PlaybookDemo["availability"]
-
-/**
- * A demonstration this application has to render a page for, narrowed by the
- * presence of a route. `none` and `partner` describe why there is nothing to
- * open; every other variant promises a hosted page at its own route.
- */
-export type HostedDemo = Extract<PlaybookDemo, { route: string }>

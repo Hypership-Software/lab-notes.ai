@@ -6,86 +6,37 @@ import type { PlaybookInput } from "./schema"
 
 function makePlaybook(slug: string, title: string) {
   const input = {
-    schemaVersion: 1,
+    schemaVersion: 2,
     slug,
     title,
     summary: `A bounded assessment for ${title.toLowerCase()} in a public-service context.`,
-    sector: "Public services",
-    tags: ["assessment"],
-    technicalPatterns: ["decision-support"],
-    problem: "A public-service team needs a clearer and more inspectable evidence process.",
-    intendedUsers: ["Public-service delivery teams"],
-    affectedGroups: ["People who use the relevant public service"],
-    supportedDecision: "Whether the proposed pattern deserves further investigation.",
-    publicBenefit: "Make early discovery more transparent and easier to scrutinise.",
-    maturity: "assessed",
-    dataAccessibility: "unknown",
-    risk: {
-      level: "moderate",
-      reasons: ["The assessment may omit important domain or community knowledge."],
-      mitigations: ["Require specialist and affected-community review before development."],
+    sector: "Cross-government",
+    strategyExample: {
+      proposal: "The draft strategy names this pattern as a potential public-service application.",
+      draftReference: "Table 2 — potential public-service applications",
+      url: `https://example.gov/${slug}`,
     },
-    officialSources: [
+    dataSources: [
       {
         id: `${slug}-source`,
         publisher: "Public authority",
-        jurisdiction: "Northern Ireland",
         title: `${title} public source`,
-        canonicalUrl: `https://example.gov/${slug}`,
-        sourceType: "strategy",
-        coveredPeriod: "Current published material",
-        accessedAt: "2026-08-18",
-        reuseStatus: "Publicly viewable; redistribution status requires confirmation.",
-        purpose: "Establish the problem statement and realistic public-service context.",
-        transformations: [],
-        caveats: ["This source record does not imply permission for bulk reuse."],
+        url: `https://example.gov/${slug}/source`,
+        covers: "The published material relevant to this example.",
+        access: "open",
+        relevance: "It grounds the problem statement in a real public-service document.",
       },
     ],
     syntheticData: {
-      status: "planned",
-      label: "Synthetic working data",
-      method: "Create deterministic invented records only after the source structure is verified.",
-      sourceCharacteristics: ["Expected structure"],
-      approximations: ["No distribution is claimed at assessment stage."],
-      alterations: ["All future records will use invented identifiers."],
-      exclusions: ["Personal and sensitive person-level data"],
-      limitations: ["No synthetic fixture exists at the assessed maturity stage."],
+      status: "not-responsible",
+      reason: "A useful stand-in would still be shaped like real, sensitive records.",
+      whatContributorsNeed: "Formal research access agreed with the responsible data owner.",
     },
-    nonAiBaseline: {
-      name: "Structured manual review",
-      description: "A person follows a documented checklist against the same evidence.",
-      method: "Review each source and record findings in a consistent structured template.",
-      limitations: ["Manual review can be slow and inconsistent without quality assurance."],
-    },
-    evaluation: {
-      status: "not-run",
-      questions: ["Would the proposed approach improve the decision without obscuring evidence?"],
-      metrics: [],
-      limitations: ["No result exists to evaluate at the assessed maturity stage."],
-      reason: "The playbook documents an assessed concept rather than an implemented result.",
-    },
-    humanOversight: {
-      responsibleRole: "Responsible public-service lead",
-      reviewPoint: "Before the concept advances beyond problem and data discovery.",
-      escalation: "Refer consequential or sensitive questions to the appropriate specialist.",
-      redress: "Correct the assessment and document why the earlier claim was unsupported.",
-    },
-    limitations: ["This is an early assessment and not evidence of service effectiveness."],
-    failureModes: ["A plausible technical pattern may distract from a service-design problem."],
-    nextValidationSteps: ["Verify the problem, source access, and safeguards with domain partners."],
-    implementation: {
-      summary: "A static assessed playbook with no runtime model or data integration.",
-      architecture: "Typed content rendered through the shared Next.js playbook detail route.",
-      inputs: ["Public source register"],
-      outputs: ["Problem and feasibility assessment"],
-      reusableParts: ["Shared playbook contract"],
-      partnerRequirements: ["Domain review", "Source access review"],
-    },
-    references: [],
     demo: {
-      availability: "none",
-      reason: "The concept has not met the evidence and data gate for a recorded demonstration.",
+      status: "not-yet",
+      note: "No hosted demonstration exists for this example yet.",
     },
+    caveats: ["This is an early example and not evidence of service effectiveness."],
     lastReviewed: "2026-08-18",
   } satisfies PlaybookInput
 
@@ -132,11 +83,11 @@ describe("createPlaybookRegistry", () => {
     expect(summary).toMatchObject({
       slug: "alpha-service",
       title: "Alpha Service",
-      problem:
-        "A public-service team needs a clearer and more inspectable evidence process.",
-      maturity: "assessed",
+      sector: "Cross-government",
     })
-    expect(summary).not.toHaveProperty("officialSources")
+    expect(summary).not.toHaveProperty("strategyExample")
+    expect(summary).not.toHaveProperty("dataSources")
+    expect(summary).not.toHaveProperty("caveats")
     expect(Object.isFrozen(registry.getPlaybookSummaries())).toBe(true)
   })
 })

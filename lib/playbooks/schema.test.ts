@@ -1,317 +1,92 @@
 import { describe, expect, it } from "vitest"
 
-import { playbookSchema } from "./schema"
+import { playbookSchema, type PlaybookInput } from "./schema"
 
-const sha256 = "a".repeat(64)
-
-const validInput = {
-  schemaVersion: 1,
-  slug: "policy-evidence",
-  title: "Policy Evidence Workbench",
-  summary: "Inspect a bounded example of evidence synthesis with traceable sources.",
-  sector: "Cross-government",
-  tags: ["policy", "evidence"],
-  technicalPatterns: ["retrieval", "structured-analysis"],
-  problem:
-    "Policy teams need to compare recurring themes without losing the evidence behind them.",
-  intendedUsers: ["Policy teams", "Researchers"],
-  affectedGroups: ["People represented in public consultations"],
-  supportedDecision:
-    "Which themes deserve further investigation by the responsible policy team.",
-  publicBenefit:
-    "Make evidence review more transparent while preserving accountable human judgement.",
-  maturity: "recorded-demo",
-  dataAccessibility: "public-readonly",
-  risk: {
-    level: "moderate",
-    reasons: ["A summary can flatten minority or conflicting views."],
-    mitigations: ["Every finding links to inspectable evidence and human review."],
-  },
-  officialSources: [
-    {
-      id: "draft-ai-strategy",
-      publisher: "Public authority",
-      jurisdiction: "Northern Ireland",
-      title: "Draft artificial intelligence strategy",
-      canonicalUrl: "https://example.gov/publication",
-      sourceType: "strategy",
-      coveredPeriod: "2025",
-      accessedAt: "2026-08-18",
-      reuseStatus: "Reuse status must be confirmed before redistribution.",
-      localSamplePath: "content/playbooks/policy-evidence/sources/sample.txt",
-      sha256,
-      purpose: "Establish realistic public-sector terminology and document structure.",
-      transformations: ["Selected a short excerpt for structural reference."],
-      caveats: ["The example does not represent an operational dataset."],
+function validPlaybook(): PlaybookInput {
+  return {
+    schemaVersion: 2,
+    slug: "policy-evidence",
+    title: "Policy Evidence Workbench",
+    summary: "Group synthetic consultation responses into themes a policy team could investigate further.",
+    sector: "Cross-government",
+    strategyExample: {
+      proposal: "The draft strategy names AI-assisted analysis of consultation responses as a potential public-service application.",
+      draftReference: "Table 2 — potential public-service applications",
+      url: "https://consultations.nidirect.gov.uk/teo/artificial-intelligence-public-consultation",
     },
-  ],
-  syntheticData: {
-    status: "available",
-    label: "Synthetic working data",
-    method: "Write invented responses by hand against a fixed set of themes and positions.",
-    dataPath: "content/playbooks/policy-evidence/policy-evidence.data.json",
-    structureNotePath:
-      "content/playbooks/policy-evidence/consultation-analysis-structure.md",
-    sourceCharacteristics: ["Document structure", "Public-service vocabulary"],
-    approximations: ["Theme frequency is illustrative rather than measured."],
-    alterations: ["All entities and response text are invented."],
-    exclusions: ["Names", "Contact details", "Exact addresses"],
-    limitations: ["Synthetic data cannot establish production performance or fairness."],
-  },
-  nonAiBaseline: {
-    name: "Keyword grouping",
-    description: "A deterministic phrase-matching comparison on the same corpus.",
-    method: "Match a reviewed list of phrases and group documents by theme.",
-    limitations: ["It misses paraphrases that are absent from the phrase list."],
-  },
-  evaluation: {
-    status: "fixture-evaluated",
-    questions: ["Does each finding cite text that supports its summary?"],
-    metrics: [
+    dataSources: [
       {
-        id: "citation-support",
-        name: "Citation support",
-        definition: "The share of reviewed findings with a supporting exact excerpt.",
+        id: "ni-ai-strategy-consultation",
+        publisher: "The Executive Office",
+        title: "Northern Ireland Artificial Intelligence Strategy consultation",
+        url: "https://consultations.nidirect.gov.uk/teo/artificial-intelligence-public-consultation",
+        covers: "The draft strategy text and its consultation questions.",
+        access: "open",
+        relevance: "It is the document whose example projects these playbooks explore.",
       },
     ],
-    labelledFixtureId: "policy-evidence-evaluation-v1",
-    limitations: ["A small labelled fixture is not an operational evaluation."],
-  },
-  humanOversight: {
-    responsibleRole: "Responsible policy lead",
-    reviewPoint: "Before any finding informs policy advice.",
-    escalation: "Refer disputed or sensitive findings to a subject-matter specialist.",
-    redress: "Correct or remove unsupported findings and retain the evidence trail.",
-  },
-  limitations: ["The example uses synthetic responses and recorded output."],
-  failureModes: ["A common phrase may be mistaken for a substantively important theme."],
-  nextValidationSteps: ["Review the method with policy and public-engagement specialists."],
-  implementation: {
-    summary: "A static-first evidence review pattern with deterministic fixtures.",
-    architecture: "Server-rendered content with a narrow local review-state boundary.",
-    inputs: ["Versioned source sample", "Deterministic synthetic corpus"],
-    outputs: ["Recorded findings", "Citation links", "Evaluation summary"],
-    reusableParts: ["Source register", "Evidence thread", "Evaluation contract"],
-    partnerRequirements: ["Domain review", "Data protection review"],
-  },
-  references: [
-    {
-      title: "Project method",
-      url: "https://example.org/method",
-      kind: "project",
+    syntheticData: {
+      status: "available",
+      dataPath: "content/playbooks/policy-evidence/policy-evidence.data.json",
+      method: "Twenty synthetic consultation responses authored by AI, shaped by the structure of a published consultation response report.",
+      limitations: ["The dataset is far smaller and tidier than a real consultation mailbox."],
     },
-  ],
-  demo: {
-    availability: "recorded",
-    route: "/playbooks/policy-evidence/demo",
-    recordedOutputId: "policy-evidence-output-v1",
-    label: "Recorded demonstration",
-    recordedAt: "2026-08-18",
-    modelLabel: "Provider-neutral language model",
-    modelVersion: "recorded-model-version",
-    promptSha256: sha256,
-    inputSha256: sha256,
-    limitations: ["The hosted page does not call a model."],
-  },
-  lastReviewed: "2026-08-18",
-} as const
-
-function cloneValidInput(): Record<string, unknown> {
-  return structuredClone(validInput)
+    demo: {
+      status: "available",
+      route: "/playbooks/policy-evidence/demo",
+      howItWorks: "A transparent keyword analysis groups the synthetic responses into themes and cites the exact passages it matched.",
+    },
+    caveats: ["Nothing here is evidence that an AI system would work operationally."],
+    lastReviewed: "2026-08-21",
+  }
 }
 
 describe("playbookSchema", () => {
-  it("parses a complete recorded playbook", () => {
-    const playbook = playbookSchema.parse(validInput)
-
-    expect(playbook.schemaVersion).toBe(1)
-    expect(playbook.officialSources).toHaveLength(1)
-    expect(playbook.syntheticData.label).toBe("Synthetic working data")
-    expect(playbook.demo.availability).toBe("recorded")
+  it("parses a complete v2 playbook", () => {
+    const parsed = playbookSchema.parse(validPlaybook())
+    expect(parsed.schemaVersion).toBe(2)
+    expect(parsed.demo.status).toBe("available")
   })
 
-  it("accepts a baseline-only demonstration while maturity stays assessed", () => {
-    const input = cloneValidInput()
-    input.maturity = "assessed"
-    input.demo = {
-      availability: "baseline-only",
-      route: "/playbooks/policy-evidence/demo",
-      label: "Baseline demonstration",
-      method: "Group responses by a reviewed list of words and phrases.",
-      vocabularyVersion: "1.0.0",
-      limitations: ["No model has been run, so nothing here is AI output."],
-    }
-
-    const result = playbookSchema.safeParse(input)
-
-    expect(result.success).toBe(true)
-  })
-
-  it("refuses a baseline demonstration before a synthetic dataset exists", () => {
-    const input = cloneValidInput()
-    input.maturity = "assessed"
-    input.demo = {
-      availability: "baseline-only",
-      route: "/playbooks/policy-evidence/demo",
-      label: "Baseline demonstration",
-      method: "Group responses by a reviewed list of words and phrases.",
-      vocabularyVersion: "1.0.0",
-      limitations: ["No model has been run, so nothing here is AI output."],
-    }
-    input.syntheticData = {
-      status: "planned",
-      label: "Synthetic working data",
-      method: "Derive invented responses once a permissible basis exists.",
-      sourceCharacteristics: ["Document structure"],
-      approximations: ["Theme frequency would be illustrative."],
-      alterations: ["All response text would be invented."],
-      exclusions: ["Names", "Contact details"],
-      limitations: ["No dataset exists yet, so nothing can be measured."],
-    }
-
-    expect(playbookSchema.safeParse(input).success).toBe(false)
-  })
-
-  it("refuses a baseline demonstration that borrows the recorded label", () => {
-    const input = cloneValidInput()
-    input.maturity = "assessed"
-    input.demo = {
-      availability: "baseline-only",
-      route: "/playbooks/policy-evidence/demo",
-      label: "Recorded demonstration",
-      method: "Group responses by a reviewed list of words and phrases.",
-      vocabularyVersion: "1.0.0",
-      limitations: ["No model has been run, so nothing here is AI output."],
-    }
-
-    expect(playbookSchema.safeParse(input).success).toBe(false)
+  it("rejects schema version 1", () => {
+    expect(playbookSchema.safeParse({ ...validPlaybook(), schemaVersion: 1 }).success).toBe(false)
   })
 
   it("rejects a malformed slug", () => {
-    const input = cloneValidInput()
-    input.slug = "Policy Evidence"
-
-    expect(playbookSchema.safeParse(input).success).toBe(false)
+    expect(playbookSchema.safeParse({ ...validPlaybook(), slug: "Policy Evidence" }).success).toBe(false)
   })
 
-  it("requires at least one official source", () => {
-    const input = cloneValidInput()
-    input.officialSources = []
-
-    expect(playbookSchema.safeParse(input).success).toBe(false)
+  it("rejects an empty data-source list", () => {
+    expect(playbookSchema.safeParse({ ...validPlaybook(), dataSources: [] }).success).toBe(false)
   })
 
-  it("requires a non-AI baseline", () => {
-    const input = cloneValidInput()
-    delete input.nonAiBaseline
-
-    expect(playbookSchema.safeParse(input).success).toBe(false)
+  it("rejects duplicate data-source ids", () => {
+    const playbook = validPlaybook()
+    playbook.dataSources = [playbook.dataSources[0], { ...playbook.dataSources[0] }]
+    expect(playbookSchema.safeParse(playbook).success).toBe(false)
   })
 
-  it("requires a plain-English risk reason", () => {
-    const input = cloneValidInput()
-    input.risk = {
-      level: "moderate",
-      reasons: [],
-      mitigations: ["Keep a person responsible for review."],
+  it("rejects an available demo without an available dataset", () => {
+    const playbook = validPlaybook()
+    playbook.syntheticData = {
+      status: "not-responsible",
+      reason: "A useful stand-in would be person-shaped.",
+      whatContributorsNeed: "Formal research access under ethics governance.",
     }
-
-    expect(playbookSchema.safeParse(input).success).toBe(false)
+    expect(playbookSchema.safeParse(playbook).success).toBe(false)
   })
 
-  it("rejects a demo route when no demo is available", () => {
-    const input = cloneValidInput()
-    input.maturity = "assessed"
-    input.demo = {
-      availability: "none",
-      reason: "The necessary data is restricted.",
-      route: "/playbooks/policy-evidence/demo",
-    }
-
-    expect(playbookSchema.safeParse(input).success).toBe(false)
+  it("rejects a demo route that does not match the slug", () => {
+    const playbook = validPlaybook()
+    playbook.demo = { status: "available", route: "/playbooks/other/demo", howItWorks: "A transparent keyword analysis over the dataset." }
+    expect(playbookSchema.safeParse(playbook).success).toBe(false)
   })
 
-  it("requires recorded-output metadata for a recorded demo", () => {
-    const input = cloneValidInput()
-    const demo = input.demo as Record<string, unknown>
-    delete demo.recordedOutputId
-
-    expect(playbookSchema.safeParse(input).success).toBe(false)
+  it("rejects an empty caveats list", () => {
+    expect(playbookSchema.safeParse({ ...validPlaybook(), caveats: [] }).success).toBe(false)
   })
 
-  it("requires a local sample path and hash together", () => {
-    const input = cloneValidInput()
-    const [source] = input.officialSources as Array<Record<string, unknown>>
-    delete source.sha256
-
-    expect(playbookSchema.safeParse(input).success).toBe(false)
-  })
-
-  it("requires a structure-note path for an available dataset", () => {
-    const incomplete = { ...validInput.syntheticData } as Record<string, unknown>
-    delete incomplete.structureNotePath
-
-    const result = playbookSchema.safeParse({
-      ...validInput,
-      syntheticData: incomplete,
-    })
-
-    expect(result.success).toBe(false)
-  })
-
-  it("rejects an available dataset with no data path", () => {
-    const incomplete = { ...validInput.syntheticData } as Record<string, unknown>
-    delete incomplete.dataPath
-
-    const result = playbookSchema.safeParse({
-      ...validInput,
-      syntheticData: incomplete,
-    })
-
-    expect(result.success).toBe(false)
-  })
-
-  it("rejects a data path that escapes the repository", () => {
-    const result = playbookSchema.safeParse({
-      ...validInput,
-      syntheticData: {
-        ...validInput.syntheticData,
-        dataPath: "../outside/data.json",
-      },
-    })
-
-    expect(result.success).toBe(false)
-  })
-
-  it("rejects a structure-note path that escapes the repository", () => {
-    const result = playbookSchema.safeParse({
-      ...validInput,
-      syntheticData: {
-        ...validInput.syntheticData,
-        structureNotePath: "../outside/note.md",
-      },
-    })
-
-    expect(result.success).toBe(false)
-  })
-
-  it("still accepts a planned dataset with no paths", () => {
-    const result = playbookSchema.safeParse({
-      ...validInput,
-      maturity: "assessed",
-      demo: { availability: "none", reason: "The necessary data is restricted." },
-      syntheticData: {
-        status: "planned",
-        label: "Synthetic working data",
-        method: "Derive invented responses once a permissible structural basis exists.",
-        sourceCharacteristics: ["Document structure"],
-        approximations: ["Theme frequency would be illustrative."],
-        alterations: ["All response text would be invented."],
-        exclusions: ["Names", "Contact details"],
-        limitations: ["No dataset exists yet, so nothing can be measured."],
-      },
-    })
-
-    expect(result.success).toBe(true)
+  it("rejects unknown fields such as maturity", () => {
+    expect(playbookSchema.safeParse({ ...validPlaybook(), maturity: "assessed" }).success).toBe(false)
   })
 })
