@@ -468,8 +468,8 @@ function toSummary(playbook: Playbook): PlaybookSummary {
 
   Leave `createPlaybookRegistry`, the import list, and the exported functions unchanged. In `lib/playbooks/registry.test.ts`, replace the local fixture with a v2-valid fixture (reuse the `validPlaybook()` shape from Step 2 with a distinct slug per fixture and `demo: { status: "not-yet", note: ... }` / `syntheticData: { status: "not-responsible", ... }` so no file paths are implied). Keep the existing assertions: alphabetical order, duplicate-slug throw, frozen arrays, lookup, unknown-slug `undefined`, and that summaries omit `strategyExample`, `dataSources`, and `caveats`.
 
-  Run: `npm run test -- lib/playbooks/registry.test.ts lib/playbooks/schema.test.ts lib/playbooks/dataset.test.ts lib/playbooks/vocabulary.test.ts`
-  Expected: PASS (registry.test.ts uses `createPlaybookRegistry` with local fixtures, so it does not import the broken content files).
+  Run: `npm run test -- lib/playbooks/schema.test.ts lib/playbooks/dataset.test.ts lib/playbooks/vocabulary.test.ts`
+  Expected: PASS. `registry.test.ts` is rewritten here but CANNOT run yet: `registry.ts` eagerly imports all seventeen content modules, which throw against the v2 schema until Task 8 migrates them — it joins the red window and goes green at Task 8's gate.
 
 - [ ] **Step 10: Commit**
 
