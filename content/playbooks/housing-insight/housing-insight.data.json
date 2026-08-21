@@ -1,0 +1,146 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Twenty invented quarterly rows standing in for the social renting demand figures published by area, with five lettered area bands, a banded count of households waiting, and a banded description of the condition of the stock around them.",
+  "records": [
+    {
+      "id": "SYN-HI-01",
+      "areaBand": "Urban area A",
+      "quarter": "2025-Q1",
+      "waitingHouseholdsBand": "over 6000",
+      "stockConditionBand": "mostly band D"
+    },
+    {
+      "id": "SYN-HI-02",
+      "areaBand": "Urban area A",
+      "quarter": "2025-Q2",
+      "waitingHouseholdsBand": "over 6000",
+      "stockConditionBand": "mostly band D"
+    },
+    {
+      "id": "SYN-HI-03",
+      "areaBand": "Urban area A",
+      "quarter": "2025-Q3",
+      "waitingHouseholdsBand": "over 6000",
+      "stockConditionBand": "mostly band C or better"
+    },
+    {
+      "id": "SYN-HI-04",
+      "areaBand": "Urban area A",
+      "quarter": "2025-Q4",
+      "waitingHouseholdsBand": "over 6000",
+      "stockConditionBand": "mostly band C or better"
+    },
+    {
+      "id": "SYN-HI-05",
+      "areaBand": "Urban area B",
+      "quarter": "2025-Q1",
+      "waitingHouseholdsBand": "3000-6000",
+      "stockConditionBand": "mostly band D"
+    },
+    {
+      "id": "SYN-HI-06",
+      "areaBand": "Urban area B",
+      "quarter": "2025-Q2",
+      "waitingHouseholdsBand": "3000-6000",
+      "stockConditionBand": "mostly band D"
+    },
+    {
+      "id": "SYN-HI-07",
+      "areaBand": "Urban area B",
+      "quarter": "2025-Q3",
+      "waitingHouseholdsBand": "3000-6000",
+      "stockConditionBand": "mostly band D"
+    },
+    {
+      "id": "SYN-HI-08",
+      "areaBand": "Urban area B",
+      "quarter": "2025-Q4",
+      "waitingHouseholdsBand": "1500-3000",
+      "stockConditionBand": "mostly band D"
+    },
+    {
+      "id": "SYN-HI-09",
+      "areaBand": "Mixed area C",
+      "quarter": "2025-Q1",
+      "waitingHouseholdsBand": "1500-3000",
+      "stockConditionBand": "mostly band D"
+    },
+    {
+      "id": "SYN-HI-10",
+      "areaBand": "Mixed area C",
+      "quarter": "2025-Q2",
+      "waitingHouseholdsBand": "1500-3000",
+      "stockConditionBand": "mostly band E or lower"
+    },
+    {
+      "id": "SYN-HI-11",
+      "areaBand": "Mixed area C",
+      "quarter": "2025-Q3",
+      "waitingHouseholdsBand": "1500-3000",
+      "stockConditionBand": "mostly band E or lower"
+    },
+    {
+      "id": "SYN-HI-12",
+      "areaBand": "Mixed area C",
+      "quarter": "2025-Q4",
+      "waitingHouseholdsBand": "1500-3000",
+      "stockConditionBand": "mostly band E or lower"
+    },
+    {
+      "id": "SYN-HI-13",
+      "areaBand": "Rural area D",
+      "quarter": "2025-Q1",
+      "waitingHouseholdsBand": "500-1500",
+      "stockConditionBand": "mostly band E or lower"
+    },
+    {
+      "id": "SYN-HI-14",
+      "areaBand": "Rural area D",
+      "quarter": "2025-Q2",
+      "waitingHouseholdsBand": "500-1500",
+      "stockConditionBand": "mostly band E or lower"
+    },
+    {
+      "id": "SYN-HI-15",
+      "areaBand": "Rural area D",
+      "quarter": "2025-Q3",
+      "waitingHouseholdsBand": "500-1500",
+      "stockConditionBand": "mostly band E or lower"
+    },
+    {
+      "id": "SYN-HI-16",
+      "areaBand": "Rural area D",
+      "quarter": "2025-Q4",
+      "waitingHouseholdsBand": "500-1500",
+      "stockConditionBand": "mostly band D"
+    },
+    {
+      "id": "SYN-HI-17",
+      "areaBand": "Rural area E",
+      "quarter": "2025-Q1",
+      "waitingHouseholdsBand": "under 500",
+      "stockConditionBand": "mostly band E or lower"
+    },
+    {
+      "id": "SYN-HI-18",
+      "areaBand": "Rural area E",
+      "quarter": "2025-Q2",
+      "waitingHouseholdsBand": "under 500",
+      "stockConditionBand": "mostly band E or lower"
+    },
+    {
+      "id": "SYN-HI-19",
+      "areaBand": "Rural area E",
+      "quarter": "2025-Q3",
+      "waitingHouseholdsBand": "under 500",
+      "stockConditionBand": "mostly band E or lower"
+    },
+    {
+      "id": "SYN-HI-20",
+      "areaBand": "Rural area E",
+      "quarter": "2025-Q4",
+      "waitingHouseholdsBand": "under 500",
+      "stockConditionBand": "mostly band E or lower"
+    }
+  ]
+}

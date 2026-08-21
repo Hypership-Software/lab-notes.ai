@@ -1,0 +1,166 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Twenty invented hourly counts standing in for the traffic census figures a transport team already works from, with four numbered junctions, a vehicle count, and bus and cycle shares given as percentages of the vehicles counted.",
+  "records": [
+    {
+      "id": "SYN-TF-01",
+      "junction": "Junction 01",
+      "hourBand": "07:00-08:00",
+      "vehicleCount": 1840,
+      "busShare": 4.2,
+      "cycleShare": 1.6
+    },
+    {
+      "id": "SYN-TF-02",
+      "junction": "Junction 01",
+      "hourBand": "08:00-09:00",
+      "vehicleCount": 2310,
+      "busShare": 3.8,
+      "cycleShare": 2.1
+    },
+    {
+      "id": "SYN-TF-03",
+      "junction": "Junction 01",
+      "hourBand": "12:00-13:00",
+      "vehicleCount": 1420,
+      "busShare": 5.1,
+      "cycleShare": 0.9
+    },
+    {
+      "id": "SYN-TF-04",
+      "junction": "Junction 01",
+      "hourBand": "17:00-18:00",
+      "vehicleCount": 2180,
+      "busShare": 3.4,
+      "cycleShare": 1.2
+    },
+    {
+      "id": "SYN-TF-05",
+      "junction": "Junction 01",
+      "hourBand": "22:00-23:00",
+      "vehicleCount": 460,
+      "busShare": 2.2,
+      "cycleShare": 0.3
+    },
+    {
+      "id": "SYN-TF-06",
+      "junction": "Junction 02",
+      "hourBand": "07:00-08:00",
+      "vehicleCount": 1120,
+      "busShare": 2.6,
+      "cycleShare": 0.7
+    },
+    {
+      "id": "SYN-TF-07",
+      "junction": "Junction 02",
+      "hourBand": "08:00-09:00",
+      "vehicleCount": 1490,
+      "busShare": 2.4,
+      "cycleShare": 0.9
+    },
+    {
+      "id": "SYN-TF-08",
+      "junction": "Junction 02",
+      "hourBand": "12:00-13:00",
+      "vehicleCount": 880,
+      "busShare": 3,
+      "cycleShare": 0.4
+    },
+    {
+      "id": "SYN-TF-09",
+      "junction": "Junction 02",
+      "hourBand": "17:00-18:00",
+      "vehicleCount": 1360,
+      "busShare": 2.1,
+      "cycleShare": 0.5
+    },
+    {
+      "id": "SYN-TF-10",
+      "junction": "Junction 02",
+      "hourBand": "22:00-23:00",
+      "vehicleCount": 240,
+      "busShare": 1.4,
+      "cycleShare": 0.1
+    },
+    {
+      "id": "SYN-TF-11",
+      "junction": "Junction 03",
+      "hourBand": "07:00-08:00",
+      "vehicleCount": 380,
+      "busShare": 0.5,
+      "cycleShare": 0.2
+    },
+    {
+      "id": "SYN-TF-12",
+      "junction": "Junction 03",
+      "hourBand": "08:00-09:00",
+      "vehicleCount": 460,
+      "busShare": 0.4,
+      "cycleShare": 0.3
+    },
+    {
+      "id": "SYN-TF-13",
+      "junction": "Junction 03",
+      "hourBand": "12:00-13:00",
+      "vehicleCount": 310,
+      "busShare": 0.6,
+      "cycleShare": 0.1
+    },
+    {
+      "id": "SYN-TF-14",
+      "junction": "Junction 03",
+      "hourBand": "17:00-18:00",
+      "vehicleCount": 520,
+      "busShare": 0.4,
+      "cycleShare": 0.2
+    },
+    {
+      "id": "SYN-TF-15",
+      "junction": "Junction 03",
+      "hourBand": "22:00-23:00",
+      "vehicleCount": 90,
+      "busShare": 0,
+      "cycleShare": 0
+    },
+    {
+      "id": "SYN-TF-16",
+      "junction": "Junction 04",
+      "hourBand": "07:00-08:00",
+      "vehicleCount": 960,
+      "busShare": 8.4,
+      "cycleShare": 3.2
+    },
+    {
+      "id": "SYN-TF-17",
+      "junction": "Junction 04",
+      "hourBand": "08:00-09:00",
+      "vehicleCount": 1240,
+      "busShare": 7.9,
+      "cycleShare": 4.1
+    },
+    {
+      "id": "SYN-TF-18",
+      "junction": "Junction 04",
+      "hourBand": "12:00-13:00",
+      "vehicleCount": 1080,
+      "busShare": 9.2,
+      "cycleShare": 2.6
+    },
+    {
+      "id": "SYN-TF-19",
+      "junction": "Junction 04",
+      "hourBand": "17:00-18:00",
+      "vehicleCount": 1310,
+      "busShare": 7.2,
+      "cycleShare": 2.9
+    },
+    {
+      "id": "SYN-TF-20",
+      "junction": "Junction 04",
+      "hourBand": "22:00-23:00",
+      "vehicleCount": 210,
+      "busShare": 3.8,
+      "cycleShare": 0.6
+    }
+  ]
+}

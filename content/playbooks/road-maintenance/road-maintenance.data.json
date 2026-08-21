@@ -1,0 +1,166 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Twenty invented defect records standing in for the inspection records a roads authority already holds, using the published road classes and the R1 to R3 severity codes, with the week a defect was reported and where it has reached in the queue.",
+  "records": [
+    {
+      "id": "SYN-RM-01",
+      "roadClass": "Motorway",
+      "defectType": "Rutting",
+      "severity": "R2",
+      "reportedWeek": "2025-W09",
+      "status": "repair instructed"
+    },
+    {
+      "id": "SYN-RM-02",
+      "roadClass": "Motorway",
+      "defectType": "Cracking",
+      "severity": "R3",
+      "reportedWeek": "2025-W11",
+      "status": "inspected"
+    },
+    {
+      "id": "SYN-RM-03",
+      "roadClass": "A",
+      "defectType": "Pothole",
+      "severity": "R1",
+      "reportedWeek": "2025-W10",
+      "status": "repaired"
+    },
+    {
+      "id": "SYN-RM-04",
+      "roadClass": "A",
+      "defectType": "Pothole",
+      "severity": "R1",
+      "reportedWeek": "2025-W12",
+      "status": "repair instructed"
+    },
+    {
+      "id": "SYN-RM-05",
+      "roadClass": "A",
+      "defectType": "Depression",
+      "severity": "R2",
+      "reportedWeek": "2025-W12",
+      "status": "inspected"
+    },
+    {
+      "id": "SYN-RM-06",
+      "roadClass": "A",
+      "defectType": "Edge deterioration",
+      "severity": "R3",
+      "reportedWeek": "2025-W13",
+      "status": "awaiting inspection"
+    },
+    {
+      "id": "SYN-RM-07",
+      "roadClass": "B",
+      "defectType": "Pothole",
+      "severity": "R1",
+      "reportedWeek": "2025-W11",
+      "status": "repaired"
+    },
+    {
+      "id": "SYN-RM-08",
+      "roadClass": "B",
+      "defectType": "Pothole",
+      "severity": "R2",
+      "reportedWeek": "2025-W13",
+      "status": "repair instructed"
+    },
+    {
+      "id": "SYN-RM-09",
+      "roadClass": "B",
+      "defectType": "Uneven surface",
+      "severity": "R3",
+      "reportedWeek": "2025-W14",
+      "status": "awaiting inspection"
+    },
+    {
+      "id": "SYN-RM-10",
+      "roadClass": "B",
+      "defectType": "Cracking",
+      "severity": "R3",
+      "reportedWeek": "2025-W15",
+      "status": "awaiting inspection"
+    },
+    {
+      "id": "SYN-RM-11",
+      "roadClass": "C",
+      "defectType": "Pothole",
+      "severity": "R1",
+      "reportedWeek": "2025-W12",
+      "status": "repaired"
+    },
+    {
+      "id": "SYN-RM-12",
+      "roadClass": "C",
+      "defectType": "Pothole",
+      "severity": "R2",
+      "reportedWeek": "2025-W14",
+      "status": "inspected"
+    },
+    {
+      "id": "SYN-RM-13",
+      "roadClass": "C",
+      "defectType": "Edge deterioration",
+      "severity": "R2",
+      "reportedWeek": "2025-W15",
+      "status": "awaiting inspection"
+    },
+    {
+      "id": "SYN-RM-14",
+      "roadClass": "C",
+      "defectType": "Depression",
+      "severity": "R3",
+      "reportedWeek": "2025-W16",
+      "status": "awaiting inspection"
+    },
+    {
+      "id": "SYN-RM-15",
+      "roadClass": "Unclassified",
+      "defectType": "Pothole",
+      "severity": "R1",
+      "reportedWeek": "2025-W13",
+      "status": "repair instructed"
+    },
+    {
+      "id": "SYN-RM-16",
+      "roadClass": "Unclassified",
+      "defectType": "Pothole",
+      "severity": "R2",
+      "reportedWeek": "2025-W15",
+      "status": "awaiting inspection"
+    },
+    {
+      "id": "SYN-RM-17",
+      "roadClass": "Unclassified",
+      "defectType": "Uneven surface",
+      "severity": "R3",
+      "reportedWeek": "2025-W16",
+      "status": "awaiting inspection"
+    },
+    {
+      "id": "SYN-RM-18",
+      "roadClass": "Unclassified",
+      "defectType": "Cracking",
+      "severity": "R3",
+      "reportedWeek": "2025-W17",
+      "status": "awaiting inspection"
+    },
+    {
+      "id": "SYN-RM-19",
+      "roadClass": "Unclassified",
+      "defectType": "Edge deterioration",
+      "severity": "R3",
+      "reportedWeek": "2025-W17",
+      "status": "awaiting inspection"
+    },
+    {
+      "id": "SYN-RM-20",
+      "roadClass": "Unclassified",
+      "defectType": "Depression",
+      "severity": "R2",
+      "reportedWeek": "2025-W18",
+      "status": "awaiting inspection"
+    }
+  ]
+}

@@ -1,63 +1,64 @@
-import { defineAssessedPlaybook } from "../define-assessed-playbook"
+import { definePlaybook } from "@/lib/playbooks/define-playbook"
 
-export const lifeEventServices = defineAssessedPlaybook({
+import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
+
+export const lifeEventServices = definePlaybook({
+  schemaVersion: 2,
   slug: "life-event-services",
   title: "Joined-up Support after a Life Event",
   summary:
-    "Examine consent-based service coordination after bereavement without creating an opaque cross-government profile.",
+    "Follow the steps someone actually has to take after a death, and show that nothing published says where in that sequence people get stuck.",
   sector: "Citizen services",
-  tags: ["life-events", "bereavement", "service-coordination"],
-  technicalPatterns: ["workflow-orchestration", "rules", "consent-management"],
-  problem:
-    "After a bereavement, people may need to notify several services while dealing with grief, deadlines, different evidence, and accessibility needs.",
-  intendedUsers: ["Bereaved people and their representatives", "Citizen service teams"],
-  affectedGroups: ["People navigating government services after a bereavement"],
-  supportedDecision:
-    "Which service notification or guidance step the person chooses to begin, confirm, skip, or complete separately.",
-  publicBenefit:
-    "Could help people understand and coordinate relevant steps while preserving consent and direct access to each service.",
-  dataAccessibility: "restricted",
-  riskLevel: "high",
-  riskReasons: [
-    "Bereavement records link identity, family, financial, health, property, and legal circumstances across services.",
-    "Incorrect or premature notification can cause distress, loss, fraud exposure, or administrative harm.",
-  ],
-  mitigations: [
-    "Prefer a transparent rules and consent workflow before considering artificial intelligence.",
-    "Require explicit confirmation for each notification, minimal data sharing, accessible alternatives, and reversible steps where possible.",
-  ],
-  sourceApplication: "linked citizen services after bereavement",
-  sourceRationale:
-    "The strategy describes notifying relevant services to reduce stress but does not define consent, authority, data sharing, or correction.",
-  syntheticMethod:
-    "Generate invented service requirements, event states, consent choices, deadlines, and error cases without realistic identities or family structures.",
-  baseline: {
-    name: "Consent-based service checklist",
-    description:
-      "A maintained rules directory explains relevant services, evidence, choices, and direct routes.",
-    method:
-      "Ask only necessary non-identifying questions, list possible steps, and require the person to confirm each action.",
-    limitations: ["A rules directory requires coordinated maintenance and may still omit unusual circumstances."],
+  strategyExample: {
+    proposal:
+      "The draft strategy names linked citizen services after a bereavement as a potential public-service application, notifying the relevant services so that someone has less to do at a hard time, without saying who authorises each notification, what gets shared, or how a mistake is put right.",
+    draftReference: strategyDraftReference,
+    url: strategyDraftUrl,
   },
-  limitations: [
-    "A synthetic journey cannot represent grief, authority disputes, complex estates, or accessibility needs.",
-    "Service coordination is primarily an interoperability, consent, and service-design problem rather than a model problem.",
+  dataSources: [
+    {
+      id: "nidirect-who-to-tell-about-a-death",
+      publisher: "nidirect",
+      title: "Who to tell about a death",
+      url: "https://www.nidirect.gov.uk/articles/who-tell-about-death",
+      covers:
+        "The published guidance on what has to be done after a death in Northern Ireland: telling the family doctor, registering the death with the district registrar, finding the will, arranging the funeral, reporting the death to the Bereavement Service, and then the long list of tax, rates, vehicle, council, bank, pension, and utility contacts a person makes themselves.",
+      access: "open",
+      relevance:
+        "It is where this playbook's journey steps come from, in the order the guidance gives them, and the fact that most of them are separate contacts is the problem the strategy's example is pointing at.",
+    },
+    {
+      id: "nisra-registrar-general-quarterly-report",
+      publisher: "Northern Ireland Statistics and Research Agency",
+      title: "Registrar General Quarterly Report",
+      url: "https://www.nisra.gov.uk/statistics/births-deaths-and-marriages/registrar-general-quarterly-report",
+      covers:
+        "Provisional counts of life event registrations in Northern Ireland — births, deaths, stillbirths, marriages, and civil partnerships — for each three-month period.",
+      access: "open",
+      relevance:
+        "It is the only published measure of how many people are going through this journey, and it counts registrations rather than journeys, which is why nothing published says where anyone gets stuck.",
+    },
   ],
-  failureModes: [
-    "A service may be notified without valid authority or before the person is ready.",
-    "An incorrect match may expose a death or private circumstance to the wrong party.",
+  syntheticData: {
+    status: "available",
+    dataPath: "content/playbooks/life-event-services/life-event-services.data.json",
+    method:
+      "Sixteen invented rows written by hand, following the one journey the published guidance sets out, each step carrying an invented median number of days and an invented band for how many people do not complete it; the file covers a single life event because that is the journey the cited guidance describes.",
+    limitations: [
+      "The days and the drop-off bands are invented and no published source measures either, so the most interesting numbers in this file are the least trustworthy.",
+      "A tidy sequence is not what a bereavement is: grief, disputes about who has authority, complicated estates, and accessibility needs all decide the real order.",
+      "Naming a step says nothing about whether anyone had the authority to take it, which is the part that would matter most.",
+    ],
+  },
+  demo: {
+    status: "not-yet",
+    note: "A demo could lay out the published steps as a checklist a person ticks off themselves, with no notification sent anywhere, but nobody has built that here yet.",
+  },
+  caveats: [
+    "A bereavement record ties together identity, family, money, health, property, and legal circumstances across services, so joining them up is the risk as much as the benefit.",
+    "Notifying a service too early, or without the authority to do it, causes distress, loss, or exposure to fraud at the worst possible time.",
+    "A wrong match can disclose a death, or someone's private circumstances, to the wrong party.",
+    "Most of the difficulty here is service design, consent, and systems talking to each other rather than anything a model does, and a checklist a person can follow would have to work first.",
   ],
-  nextValidationSteps: [
-    "Map the existing bereavement journey with affected people, representatives, and service teams.",
-    "Define lawful authority, consent, minimum data, correction, security, and service ownership for each step.",
-    "Prototype the transparent checklist baseline before evaluating any AI-specific component.",
-  ],
-  demoBarrier:
-    "Cross-service authority, consent, security, data correction, and grief-sensitive design must be resolved before an interactive example.",
-  responsibleRole: "Accountable citizen-service owner for each confirmed notification",
-  partnerRequirements: [
-    "Bereaved-person and representative participation",
-    "Cross-government service owners",
-    "Legal, security, accessibility, and data-protection review",
-  ],
+  lastReviewed: "2026-08-21",
 })

@@ -1,63 +1,63 @@
-import { defineAssessedPlaybook } from "../define-assessed-playbook"
+import { definePlaybook } from "@/lib/playbooks/define-playbook"
 
-export const housingInsight = defineAssessedPlaybook({
+import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
+
+export const housingInsight = definePlaybook({
+  schemaVersion: 2,
   slug: "housing-insight",
   title: "Housing Need and Service Insight",
   summary:
-    "Assess property and tenant-service insight without automating allocation, enforcement, tenancy, or eligibility decisions.",
+    "Work out what can honestly be said about housing need and stock condition from figures that count households by area and quarter, and keep the stand-in data well away from any tenancy.",
   sector: "Housing",
-  tags: ["housing", "property-management", "tenant-services"],
-  technicalPatterns: ["forecasting", "triage", "aggregate-analysis"],
-  problem:
-    "Housing teams manage repairs, property condition, service demand, and communication amid constrained supply and diverse tenant needs.",
-  intendedUsers: ["Housing service teams", "Property managers", "Tenant support teams"],
-  affectedGroups: ["Tenants, applicants, and people experiencing housing need"],
-  supportedDecision:
-    "Which aggregate service pattern or maintenance issue deserves investigation by the responsible housing team.",
-  publicBenefit:
-    "Could help teams inspect service patterns while keeping tenancy and allocation decisions outside the example.",
-  dataAccessibility: "restricted",
-  riskLevel: "high",
-  riskReasons: [
-    "Housing records can reveal finances, disability, household circumstances, location, and vulnerability.",
-    "Poor prioritisation or profiling can affect safety, housing stability, and access to support.",
-  ],
-  mitigations: [
-    "Restrict the pattern to aggregate service insight or property maintenance and prohibit person-level eligibility or enforcement scoring.",
-    "Require tenant participation, human review, clear reasons, and correction routes.",
-  ],
-  sourceApplication: "AI in housing for property management and tenant services",
-  sourceRationale:
-    "The strategy states a broad opportunity but does not identify the service problem, data boundary, or prohibited decisions.",
-  syntheticMethod:
-    "Generate invented properties, aggregate service events, repair categories, accessibility flags, and response times without exact locations or household profiles.",
-  baseline: {
-    name: "Standards-based service dashboard",
-    description:
-      "Published service standards and aggregate counts highlight backlogs and exceptions.",
-    method:
-      "Group invented events by service category and compare age and status with documented response thresholds.",
-    limitations: ["Aggregate thresholds can miss urgent circumstances not captured in the recorded category."],
+  strategyExample: {
+    proposal:
+      "The draft strategy names AI in housing for property management and tenant services as a potential public-service application, stating a broad opportunity without naming the service problem, the data it would use, or the decisions it must never make.",
+    draftReference: strategyDraftReference,
+    url: strategyDraftUrl,
   },
-  limitations: [
-    "Synthetic property and service data cannot establish tenant experience, need, or operational impact.",
-    "Maintenance patterns must not be repurposed to judge a tenant or household.",
+  dataSources: [
+    {
+      id: "dfc-ni-housing-statistics",
+      publisher: "Department for Communities",
+      title: "Northern Ireland Housing Statistics",
+      url: "https://www.communities-ni.gov.uk/articles/northern-ireland-housing-statistics",
+      covers:
+        "The annual compendium of Northern Ireland housing statistics, in sections on supply, energy, social renting demand, private renting demand, owner occupier demand, and household characteristics.",
+      access: "open",
+      relevance:
+        "Its social renting demand and energy sections are the published shape this playbook's synthetic records imitate: households and dwellings counted in groups by area, with nobody described.",
+    },
+    {
+      id: "dfc-ni-housing-bulletin",
+      publisher: "Department for Communities",
+      title: "Northern Ireland Housing Bulletin",
+      url: "https://www.communities-ni.gov.uk/articles/northern-ireland-housing-bulletin",
+      covers:
+        "The quarterly bulletin covering social housing development activity, social housing demand, homelessness, and house sales and prices.",
+      access: "open",
+      relevance:
+        "It sets the quarter as the published period, which is the grain the synthetic records use, and shows that what reaches the public is counts of households and properties rather than anything about a tenancy.",
+    },
   ],
-  failureModes: [
-    "Recorded demand may reflect barriers to reporting rather than underlying need.",
-    "An efficiency metric may deprioritise complex cases or accessible communication.",
+  syntheticData: {
+    status: "available",
+    dataPath: "content/playbooks/housing-insight/housing-insight.data.json",
+    method:
+      "Twenty invented quarterly rows written by hand, five lettered area bands each carrying a banded count of households waiting and a banded description of the condition of the stock around them, so service patterns can be discussed with no property, household, or tenancy in the file.",
+    limitations: [
+      "The areas are letters and the bands are invented, so nothing here describes housing need or housing condition anywhere in Northern Ireland.",
+      "A banded count by area and quarter cannot show an urgent circumstance, and urgency is usually the thing that matters.",
+      "Condition and need are held here as two coarse bands, which is the safe choice and also removes almost everything a housing team would actually work from.",
+    ],
+  },
+  demo: {
+    status: "not-yet",
+    note: "A demo could show which area bands moved between quarters and state plainly what a band change does and does not imply, but nobody has built that here yet.",
+  },
+  caveats: [
+    "Housing records can reveal finances, disability, household circumstances, address, and vulnerability, which is why this file counts households in bands and never describes one.",
+    "Recorded demand partly measures who managed to get recorded, so a low count can mean a barrier to reporting rather than less need.",
+    "Service and maintenance patterns must not be turned round to judge a tenant or a household, and nothing here belongs anywhere near an allocation, eligibility, or enforcement decision.",
   ],
-  nextValidationSteps: [
-    "Choose a non-eligibility task such as aggregate repair backlog or communication accessibility.",
-    "Co-design success, redress, and prohibited uses with tenants and housing staff.",
-    "Evaluate missing demand, subgroup experience, urgent exceptions, and data-minimisation controls.",
-  ],
-  demoBarrier:
-    "The broad housing proposal must be narrowed away from consequential person-level decisions and reviewed with tenants and service partners.",
-  responsibleRole: "Accountable housing service lead",
-  partnerRequirements: [
-    "Tenant participation",
-    "Housing service and property partner",
-    "Equality, accessibility, and data-protection review",
-  ],
+  lastReviewed: "2026-08-21",
 })

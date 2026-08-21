@@ -1,0 +1,118 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Sixteen invented rows following the one journey the published guidance actually sets out, step by step after a death, with an invented median number of days and an invented band for how many people do not complete each step. Nothing published measures either figure.",
+  "records": [
+    {
+      "id": "SYN-LE-01",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Tell the family doctor",
+      "medianDays": 1,
+      "dropOffShareBand": "under 5%"
+    },
+    {
+      "id": "SYN-LE-02",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Register the death with the district registrar",
+      "medianDays": 3,
+      "dropOffShareBand": "under 5%"
+    },
+    {
+      "id": "SYN-LE-03",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Find the will",
+      "medianDays": 5,
+      "dropOffShareBand": "5-15%"
+    },
+    {
+      "id": "SYN-LE-04",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Arrange the funeral",
+      "medianDays": 6,
+      "dropOffShareBand": "under 5%"
+    },
+    {
+      "id": "SYN-LE-05",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Report the death to the Bereavement Service",
+      "medianDays": 8,
+      "dropOffShareBand": "5-15%"
+    },
+    {
+      "id": "SYN-LE-06",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Return a Motability vehicle",
+      "medianDays": 12,
+      "dropOffShareBand": "5-15%"
+    },
+    {
+      "id": "SYN-LE-07",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Tell banks and insurers",
+      "medianDays": 18,
+      "dropOffShareBand": "5-15%"
+    },
+    {
+      "id": "SYN-LE-08",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Tell the tax and National Insurance offices",
+      "medianDays": 21,
+      "dropOffShareBand": "15-30%"
+    },
+    {
+      "id": "SYN-LE-09",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Check eligibility for Bereavement Support Payment",
+      "medianDays": 22,
+      "dropOffShareBand": "15-30%"
+    },
+    {
+      "id": "SYN-LE-10",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Tell Land and Property Services about rates",
+      "medianDays": 24,
+      "dropOffShareBand": "15-30%"
+    },
+    {
+      "id": "SYN-LE-11",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Tell the Driver and Vehicle Agency",
+      "medianDays": 26,
+      "dropOffShareBand": "15-30%"
+    },
+    {
+      "id": "SYN-LE-12",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Tell pension providers",
+      "medianDays": 28,
+      "dropOffShareBand": "15-30%"
+    },
+    {
+      "id": "SYN-LE-13",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Tell the local council",
+      "medianDays": 30,
+      "dropOffShareBand": "15-30%"
+    },
+    {
+      "id": "SYN-LE-14",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Tell utility and phone providers",
+      "medianDays": 33,
+      "dropOffShareBand": "over 30%"
+    },
+    {
+      "id": "SYN-LE-15",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Return a Blue Badge",
+      "medianDays": 40,
+      "dropOffShareBand": "over 30%"
+    },
+    {
+      "id": "SYN-LE-16",
+      "lifeEvent": "Bereavement",
+      "journeyStep": "Apply for probate or confirm the executor",
+      "medianDays": 60,
+      "dropOffShareBand": "15-30%"
+    }
+  ]
+}

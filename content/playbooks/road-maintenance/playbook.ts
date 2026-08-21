@@ -1,63 +1,63 @@
-import { defineAssessedPlaybook } from "../define-assessed-playbook"
+import { definePlaybook } from "@/lib/playbooks/define-playbook"
 
-export const roadMaintenance = defineAssessedPlaybook({
+import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
+
+export const roadMaintenance = definePlaybook({
+  schemaVersion: 2,
   slug: "road-maintenance",
   title: "Road Maintenance Planning",
   summary:
-    "Explore evidence-led defect triage without turning an image score into an automatic repair or funding decision.",
+    "Follow how a road defect becomes an inspected, prioritised, and repaired one, and what a stand-in version of those records can and cannot settle.",
   sector: "Transport",
-  tags: ["roads", "maintenance", "assets"],
-  technicalPatterns: ["computer-vision", "ranking", "asset-management"],
-  problem:
-    "Road teams must inspect a large network and prioritise maintenance under safety, condition, access, and budget constraints.",
-  intendedUsers: ["Road inspectors", "Asset managers", "Maintenance planners"],
-  affectedGroups: ["Road users and communities affected by road condition or works"],
-  supportedDecision:
-    "Which reported defect a qualified inspector should verify and assess for maintenance priority.",
-  publicBenefit:
-    "Could provide a more inspectable route from observed defect evidence to human inspection planning.",
-  dataAccessibility: "partial",
-  riskLevel: "moderate",
-  riskReasons: [
-    "Missed defects can create safety risks, while false alerts consume inspection capacity.",
-    "Uneven imagery and reporting can shift resources away from less observed areas.",
-  ],
-  mitigations: [
-    "Retain inspection standards and human verification before severity or repair decisions.",
-    "Audit geographic coverage and separate defect evidence from allocation policy.",
-  ],
-  sourceApplication: "AI for road management",
-  sourceRationale:
-    "The strategy describes early defect detection and repair prioritisation without defining imagery, inspection standards, or allocation rules.",
-  syntheticMethod:
-    "Stand in for the inspection records a roads authority already holds, so the pattern could be tried without them: invented road segments, inspection events, image-quality flags, defect categories, and maintenance constraints, shaped by the published inspection standard.",
-  baseline: {
-    name: "Standards-based inspection queue",
-    description:
-      "Reported defects are ordered by documented severity, route, and inspection-age rules.",
-    method:
-      "Apply published or partner-reviewed inspection categories and show the factor behind each queue position.",
-    limitations: ["The baseline depends on reports and inspections that may be incomplete or delayed."],
+  strategyExample: {
+    proposal:
+      "The draft strategy names AI for road management as a potential public-service application, describing early detection of defects and prioritising repairs, without saying what imagery it means, which inspection standard applies, or how money would follow the ranking.",
+    draftReference: strategyDraftReference,
+    url: strategyDraftUrl,
   },
-  limitations: [
-    "Synthetic metadata cannot establish performance on real surfaces, weather, cameras, or road layouts.",
-    "A defect classifier does not determine repair method, cost, or network priority.",
+  dataSources: [
+    {
+      id: "dfi-road-network-and-condition-statistics",
+      publisher: "Department for Infrastructure",
+      title: "Northern Ireland road network and condition statistics: technical report",
+      url: "https://www.infrastructure-ni.gov.uk/articles/northern-ireland-road-network-and-condition-statistics-technical-report",
+      covers:
+        "How the department measures its network and its condition: road length by class — motorway, A, B, C, and unclassified — machine condition surveys that produce a road condition index, and surface defects recorded during routine safety inspections in the Road Maintenance Client System, which also ranks the repairs.",
+      access: "open",
+      relevance:
+        "It is the source of this playbook's road classes and defect vocabulary, and it states the limit that matters most: a defect only exists in the figures once an inspection has recorded it.",
+    },
+    {
+      id: "dfi-recorded-potholes-release",
+      publisher: "Department for Infrastructure",
+      title: "Potholes recorded by DfI Roads on the public road network each year since 2020",
+      url: "https://www.infrastructure-ni.gov.uk/publications/dfi2025-0038-details-potholes-recorded-dfi-roads-northern-ireland-public-road-network-each-year-2020",
+      covers:
+        "A published release of pothole counts on the Northern Ireland public road network by year, separating those reported by the public from those found by inspection, and those repaired from those still waiting.",
+      access: "open",
+      relevance:
+        "It is the published shape of the queue this playbook's synthetic records imitate, which is why each record carries a status rather than a score.",
+    },
   ],
-  failureModes: [
-    "Shadows, standing water, markings, or repairs may be mistaken for damage.",
-    "Areas with fewer surveys may appear to have fewer needs.",
+  syntheticData: {
+    status: "available",
+    dataPath: "content/playbooks/road-maintenance/road-maintenance.data.json",
+    method:
+      "Twenty invented defect records written by hand using the published road classes and the R1 to R3 severity codes, each with a defect type, the week it was reported, and where it has reached in the queue, so triage can be discussed without a real authority's records.",
+    limitations: [
+      "The records are invented, so nothing here describes a defect, a road, or a repair backlog anywhere in Northern Ireland.",
+      "There is no imagery behind any of these rows, so this file cannot say anything about whether a classifier would recognise a defect on a real surface, in real weather, from a real camera.",
+      "A severity code and a status leave out cost, repair method, and what else on the network is competing for the same crew.",
+    ],
+  },
+  demo: {
+    status: "not-yet",
+    note: "A demo could order these defects by severity, road class, and how long they have waited, and name the rule behind each position, but nobody has built that here yet.",
+  },
+  caveats: [
+    "A missed defect is a safety problem, and a false one spends inspection time that was already short.",
+    "Defects only enter the figures once someone has inspected or reported them, so places that are surveyed and reported less can look as though they need less.",
+    "Shadows, standing water, road markings, and old repairs all look like damage in an image, and a classification decides nothing about repair method, cost, or what the network needs most.",
   ],
-  nextValidationSteps: [
-    "Map one inspection workflow and confirm the authoritative defect taxonomy.",
-    "Identify permissible labelled imagery and test across weather, road types, and capture devices.",
-    "Evaluate coverage, false negatives, inspector workload, and geographic distribution.",
-  ],
-  demoBarrier:
-    "The defect taxonomy, labelled imagery rights, capture conditions, and inspection workflow need transport-partner validation.",
-  responsibleRole: "Qualified road inspector or asset manager",
-  partnerRequirements: [
-    "Road inspection partner",
-    "Asset management and safety review",
-    "Permissible representative imagery",
-  ],
+  lastReviewed: "2026-08-21",
 })
