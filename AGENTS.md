@@ -13,9 +13,9 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Read `PRODUCT.md`, `DESIGN.md`, and `build-plan.md` before changing product behaviour, content structure, or visual design.
 - Keep this repository as one Next.js application with one package manifest and one deployment unit. Feature and content folders are internal module boundaries, not separate apps or packages.
 - Public-facing content must use plain English. Technical implementation detail should be available through progressive disclosure and repository links.
-- Every playbook must use the shared typed schema and retain the fixed provenance, baseline, evaluation, risk, human-oversight, and limitation fields.
-- Hosted examples use one-off, permissible official source samples to inform deterministic synthetic fixtures. Do not add production data pipelines, runtime model calls, or required API keys without an approved design change.
-- Visibly distinguish official source samples, synthetic working data, recorded AI-assisted output, deterministic non-AI baselines, and human review state.
+- Every playbook must use the shared typed schema and retain the strategy-example, data-source, synthetic-data, demo, and caveats sections.
+- Synthetic datasets are AI-authored stand-ins shaped by what the real, published sources make public. Do not add production data pipelines, runtime model calls, or required API keys without an approved design change.
+- Visibly distinguish real published sources, synthetic working data, and demo output.
 - Never commit secrets, credentials, private endpoints, personal names, personal local paths, or sensitive person-level data.
 - Add shadcn/ui primitives through the CLI and keep generated primitives separate from project-specific components.
 - Prefer Server Components. Add `"use client"` only at the smallest interactive boundary.

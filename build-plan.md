@@ -1,1068 +1,525 @@
-# AI Public-Service Playbooks MVP Implementation Plan
+# A/B/C/D Re-scope Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Build a production-quality, open-source Next.js catalogue of seventeen public-service AI playbooks with one complete, key-free Policy Evidence Workbench recorded exemplar.
+**Goal:** Re-scope the playbook catalogue to the A/B/C/D contract — strategy-draft example, investigated data sources, synthetic dataset, demo, plus one caveats block — deleting the maturity/risk/evaluation/recorded-AI apparatus and shipping a synthetic dataset for every playbook where that is responsible.
 
-**Architecture:** One static-first Next.js 16 App Router application. Typed TypeScript playbook definitions are validated with Zod and rendered through Server Components; small Client Components handle URL-backed catalogue filters and local demonstration state. Policy Evidence Workbench uses versioned official-source excerpts, deterministic synthetic fixtures, a transparent non-AI baseline, checked-in recorded AI-assisted output, and a labelled evaluation set. There is no database, authentication, ingestion pipeline, or hosted model call in the MVP.
+**Architecture:** One clean-cut rewrite. Schema v2 replaces v1 in place; all seventeen content files, the catalogue, the detail route, and the demo migrate to it in a coordinated series while dead machinery is deleted with its last consumer. The demo becomes a fully server-rendered page with no client JavaScript.
 
-**Tech Stack:** Next.js 16.3, React 19.2, TypeScript, Tailwind CSS 4, shadcn/ui with Base UI primitives, Zod, Vitest, React Testing Library, and the accessibility rules included by `eslint-config-next/core-web-vitals`.
+**Tech Stack:** Next.js 16.3, React 19.2, TypeScript, Tailwind CSS 4, Zod, Vitest, React Testing Library.
 
-**Spec:** [`DESIGN.md`](./DESIGN.md), supported by [`PRODUCT.md`](./PRODUCT.md)
+**Spec:** `docs/superpowers/specs/2026-08-21-abcd-rescope-design.md` (untracked by design — `docs/superpowers/` is gitignored; the contract is restated in full in Task 2).
 
-## Global constraints
+## Global Constraints
 
-- Keep one `package.json`, one Next.js application, and one deployment unit.
-- Follow `AGENTS.md`; read the relevant installed Next.js guide before using an unfamiliar API.
-- Use npm and commit `package-lock.json` changes.
-- Use shadcn/ui primitives through `npx shadcn@latest add`; do not hand-create lookalike primitives.
-- Prefer Server Components. Place `"use client"` at the narrowest stateful boundary.
-- Keep policy-evidence domain functions independent of React and Next.js.
-- Write the failing test before the production implementation within each behaviour task.
-- Use a small permissible official-source excerpt only to establish realistic structure and method. Run the product on deterministic synthetic fixtures.
-- No runtime model call, required key, live departmental integration, user upload, database, or background job.
-- No secret, credential, private endpoint, personal name, personal local path, or sensitive person-level record in tracked files, fixtures, examples, snapshots, metadata, or commit messages.
-- Never present synthetic fixtures as official data or recorded output as a live service.
-- Keep the deterministic non-AI baseline credible and visible.
-- Do not declare `partner-ready`, `operational-pilot`, or `evaluated-service` without the external review required by `DESIGN.md`.
-- All core explanation and recorded evidence remains readable without client JavaScript.
-- Meet WCAG 2.2 AA. Enforce the existing JSX accessibility lint rules, then manually verify keyboard use, focus, reduced motion, forced colours, 200% zoom, 320 CSS pixel reflow, and the no-JavaScript reading path before release.
-- Do not add an automated browser-test harness. Keep route-level acceptance review manual and record it in the pull request or release review.
-- Use Apache License 2.0 for original repository code and documentation. Preserve and document third-party source terms separately.
-- Keep commits small and scoped. Do not include unrelated workspace changes.
+- Keep one `package.json`, one Next.js application, one deployment unit.
+- No runtime model call, API key, database, upload, or background job — the point of C is that nobody needs credentials to try an idea.
+- Public-facing content is plain English. Never present synthetic data as official data.
+- Every dataset file carries the exact top-level literal `"Synthetic working data"`.
+- No personal names, personal local paths, secrets, credentials, private endpoints, or person-level records in any tracked file. `lib/privacy-patterns.ts` is the shared enforcement and must not be weakened.
+- Do not hand-create shadcn lookalikes; existing primitives in `components/ui/` stay as they are.
+- Prefer Server Components; after this plan the repository has **zero** `"use client"` boundaries in `features/policy-evidence/`.
+- WCAG 2.2 AA, keyboard operation, visible focus, no-JavaScript readability of all core content.
+- **Coordinated red window:** Task 2 flips the schema, which breaks repo-wide typecheck until Task 13 completes. Each task in between must pass its own focused verification exactly as written (standalone Vitest files and `npx tsx` parses do not import broken modules). The full vitest suite is green from the end of Task 12; the full gate `npm run check` is restored in Task 13 and must stay green from then on.
+- `AGENTS.md` starts with a generated block ("This is NOT the Next.js you know") maintained by `next dev`. Edit only the "Project rules" section beneath it.
+- Commit after every task with the message given in the task. Do not include unrelated files.
+- Use `lastReviewed: "2026-08-21"` in every rewritten playbook.
 
-## Planned application surface
+---
 
-```text
-/
-/playbooks
-/playbooks/[slug]
-/playbooks/[slug]/demo
-/method
-/contribute
-```
+## Task 1: Re-scope the tracked product documents
 
-## Planned content and feature boundaries
+**Files:**
+- Modify: `PRODUCT.md`
+- Modify: `AGENTS.md` (Project rules section only)
+- Modify: `DESIGN.md`
+- Modify: `build-plan.md` (this file — already replaced; commit it)
 
-```text
-app/                           route composition and metadata
-components/ui/                 generated shadcn primitives
-components/site/               site-wide semantic presentation
-content/playbooks/             typed definitions and versioned fixtures
-features/playbooks/            catalogue and shared detail presentation
-features/policy-evidence/      exemplar domain logic and interface
-lib/playbooks/                 schema, registry, and validation utilities
-scripts/                       content-integrity checks and fixture generation
-tests/                         unit and focused semantic component checks
+**Interfaces:**
+- Produces: the product definition every later task's copy must match — the terms "strategy draft example", "data sources investigated", "synthetic dataset", "demo", "caveats".
+
+- [ ] **Step 1: Rewrite `PRODUCT.md`.** Keep the `impeccable:product-schema` comment, Platform, and Stack sections unchanged. Replace Product Purpose, Positioning, Operating Context, Capabilities and Constraints, Evidence on Hand, and Product Principles so they say, in this order and in plain English:
+  - The project is an open-source starting point for anyone who wants to engage with Northern Ireland's draft AI strategy, particularly the example projects the draft calls out — which are this site's playbooks.
+  - Each playbook shows: (A) the example the strategy draft gave, (B) the data sources investigated as appropriate to it, (C) a synthetic dataset generated by AI and shaped by what the real sources publish, so validating the idea needs no API key, account, or data-sharing agreement, and (D) a working demo built on A/B/C.
+  - MVP: every playbook ships A, B, C (with an honest `not-responsible` path for C in sensitive domains) and one caveats block; exactly one playbook — Policy Evidence — ships D.
+  - Constraints that survive verbatim: one Next.js app; no runtime model calls or keys; synthetic data honestly labelled and never presented as official data or operational evidence; no person-level data committed.
+  - Remove all references to maturity ladders, risk tiers, evaluation, non-AI baselines as control arms, recorded AI output, and human-oversight fields.
+
+- [ ] **Step 2: Rewrite the two governance bullets in `AGENTS.md`.** Replace
+  `- Every playbook must use the shared typed schema and retain the fixed provenance, baseline, evaluation, risk, human-oversight, and limitation fields.` with
+  `- Every playbook must use the shared typed schema and retain the strategy-example, data-source, synthetic-data, demo, and caveats sections.`
+  Replace `- Visibly distinguish official source samples, synthetic working data, recorded AI-assisted output, deterministic non-AI baselines, and human review state.` with
+  `- Visibly distinguish real published sources, synthetic working data, and demo output.`
+  Leave every other bullet and the generated block untouched.
+
+- [ ] **Step 3: Update `DESIGN.md`.** Section by section:
+  - §1–§2: restate the purpose from Step 1; delete the "eight public questions" if they reference recorded output, maturity, or evaluation — reduce to: can a visitor say what the draft proposed, what data exists, what the synthetic dataset is, and what the demo does and does not show?
+  - §5 Scope: MVP is A/B/C for seventeen playbooks, D for policy-evidence. Non-goals gain: evaluation metrics, gold labels, recorded or live AI output, maturity/risk governance apparatus.
+  - §7 Information architecture: routes unchanged (`/`, `/playbooks`, `/playbooks/[slug]`, `/playbooks/[slug]/demo`, `/method`, `/contribute`); the detail sequence becomes five sections: "What the strategy draft proposed", "Data sources investigated", "Synthetic dataset", "Demo", "Caveats". Delete the eleven-section contract and the contents-nav requirement.
+  - §9 The playbook contract: replace entirely with the v2 contract exactly as coded in Task 2.
+  - §10: keep the synthetic-data method subsection (rewritten: datasets are AI-authored, shaped by what real sources publish, envelope-labelled, privacy-walked; no generator, no seed, no hash). Delete the "Recorded AI-assisted output" subsection and all sha-256 prose except none — delete it all; nothing hashes any more.
+  - §11: rewrite as: the demo runs a transparent keyword analysis over the committed synthetic dataset on every render — no model, no key, no client JavaScript; findings cite exact passages; the page states what it is not before what it is.
+  - §15, §18, §21: drop states, tests, and definition-of-done items that reference deleted machinery; add "every dataset file parses through the shared envelope and privacy walk" and "exactly one playbook has an available demo".
+  - Leave §12–§14 (Evidence Desk visual system, typography, content voice) and §16–§17 (accessibility, privacy) intact except for deleted-term cleanups.
+
+- [ ] **Step 4: Verify no stale governance vocabulary remains in the three docs.**
+
+  Run: `grep -n -i "maturity\|recorded demonstration\|recorded-demo\|non-AI baseline\|evaluation status\|gold\|oversight" PRODUCT.md AGENTS.md DESIGN.md`
+  Expected: no hits, or only hits that are explicit "we deleted this" design-decision notes in DESIGN.md §20.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add PRODUCT.md AGENTS.md DESIGN.md build-plan.md
+git commit -m "docs: re-scope the product to the A/B/C/D playbook contract"
 ```
 
 ---
 
-## Task 1: Establish the unit-test and static quality harness
+## Task 2: Rewrite the playbook contract (schema v2)
 
-**Files**
+**Files:**
+- Modify: `lib/playbooks/schema.ts` (full rewrite)
+- Modify: `lib/playbooks/schema.test.ts` (full rewrite)
+- Create: `lib/playbooks/dataset.ts`
+- Create: `lib/playbooks/dataset.test.ts`
+- Modify: `lib/playbooks/vocabulary.ts` (shrink)
+- Modify: `lib/playbooks/vocabulary.test.ts` (shrink)
+- Modify: `lib/playbooks/registry.ts` (summary projection only)
+- Modify: `lib/playbooks/registry.test.ts` (v2 fixture)
 
-- Modify: `package.json`
-- Modify: `package-lock.json`
-- Create: `vitest.config.mts`
-- Create: `vitest.setup.ts`
-- Create: `tests/smoke.test.ts`
+**Interfaces:**
+- Consumes: `kebabSlugSchema`, `kebabSlugSource`, `isoDateSchema` from `lib/schema-primitives.ts` (unchanged this task).
+- Produces: `playbookSchema`, `sectorValues`, `accessValues`, types `Playbook`, `PlaybookInput`, `PlaybookSummary`, `DataSource`, `DataAccess`, `SyntheticData`, `PlaybookDemo`; `syntheticDatasetSchema` + type `SyntheticDataset` from `lib/playbooks/dataset.ts`; `dataAccessLabels` from `vocabulary.ts`. `definePlaybook` keeps its existing signature and file.
 
-### Steps
+- [ ] **Step 1: Confirm the sector vocabulary is unchanged in content.**
 
-- [ ] Verify the starting point and record any pre-existing changes without altering them.
+  Run: `grep -h "sector:" content/playbooks/*/playbook.ts | sort -u`
+  Expected: exactly the thirteen strings hard-coded in Step 4's `sectorValues`. If content has drifted, update `sectorValues` to match content — never the reverse.
 
-  Run:
-
-  ```bash
-  git status --short
-  npm run lint
-  npm run build
-  ```
-
-  Expected: the scaffold lints and builds; only known planning documents are untracked or modified.
-
-- [ ] Install the runtime validation dependency and test toolchain.
-
-  Run:
-
-  ```bash
-  npm install zod
-  npm install -D vitest @vitejs/plugin-react@^5.2.0 jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom @testing-library/user-event tsx
-  ```
-
-- [ ] Confirm the existing accessibility lint layer rather than adding a second tool.
-
-  Run:
-
-  ```bash
-  npm ls eslint-plugin-jsx-a11y
-  npm run lint
-  ```
-
-  Expected: `eslint-plugin-jsx-a11y` is present through `eslint-config-next`, and the current codebase passes the ESLint CLI. Add shadcn primitives only in the later UI task that first uses each primitive.
-
-- [ ] Configure Vitest using the installed Next.js guidance.
-
-  `vitest.config.mts`:
-
-  ```ts
-  import react from "@vitejs/plugin-react"
-  import { defineConfig } from "vitest/config"
-
-  export default defineConfig({
-    plugins: [react()],
-    resolve: {
-      tsconfigPaths: true,
-    },
-    test: {
-      environment: "jsdom",
-      setupFiles: ["./vitest.setup.ts"],
-      include: ["**/*.test.{ts,tsx}"],
-    },
-  })
-  ```
-
-  `vitest.setup.ts`:
-
-  ```ts
-  import "@testing-library/jest-dom/vitest"
-  ```
-
-- [ ] Add scripts to `package.json` without removing the scaffold scripts.
-
-  ```json
-  {
-    "scripts": {
-      "dev": "next dev",
-      "build": "next build",
-      "start": "next start",
-      "lint": "eslint .",
-      "typecheck": "next typegen && tsc --noEmit",
-      "test": "vitest run",
-      "test:watch": "vitest",
-      "validate:content": "tsx scripts/validate-content.mts",
-      "check": "npm run validate:content && npm run typecheck && npm run lint && npm run test && npm run build"
-    }
-  }
-  ```
-
-- [ ] Add a one-assertion unit smoke test, then prove the harness itself works.
-
-  `tests/smoke.test.ts`:
-
-  ```ts
-  import { describe, expect, it } from "vitest"
-
-  describe("test harness", () => {
-    it("runs TypeScript tests", () => {
-      expect(2 + 2).toBe(4)
-    })
-  })
-  ```
-
-  Run:
-
-  ```bash
-  npm run test
-  npm run build
-  ```
-
-- [ ] Commit the harness independently.
-
-  ```bash
-  git add package.json package-lock.json vitest.config.mts vitest.setup.ts tests
-  git commit -m "test: establish application quality harness"
-  ```
-
----
-
-## Task 2: Define and validate the playbook contract
-
-**Files**
-
-- Create: `lib/playbooks/schema.ts`
-- Create: `lib/playbooks/define-playbook.ts`
-- Create: `lib/playbooks/schema.test.ts`
-- Create: `lib/playbooks/registry.ts`
-- Create: `lib/playbooks/registry.test.ts`
-- Create: `scripts/validate-content.mts`
-
-### Public interfaces
+- [ ] **Step 2: Write the failing schema tests.** Replace `lib/playbooks/schema.test.ts` entirely. Build one valid input as a shared helper and derive each failure from it:
 
 ```ts
-export type Playbook = z.infer<typeof playbookSchema>
-export type PlaybookSummary = Pick<
-  Playbook,
-  "slug" | "title" | "summary" | "sector" | "technicalPatterns" |
-  "maturity" | "dataAccessibility" | "risk" | "demo" | "lastReviewed"
->
+import { describe, expect, it } from "vitest"
 
-export function definePlaybook(input: Playbook): Playbook
-export function getAllPlaybooks(): readonly Playbook[]
-export function getPlaybook(slug: string): Playbook | undefined
-export function getPlaybookSummaries(): readonly PlaybookSummary[]
-export function getPlaybookSlugs(): readonly string[]
+import { playbookSchema, type PlaybookInput } from "./schema"
+
+function validPlaybook(): PlaybookInput {
+  return {
+    schemaVersion: 2,
+    slug: "policy-evidence",
+    title: "Policy Evidence Workbench",
+    summary: "Group synthetic consultation responses into themes a policy team could investigate further.",
+    sector: "Cross-government",
+    strategyExample: {
+      proposal: "The draft strategy names AI-assisted analysis of consultation responses as a potential public-service application.",
+      draftReference: "Table 2 — potential public-service applications",
+      url: "https://consultations.nidirect.gov.uk/teo/artificial-intelligence-public-consultation",
+    },
+    dataSources: [
+      {
+        id: "ni-ai-strategy-consultation",
+        publisher: "The Executive Office",
+        title: "Northern Ireland Artificial Intelligence Strategy consultation",
+        url: "https://consultations.nidirect.gov.uk/teo/artificial-intelligence-public-consultation",
+        covers: "The draft strategy text and its consultation questions.",
+        access: "open",
+        relevance: "It is the document whose example projects these playbooks explore.",
+      },
+    ],
+    syntheticData: {
+      status: "available",
+      dataPath: "content/playbooks/policy-evidence/policy-evidence.data.json",
+      method: "Twenty synthetic consultation responses authored by AI, shaped by the structure of a published consultation response report.",
+      limitations: ["The dataset is far smaller and tidier than a real consultation mailbox."],
+    },
+    demo: {
+      status: "available",
+      route: "/playbooks/policy-evidence/demo",
+      howItWorks: "A transparent keyword analysis groups the synthetic responses into themes and cites the exact passages it matched.",
+    },
+    caveats: ["Nothing here is evidence that an AI system would work operationally."],
+    lastReviewed: "2026-08-21",
+  }
+}
+
+describe("playbookSchema", () => {
+  it("parses a complete v2 playbook", () => {
+    const parsed = playbookSchema.parse(validPlaybook())
+    expect(parsed.schemaVersion).toBe(2)
+    expect(parsed.demo.status).toBe("available")
+  })
+
+  it("rejects schema version 1", () => {
+    expect(playbookSchema.safeParse({ ...validPlaybook(), schemaVersion: 1 }).success).toBe(false)
+  })
+
+  it("rejects a malformed slug", () => {
+    expect(playbookSchema.safeParse({ ...validPlaybook(), slug: "Policy Evidence" }).success).toBe(false)
+  })
+
+  it("rejects an empty data-source list", () => {
+    expect(playbookSchema.safeParse({ ...validPlaybook(), dataSources: [] }).success).toBe(false)
+  })
+
+  it("rejects duplicate data-source ids", () => {
+    const playbook = validPlaybook()
+    playbook.dataSources = [playbook.dataSources[0], { ...playbook.dataSources[0] }]
+    expect(playbookSchema.safeParse(playbook).success).toBe(false)
+  })
+
+  it("rejects an available demo without an available dataset", () => {
+    const playbook = validPlaybook()
+    playbook.syntheticData = {
+      status: "not-responsible",
+      reason: "A useful stand-in would be person-shaped.",
+      whatContributorsNeed: "Formal research access under ethics governance.",
+    }
+    expect(playbookSchema.safeParse(playbook).success).toBe(false)
+  })
+
+  it("rejects a demo route that does not match the slug", () => {
+    const playbook = validPlaybook()
+    playbook.demo = { status: "available", route: "/playbooks/other/demo", howItWorks: "A transparent keyword analysis over the dataset." }
+    expect(playbookSchema.safeParse(playbook).success).toBe(false)
+  })
+
+  it("rejects an empty caveats list", () => {
+    expect(playbookSchema.safeParse({ ...validPlaybook(), caveats: [] }).success).toBe(false)
+  })
+
+  it("rejects unknown fields such as maturity", () => {
+    expect(playbookSchema.safeParse({ ...validPlaybook(), maturity: "assessed" }).success).toBe(false)
+  })
+})
 ```
 
-### Steps
+- [ ] **Step 3: Run the test to verify it fails.**
 
-- [ ] Write schema tests before `schema.ts`. Cover one complete valid object and failures for a malformed slug, missing official sources, missing non-AI baseline, missing risk reasons, a demo route on `demo.availability: "none"`, and a recorded demo without recorded-output metadata.
+  Run: `npm run test -- lib/playbooks/schema.test.ts`
+  Expected: FAIL — the module still exports the v1 shape.
 
-  The contract assertions must include:
+- [ ] **Step 4: Rewrite `lib/playbooks/schema.ts`.** Replace the entire file:
 
-  ```ts
-  expect(validPlaybook.schemaVersion).toBe(1)
-  expect(validPlaybook.officialSources).toHaveLength(1)
-  expect(validPlaybook.syntheticData.label).toBe("Synthetic working data")
-  expect(validPlaybook.demo.availability).toBe("recorded")
-  ```
+```ts
+import { z } from "zod"
 
-- [ ] Run the tests and confirm failure because the schema module does not exist.
+import {
+  isoDateSchema,
+  kebabSlugSchema as slugSchema,
+  kebabSlugSource,
+} from "@/lib/schema-primitives"
 
-  ```bash
-  npm run test -- lib/playbooks/schema.test.ts
-  ```
+const relativePathSchema = z
+  .string()
+  .min(1)
+  .refine(
+    (value) =>
+      !/^[A-Za-z]:[\\/]/.test(value) &&
+      !/^[\\/]/.test(value) &&
+      !/(?:^|[\\/])\.\.(?:[\\/]|$)/.test(value),
+    "Use a repository-relative path without parent-directory segments",
+  )
 
-- [ ] Implement controlled vocabularies and nested schemas in `lib/playbooks/schema.ts`.
+const sentenceSchema = z.string().trim().min(10)
+const nonEmptyList = <T extends z.ZodType>(item: T) => z.array(item).min(1)
 
-  Use these exported values exactly:
+const demoRouteSchema = z
+  .string()
+  .regex(
+    new RegExp(`^/playbooks/${kebabSlugSource}/demo$`),
+    "Use the playbook's own demo route",
+  )
 
-  ```ts
-  import { z } from "zod"
+// The sector strings already used in content/playbooks, verbatim and
+// alphabetical (Task 2 Step 1 verifies). Do not invent a sector no playbook uses.
+export const sectorValues = [
+  "Agriculture",
+  "Citizen services",
+  "Communities",
+  "Community safety",
+  "Cross-government",
+  "Education",
+  "Environment",
+  "Health",
+  "Housing",
+  "Infrastructure",
+  "Justice",
+  "Justice and education",
+  "Transport",
+] as const
 
-  export const maturityValues = [
-    "assessed",
-    "recorded-demo",
-    "partner-ready",
-    "operational-pilot",
-    "evaluated-service",
-  ] as const
+export const accessValues = ["open", "registration-or-key", "restricted"] as const
 
-  export const dataAccessibilityValues = [
-    "open",
-    "public-readonly",
-    "partial",
-    "restricted",
-    "unknown",
-  ] as const
+/** A — the example as the strategy draft gave it. Our words, their link. */
+export const strategyExampleSchema = z.strictObject({
+  proposal: sentenceSchema,
+  draftReference: z.string().trim().min(3),
+  url: z.url(),
+})
 
-  export const riskValues = ["low", "moderate", "high", "very-high"] as const
-  export const demoAvailabilityValues = ["none", "recorded", "live-local", "partner"] as const
+/** B — one investigated source: what it covers, how open it is, why it fits. */
+export const dataSourceSchema = z.strictObject({
+  id: slugSchema,
+  publisher: z.string().trim().min(2),
+  title: z.string().trim().min(4),
+  url: z.url(),
+  covers: sentenceSchema,
+  access: z.enum(accessValues),
+  relevance: sentenceSchema,
+})
 
-  export const sourceSchema = z.object({
-    id: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
-    publisher: z.string().min(2),
-    jurisdiction: z.string().min(2),
-    title: z.string().min(4),
-    canonicalUrl: z.string().url(),
-    sourceType: z.enum(["strategy", "consultation-report", "dataset", "guidance", "research"]),
-    coveredPeriod: z.string().min(1),
-    accessedAt: z.string().date(),
-    reuseStatus: z.string().min(4),
-    localSamplePath: z.string().optional(),
-    sha256: z.string().regex(/^[a-f0-9]{64}$/).optional(),
-    purpose: z.string().min(10),
-    transformations: z.array(z.string().min(4)),
-    caveats: z.array(z.string().min(4)),
-  }).superRefine((source, context) => {
-    if (Boolean(source.localSamplePath) !== Boolean(source.sha256)) {
+/**
+ * C — either a committed synthetic dataset, or a plain statement of why a
+ * synthetic stand-in is not responsible in this domain and what a contributor
+ * would need instead. There is no third state: every playbook answers C.
+ */
+export const syntheticDataSchema = z.discriminatedUnion("status", [
+  z.strictObject({
+    status: z.literal("available"),
+    dataPath: relativePathSchema,
+    method: sentenceSchema,
+    limitations: nonEmptyList(sentenceSchema),
+  }),
+  z.strictObject({
+    status: z.literal("not-responsible"),
+    reason: sentenceSchema,
+    whatContributorsNeed: sentenceSchema,
+  }),
+])
+
+/** D — a hosted demo or a one-sentence honest note that none exists yet. */
+export const demoSchema = z.discriminatedUnion("status", [
+  z.strictObject({
+    status: z.literal("available"),
+    route: demoRouteSchema,
+    howItWorks: sentenceSchema,
+  }),
+  z.strictObject({
+    status: z.literal("not-yet"),
+    note: sentenceSchema,
+  }),
+])
+
+export const playbookSchema = z
+  .strictObject({
+    schemaVersion: z.literal(2),
+    slug: slugSchema,
+    title: z.string().trim().min(4),
+    summary: sentenceSchema,
+    sector: z.enum(sectorValues),
+    strategyExample: strategyExampleSchema,
+    dataSources: nonEmptyList(dataSourceSchema),
+    syntheticData: syntheticDataSchema,
+    demo: demoSchema,
+    caveats: nonEmptyList(sentenceSchema),
+    lastReviewed: isoDateSchema,
+  })
+  .superRefine((playbook, context) => {
+    const sourceIds = playbook.dataSources.map((source) => source.id)
+    if (new Set(sourceIds).size !== sourceIds.length) {
       context.addIssue({
         code: "custom",
-        message: "A local sample path and SHA-256 must be supplied together",
+        path: ["dataSources"],
+        message: "Data source IDs must be unique within a playbook",
+      })
+    }
+
+    // The demo reads the playbook's dataset on every render, so it cannot be
+    // offered without one.
+    if (playbook.demo.status === "available" && playbook.syntheticData.status !== "available") {
+      context.addIssue({
+        code: "custom",
+        path: ["demo"],
+        message: "An available demo requires an available synthetic dataset",
+      })
+    }
+
+    if (
+      playbook.demo.status === "available" &&
+      playbook.demo.route !== `/playbooks/${playbook.slug}/demo`
+    ) {
+      context.addIssue({
+        code: "custom",
+        path: ["demo", "route"],
+        message: "The demo route must match the playbook slug",
       })
     }
   })
-  ```
 
-  Compose the complete `playbookSchema` from named nested schemas for classification, risk, synthetic data, non-AI baseline, evaluation, human oversight, implementation, references, and demo. Keep the field set and meanings in `DESIGN.md` section 9. Use discriminated unions for demo availability so `recorded` requires `route`, `recordedOutputId`, and `label`, while `none` requires `reason` and permits no route.
+export type PlaybookInput = z.input<typeof playbookSchema>
+export type Playbook = z.output<typeof playbookSchema>
 
-- [ ] Implement `definePlaybook` as the only content-definition entry point.
+export type PlaybookSummary = Pick<
+  Playbook,
+  "slug" | "title" | "summary" | "sector" | "syntheticData" | "demo" | "lastReviewed"
+>
 
-  ```ts
-  import { playbookSchema, type PlaybookInput } from "./schema"
+export type Sector = Playbook["sector"]
+export type DataAccess = (typeof accessValues)[number]
+export type DataSource = Playbook["dataSources"][number]
+export type SyntheticData = Playbook["syntheticData"]
+export type PlaybookDemo = Playbook["demo"]
+```
 
-  export function definePlaybook(input: PlaybookInput) {
-    return playbookSchema.parse(input)
-  }
-  ```
+- [ ] **Step 5: Run the schema tests.**
 
-  Export an input type and parsed `Playbook` type from `schema.ts`; do not use type assertions to bypass validation.
+  Run: `npm run test -- lib/playbooks/schema.test.ts`
+  Expected: PASS.
 
-- [ ] Write registry tests before `registry.ts`. Assert stable alphabetical fallback order, unique slugs, immutable returned arrays, successful lookup, `undefined` for an unknown slug, and summary projection without full narrative or fixtures.
-
-- [ ] Implement an explicit registry import list. Avoid filesystem discovery inside runtime application code.
-
-  ```ts
-  const playbooks = Object.freeze([
-    policyEvidence,
-    diagnosticImagingSupport,
-    healthOperations,
-    lessonPlanningFeedback,
-    adaptiveTutoring,
-    wastewaterMonitoring,
-    trafficFlow,
-    roadMaintenance,
-    justiceResearch,
-    offenderLearning,
-    violenceRiskResearch,
-    earthObservation,
-    farmAdvisory,
-    waterManagement,
-    communityParticipation,
-    housingInsight,
-    lifeEventServices,
-  ])
-  ```
-
-  The imports may fail until Task 3 creates content. Use a temporary schema-valid fixture local to the registry test, not an incomplete production playbook.
-
-- [ ] Create `scripts/validate-content.mts` to parse all registered definitions, detect duplicate slugs and source IDs, verify local sample SHA-256 values, and exit non-zero with source-specific messages. Extend this validator in Task 5 to verify recorded findings and citations after their fixture schemas exist.
-
-  Expose testable functions and keep only the CLI entry point responsible for process exit:
-
-  ```ts
-  export async function validateContent(rootDirectory = process.cwd()): Promise<string[]>
-
-  const errors = await validateContent()
-  if (errors.length > 0) {
-    for (const error of errors) console.error(error)
-    process.exitCode = 1
-  }
-  ```
-
-- [ ] Run focused and full tests.
-
-  ```bash
-  npm run test -- lib/playbooks
-  npm run typecheck
-  ```
-
-- [ ] Commit the contract.
-
-  ```bash
-  git add lib/playbooks scripts/validate-content.mts
-  git commit -m "feat: define the playbook content contract"
-  ```
-
----
-
-## Task 3: Add all seventeen assessed playbooks
-
-**Files**
-
-- Create: `content/playbooks/policy-evidence/playbook.ts`
-- Create: `content/playbooks/diagnostic-imaging-support/playbook.ts`
-- Create: `content/playbooks/health-operations/playbook.ts`
-- Create: `content/playbooks/lesson-planning-feedback/playbook.ts`
-- Create: `content/playbooks/adaptive-tutoring/playbook.ts`
-- Create: `content/playbooks/wastewater-monitoring/playbook.ts`
-- Create: `content/playbooks/traffic-flow/playbook.ts`
-- Create: `content/playbooks/road-maintenance/playbook.ts`
-- Create: `content/playbooks/justice-research/playbook.ts`
-- Create: `content/playbooks/offender-learning/playbook.ts`
-- Create: `content/playbooks/violence-risk-research/playbook.ts`
-- Create: `content/playbooks/earth-observation/playbook.ts`
-- Create: `content/playbooks/farm-advisory/playbook.ts`
-- Create: `content/playbooks/water-management/playbook.ts`
-- Create: `content/playbooks/community-participation/playbook.ts`
-- Create: `content/playbooks/housing-insight/playbook.ts`
-- Create: `content/playbooks/life-event-services/playbook.ts`
-- Modify: `lib/playbooks/registry.ts`
-- Create: `content/playbooks/content.test.ts`
-
-### Steps
-
-- [ ] Write the inventory test first. Assert the exact slug set, count of seventeen, seventeen honest `assessed` entries, no public demo yet, and `very-high` risk plus `demo.availability: "none"` for `violence-risk-research`. Task 10 promotes Policy Evidence to the single `recorded-demo` only after its dataset, output, citations, and evaluation exist.
-
-  ```ts
-  const expectedSlugs = [
-    "adaptive-tutoring",
-    "community-participation",
-    "diagnostic-imaging-support",
-    "earth-observation",
-    "farm-advisory",
-    "health-operations",
-    "housing-insight",
-    "justice-research",
-    "lesson-planning-feedback",
-    "life-event-services",
-    "offender-learning",
-    "policy-evidence",
-    "road-maintenance",
-    "traffic-flow",
-    "violence-risk-research",
-    "wastewater-monitoring",
-    "water-management",
-  ]
-  ```
-
-- [ ] Run the focused test and confirm it fails because the inventory is incomplete.
-
-  ```bash
-  npm run test -- content/playbooks/content.test.ts
-  ```
-
-- [ ] Write `policy-evidence/playbook.ts` as the complete assessed reference definition. Use `maturity: "assessed"`, `dataAccessibility: "public-readonly"`, `risk: "moderate"`, and `demo.availability: "none"` until Task 10 records and verifies the exemplar. The public benefit must be qualitative. The supported decision is whether a theme deserves further policy-team investigation, not what policy to adopt.
-
-- [ ] Add the two initial official references to the policy-evidence source register:
-
-  1. Northern Ireland Department for the Economy, **AI Strategic Direction**, canonical page `https://www.economy-ni.gov.uk/publications/ai-strategic-direction`, used as public-service strategy context.
-  2. Northern Ireland Department for the Economy, **Draft Circular Economy Strategy for Northern Ireland — Public Consultation Response Report**, canonical page `https://www.economy-ni.gov.uk/publications/draft-circular-economy-strategy-northern-ireland-public-consultation-response-report`, used only to establish an official consultation-analysis method and vocabulary.
-
-  Record exact access dates during implementation. Do not copy real consultation responses. Task 8 will add the authored structure note describing the method it observed.
-
-- [ ] Write the other sixteen definitions as honest assessed concepts. Each must contain substantive plain-English content for all required fields, at least one official source, a feasible non-AI baseline, and explicit next validation questions. Set `demo.availability: "none"` and make the reason name the material data, risk, domain-validation, or evidence barrier.
-
-- [ ] Apply these minimum classifications:
-
-  | Playbook | Data accessibility | Risk |
-  | --- | --- | --- |
-  | Diagnostic imaging support | `restricted` | `high` |
-  | Health operations | `restricted` | `high` |
-  | Lesson planning and feedback | `partial` | `moderate` |
-  | Adaptive tutoring | `restricted` | `high` |
-  | Wastewater monitoring | `partial` | `moderate` |
-  | Traffic flow | `partial` | `moderate` |
-  | Road maintenance | `partial` | `moderate` |
-  | Justice research | `restricted` | `high` |
-  | Offender learning | `restricted` | `high` |
-  | Violence risk research | `restricted` | `very-high` |
-  | Earth observation | `open` | `moderate` |
-  | Farm advisory | `partial` | `moderate` |
-  | Water management | `partial` | `moderate` |
-  | Community participation | `public-readonly` | `moderate` |
-  | Housing insight | `restricted` | `high` |
-  | Life-event services | `restricted` | `high` |
-
-  If source research supports a different classification, update the definition and add a short rationale to the commit. Do not improve a status merely to make the catalogue look balanced.
-
-- [ ] Complete the explicit registry import list and freeze the array.
-
-- [ ] Add tests that reject marketing claims and sensitive fixture shapes. Keep the check narrow and deterministic: disallow the repository's banned claim phrases in `publicBenefit`, and disallow metadata keys matching `fullName`, `email`, `phone`, `address`, `nationalInsuranceNumber`, `healthAndCareNumber`, or `dateOfBirth`.
-
-- [ ] Validate the complete inventory.
-
-  ```bash
-  npm run validate:content
-  npm run test -- content/playbooks lib/playbooks
-  npm run typecheck
-  ```
-
-- [ ] Commit the assessed catalogue content.
-
-  ```bash
-  git add content/playbooks lib/playbooks/registry.ts
-  git commit -m "content: add assessed public-service playbooks"
-  ```
-
----
-
-## Task 4: Build the Evidence Desk foundation and site shell
-
-**Files**
-
-- Modify: `app/layout.tsx`
-- Modify: `app/globals.css`
-- Create: `components/site/site-header.tsx`
-- Create: `components/site/site-footer.tsx`
-- Create: `components/site/provenance-label.tsx`
-- Create: `components/site/status-badge.tsx`
-- Create: `components/site/risk-badge.tsx`
-- Create: `components/site/external-link.tsx`
-- Create: `components/site/site-shell.test.tsx`
-
-### Steps
-
-- [ ] Write component tests first for a skip link, labelled primary navigation, current-page state, descriptive status text, risk reason access, safe external-link attributes, and the absence of an official-government claim.
-
-- [ ] Run the focused test and confirm failure.
-
-  ```bash
-  npm run test -- components/site/site-shell.test.tsx
-  ```
-
-- [ ] Replace the default Geist setup with Archivo and Fragment Mono using `next/font/google` in `app/layout.tsx`.
-
-  ```ts
-  import { Archivo, Fragment_Mono } from "next/font/google"
-
-  const archivo = Archivo({
-    subsets: ["latin"],
-    variable: "--font-sans",
-    display: "swap",
-  })
-
-  const fragmentMono = Fragment_Mono({
-    subsets: ["latin"],
-    variable: "--font-mono",
-    weight: "400",
-    display: "swap",
-  })
-  ```
-
-  Keep root metadata factual: independent open-source playbooks, no government endorsement, no adoption or outcome claim.
-
-- [ ] Implement the `DESIGN.md` colour, typography, spacing, radius, focus, motion, and maximum-width tokens in `app/globals.css`. Map the required shadcn semantic variables onto the Evidence Desk palette instead of styling each primitive separately.
-
-- [ ] Add base rules for:
-
-  - 16px or larger body copy with a 1.6 line height;
-  - 65–72 character long-form measure;
-  - visible `:focus-visible` rings with an offset;
-  - 44px minimum interactive targets;
-  - `prefers-reduced-motion: reduce`;
-  - `forced-colors: active`;
-  - print-visible URLs and provenance labels;
-  - a visually hidden utility compatible with focus reveal.
-
-- [ ] Implement the site shell. Use plain text identity such as **Public-Service AI Playbooks** with a small **Independent open-source project** qualifier. Navigation contains Playbooks, Method, and Contribute. The GitHub link belongs in the footer and contribution page unless a repository URL is already configured.
-
-- [ ] Implement shared badges with text plus icon or symbol. `StatusBadge` maps all five maturity states; `RiskBadge` accepts both tier and plain-English reasons. Never return only a coloured dot.
-
-- [ ] Run component tests, lint, and typecheck.
-
-  ```bash
-  npm run test -- components/site
-  npm run lint
-  npm run typecheck
-  ```
-
-- [ ] Commit the visual foundation.
-
-  ```bash
-  git add app/layout.tsx app/globals.css components/site
-  git commit -m "feat: establish the Evidence Desk design system"
-  ```
-
----
-
-## Task 5: Implement pure catalogue search, filters, and ordering
-
-**Files**
-
-- Create: `features/playbooks/catalogue/catalogue-query.ts`
-- Create: `features/playbooks/catalogue/filter-playbooks.ts`
-- Create: `features/playbooks/catalogue/filter-options.ts`
-- Create: `features/playbooks/catalogue/filter-playbooks.test.ts`
-
-### Public interfaces
+- [ ] **Step 6: Write the failing dataset-envelope tests.** Create `lib/playbooks/dataset.test.ts`:
 
 ```ts
-export type CatalogueQuery = {
-  query: string
-  sectors: string[]
-  patterns: string[]
-  dataAccessibility: DataAccessibility[]
-  maturity: Maturity[]
-  risk: Risk[]
+import { describe, expect, it } from "vitest"
+
+import { syntheticDatasetSchema } from "./dataset"
+
+const valid = {
+  disclosure: "Synthetic working data",
+  description: "Synthetic sample readings standing in for a published monitoring series.",
+  records: [{ id: "SYN-XX-01", value: 3 }],
 }
 
-export function parseCatalogueQuery(
-  searchParams: Record<string, string | string[] | undefined>,
-): CatalogueQuery
+describe("syntheticDatasetSchema", () => {
+  it("parses a labelled envelope", () => {
+    expect(syntheticDatasetSchema.parse(valid).records).toHaveLength(1)
+  })
 
-export function serializeCatalogueQuery(query: CatalogueQuery): URLSearchParams
+  it("rejects a missing or altered disclosure literal", () => {
+    expect(syntheticDatasetSchema.safeParse({ ...valid, disclosure: "Synthetic data" }).success).toBe(false)
+  })
 
-export function filterPlaybooks(
-  playbooks: readonly PlaybookSummary[],
-  query: CatalogueQuery,
-): PlaybookSummary[]
+  it("rejects an empty records array", () => {
+    expect(syntheticDatasetSchema.safeParse({ ...valid, records: [] }).success).toBe(false)
+  })
 
-export function getCatalogueFilterOptions(
-  playbooks: readonly PlaybookSummary[],
-): CatalogueFilterOptions
+  it("rejects unknown envelope fields", () => {
+    expect(syntheticDatasetSchema.safeParse({ ...valid, seed: 7 }).success).toBe(false)
+  })
+})
 ```
 
-### Steps
-
-- [ ] Write tests first for case-insensitive text matching, AND-across filter groups, OR-within a group, repeated query parameters, invalid enum values, stable default ordering, diacritic normalisation, zero results, serialization round trips, and non-mutation of input arrays.
-
-  Use query keys `q`, `sector`, `pattern`, `data`, `maturity`, and `risk`.
-
-- [ ] Run the focused test and confirm failure.
-
-  ```bash
-  npm run test -- features/playbooks/catalogue/filter-playbooks.test.ts
-  ```
-
-- [ ] Implement query parsing with Zod-backed enum checks. Ignore invalid values and keep valid repeated values. Trim search text and cap it at 120 characters.
-
-- [ ] Implement pure filtering. Match search text against title, summary, problem, sector, technical patterns, and tags. Default order is:
-
-  1. maturity rank: recorded demo before assessed;
-  2. data accessibility rank: open, public-readonly, partial, restricted, unknown;
-  3. title using `Intl.Collator("en-GB", { sensitivity: "base" })`.
-
-- [ ] Derive filter options from content rather than maintaining a second list. Return label, value, and total inventory count for each option.
-
-- [ ] Run focused tests and typecheck.
-
-  ```bash
-  npm run test -- features/playbooks/catalogue
-  npm run typecheck
-  ```
-
-- [ ] Commit catalogue domain logic.
-
-  ```bash
-  git add features/playbooks/catalogue
-  git commit -m "feat: add catalogue query and filtering logic"
-  ```
-
----
-
-## Task 6: Build the public home, catalogue, method, and contribution pages
-
-**Files**
-
-- Modify: `app/page.tsx`
-- Create: `app/playbooks/page.tsx`
-- Create: `app/method/page.tsx`
-- Create: `app/contribute/page.tsx`
-- Create: `features/playbooks/catalogue/playbook-catalogue.tsx`
-- Create: `features/playbooks/catalogue/catalogue-filters.tsx`
-- Create: `features/playbooks/catalogue/playbook-dossier-row.tsx`
-- Create: `features/playbooks/catalogue/filter-summary.tsx`
-- Create: `features/playbooks/catalogue/playbook-catalogue.test.tsx`
-- Create: `components/site/evidence-chain.tsx`
-
-### Steps
-
-- [ ] Write component tests first. Cover the home-page evidence chain order, the primary catalogue action, the Policy Evidence assessment label and recording barrier, all seventeen catalogue items without active filters, result-count announcement, filter clearing, accessible dossier-row names, and the method page's five evidence-maturity rungs.
-
-- [ ] Run the tests and confirm failure.
-
-  ```bash
-  npm run test -- features/playbooks/catalogue components/site/evidence-chain.test.tsx
-  ```
-
-- [ ] Implement `EvidenceChain` as five numbered stages: public problem, official source sample, synthetic working data, bounded demonstration, evidence and code. At small widths it is a vertical ordered list; at wide widths it may use a restrained horizontal rule. Preserve the same DOM order.
-
-- [ ] Implement the home page as a Server Component with this sequence:
-
-  1. proposition and independence qualifier;
-  2. evidence chain;
-  3. Policy Evidence Workbench feature with its current **Assessed concept** label and a plain recording-readiness barrier until Task 10;
-  4. a short catalogue preview representing different maturity, risk, and data-access conditions;
-  5. method and contribution prompts.
-
-  Do not add a chatbot input, abstract AI art, model logo cloud, invented impact statistic, or generic feature-icon row.
-
-- [ ] Implement `PlaybookDossierRow` as semantic article content containing title, summary, sector, technical pattern, maturity, data access, risk label, last-reviewed date, and a descriptive detail link. Use a 12-column dossier layout on desktop and a linear sheet on mobile.
-
-- [ ] Implement `CatalogueFilters` as the narrow Client Component. Initialise from the server-parsed query, update the URL with `router.replace`, preserve keyboard focus, and use native form semantics plus shadcn Select/Command only where they improve accessibility. The full unfiltered catalogue is present in server HTML.
-
-- [ ] Implement `/playbooks` as a Server Component that receives `searchParams` as a Promise under Next.js 16, parses them, filters the registry, and passes serializable summaries to the client filter control.
-
-  ```ts
-  type Props = {
-    searchParams: Promise<Record<string, string | string[] | undefined>>
-  }
-
-  export default async function PlaybooksPage({ searchParams }: Props) {
-    const query = parseCatalogueQuery(await searchParams)
-    const playbooks = filterPlaybooks(getPlaybookSummaries(), query)
-    return <PlaybookCatalogue playbooks={playbooks} query={query} />
-  }
-  ```
-
-- [ ] Implement the zero-result state with the active-filter summary and one **Clear all filters** action. Announce the result count in a polite live region after client-side changes.
-
-- [ ] Implement `/method` from `DESIGN.md`: evidence ladder, source register, one-off sourcing, synthetic-data contract, recorded-output contract, non-AI baseline, risk and human review, and how to interpret evaluation. Include links to the schema and exemplar source tree once repository URLs are configured.
-
-- [ ] Implement `/contribute` as three contribution tracks:
-
-  - improve an assessed playbook;
-  - add or verify an official source;
-  - build a recorded exemplar after meeting the complete gate.
-
-  State the privacy rules and link to `CONTRIBUTING.md`, `SECURITY.md`, and the repository issue tracker through a central site configuration object rather than duplicating URLs.
-
-- [ ] Run focused tests and verify server rendering. During the release review, disable JavaScript in the browser and confirm the server-rendered catalogue and method content remain readable.
-
-  ```bash
-  npm run test -- features/playbooks/catalogue components/site
-  npm run build
-  ```
-
-- [ ] Commit the public discovery routes.
-
-  ```bash
-  git add app/page.tsx app/playbooks app/method app/contribute features/playbooks/catalogue components/site/evidence-chain.tsx
-  git commit -m "feat: build the public playbook catalogue"
-  ```
-
----
-
-## Task 7: Build the reusable playbook detail route
-
-**Files**
-
-- Create: `app/playbooks/[slug]/page.tsx`
-- Create: `app/not-found.tsx`
-- Create: `features/playbooks/detail/playbook-detail.tsx`
-- Create: `features/playbooks/detail/metadata-rail.tsx`
-- Create: `features/playbooks/detail/source-register.tsx`
-- Create: `features/playbooks/detail/maturity-ladder.tsx`
-- Create: `features/playbooks/detail/demo-readiness.tsx`
-- Create: `features/playbooks/detail/synthetic-data-method.tsx`
-- Create: `features/playbooks/detail/evaluation-evidence.tsx`
-- Create: `features/playbooks/detail/implementation-index.tsx`
-- Create: `features/playbooks/detail/review-status.ts`
-- Create: `features/playbooks/detail/review-status.test.ts`
-- Create: `features/playbooks/detail/detail-primitives.test.tsx`
-- Create: `features/playbooks/detail/playbook-detail.test.tsx`
-- Create: `lib/playbooks/vocabulary.ts`
-- Create: `lib/playbooks/vocabulary.test.ts`
-- Create: `lib/format-date.ts`
-- Create: `lib/format-date.test.ts`
-- Create: `lib/assert-never.ts`
-- Modify: `app/globals.css`
-- Modify: `lib/playbooks/schema.ts`, `components/site/status-badge.tsx`, `components/site/risk-badge.tsx`, `features/playbooks/catalogue/filter-options.ts`, `features/playbooks/catalogue/playbook-dossier-row.tsx`, `app/method/page.tsx` (adopt the shared vocabulary and date helper)
-
-### Interfaces
-
-Derive component inputs from `Playbook`; do not define a second detail-page content model.
+- [ ] **Step 7: Implement `lib/playbooks/dataset.ts`.**
 
 ```ts
-export type ReviewStatus =
-  | { status: "current"; reviewedAt: string; reviewDueAt: string }
-  | { status: "review-needed"; reviewedAt: string; reviewDueAt: string }
-
-export function getReviewStatus(
-  lastReviewed: string,
-  now: Date,
-): ReviewStatus
-
-export function MetadataRail(props: {
-  playbook: Playbook
-  reviewStatus: ReviewStatus
-}): ReactNode
-
-export function SourceRegister(props: {
-  sources: Playbook["officialSources"]
-}): ReactNode
-
-export function MaturityLadder(props: {
-  maturity: Playbook["maturity"]
-  nextValidationSteps: Playbook["nextValidationSteps"]
-}): ReactNode
-
-export function DemoReadiness(props: {
-  demo: Playbook["demo"]
-  nextValidationSteps: Playbook["nextValidationSteps"]
-}): ReactNode
-
-export function SyntheticDataMethod(props: {
-  syntheticData: Playbook["syntheticData"]
-}): ReactNode
-
-export function EvaluationEvidence(props: {
-  evaluation: Playbook["evaluation"]
-}): ReactNode
-
-export function ImplementationIndex(props: {
-  implementation: Playbook["implementation"]
-  references: Playbook["references"]
-}): ReactNode
-
-export function PlaybookDetail(props: {
-  playbook: Playbook
-  reviewStatus: ReviewStatus
-}): ReactNode
-```
-
-### 7.1 Centralise the shared vocabulary and date presentation
-
-- [ ] Write `lib/playbooks/vocabulary.test.ts` and `lib/format-date.test.ts` first. Assert that the maturity ladder covers `maturityValues` in order, that the maturity, data-accessibility, risk, and source-type records are keyed exactly by the schema's exported values, and that one shared UTC formatter renders `2026-08-18` as `18 August 2026`.
-
-- [ ] Run the focused tests and confirm failure.
-
-  ```bash
-  npm run test -- lib/playbooks/vocabulary.test.ts lib/format-date.test.ts
-  ```
-
-- [ ] Implement `lib/playbooks/vocabulary.ts` (schema-keyed text only, no JSX), `lib/format-date.ts` (one `Intl.DateTimeFormat` at UTC), and `lib/assert-never.ts`. Export `isoDateSchema` from `lib/playbooks/schema.ts` and use it for `accessedAt`, `recordedAt`, and `lastReviewed`.
-
-- [ ] Migrate every existing consumer: `status-badge.tsx`, `risk-badge.tsx`, `filter-options.ts`, `playbook-dossier-row.tsx`, and `app/method/page.tsx`. Maturity labels are currently defined three times and data-accessibility labels twice with divergent wording (**Open** against **Open data**); resolve that in favour of **Open data** so a filter chip and a dossier row describe the same value identically. Keep the method page's existing `.maturity-ladder` markup and `aria-label="Evidence maturity"` unchanged.
-
-- [ ] Run the full test suite, typecheck, and lint. Every existing test must still pass unchanged, because the catalogue, site-shell, and evidence-chain tests already assert these labels.
-
-  ```bash
-  npm run test
-  npm run typecheck
-  npm run lint
-  git add lib components/site features/playbooks/catalogue app/method/page.tsx
-  git commit -m "refactor: centralise playbook vocabulary and date presentation"
-  ```
-
-### 7.2 Make review status deterministic
-
-- [ ] Write `review-status.test.ts` first. Cover the day before, exact twelve-month anniversary, first day after the anniversary, and a leap-day review. The exact anniversary remains current; only a later UTC date is review-needed. Pass `now` explicitly instead of mocking global time.
-
-- [ ] Run the focused test and confirm failure.
-
-  ```bash
-  npm run test -- features/playbooks/detail/review-status.test.ts
-  ```
-
-- [ ] Implement `getReviewStatus`. Validate the input with the exported `isoDateSchema` rather than a second hand-rolled date parser; Zod's ISO date check is calendar-aware, so `2026-02-31` and `2100-02-29` are already rejected. Calculate the calendar anniversary in UTC and clamp 29 February to the last valid day of February in a non-leap year. Return the recorded and due dates as ISO dates so presentation code can format them without losing provenance. Both dates are always shown in text, because this status is computed from the build clock.
-
-- [ ] Run the focused test and commit the pure date rule.
-
-  ```bash
-  npm run test -- features/playbooks/detail/review-status.test.ts
-  git add features/playbooks/detail/review-status.ts features/playbooks/detail/review-status.test.ts
-  git commit -m "feat: define playbook review status"
-  ```
-
-### 7.3 Build the reusable dossier primitives
-
-- [ ] Write `detail-primitives.test.tsx` first. Assert that:
-
-  - metadata exposes maturity, data accessibility, the risk badge, sector, technical patterns, both review dates, and review-needed text when applicable, while risk *reasons* stay in the risks section so they are neither duplicated nor announced twice;
-  - every source dossier exposes publisher, jurisdiction, title, canonical link, type, covered period, access date, reuse status, purpose, transformations, caveats, and optional local sample/hash together;
-  - the maturity ladder marks exactly one current rung and presents `nextValidationSteps` as work still required;
-  - `DemoReadiness` handles `none`, `recorded`, `live-local`, and `partner` exhaustively, including warnings and limitations;
-  - synthetic-data and evaluation components render every discriminated-union variant without implying unavailable evidence;
-  - the implementation index exposes architecture, inputs, outputs, reusable parts, partner requirements, and references.
-
-- [ ] Run the focused test and confirm failure.
-
-  ```bash
-  npm run test -- features/playbooks/detail/detail-primitives.test.tsx
-  ```
-
-- [ ] Implement the primitives as Server Components. Reuse `StatusBadge`, `RiskBadge`, `ExternalLink`, `ProvenanceLabel`, the shared vocabulary, `formatUtcDate`, and `assertNever`; define no local label map, date formatter, or exhaustiveness helper. Render sources once as an ordered list of `<article>` dossiers containing definition lists; use CSS Grid to make them compact on wide layouts and stack the same markup on narrow layouts. Assert on roles, accessible names, and visible text — the repository uses no `data-testid` and should not start here.
-
-- [ ] Render every genuinely optional field honestly. `localSamplePath` and `sha256` appear only together; empty `transformations`, `caveats`, `references`, `partnerRequirements`, and `not-run` metrics omit their own label and list. The eleven sections themselves are unconditional, and no placeholder, dash, or zero stands in for missing evidence.
-
-- [ ] Keep schema variants exhaustive. Use `never` assertions in `DemoReadiness`, `SyntheticDataMethod`, and `EvaluationEvidence` so a new variant fails typecheck until its public explanation is designed.
-
-- [ ] Run the focused test and commit the primitives.
-
-  ```bash
-  npm run test -- features/playbooks/detail/detail-primitives.test.tsx
-  git add features/playbooks/detail
-  git commit -m "feat: add playbook dossier primitives"
-  ```
-
-### 7.4 Compose the fixed evidence sequence
-
-- [ ] Write `playbook-detail.test.tsx` first using a registered playbook fixture. Assert one `h1`; the exact eleven `h2` headings in the order specified by `DESIGN.md`; the summary before technical detail; and visible problem, intended users, supported decision, public benefit, synthetic method, non-AI baseline, evaluation state, limitations, failure modes, human-review point, escalation, and redress.
-
-- [ ] Run the focused test and confirm failure.
-
-  ```bash
-  npm run test -- features/playbooks/detail/playbook-detail.test.tsx
-  ```
-
-- [ ] Implement `PlaybookDetail` as one semantic document. Define the eleven sections once, as data, and render both the contents list and the document body from that definition so they cannot drift. Give each numbered section a stable fragment ID. Preserve the document order at every breakpoint; the desktop metadata rail, narrative column, and evidence notes are visual CSS-grid placements rather than duplicate markup.
-
-- [ ] Add the JavaScript-free contents block between the title and the first section: a labelled `nav` with an ordered list of the eleven fragment links, its label a paragraph rather than a heading so the document keeps exactly eleven `h2` elements.
-
-- [ ] Extend `app/globals.css` only with selectors required by the dossier layout, using the existing design tokens. Reuse the shipped composition rather than restating it: the route wraps content in `.page-shell` as `/playbooks` and `/method` do, the header reuses `.page-intro`, prose reuses `.reading-width`, and the ladder reuses `.maturity-ladder` with added current-rung and future-rung rules. Extend the existing `@media print`, `(forced-colors: active)`, and `(prefers-reduced-motion: reduce)` blocks instead of adding a second set, and do not name a class that no stylesheet defines. Include visible focus states, print-safe borders, readable measures, and responsive stacking without horizontal overflow.
-
-- [ ] Run the focused detail tests and commit the composition.
-
-  ```bash
-  npm run test -- features/playbooks/detail
-  git add features/playbooks/detail app/globals.css
-  git commit -m "feat: compose comparable playbook dossiers"
-  ```
-
-### 7.5 Add the static route, metadata, and 404
-
-- [ ] Implement the parameterised route with build-time slugs and generated metadata. Use Next.js's generated route helper so the route parameter stays coupled to the file-system route.
-
-  ```tsx
-  import type { Metadata } from "next"
-  import { notFound } from "next/navigation"
-
-  import { PlaybookDetail } from "@/features/playbooks/detail/playbook-detail"
-  import { getReviewStatus } from "@/features/playbooks/detail/review-status"
-  import { getPlaybook, getPlaybookSlugs } from "@/lib/playbooks/registry"
-
-  export const dynamicParams = false
-
-  export function generateStaticParams() {
-    return getPlaybookSlugs().map((slug) => ({ slug }))
-  }
-
-  export async function generateMetadata({
-    params,
-  }: PageProps<"/playbooks/[slug]">): Promise<Metadata> {
-    const { slug } = await params
-    const playbook = getPlaybook(slug)
-    if (!playbook) return {}
-    return { title: playbook.title, description: playbook.summary }
-  }
-
-  export default async function PlaybookPage({
-    params,
-  }: PageProps<"/playbooks/[slug]">) {
-    const { slug } = await params
-    const playbook = getPlaybook(slug)
-    if (!playbook) notFound()
-
-    return (
-      <PlaybookDetail
-        playbook={playbook}
-        reviewStatus={getReviewStatus(playbook.lastReviewed, new Date())}
-      />
-    )
-  }
-  ```
-
-- [ ] Build `app/not-found.tsx` with a plain-English sentence and one catalogue link. Keep the copy generic, because this file also serves every unmatched URL in the application, and export no `metadata`: Next.js documents metadata exports only for the experimental `global-not-found.js`, and 404 responses already receive `noindex`.
-
-- [ ] Do not add `app/playbooks/[slug]/loading.tsx`: every dossier is local, validated, and statically rendered, and the absent Suspense boundary is also what keeps an unknown slug a real HTTP 404. Next.js returns 404 for a non-streamed not-found response and 200 with `noindex` once streaming has begun.
-
-- [ ] Run focused tests, content validation, type generation/typecheck, lint, and the production build. Confirm the build emits the static playbook route and the registry still contains seventeen unique slugs.
-
-  ```bash
-  npm run test -- features/playbooks/detail
-  npm run validate:content
-  npm run typecheck
-  npm run lint
-  npm run build
-  ```
-
-- [ ] Start the production server and perform a bounded manual verification: one assessed dossier at desktop and mobile widths, print preview, keyboard focus order, forced colours, JavaScript disabled, every external-source accessible name, and an unknown slug returning HTTP 404. This is a manual acceptance pass, not an automated browser-test suite.
-
-- [ ] Run the Impeccable interface detector once against the completed route, resolve real findings, then run the full repository check.
-
-  ```bash
-  npm run check
-  ```
-
-- [ ] Commit the route and final presentation changes.
-
-  ```bash
-  git add app/playbooks/[slug]/page.tsx app/not-found.tsx app/globals.css features/playbooks/detail
-  git commit -m "feat: publish static playbook dossiers"
-  ```
-
----
-
-## Task 8: Create the policy-evidence synthetic dataset
-
-**Files**
-
-- Create: `content/playbooks/policy-evidence/consultation-analysis-structure.md`
-- Create: `content/playbooks/policy-evidence/policy-evidence.data.json`
-- Create: `features/policy-evidence/domain/types.ts`
-- Create: `features/policy-evidence/domain/types.test.ts`
-- Create: `lib/privacy-patterns.ts`
-- Create: `lib/privacy-patterns.test.ts`
-- Create: `scripts/validate-content-core.ts`
-- Create: `scripts/validate-content.test.ts`
-- Modify: `scripts/validate-content.mts` (reduced to a thin CLI shim over `validate-content-core.ts`)
-- Modify: `content/playbooks/policy-evidence/playbook.ts`
-- Modify: `content/playbooks/define-assessed-playbook.ts`
-- Modify: `lib/playbooks/schema.ts`
-- Create: `.gitattributes`
-
-The dataset is written by hand and committed as a single readable file. There is
-no generator, no seed, and no build step between the file and the page: the
-example imports `policy-evidence.data.json` directly. A generator would make the
-twenty documents reproducible, which nothing needs, at the cost of machinery
-that has to be understood before the data can be read or corrected.
-
-For the same reason the dataset carries no recorded hash. A hash asserts that a
-file is an unaltered copy of something derived elsewhere; an authored dataset is
-its own original, editing it is legitimate work, and a recorded hash over it
-would only ever fire as a false alarm. Hashing stays where the claim is real:
-`officialSources[].localSamplePath` with its `sha256`.
-
-There is no `fixtures/source/` directory. Nothing here is a downloaded excerpt:
-the consultation-analysis structure note is authored prose describing the
-headings, stages, and vocabulary observed in a public report, not a verbatim
-extract, so it is attached to the synthetic provenance
-(`syntheticData.structureNotePath`) rather than filed as an `officialSources`
-local sample. The report itself stays an `officialSources` entry with only a
-canonical link and a `reuseStatus` explaining that no respondent text is copied.
-
-### Public interfaces
-
-```ts
-export const corpusDocumentSchema = z.strictObject({
-  id: z.string().regex(/^SYN-\d{4}$/, "Use a zero-padded SYN identifier"),
-  synthetic: z.literal(true),
+import { z } from "zod"
+
+/**
+ * The one envelope every committed synthetic dataset uses. Record shape is
+ * per-domain and deliberately untyped here: the disclosure literal, the
+ * privacy walk in content validation, and per-consumer contracts (the
+ * policy-evidence corpus) are the guarantees. No generator, no seed, no hash —
+ * an authored dataset is its own original.
+ */
+export const syntheticDatasetSchema = z.strictObject({
   disclosure: z.literal("Synthetic working data"),
-  theme: z.enum(corpusThemeValues),
-  stance: z.enum(corpusStanceValues),
-  text: corpusTextSchema,
+  description: z.string().trim().min(10),
+  records: z.array(z.record(z.string(), z.unknown())).min(1),
 })
 
-export const corpusSchema = z
-  .array(corpusDocumentSchema)
-  .min(1)
-  .superRefine(/* unique identifiers, ascending sort order */)
-
-export type CorpusDocument = z.infer<typeof corpusDocumentSchema>
+export type SyntheticDataset = z.infer<typeof syntheticDatasetSchema>
 ```
 
-The document contract is schema-first: `corpusSchema` is the one place that
-enforces the disclosure literal, the `synthetic: true` literal, the identifier
-shape, uniqueness, and sort order, so nothing downstream hand-rolls those
-checks. `theme` and `stance` are typed enums, not free-text `tags`. Because the
-documents are hand-authored, this parse is the only thing standing between an
-author's edit and a published dataset, so content validation runs it over the
-committed file rather than trusting it at authoring time.
+  Run: `npm run test -- lib/playbooks/dataset.test.ts`
+  Expected: PASS.
 
-### Steps
+- [ ] **Step 8: Shrink `lib/playbooks/vocabulary.ts`.** Replace its contents with only:
 
-- [ ] Verify the official response-report page is accessible on the implementation date and record the canonical publication page, publisher, publication date, access date, and reuse statement as an `officialSources` entry with no local sample path or hash — the report is used only to study structure, not to supply text.
+```ts
+import type { DataAccess, PlaybookDemo, SyntheticData } from "./schema"
 
-- [ ] Author `consultation-analysis-structure.md` describing, in this project's own words, the headings, analytical stages, and public-sector consultation vocabulary a policy team's manual method would use. It must contain no respondent text, contact information, signature, or local path, and no sentence copied from the source report. It must state which parts of the shape come from the report and which the project chose for itself: the six themes and four positions are this project's own.
+export const dataAccessLabels: Record<DataAccess, string> = {
+  open: "Open data",
+  "registration-or-key": "Registration or key required",
+  restricted: "Restricted",
+}
 
-- [ ] Write the document contract in `types.ts` before the data: `corpusThemeValues`, `corpusStanceValues`, `corpusDocumentSchema`, and `corpusSchema`, with person-shaped text rejected at the contract boundary via the shared `findPersonalDataShape` check rather than re-implemented per caller.
+export const syntheticDataBadgeLabels: Record<SyntheticData["status"], string> = {
+  available: "Synthetic dataset available",
+  "not-responsible": "No synthetic dataset",
+}
 
-- [ ] Write the contract tests first. Assert that IDs are unique, zero-padded, and sorted ascending; that every record carries `synthetic: true` and the exact disclosure label; that an unknown field is rejected; and that text containing an email, phone number, URL, National Insurance number pattern, or Health and Care number pattern fails to parse.
+export const demoBadgeLabels: Record<PlaybookDemo["status"], string> = {
+  available: "Demo available",
+  "not-yet": "No demo yet",
+}
+```
 
-- [ ] Author twenty documents in `policy-evidence.data.json`, covering six themes relevant to a strategy consultation — access to services, workforce capability, data governance, accountability, procurement and reuse, and environmental cost — across supportive, critical, mixed, and uncertain positions. Each response must read like something a person or organisation would actually write: varied length, varied register, and at least one genuine minority position retained rather than averaged away. No response may imitate a named real respondent, and none may contain a numeral that could read as an identifier.
+  Rewrite `lib/playbooks/vocabulary.test.ts` to assert each record is keyed exactly by its schema values (`accessValues`, the two union statuses) using `Object.keys(...)` against the exported value tuples.
 
-- [ ] Record the dataset path, structure-note path, source characteristics, approximations, deliberate alterations, exclusions, and limitations on the playbook's `syntheticDataset` spec. The method sentence must say what the dataset stands in for and why it exists — that a visitor can try the task without holding a consultation mailbox — not merely how it was produced. `syntheticData` becomes `"available"` for this playbook, but `maturity` stays `"assessed"` and `demo.availability` stays `"none"`: the schema couples maturity and demo state to the recorded analysis, prompt, and evaluation, which are still outstanding.
+  Run: `npm run test -- lib/playbooks/vocabulary.test.ts`
+  Expected: PASS.
 
-- [ ] Pin `content/playbooks/**/*.data.json` and `content/playbooks/**/fixtures/**` to LF in `.gitattributes`. Datasets are pinned so their diffs stay readable across platforms; source samples are pinned because `core.autocrlf` would otherwise rewrite them to CRLF on a Windows checkout and every recorded SHA-256 would mismatch on a fresh clone while still matching on Linux CI.
+- [ ] **Step 9: Update the registry projection and its test.** In `lib/playbooks/registry.ts`, replace `toSummary` with:
 
-- [ ] Extend `scripts/validate-content.mts` to resolve the dataset and structure-note paths inside the repository root, confirm the structure note is readable, run a full `corpusSchema` parse of the committed dataset, and scan the parsed keys against `sensitiveKeyPattern`.
+```ts
+function toSummary(playbook: Playbook): PlaybookSummary {
+  return Object.freeze({
+    slug: playbook.slug,
+    title: playbook.title,
+    summary: playbook.summary,
+    sector: playbook.sector,
+    syntheticData: playbook.syntheticData,
+    demo: playbook.demo,
+    lastReviewed: playbook.lastReviewed,
+  })
+}
+```
 
-- [ ] Prove each validation branch fails before trusting it. Build a temporary root holding a deliberately broken copy of the dataset and confirm `validateContent` names the playbook for invalid JSON, for a document that breaks the contract, and for text carrying a person-shaped value. Resolve the real content against the wrong root and confirm the missing dataset is reported by filename.
+  Leave `createPlaybookRegistry`, the import list, and the exported functions unchanged. In `lib/playbooks/registry.test.ts`, replace the local fixture with a v2-valid fixture (reuse the `validPlaybook()` shape from Step 2 with a distinct slug per fixture and `demo: { status: "not-yet", note: ... }` / `syntheticData: { status: "not-responsible", ... }` so no file paths are implied). Keep the existing assertions: alphabetical order, duplicate-slug throw, frozen arrays, lookup, unknown-slug `undefined`, and that summaries omit `strategyExample`, `dataSources`, and `caveats`.
 
-- [ ] Commit the work. It lands as multiple commits rather than one, each following its own red-green-refactor cycle: the shared privacy patterns and line-ending pin, the document contract, the authored dataset, the playbook declaration, and finally the content-validation wiring.
+  Run: `npm run test -- lib/playbooks/registry.test.ts lib/playbooks/schema.test.ts lib/playbooks/dataset.test.ts lib/playbooks/vocabulary.test.ts`
+  Expected: PASS (registry.test.ts uses `createPlaybookRegistry` with local fixtures, so it does not import the broken content files).
+
+- [ ] **Step 10: Commit**
+
+```bash
+git add lib/playbooks
+git commit -m "feat!: replace the playbook contract with the A/B/C/D schema"
+```
 
 ---
 
-## Task 9: Implement the baseline, recorded analysis, citations, and evaluation
+## Task 3: Collapse the policy-evidence domain to the analysis the demo needs
 
-**Files**
-
+**Files:**
 - Modify: `features/policy-evidence/domain/types.ts`
-- Create: `features/policy-evidence/domain/run-baseline.ts`
-- Create: `features/policy-evidence/domain/run-baseline.test.ts`
-- Create: `features/policy-evidence/domain/evaluate-analysis.ts`
-- Create: `features/policy-evidence/domain/evaluate-analysis.test.ts`
-- Create: `features/policy-evidence/domain/baseline-evaluation.test.ts`
-- Create: `features/policy-evidence/domain/recorded-analysis.ts`
-- Create: `features/policy-evidence/domain/recorded-analysis.test.ts`
-- Create: `content/playbooks/policy-evidence/policy-evidence.gold.json`
-- Modify: `content/playbooks/policy-evidence/playbook.ts`
-- Modify: `content/playbooks/define-assessed-playbook.ts`
+- Modify: `features/policy-evidence/domain/types.test.ts`
+- Rename: `features/policy-evidence/domain/run-baseline.ts` → `run-analysis.ts`
+- Rename: `features/policy-evidence/domain/run-baseline.test.ts` → `run-analysis.test.ts`
+- Modify: `features/policy-evidence/fixtures.ts`
+- Modify: `content/playbooks/policy-evidence/policy-evidence.data.json` (envelope migration)
+- Delete: `features/policy-evidence/domain/recorded-analysis.ts`, `recorded-analysis.test.ts`, `evaluate-analysis.ts`, `evaluate-analysis.test.ts`, `baseline-evaluation.test.ts`, `review-disposition.ts`, `citation-integrity.ts`, `build-evidence-threads.ts`, `build-evidence-threads.test.ts`
+- Delete: `content/playbooks/policy-evidence/policy-evidence.gold.json`
 
-Committed artefacts stay flat and named for the playbook, as the dataset does:
-`policy-evidence.gold.json` sits beside `policy-evidence.data.json`. The
-expectation set is hand-labelled, so it carries no manifest and no hash for the
-same reason the dataset does not; `evaluationGoldSchema` is what guards it, and
-`baseline-evaluation.test.ts` parses the committed file through it.
+**Interfaces:**
+- Consumes: `syntheticDatasetSchema` from `lib/playbooks/dataset.ts` (Task 2).
+- Produces: `corpusSchema`, `corpusDocumentSchema`, `corpusThemeValues`, types `CorpusDocument`, `CorpusDocumentId`, `Citation`, `Finding`, `Analysis`; `runAnalysis(corpus: readonly CorpusDocument[]): Analysis` and `themeVocabulary` from `run-analysis.ts`; `policyEvidenceDataset` (envelope) and `policyEvidenceCorpus` (parsed records) from `fixtures.ts`.
 
-### Public interfaces
+- [ ] **Step 1: Migrate the data file into the envelope and drop per-record duplication.** The envelope now carries the disclosure once, so each record loses its `synthetic` and `disclosure` fields.
+
+```bash
+node -e '
+const fs = require("fs");
+const p = "content/playbooks/policy-evidence/policy-evidence.data.json";
+const records = JSON.parse(fs.readFileSync(p, "utf8")).map(({ synthetic, disclosure, ...rest }) => rest);
+const out = {
+  disclosure: "Synthetic working data",
+  description: "Twenty synthetic consultation responses standing in for a real consultation mailbox, so the analysis task can be tried without holding one.",
+  records,
+};
+fs.writeFileSync(p, JSON.stringify(out, null, 2) + "\n");
+'
+git diff --stat content/playbooks/policy-evidence/policy-evidence.data.json
+```
+
+  Expected: one file changed; records keep `id`, `theme`, `stance`, `text` untouched.
+
+- [ ] **Step 2: Simplify `types.ts`.** Delete `citationSchema`, `findingIdSchema`, `findingSchema`, `baselineAnalysisSchema`, `recordedAnalysisSchema`, `analysisResultSchema`, `evaluationCaseSchema`, `evaluationGoldSchema`, and the `sha256Schema`/`kebabSlugPattern` imports. In `corpusDocumentSchema`, delete the `synthetic` and `disclosure` fields (the envelope owns disclosure now); keep `id`, `theme`, `stance`, `text` and the person-shaped-text refinement exactly as they are. Keep `corpusSchema` (uniqueness + sort refinements) unchanged. Replace the deleted analysis types with plain types — these are computed in-process, never parsed from a file, so they need no Zod:
 
 ```ts
 export type Citation = {
-  documentId: CorpusDocument["id"]
+  documentId: CorpusDocumentId
   start: number
   end: number
   quote: string
@@ -1076,446 +533,755 @@ export type Finding = {
   limitations: string[]
 }
 
-// A discriminated union, not a shared shape. Only the recorded branch records
-// `inputSha256`: the baseline is computed from the corpus in the same process
-// that reads it, so a hash over its input attests to nothing, while a recorded
-// output was produced elsewhere and the hash is the only thing tying it to this
-// exact dataset.
-export type AnalysisResult =
-  | { kind: "baseline"; vocabularyVersion: string; findings: Finding[] }
-  | { kind: "recorded-ai-assisted"; inputSha256: string; findings: Finding[] }
-
-export type EvaluationResult = {
-  citationPrecision: Metric
-  evidenceCoverage: Metric
-  unsupportedFindingCount: number
-  brokenReferenceCount: number
-  findingsWithoutGoldCase: FindingId[]
-  cases: EvaluationCaseResult[]
-  limitations: string[]
-}
-
-export function runBaseline(corpus: readonly CorpusDocument[]): BaselineAnalysis
-export function evaluateAnalysis(
-  analysis: AnalysisResult,
-  gold: readonly EvaluationCase[],
-  corpus: readonly CorpusDocument[],
-): EvaluationResult
-export function parseRecordedAnalysis(
-  rawManifest: unknown,
-  rawAnalysis: unknown,
-  corpus: readonly CorpusDocument[],
-): ParseResult
+export type Analysis = { findings: Finding[] }
 ```
 
-`Metric` always carries its numerator and denominator, and `value` is `null`
-rather than `0` for an empty denominator: "could not be measured" and "measured
-as nothing" are different claims.
+- [ ] **Step 3: Update `types.test.ts`.** Delete every test for the removed schemas (recorded analysis, evaluation cases, gold set, citation schema, finding schema). Update corpus-document tests: a record with `synthetic: true` or `disclosure` is now **rejected** (strict object). Keep: unique-id, sort-order, person-shaped-text rejection, unknown-field rejection tests.
 
-An `EvaluationCase` joins to a finding by `findingId`, which is what forces the
-baseline and any recorded analysis to agree on identifiers and so makes them
-comparable. A finding the expectation set never labelled is reported in
-`findingsWithoutGoldCase` and excluded from precision, because crediting or
-penalising unreviewed work would make the metric a claim about a judgement
-nobody made.
+  Run: `npm run test -- features/policy-evidence/domain/types.test.ts`
+  Expected: PASS.
 
-### Steps
+- [ ] **Step 4: Rename and reframe the engine.**
 
-- [ ] Write baseline tests first. Cover phrase matching, normalised punctuation and case, a term refused inside a longer word, matched-excerpt citations at exact offsets, stable finding order, no duplicate document citation per finding, empty corpus, and identical results for identical input.
+```bash
+git mv features/policy-evidence/domain/run-baseline.ts features/policy-evidence/domain/run-analysis.ts
+git mv features/policy-evidence/domain/run-baseline.test.ts features/policy-evidence/domain/run-analysis.test.ts
+```
 
-- [ ] Implement the baseline as a visible, versioned controlled vocabulary for the six themes, and nothing else: no embeddings, no model call, no learned weights. Score exact phrases and tokens by word count, cite the sentence enclosing the strongest match so a citation reads as evidence, and break ties by score then document ID. Return findings in theme declaration order rather than ranked by match count — ranking would read as a claim about which concern matters most, which a word list cannot support and which this playbook explicitly disclaims.
+  In `run-analysis.ts`: rename `runBaseline` → `runAnalysis` with return type `Analysis`; delete `baselineVocabularyVersion`; the return statement becomes `return { findings }` (no `kind`, no version). Rename the internal `baselineLimitations` constant to `analysisLimitations` and keep its three sentences verbatim — they name real failures of a phrase list. Keep `themeVocabulary`, `themeLabels`, `termPattern`, `enclosingSentence`, `scoreDocument`, ordering, and the six-citation cap byte-for-byte otherwise. Update the doc comments: this is the demo's transparent method, not a control arm awaiting a comparison.
 
-- [ ] Write evaluation tests first. Cover all-correct, an unexpected citation, a missing expected document, an unsupported finding, a broken document ID, mismatched quote offsets, offsets past the end of the document, a finding with no gold case, a gold case whose finding is absent, and explicit `null` metric values for zero denominators.
+  In `run-analysis.test.ts`: update imports and every assertion that touched `result.kind` or `result.vocabularyVersion` to assert on `result.findings` directly. All behavioural assertions (phrase matching, no match inside longer words, exact offsets, stable order, one citation per document per finding, empty corpus, determinism) stay.
 
-- [ ] Implement citation-integrity validation before computing metrics. A citation is valid only if the document exists and `document.text.slice(start, end) === quote`. Never re-derive the quote from the offsets: that would make every citation agree with itself. An invalid citation is counted as a broken reference and excluded from both metrics rather than scored.
-
-- [ ] Author `policy-evidence.gold.json` as a labelled expectation per theme, each with a rationale a reader can disagree with. Every document in the dataset is labelled exactly once, and the labels agree with the `theme` recorded on each document. Record in the playbook's evaluation limitations that the labels were written by the same author as the dataset, so they are not an independent judgement.
-
-- [ ] Pin the baseline's published numbers in `baseline-evaluation.test.ts` by running the real baseline over the committed dataset and expectation set. Assert the exact precision and coverage numerators and denominators, the one response missed because it raises its theme in different words, and the three responses attributed to a theme their author did not intend. Editing the vocabulary, the dataset, or the labels is allowed; changing a published result without noticing is not.
-
-- [ ] Keep the playbook's `evaluation.status` at `not-run` and replace its reason with what has actually been measured. The comparison this playbook promises is between the baseline and a recorded AI-assisted analysis; half of it does not exist, so a `fixture-evaluated` status would advertise an evaluation of the exemplar when only its control arm has been measured. Task 10 promotes it once both arms exist.
-
-- [ ] Implement `parseRecordedAnalysis` and its manifest schema before any recording exists, and test it against a hand-built recording. Every manifest field is required with no default: this is the one place the repository makes a claim about a model rather than about its own code, so an incomplete manifest is a refusal. Prove that a wrong label, a `liveService: true` claim, a missing model identifier, an input hash disagreeing with the output, limitations omitting **Not operationally validated**, an unresolvable citation, and an empty finding list are each rejected, and that every problem is reported rather than only the first.
-
-- [ ] Run the domain tests and content integrity validation.
-
-  ```bash
-  npm run test -- features/policy-evidence/domain
-  npm run validate:content
-  npm run typecheck
-  ```
-
-### Outstanding: the recording itself
-
-This is the only part of Task 9 that cannot be done inside the repository, and
-it blocks Task 10's recorded-output stages.
-
-- [ ] Produce one recorded AI-assisted result outside the hosted runtime, using the exact committed `policy-evidence.data.json` and an openly licensed model running locally. Keep the one-off runner and any downloaded weights outside the repository; they are recording tools, not application dependencies. Remove machine details, operator identity, request identifiers, and any credential material. The output must satisfy `recordedAnalysisSchema`, must use the same `F-<theme>` finding identifiers as the baseline so the two are comparable, and must include at least one known, visible weakness so the human-review path is meaningful.
-
-- [ ] Commit the recording as `policy-evidence.recorded.json` with a `policy-evidence.recorded.manifest.ts` carrying the real UTC recording date, exact open-model identifier and version, `procedureVersion`, input dataset SHA-256, procedure SHA-256, and output SHA-256 as literals from the completed run. Do not commit an incomplete manifest, and do not relabel hand-authored output as model-generated: `parseRecordedAnalysis` is written to refuse both.
-
-- [ ] Add a test that loads the committed recording through `parseRecordedAnalysis` against the committed dataset and asserts it is accepted, then evaluate it with `evaluateAnalysis` and pin its metrics beside the baseline's.
-
-- [ ] Commit domain behaviour and recorded evidence separately from UI.
-
----
-
-## Task 10: Build the Policy Evidence Workbench interaction
-
-**Files**
-
-- Create: `app/playbooks/[slug]/demo/page.tsx`
-- Create: `features/policy-evidence/fixtures.ts`
-- Create: `features/policy-evidence/domain/build-evidence-threads.ts`
-- Create: `features/policy-evidence/domain/build-evidence-threads.test.ts`
-- Create: `features/policy-evidence/domain/review-disposition.ts`
-- Create: `features/policy-evidence/components/policy-evidence-workbench.tsx`
-- Create: `features/policy-evidence/components/workbench-client.tsx`
-- Create: `features/policy-evidence/components/element-ids.ts`
-- Create: `features/policy-evidence/components/baseline-demo-banner.tsx`
-- Create: `features/policy-evidence/components/synthetic-corpus-inspector.tsx`
-- Create: `features/policy-evidence/components/finding-list.tsx`
-- Create: `features/policy-evidence/components/evidence-thread.tsx`
-- Create: `features/policy-evidence/components/finding-review-controls.tsx`
-- Create: `features/policy-evidence/components/evaluation-summary.tsx`
-- Create: `features/policy-evidence/components/policy-evidence-workbench.test.tsx`
-- Modify: `lib/playbooks/schema.ts` (the `baseline-only` demo state)
-- Modify: `features/playbooks/detail/demo-readiness.tsx`
-- Modify: `content/playbooks/define-assessed-playbook.ts`
-- Modify: `content/playbooks/policy-evidence/playbook.ts`
-- Modify: `app/page.tsx`
-- Modify: `app/globals.css`
-
-There is no `source-inspector.tsx`: the detail route's `SourceRegister` and
-`SyntheticDataMethod` already render exactly what this page needs, and a second
-component making the same claims in different words is how two parts of a
-provenance-focused site start disagreeing.
-
-### The `baseline-only` demo state
-
-The four original demo states could not describe this page. `recorded` requires
-a model identifier, prompt hash, and recorded output; `none` publishes nothing;
-`live-local` and `partner` are elsewhere. A hosted example that runs only the
-deterministic non-AI baseline over committed synthetic data needed its own
-state, so `demoAvailabilityValues` gains `baseline-only`.
-
-It is a weaker claim than `recorded`, not a stronger one:
-
-- it carries `label: "Baseline demonstration"`, a distinct literal, so it can
-  never be mistaken for `"Recorded demonstration"` in content or in a test;
-- it records `vocabularyVersion`, because the result on the page depends on
-  which word list produced it;
-- it leaves `maturity` at `assessed`, because running no model is not evidence
-  of one, and the existing refinement already refuses `recorded-demo` maturity
-  without recorded metadata;
-- a new refinement refuses it unless `syntheticData.status` is `"available"`,
-  since the page reads that dataset on every render.
-
-### Client-state contract
+- [ ] **Step 5: Rewrite `fixtures.ts`.**
 
 ```ts
-export type ReviewDisposition =
-  | "unreviewed"
-  | "investigate"
-  | "unsupported"
-  | "specialist-review"
+import dataJson from "@/content/playbooks/policy-evidence/policy-evidence.data.json"
 
-// No `comparisonMode`. Comparison needs two analyses and only the baseline
-// exists; a mode selector over one arm would imply the other was coming back.
-export type WorkbenchState = {
-  activeFindingId: FindingId | undefined
-  dispositions: Record<string, ReviewDisposition>
-  resetPending: boolean
+import { syntheticDatasetSchema } from "@/lib/playbooks/dataset"
+
+import { corpusSchema } from "./domain/types"
+
+/**
+ * The committed dataset, parsed once at module load: envelope first, then the
+ * records through the corpus contract. A hand-edited dataset that no longer
+ * satisfies either must fail the build, not reach a page.
+ */
+export const policyEvidenceDataset = syntheticDatasetSchema.parse(dataJson)
+
+export const policyEvidenceCorpus = corpusSchema.parse(policyEvidenceDataset.records)
+```
+
+- [ ] **Step 6: Add citation-integrity coverage to `run-analysis.test.ts`** (replacing the deleted `citation-integrity.ts` consumer): run the real engine over the real committed corpus and assert every citation is an exact slice —
+
+```ts
+import { policyEvidenceCorpus } from "../fixtures"
+
+it("cites only exact passages of the committed dataset", () => {
+  const documents = new Map(policyEvidenceCorpus.map((document) => [document.id, document]))
+  const { findings } = runAnalysis(policyEvidenceCorpus)
+
+  expect(findings.length).toBeGreaterThan(0)
+  for (const finding of findings) {
+    for (const citation of finding.evidence) {
+      const document = documents.get(citation.documentId)
+      expect(document, `${finding.id} cites unknown ${citation.documentId}`).toBeDefined()
+      expect(document!.text.slice(citation.start, citation.end)).toBe(citation.quote)
+    }
+  }
+})
+```
+
+- [ ] **Step 7: Delete the dead machinery.**
+
+```bash
+git rm features/policy-evidence/domain/recorded-analysis.ts \
+       features/policy-evidence/domain/recorded-analysis.test.ts \
+       features/policy-evidence/domain/evaluate-analysis.ts \
+       features/policy-evidence/domain/evaluate-analysis.test.ts \
+       features/policy-evidence/domain/baseline-evaluation.test.ts \
+       features/policy-evidence/domain/review-disposition.ts \
+       features/policy-evidence/domain/citation-integrity.ts \
+       features/policy-evidence/domain/build-evidence-threads.ts \
+       features/policy-evidence/domain/build-evidence-threads.test.ts \
+       content/playbooks/policy-evidence/policy-evidence.gold.json
+```
+
+- [ ] **Step 8: Run the domain suite.**
+
+  Run: `npm run test -- features/policy-evidence/domain`
+  Expected: PASS — types and run-analysis suites only.
+
+- [ ] **Step 9: Commit**
+
+```bash
+git add -A content/playbooks/policy-evidence features/policy-evidence
+git commit -m "refactor!: collapse the policy-evidence domain to the analysis the demo runs"
+```
+
+---
+
+## Task 4: Rewrite the policy-evidence playbook as the v2 worked example
+
+**Files:**
+- Create: `content/playbooks/strategy-draft.ts`
+- Modify: `content/playbooks/policy-evidence/playbook.ts` (full rewrite)
+- Keep: `content/playbooks/policy-evidence/consultation-analysis-structure.md` (referenced from prose, no schema field)
+
+**Interfaces:**
+- Consumes: `definePlaybook` (unchanged), schema v2 (Task 2).
+- Produces: `strategyDraftUrl`, `strategyDraftReference` from `content/playbooks/strategy-draft.ts`; the export name `policyEvidence` (unchanged, registry depends on it). Every Task 5–8 playbook follows this file's shape exactly.
+
+- [ ] **Step 1: Create the shared draft pointer** — the only cross-playbook content module; it replaces `define-assessed-playbook.ts`'s factory with two constants:
+
+```ts
+/** The one document every playbook's A-section points at. */
+export const strategyDraftUrl =
+  "https://consultations.nidirect.gov.uk/teo/artificial-intelligence-public-consultation"
+
+export const strategyDraftReference = "Table 2 — potential public-service applications"
+```
+
+- [ ] **Step 2: Read the old `policy-evidence/playbook.ts` before overwriting it.** The `sourceApplication`, `sourceRationale`, risk reasons, and limitations prose are the raw material for `strategyExample.proposal` and `caveats`. Distil — do not copy governance vocabulary.
+
+- [ ] **Step 3: Rewrite `content/playbooks/policy-evidence/playbook.ts`:**
+
+```ts
+import { definePlaybook } from "@/lib/playbooks/define-playbook"
+
+import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
+
+export const policyEvidence = definePlaybook({
+  schemaVersion: 2,
+  slug: "policy-evidence",
+  title: "Policy Evidence Workbench",
+  summary:
+    "Group consultation responses into themes a policy team could investigate further, with every theme citing the exact passages behind it.",
+  sector: "Cross-government", // the sector string this playbook already uses
+  strategyExample: {
+    proposal:
+      "The draft strategy names AI-assisted analysis of public consultation responses as a potential public-service application: helping policy teams see the themes in large volumes of free-text replies.",
+    draftReference: strategyDraftReference,
+    url: strategyDraftUrl,
+  },
+  dataSources: [
+    {
+      id: "ni-ai-strategy-consultation",
+      publisher: "The Executive Office",
+      title: "Northern Ireland Artificial Intelligence Strategy consultation",
+      url: strategyDraftUrl,
+      covers: "The draft strategy text and the consultation it is open for.",
+      access: "open",
+      relevance: "It is the document whose example projects these playbooks explore.",
+    },
+    {
+      id: "circular-economy-consultation-report",
+      publisher: "Department for the Economy",
+      title: "Draft Circular Economy Strategy — public consultation response report",
+      url: "https://www.economy-ni.gov.uk/publications/draft-circular-economy-strategy-northern-ireland-public-consultation-response-report",
+      covers: "How an NI department actually analysed and reported a consultation's responses.",
+      access: "open",
+      relevance:
+        "Its headings, stages, and vocabulary shaped the synthetic dataset's structure; no respondent text was copied. Our reading of it is recorded in consultation-analysis-structure.md beside this file.",
+    },
+  ],
+  syntheticData: {
+    status: "available",
+    dataPath: "content/playbooks/policy-evidence/policy-evidence.data.json",
+    method:
+      "Twenty synthetic consultation responses authored by AI, shaped by the structure and vocabulary of a published consultation response report, so the analysis task can be tried without holding a consultation mailbox.",
+    limitations: [
+      "The dataset is far smaller and tidier than a real consultation mailbox.",
+      "The six themes and four stances are this project's own choices, verified in no official source.",
+    ],
+  },
+  demo: {
+    status: "available",
+    route: "/playbooks/policy-evidence/demo",
+    howItWorks:
+      "A transparent keyword analysis — no model, no key — groups the synthetic responses into themes and cites the exact passages it matched, recomputed from the committed dataset on every render.",
+  },
+  caveats: [
+    "A matched keyword shows a response used a word, not what the respondent meant by it; a real analysis needs human reading.",
+    "Nothing on this page is evidence that an AI system would analyse a real consultation accurately, fairly, or lawfully.",
+  ],
+  lastReviewed: "2026-08-21",
+})
+```
+
+
+- [ ] **Step 4: Verify the file parses through the schema in isolation** (the repo-wide typecheck is still red; this import chain is already green):
+
+```bash
+npx tsx -e 'import("./content/playbooks/policy-evidence/playbook").then(m => console.log(m.policyEvidence.slug, m.policyEvidence.demo.status))'
+```
+
+  Expected: `policy-evidence available`.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add content/playbooks/strategy-draft.ts content/playbooks/policy-evidence
+git commit -m "content: rewrite the policy-evidence playbook to the A/B/C/D contract"
+```
+
+---
+
+## Tasks 5–8: Rewrite the sixteen remaining playbooks with their datasets
+
+The four batches share one procedure; the table in each task is the content
+brief. For **every** playbook in a batch:
+
+1. Read the old `content/playbooks/<slug>/playbook.ts` first. Reuse its title
+   and sector verbatim; distil `sourceApplication`/`sourceRationale` into
+   `strategyExample.proposal`; distil risk reasons + limitations into 2–3
+   `caveats` sentences with the governance vocabulary removed.
+2. Research section B: verify each candidate source URL in the table resolves
+   (WebFetch or `curl -sI <url> | head -1`) before committing it. If a URL is
+   dead, find the publisher's current statistics page for the same series and
+   use that instead. 1–3 sources per playbook; classify `access` honestly
+   (`open` for published statistics pages).
+3. Author the dataset at `content/playbooks/<slug>/<slug>.data.json` in the
+   Task 2 envelope: the exact disclosure literal, a one-sentence description
+   saying what the records stand in for, and 12–24 records using the field
+   sketch in the table. Rules: ids use the `SYN-<ABBR>-NN` convention shown;
+   values are plausible for what the real source publishes but obviously
+   aggregate or invented; **no** string may contain a URL, email shape,
+   phone shape, ten-digit run, or NI-number shape (`lib/privacy-patterns.ts`
+   is the arbiter and content validation will walk every string in Task 9);
+   no person-level records — aggregate bands, sites, periods, and categories
+   only. Text-corpus datasets additionally must read like human writing, keep
+   at least one minority view, and imitate no named respondent.
+4. Write the new `playbook.ts` exactly in the Task 4 shape: same import of
+   `strategyDraftUrl`/`strategyDraftReference`, `schemaVersion: 2`,
+   `demo: { status: "not-yet", note: <one sentence naming what a demo would
+   show and that nobody has built it yet> }`, `lastReviewed: "2026-08-21"`.
+   For a `not-responsible` playbook, omit the dataset file and write the
+   `reason` / `whatContributorsNeed` sentences from the table.
+5. Verify each playbook in isolation:
+   `npx tsx -e 'import("./content/playbooks/<slug>/playbook").then(m => console.log(m.<exportName>.slug))'`
+   and each dataset:
+   `npx tsx -e 'import("./lib/playbooks/dataset").then(async d => { const j = (await import("./content/playbooks/<slug>/<slug>.data.json")).default; d.syntheticDatasetSchema.parse(j); console.log("ok") })'`
+6. Commit the batch with the message given.
+
+### Task 5: Health and education batch
+
+| Slug | Sector (keep existing) | C decision | Dataset id prefix | Record fields | Candidate B sources |
+| --- | --- | --- | --- | --- | --- |
+| `diagnostic-imaging-support` | Health | **not-responsible** — imaging cannot be honestly stood in for by a JSON file, and any useful tabular stand-in trends person-shaped. `whatContributorsNeed`: partner access to an imaging archive under formal clinical-research governance. | — | — | Department of Health NI imaging/diagnostic waiting time statistics (open) |
+| `health-operations` | Health | available | `SYN-HO-` | `{ id, specialty, quarter, waitingBand, patientsWaitingBand }` — specialty names, quarters like `"2025-Q4"`, banded counts like `"5000-10000"` | DoH NI hospital waiting time statistics (open); NISRA health statistics (open) |
+| `lesson-planning-feedback` | Education | available | `SYN-LP-` | `{ id, keyStage, subject, topic, draftObjective }` — `draftObjective` is one synthetic teacher-written sentence | CCEA curriculum pages (open); DE NI school enrolment statistics (open) |
+| `adaptive-tutoring` | Education | available | `SYN-AT-` | `{ id, topic, difficulty, attemptsBand, successRateBand }` | DE NI qualifications and attainment statistics (open) |
+
+- [ ] Complete steps 1–5 for all four playbooks.
+- [ ] Commit:
+
+```bash
+git add content/playbooks/diagnostic-imaging-support content/playbooks/health-operations content/playbooks/lesson-planning-feedback content/playbooks/adaptive-tutoring
+git commit -m "content: rewrite health and education playbooks with synthetic datasets"
+```
+
+### Task 6: Environment and agriculture batch
+
+| Slug | Sector | C decision | Prefix | Record fields | Candidate B sources |
+| --- | --- | --- | --- | --- | --- |
+| `wastewater-monitoring` | Infrastructure | available | `SYN-WW-` | `{ id, site, week, flowBand, ammoniaMgPerL, phosphorusMgPerL }` — sites named `"Works A"`…, numeric values as JSON numbers | NI Water annual reports (open); DAERA water quality monitoring (open) |
+| `water-management` | Infrastructure | available | `SYN-WM-` | `{ id, catchment, month, rainfallMm, riverLevelBand, abstractionBand }` | DfI Rivers hydrology data (open); DAERA (open) |
+| `earth-observation` | Environment | available | `SYN-EO-` | `{ id, tile, period, landCoverClass, changedHectares }` | DAERA land cover data (open); Copernicus open data (open) |
+| `farm-advisory` | Agriculture | available | `SYN-FA-` | `{ id, fieldGroup, crop, soilPh, nitrogenBand, yieldBand }` | DAERA agricultural census statistics (open) |
+
+- [ ] Complete steps 1–5 for all four playbooks.
+- [ ] Commit:
+
+```bash
+git add content/playbooks/wastewater-monitoring content/playbooks/water-management content/playbooks/earth-observation content/playbooks/farm-advisory
+git commit -m "content: rewrite environment and agriculture playbooks with synthetic datasets"
+```
+
+### Task 7: Transport, housing, and life-events batch
+
+| Slug | Sector | C decision | Prefix | Record fields | Candidate B sources |
+| --- | --- | --- | --- | --- | --- |
+| `traffic-flow` | Transport | available | `SYN-TF-` | `{ id, junction, hourBand, vehicleCount, busShare, cycleShare }` — junctions named `"Junction 01"`… | DfI traffic count statistics (open); Translink performance reports (open) |
+| `road-maintenance` | Transport | available | `SYN-RM-` | `{ id, roadClass, defectType, severity, reportedWeek, status }` | DfI road maintenance and defect reports (open) |
+| `housing-insight` | Housing | available | `SYN-HI-` | `{ id, areaBand, quarter, waitingHouseholdsBand, stockConditionBand }` — areas as bands (`"Urban area A"`), never real estates | NI Housing Executive statistics (open); DfC housing statistics (open) |
+| `life-event-services` | Citizen services | available | `SYN-LE-` | `{ id, lifeEvent, journeyStep, medianDays, dropOffShareBand }` | nidirect service content (open); NISRA registration statistics (open) |
+
+- [ ] Complete steps 1–5 for all four playbooks.
+- [ ] Commit:
+
+```bash
+git add content/playbooks/traffic-flow content/playbooks/road-maintenance content/playbooks/housing-insight content/playbooks/life-event-services
+git commit -m "content: rewrite transport, housing, and life-event playbooks with synthetic datasets"
+```
+
+### Task 8: Justice and participation batch, registry cleanup
+
+| Slug | Sector | C decision | Prefix | Record fields | Candidate B sources |
+| --- | --- | --- | --- | --- | --- |
+| `justice-research` | Justice | available | `SYN-JR-` | `{ id, offenceGroup, quarter, disposalsBand, medianDaysToDisposal }` | Department of Justice NI court statistics (open) |
+| `offender-learning` | Justice and education | available | `SYN-OL-` | `{ id, course, quarter, enrolmentsBand, completionBand }` | DoJ / NI Prison Service annual reports (open) |
+| `violence-risk-research` | Community safety | **not-responsible** — any stand-in useful for risk research would be person-shaped by construction. `whatContributorsNeed`: formal research access under ethics and data-protection governance, with domain experts owning the question. | — | — | DoJ research and statistics publications (open) |
+| `community-participation` | Communities | available | `SYN-CP-` | `{ id, topic, stance, text }` — 16+ synthetic public comments on local issues; same authoring rules as the policy-evidence corpus | nidirect consultations portal (open) |
+
+- [ ] Complete steps 1–5 for all four playbooks.
+- [ ] **Delete the retired factory** — its last consumer is gone:
+
+```bash
+git rm content/playbooks/define-assessed-playbook.ts
+```
+
+- [ ] **Rewrite `content/playbooks/content.test.ts`.** Replace entirely:
+
+```ts
+import { describe, expect, it } from "vitest"
+
+import { getAllPlaybooks } from "@/lib/playbooks/registry"
+import { sensitiveKeyPattern } from "@/lib/privacy-patterns"
+
+const expectedSlugs = [
+  "adaptive-tutoring",
+  "community-participation",
+  "diagnostic-imaging-support",
+  "earth-observation",
+  "farm-advisory",
+  "health-operations",
+  "housing-insight",
+  "justice-research",
+  "lesson-planning-feedback",
+  "life-event-services",
+  "offender-learning",
+  "policy-evidence",
+  "road-maintenance",
+  "traffic-flow",
+  "violence-risk-research",
+  "wastewater-monitoring",
+  "water-management",
+]
+
+const bannedClaimPattern =
+  /\b(guarantee[sd]?|proven|revolutioni[sz]e[sd]?|eliminat(?:es?|ed)|world-class|cutting[- ]edge)\b/i
+
+function collectKeys(value: unknown): string[] {
+  if (Array.isArray(value)) return value.flatMap(collectKeys)
+  if (!value || typeof value !== "object") return []
+  return Object.entries(value).flatMap(([key, child]) => [key, ...collectKeys(child)])
+}
+
+describe("playbook inventory", () => {
+  const playbooks = getAllPlaybooks()
+
+  it("contains exactly the seventeen expected playbooks", () => {
+    expect(playbooks.map((playbook) => playbook.slug)).toEqual(expectedSlugs)
+  })
+
+  it("has exactly one available demo, on policy-evidence", () => {
+    const withDemo = playbooks.filter((playbook) => playbook.demo.status === "available")
+    expect(withDemo.map((playbook) => playbook.slug)).toEqual(["policy-evidence"])
+  })
+
+  it("answers C on every playbook, with datasets at the conventional path", () => {
+    for (const playbook of playbooks) {
+      if (playbook.syntheticData.status === "available") {
+        expect(playbook.syntheticData.dataPath).toBe(
+          `content/playbooks/${playbook.slug}/${playbook.slug}.data.json`,
+        )
+      } else {
+        expect(playbook.syntheticData.reason.length).toBeGreaterThan(10)
+      }
+    }
+  })
+
+  it("keeps sensitive domains dataset-free", () => {
+    for (const slug of ["violence-risk-research", "diagnostic-imaging-support"]) {
+      const playbook = playbooks.find((candidate) => candidate.slug === slug)
+      expect(playbook?.syntheticData.status).toBe("not-responsible")
+    }
+  })
+
+  it("makes no marketing claims in summaries or proposals", () => {
+    for (const playbook of playbooks) {
+      expect(playbook.summary).not.toMatch(bannedClaimPattern)
+      expect(playbook.strategyExample.proposal).not.toMatch(bannedClaimPattern)
+    }
+  })
+
+  it("carries no person-shaped metadata keys", () => {
+    for (const playbook of playbooks) {
+      expect(collectKeys(playbook).filter((key) => sensitiveKeyPattern.test(key))).toEqual([])
+    }
+  })
+})
+```
+
+- [ ] Run: `npm run test -- content/playbooks/content.test.ts lib/playbooks`
+  Expected: PASS — the registry's import chain is fully v2 for the first time.
+- [ ] Commit:
+
+```bash
+git add -A content/playbooks
+git commit -m "content: rewrite justice and participation playbooks; retire the assessed factory"
+```
+
+---
+
+## Task 9: Retarget content validation
+
+**Files:**
+- Modify: `scripts/validate-content-core.ts` (full rewrite)
+- Modify: `scripts/validate-content.test.ts`
+- Modify: `lib/schema-primitives.ts` (delete `sha256Schema`)
+
+**Interfaces:**
+- Consumes: `playbookSchema`, `getAllPlaybooks`, `syntheticDatasetSchema`, `sensitiveKeyPattern`, `findPersonalDataShape`, `corpusSchema`.
+- Produces: `validateContent(rootDirectory?): Promise<string[]>` — same signature; `scripts/validate-content.mts` CLI shim needs no change.
+
+- [ ] **Step 1: Write the failing tests first.** Rework `scripts/validate-content.test.ts` to the new branches, keeping its existing temp-root technique (copy real content into a scratch root, break one thing, assert the error names the playbook):
+  - a dataset file missing from disk → error names `<slug>/dataset` and the filename;
+  - invalid JSON → error names the playbook;
+  - an envelope without the disclosure literal → error;
+  - a record string containing `"call me on 028 9012 3456"` → error naming the personal-data shape;
+  - a record key `email` → error naming the key;
+  - the real repository root → zero errors.
+
+  Run: `npm run test -- scripts/validate-content.test.ts`
+  Expected: FAIL.
+
+- [ ] **Step 2: Rewrite `validate-content-core.ts`.** Keep `resolveInsideRoot` and `collectKeys` verbatim; delete `sha256`, `HashCheck`, and `checkFileHash` (nothing hashes any more). Add a string walk beside the key walk:
+
+```ts
+function collectStrings(value: unknown): string[] {
+  if (typeof value === "string") return [value]
+  if (Array.isArray(value)) return value.flatMap(collectStrings)
+  if (!value || typeof value !== "object") return []
+  return Object.values(value).flatMap(collectStrings)
 }
 ```
 
-### Steps
+  The loop per playbook: schema `safeParse` (report issues), duplicate-slug guard (both kept from the current file), then for `syntheticData.status === "available"`: resolve `dataPath` inside the root, read + `JSON.parse` (report `cannot parse`), `syntheticDatasetSchema.safeParse` (report issues), then over the parsed envelope report any key matching `sensitiveKeyPattern` and, for each record string, any `findPersonalDataShape(text)` hit as `` `${playbook.slug}/dataset: record contains a ${shape}` ``. For `policy-evidence` only, additionally parse the envelope's `records` through `corpusSchema` so the demo's contract is enforced at validation time, not just at build time.
 
-- [ ] Write component tests first for the hosted-flow stages this page can honestly show: orientation, the absence of any recorded or live AI label, the task and its disclaimers, the source label, the synthetic label, the whole dataset in the page, one finding per theme, the complete evidence thread in order, the four disposition values, metrics with numerators and denominators, and reuse guidance.
+- [ ] **Step 3: Delete `sha256Schema` from `lib/schema-primitives.ts`** and confirm nothing imports it:
 
-- [ ] Add interaction tests for keyboard finding selection, review-state change reflected in both the legend and the finding list, the two-step reset confirmation including the cancel path, selection preserved when a different finding is reviewed, a citation link resolving to the response anchor, and a group name that includes the finding and its current disposition.
+  Run: `grep -rn "sha256" lib features scripts content app components --include="*.ts" --include="*.tsx" --include="*.mts"`
+  Expected: no hits.
 
-- [ ] Implement `PolicyEvidenceWorkbench` as a Server Component. Both fixtures are parsed through their schemas at module load in `fixtures.ts`; the component runs the baseline, scores the evaluation, and joins the evidence threads. Nothing that produced a thread crosses into the browser.
+- [ ] **Step 4: Run the validator suite and the real validator.**
 
-- [ ] Keep `WorkbenchClient` the only client boundary, holding active finding, dispositions, and reset state. Render *every* thread regardless of selection: hiding the unselected ones would put the page's substance behind hydration, and the page must stay readable with JavaScript off. Selection is emphasis and movement, not disclosure.
+  Run: `npm run test -- scripts/validate-content.test.ts && npm run validate:content`
+  Expected: both PASS with zero errors.
 
-- [ ] Put shared anchor helpers in `element-ids.ts` with no `"use client"` directive. Exporting them from the client component makes them client references, and the server can no longer call them while rendering the corpus — which fails the build rather than degrading quietly.
+- [ ] **Step 5: Commit**
 
-- [ ] Add the persistent banner above every result, stating what the page is not before what it is: no model is involved, nothing is AI output recorded or live, and no part of it has been operationally validated.
-
-- [ ] Implement `EvidenceThread` in this exact order: finding, citation, synthetic response cited, how that response was made, what a reader expected, your review. Every stage is labelled in text; the numbers and the connector rule may reinforce the order but never carry it. A citation that does not resolve stays visible and says so, because hiding it would leave a finding looking fully evidenced while the evaluation counts a broken reference.
-
-- [ ] Implement review controls as native radios in a fieldset whose legend names both the finding and the state currently chosen. No wording may imply approval, and the control says in place that states stay in the browser and reset on reload.
-
-- [ ] Implement the evaluation summary with explicit numerators and denominators, `Not available` for a zero denominator, a case-by-case table naming what was missed and what was cited unexpectedly, and the evaluation's own limitations.
-
-- [ ] Implement the generic demo route. Render the workbench for a `baseline-only` playbook, and `DemoReadiness` with the specific reason and a back link for anything else. Unknown slugs use `notFound()`. Keep `generateStaticParams()` across all registry slugs so a direct `/demo` URL is a page explaining what is missing rather than a 404.
-
-- [ ] Mark selection with a ring inside the existing border, never a thick accent down one edge, matching how the maturity ladder marks its current rung. Every state carried by colour is also written out in text.
-
-- [ ] During the release review, disable JavaScript and confirm the disclosure, task, source register, synthetic method, all twenty responses, all six findings, every evidence thread, and the evaluation remain readable. Interactive review controls may be inert.
-
-- [ ] Run focused tests, typecheck, lint, content validation, and build.
-
-### Outstanding: everything that needs the recording
-
-Blocked on Task 9's recording. Each of these is a real hosted-flow stage that
-cannot be built yet, and none is stubbed:
-
-- [ ] Add the recorded-output stage: load the committed recording through `parseRecordedAnalysis`, render it beside the baseline, and label it `Recorded AI-assisted output`.
-
-- [ ] Add `baseline-comparison.tsx` and the `comparisonMode` state (`recorded`, `baseline`, `side-by-side`), keeping the dataset and evaluation definition unchanged across modes and preserving the active finding when the mode changes.
-
-- [ ] Promote the playbook to `recorded-demo` maturity with `demo.availability: "recorded"`, and move `evaluation.status` to `fixture-evaluated` once both arms of the comparison exist.
+```bash
+git add scripts lib/schema-primitives.ts
+git commit -m "feat: validate every synthetic dataset through the shared envelope and privacy walk"
+```
 
 ---
 
-## Task 11: Complete accessibility, responsive, and route review
+## Task 10: Rewrite the playbook detail route to five sections
 
-**Files**
+**Files:**
+- Create: `features/playbooks/detail/strategy-example-section.tsx`
+- Create: `features/playbooks/detail/data-sources-section.tsx`
+- Create: `features/playbooks/detail/synthetic-data-section.tsx`
+- Create: `features/playbooks/detail/demo-section.tsx`
+- Modify: `features/playbooks/detail/playbook-detail.tsx` (full rewrite; renders Caveats inline)
+- Modify: `features/playbooks/detail/detail-primitives.test.tsx` (full rewrite)
+- Modify: `features/playbooks/detail/playbook-detail.test.tsx` (full rewrite)
+- Modify: `app/playbooks/[slug]/page.tsx` (drop `reviewStatus`)
+- Delete: `features/playbooks/detail/maturity-ladder.tsx`, `metadata-rail.tsx`, `demo-readiness.tsx`, `evaluation-evidence.tsx`, `implementation-index.tsx`, `synthetic-data-method.tsx`, `source-register.tsx`, `review-status.ts`, `review-status.test.ts`
+- Keep: `definition-list-row.tsx` (reuse in the sources section), `lib/format-date.ts`, `lib/assert-never.ts`
 
-- Modify only application or component test files implicated by review findings
-- Modify: `.github/pull_request_template.md` when the release-review checklist is introduced in Task 12
+**Interfaces:**
+- Consumes: `Playbook`, `DataSource`, `dataAccessLabels`, `formatUtcDate`, `assertNever`, `ExternalLink`, `ProvenanceLabel`.
+- Produces: `PlaybookDetail(props: { playbook: Playbook }): ReactNode` — the route's only import from this folder.
 
-### Steps
+- [ ] **Step 1: Write the failing tests.** `playbook-detail.test.tsx` renders `<PlaybookDetail playbook={getPlaybook("policy-evidence")!} />` and asserts: exactly one `h1` (the title); exactly five `h2`s with accessible names, in order: `What the strategy draft proposed`, `Data sources investigated`, `Synthetic dataset`, `Demo`, `Caveats`; the summary, sector, and formatted last-reviewed date visible before the first `h2`. `detail-primitives.test.tsx` covers each section against hand-built fixtures:
+  - StrategyExampleSection shows the proposal, the draft reference, and a link whose accessible name includes the source title/publisher;
+  - DataSourcesSection lists every source as an article exposing publisher, title, link, covers, the `dataAccessLabels` text, and relevance;
+  - SyntheticDataSection `available` shows the `Synthetic working data` provenance label, the method sentence, every limitation, and the `dataPath` as code text; `not-responsible` shows the reason and the `whatContributorsNeed` sentence and no path;
+  - DemoSection `available` renders a link to `route` with the `howItWorks` sentence; `not-yet` renders the note and no link;
+  - assert on roles, names, and visible text only — no `data-testid`.
 
-- [ ] Run the automated quality gate first:
+  Run: `npm run test -- features/playbooks/detail`
+  Expected: FAIL.
 
-  ```bash
-  npm run validate:content
-  npm run typecheck
-  npm run lint
-  npm run test
-  npm run build
-  ```
+- [ ] **Step 2: Implement the four section components as Server Components.** Each takes exactly its slice of `Playbook` (`strategyExample`, `dataSources`, `syntheticData`, `demo`) plus the heading id it labels itself by. Reuse `.page-shell`, `.page-intro`, `.reading-width`, and existing dossier CSS classes from `app/globals.css`; do not add new class names a stylesheet does not define. Use `assertNever` in the two discriminated-union sections so a new status fails typecheck. `PlaybookDetail` composes: header (h1, summary, sector, `Last reviewed <formatUtcDate(...)>`), then the five sections with stable fragment ids `strategy-example`, `data-sources`, `synthetic-dataset`, `demo`, `caveats`; Caveats is a `section` with an `h2` and a `ul` rendered inline in `playbook-detail.tsx`.
 
-  The lint step uses the Next.js Core Web Vitals configuration and its bundled `eslint-plugin-jsx-a11y` rules. Focused component tests assert semantic roles, names, states, and keyboard behaviour for synchronous interactive components.
+- [ ] **Step 3: Update the route.** In `app/playbooks/[slug]/page.tsx`, delete the `getReviewStatus` import and the `reviewStatus` prop; everything else (static params, metadata, `notFound`) stays.
 
-- [ ] Review the complete route flow manually:
+- [ ] **Step 4: Delete the retired components.**
 
-  - home → catalogue → Policy Evidence Workbench navigation;
-  - combined sector, maturity, data, and risk filters reflected in the URL;
-  - search plus filter clearing;
-  - no-results recovery;
-  - all eleven detail sections;
-  - a no-demo explanation for a restricted, high-risk playbook;
-  - complete finding → citation → synthetic note → evaluation → disposition flow;
-  - baseline versus recorded comparison;
-  - review-state reset;
-  - unknown slug 404;
-  - no-JavaScript readability.
+```bash
+git rm features/playbooks/detail/maturity-ladder.tsx features/playbooks/detail/metadata-rail.tsx \
+       features/playbooks/detail/demo-readiness.tsx features/playbooks/detail/evaluation-evidence.tsx \
+       features/playbooks/detail/implementation-index.tsx features/playbooks/detail/synthetic-data-method.tsx \
+       features/playbooks/detail/source-register.tsx features/playbooks/detail/review-status.ts \
+       features/playbooks/detail/review-status.test.ts
+```
 
-- [ ] Review at 320×800, 768×1024, and 1440×1000. Confirm no horizontal page overflow, 44px minimum primary control bounds, stacked table representation at small width, and the evidence thread following the selected finding in DOM order.
+- [ ] **Step 5: Run the detail suite.**
 
-- [ ] Review keyboard-only operation from the skip link through primary navigation, catalogue filters, finding selection, evidence, disposition, and reset. Confirm focus remains visible and unobscured.
+  Run: `npm run test -- features/playbooks/detail`
+  Expected: PASS.
 
-- [ ] Review at 200% zoom, with reduced motion, in Windows High Contrast or forced colours, and with JavaScript disabled. Confirm selected and focus states never rely on colour alone.
+- [ ] **Step 6: Commit**
 
-- [ ] Confirm every route has a unique descriptive title for the Next.js route announcer and that landmarks and heading levels remain coherent.
-
-- [ ] Record the routes, browsers, viewport sizes, accessibility modes, date, and findings in the pull-request description or release review, not in a personal file inside the repository.
-
-- [ ] Commit focused fixes and semantic component coverage introduced by the review.
-
-  ```bash
-  git add app components features
-  git commit -m "fix: address accessibility and responsive review"
-  ```
+```bash
+git add -A features/playbooks/detail app/playbooks
+git commit -m "feat: render playbook dossiers as the five A/B/C/D sections"
+```
 
 ---
 
-## Task 12: Add metadata, error boundaries, and public repository governance
+## Task 11: Shrink the catalogue to search, sector, and honest badges
 
-**Files**
+**Files:**
+- Modify: `features/playbooks/catalogue/catalogue-query.ts`
+- Modify: `features/playbooks/catalogue/filter-playbooks.ts`
+- Modify: `features/playbooks/catalogue/filter-options.ts`
+- Modify: `features/playbooks/catalogue/filter-playbooks.test.ts`
+- Modify: `features/playbooks/catalogue/playbook-dossier-row.tsx`
+- Modify: `features/playbooks/catalogue/catalogue-filters.tsx`
+- Modify: `features/playbooks/catalogue/filter-summary.tsx`
+- Modify: `features/playbooks/catalogue/playbook-catalogue.tsx`
+- Modify: `features/playbooks/catalogue/playbook-catalogue.test.tsx`
+- Create: `components/site/availability-badge.tsx`
+- Modify: `components/site/site-shell.test.tsx` (drop deleted-badge assertions)
+- Modify: `app/playbooks/page.tsx` (only if prop shapes changed)
+- Delete: `components/site/status-badge.tsx`, `components/site/risk-badge.tsx`
 
-- Modify: `app/layout.tsx`
-- Create: `app/robots.ts`
-- Create: `app/sitemap.ts`
-- Create: `app/opengraph-image.tsx`
-- Create: `app/error.tsx`
-- Create: `app/global-error.tsx`
-- Create: `lib/site-config.ts`
+**Interfaces:**
+- Consumes: `PlaybookSummary` (v2), `syntheticDataBadgeLabels`, `demoBadgeLabels` from `lib/playbooks/vocabulary.ts`.
+- Produces:
+
+```ts
+export type CatalogueQuery = { query: string; sectors: string[] }
+export function parseCatalogueQuery(searchParams: Record<string, string | string[] | undefined>): CatalogueQuery // keys "q" and "sector"
+export function serializeCatalogueQuery(query: CatalogueQuery): URLSearchParams
+export function filterPlaybooks(playbooks: readonly PlaybookSummary[], query: CatalogueQuery): PlaybookSummary[]
+export function getCatalogueFilterOptions(playbooks: readonly PlaybookSummary[]): { sectors: { value: string; label: string; count: number }[] }
+export function AvailabilityBadge(props: { kind: "dataset" | "demo"; available: boolean }): ReactNode
+```
+
+- [ ] **Step 1: Rewrite the pure-logic tests first** (`filter-playbooks.test.ts`): case-insensitive and diacritic-normalised search over title, summary, and sector; sector OR-within-group; search AND sector combined; repeated `sector` params; invalid sector values ignored; 120-character query cap; serialisation round trip; non-mutation; default order = demo-available first, then title with `Intl.Collator("en-GB", { sensitivity: "base" })`; zero results returns an empty array.
+
+  Run: `npm run test -- features/playbooks/catalogue/filter-playbooks.test.ts`
+  Expected: FAIL.
+
+- [ ] **Step 2: Implement.** Strip `catalogue-query.ts` to `q`/`sector` parsing (keep the existing Zod-backed ignore-invalid pattern and the 120-char trim/cap); strip `filter-playbooks.ts` to the fields above with the new two-level ordering; `filter-options.ts` returns sectors only, each with its total inventory count. Run the test: PASS.
+
+- [ ] **Step 3: Rewrite the row and badges.** `AvailabilityBadge` renders a `<span>` with visible text from the vocabulary label maps plus a leading symbol (`●` available / `○` not) — text always carries the state, never colour alone. `playbook-dossier-row.tsx` becomes: title (link), summary, sector, both badges, `Last reviewed <date>`. Update `catalogue-filters.tsx` to one search input and one sector group (native checkboxes or the existing Select), keeping the `router.replace` + focus-preservation behaviour and the polite result-count live region; update `filter-summary.tsx` to sectors + query only.
+
+- [ ] **Step 4: Delete the retired badges and fix their tests.**
+
+```bash
+git rm components/site/status-badge.tsx components/site/risk-badge.tsx
+```
+
+  Remove status/risk badge assertions from `site-shell.test.tsx` and any badge usage from remaining site components; update `playbook-catalogue.test.tsx` to assert: all seventeen rows unfiltered, the two badge texts on a row with and without a dataset, result-count announcement, zero-result state with **Clear all filters**.
+
+- [ ] **Step 5: Run the catalogue and site suites.**
+
+  Run: `npm run test -- features/playbooks/catalogue components/site`
+  Expected: PASS.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add -A features/playbooks/catalogue components/site app/playbooks/page.tsx
+git commit -m "feat: shrink the catalogue to search, sector, and availability badges"
+```
+
+---
+
+## Task 12: Rebuild the demo as a server-only page and restore the full gate
+
+**Files:**
+- Modify: `features/policy-evidence/components/policy-evidence-workbench.tsx` (full rewrite)
+- Modify: `features/policy-evidence/components/policy-evidence-workbench.test.tsx` (full rewrite)
+- Modify: `features/policy-evidence/components/element-ids.ts` (keep; prune to what is used)
+- Modify: `app/playbooks/[slug]/demo/page.tsx`
+- Delete: `features/policy-evidence/components/workbench-client.tsx`, `baseline-demo-banner.tsx`, `synthetic-corpus-inspector.tsx`, `finding-list.tsx`, `evidence-thread.tsx`, `finding-review-controls.tsx`, `evaluation-summary.tsx`
+- Modify: `app/globals.css` (delete selectors only the removed components used)
+
+**Interfaces:**
+- Consumes: `runAnalysis`, `policyEvidenceCorpus`, `policyEvidenceDataset`, `Playbook`, `ProvenanceLabel`, `documentElementId` from `element-ids.ts`.
+- Produces: `PolicyEvidenceWorkbench(props: { playbook: Playbook }): ReactNode`.
+
+- [ ] **Step 1: Write the failing tests.** The workbench test renders the server component with the real registry playbook and asserts:
+  - an intro that states what the page is **not** before what it is: the visible strings `No model is involved`, `no account or key`, and the `Synthetic working data` provenance label;
+  - the dataset section renders the envelope description and **all twenty** records, each an `article` (or `li`) whose `id` equals `documentElementId(record.id)` and which shows the record's theme, stance, and full text;
+  - one section per finding produced by the real engine, showing label, summary, and each limitation sentence;
+  - every citation is a link whose `href` is `#` + the cited record's element id and whose text includes the quote;
+  - no element with a `radio`, `button`, or `combobox` role anywhere (the page has no interactivity).
+
+  Run: `npm run test -- features/policy-evidence/components`
+  Expected: FAIL.
+
+- [ ] **Step 2: Implement the workbench as one Server Component, no `"use client"` anywhere in the feature:**
+
+```tsx
+export function PolicyEvidenceWorkbench({ playbook }: { playbook: Playbook }) {
+  const analysis = runAnalysis(policyEvidenceCorpus)
+  // header: playbook title + "Demo"; intro paragraphs (what it is not / what it is / playbook.demo.howItWorks when available)
+  // section "Synthetic dataset": ProvenanceLabel + policyEvidenceDataset.description + ordered list of records with anchors
+  // section "Findings": one sub-section per finding; citations as <a href={`#${documentElementId(citation.documentId)}`}>“{citation.quote}”</a>
+  // back link to /playbooks/policy-evidence
+}
+```
+
+  Order on the page: intro → dataset → findings (citations link back up to records). Every state is text; selection/emphasis affordances are gone with the client boundary.
+
+- [ ] **Step 3: Update the demo route.** `app/playbooks/[slug]/demo/page.tsx`: unknown slug → `notFound()`; `demo.status === "available"` → `<PolicyEvidenceWorkbench playbook={playbook} />` (policy-evidence is the only such playbook; the workbench is its demo); otherwise render a small page with the playbook title, the `demo.note` sentence, and a link back to the playbook. Keep `generateStaticParams()` over all registry slugs and `dynamicParams = false`.
+
+- [ ] **Step 4: Delete the retired components, prune `element-ids.ts`, and remove orphaned CSS.** In `element-ids.ts`, delete `threadElementId` and `ThreadElementId` along with the now-dead `FindingId` import (Task 3 removed that type); keep `documentElementId`/`DocumentElementId`.
+
+```bash
+git rm features/policy-evidence/components/workbench-client.tsx \
+       features/policy-evidence/components/baseline-demo-banner.tsx \
+       features/policy-evidence/components/synthetic-corpus-inspector.tsx \
+       features/policy-evidence/components/finding-list.tsx \
+       features/policy-evidence/components/evidence-thread.tsx \
+       features/policy-evidence/components/finding-review-controls.tsx \
+       features/policy-evidence/components/evaluation-summary.tsx
+```
+
+  Then grep `app/globals.css` for class names that now appear in no `.tsx` file and delete those rule blocks only.
+
+- [ ] **Step 5: Confirm every vitest suite passes.** (Typecheck and lint stay red until Task 13 rewrites the home and method pages, which still reference deleted vocabulary — the full gate closes there.)
+
+  Run: `npm run test`
+  Expected: all suites PASS.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add -A features/policy-evidence app/playbooks app/globals.css
+git commit -m "feat: rebuild the demo as a server-rendered dataset-and-findings page"
+```
+
+---
+
+## Task 13: Reframe the home, method, and contribute pages
+
+**Files:**
+- Modify: `app/page.tsx`
+- Modify: `components/site/evidence-chain.tsx`
+- Modify: `components/site/evidence-chain.test.tsx`
+- Modify: `app/method/page.tsx`
+- Modify: `app/contribute/page.tsx`
+- Modify: any site test asserting old copy (run the suite to find them)
+
+**Interfaces:**
+- Consumes: `getPlaybookSummaries`, `AvailabilityBadge`, the five detail-section heading names (copy must match Task 10's headings when referring to them).
+
+- [ ] **Step 1: Update the evidence-chain test, then the component.** `EvidenceChain` becomes the four-step A/B/C/D strip — an ordered list, same responsive pattern as now, with these exact stage names and one plain sentence each:
+  1. **Strategy example** — what the draft proposed;
+  2. **Investigated sources** — the real data behind it;
+  3. **Synthetic dataset** — try the idea with no key or agreement;
+  4. **Working demo** — see it run end to end.
+
+  The test asserts the four names in DOM order inside a single `ol`.
+
+- [ ] **Step 2: Rewrite the home page** as: (1) proposition — "Northern Ireland's draft AI strategy calls out example projects for public services. This site turns them into playbooks you can explore, validate, and contribute to", with the independent-open-source qualifier kept; (2) the A/B/C/D strip; (3) the Policy Evidence demo feature linking to `/playbooks/policy-evidence/demo`; (4) a short catalogue preview (3–4 rows); (5) method and contribute prompts. No chatbot input, no invented statistic, no AI artwork.
+
+- [ ] **Step 3: Rewrite `/method` as "How this works":** one section per letter — where A comes from (the draft, Table 2, one link), how B sources are chosen and access-classified, how C datasets are made (AI-authored, shaped by what real sources publish, envelope-labelled `Synthetic working data`, privacy-walked, no generator/seed/hash) and what they can never prove, and what a D demo does (transparent computation over committed data, no model, no key) and does not show. Keep the route at `/method`; set the page `<h1>` and metadata title to "How this works".
+
+- [ ] **Step 4: Rewrite `/contribute` to four tracks:** improve a playbook's plain-English content; add or verify a data source; contribute a synthetic dataset (must use the envelope, pass `npm run validate:content`, and follow the privacy rules); build a demo for a playbook that has a dataset. State the privacy rules inline.
+
+- [ ] **Step 5: Full gate plus manual review.**
+
+  Run: `npm run check`
+  Expected: PASS. Then `npm run build && npm run start` and manually verify: home → catalogue → policy-evidence → demo flow; a `not-responsible` playbook reads honestly; the demo page with JavaScript disabled shows intro, all records, all findings, and working citation anchors; keyboard-only pass over the catalogue filters and demo links; 320px width without horizontal overflow. Record findings in the PR description.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add app components/site
+git commit -m "feat: reframe the site around the strategy draft and the A/B/C/D chain"
+```
+
+---
+
+## Task 14: Slim open-source release surface
+
+**Files:**
 - Replace: `README.md`
+- Create: `LICENSE`
 - Create: `CONTRIBUTING.md`
 - Create: `SECURITY.md`
-- Create: `CODE_OF_CONDUCT.md`
-- Create: `LICENSE`
-- Create: `.github/ISSUE_TEMPLATE/playbook.yml`
-- Create: `.github/ISSUE_TEMPLATE/source-correction.yml`
-- Create: `.github/pull_request_template.md`
 - Create: `.github/workflows/ci.yml`
-- Create: `.github/dependabot.yml`
 
-### Steps
+**Interfaces:**
+- Consumes: the four contribute tracks (Task 13) — CONTRIBUTING must match them.
 
-- [ ] Create `lib/site-config.ts` as the single source for site name, description, canonical origin, repository URL, issue URL, and private vulnerability-reporting URL. Read the canonical origin from `NEXT_PUBLIC_SITE_URL` with a documented localhost fallback; do not commit an environment-specific deployment address.
+- [ ] **Step 1: Replace the scaffold `README.md`** with, in order: one-paragraph purpose (the Task 1 articulation); the A/B/C/D structure explained in four bullets; independence statement (no government endorsement); quickstart (`npm ci`, `npm run dev`, `npm run check`); "No API key is required — that is the point"; data honesty (synthetic datasets are AI-authored stand-ins, labelled `Synthetic working data`, never official data or operational evidence); the four contribution tracks with a link to CONTRIBUTING.md; licence note (Apache-2.0 for repository code and content; linked official sources keep their own terms).
 
-- [ ] Add static root metadata and dynamic playbook metadata. Add a generated Open Graph image using only supported `ImageResponse` flexbox styles. The image includes the independent-project qualifier and no seal, crest, or invented government association.
+- [ ] **Step 2: Add the licence.**
 
-- [ ] Add `robots.ts` and `sitemap.ts` from the route list and registry slugs. Include only public routes and recorded demo routes. Derive URLs from `siteConfig.origin`.
+```bash
+curl -fsSL https://www.apache.org/licenses/LICENSE-2.0.txt -o LICENSE
+head -3 LICENSE
+```
 
-- [ ] Add designed route and global error boundaries. `app/error.tsx` is a Client Component with one retry action and one safe catalogue link. `app/global-error.tsx` supplies its own `<html>` and `<body>`. Error copy must not expose stack traces, fixture contents, or local paths.
+  Expected: the canonical Apache License 2.0 header. Do not add a NOTICE file.
 
-- [ ] Replace the scaffold README with:
+- [ ] **Step 3: Write `CONTRIBUTING.md`** around the four tracks: for each, what to change, which command must pass (`npm run check`), and the hard rules (envelope + disclosure literal for datasets; no person-shaped data — `lib/privacy-patterns.ts` is the arbiter; plain English; verified source URLs; no model calls or keys).
 
-  - product purpose and independence statement;
-  - screenshot or text-based route overview after the UI exists;
-  - `npm ci`, `npm run dev`, and `npm run check` commands;
-  - one-app architecture summary;
-  - data provenance and synthetic-data policy;
-  - exact tracked fixture types;
-  - contribution routes;
-  - licence and third-party source-material note;
-  - security reporting link;
-  - a statement that no API key is required for the MVP.
+- [ ] **Step 4: Write `SECURITY.md`:** report vulnerabilities through GitHub private vulnerability reporting on this repository; no personal email; supported version is `main`.
 
-- [ ] Write `CONTRIBUTING.md` around the three contribution tracks in `/contribute`. Require schema validity, official source records, privacy review, deterministic fixtures, baseline, evaluation, accessibility, and tests according to maturity.
+- [ ] **Step 5: Add CI** at `.github/workflows/ci.yml`:
 
-- [ ] Add Apache License 2.0 text to `LICENSE`. In repository documentation, state that included official-source samples keep their original reuse terms and are not relicensed by the repository.
+```yaml
+name: CI
 
-- [ ] Add Contributor Covenant 2.1 text to `CODE_OF_CONDUCT.md` with enforcement through repository maintainer channels rather than a personal email address.
+on:
+  pull_request:
+  push:
+    branches: [main]
 
-- [ ] Configure `SECURITY.md` to use GitHub private vulnerability reporting. Describe supported versions without naming an individual.
+permissions:
+  contents: read
 
-- [ ] Add structured issue forms for a new playbook and a source correction. Ask for public URLs and reuse status; warn against entering personal or sensitive data.
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+```
 
-- [ ] Add a pull-request checklist covering schema, provenance, source permission, synthetic label, baseline, recorded-output metadata, evaluation, oversight, accessibility, tests, and the absence of personal or sensitive data.
+- [ ] **Step 6: Final verification and privacy scan.**
 
-- [ ] Add CI with explicit least-privilege permissions and npm cache:
+```bash
+npm run check
+git grep -n -I -E "/Users/|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|api[_-]?key|client[_-]?secret" -- ':!package-lock.json' ':!build-plan.md'
+```
 
-  ```yaml
-  name: CI
+  Expected: check passes; the grep returns no personal paths, keys, or secrets (documentation mentions of "no API key is required" are fine — review hits, don't blind-delete).
 
-  on:
-    pull_request:
-    push:
-      branches: [main]
+- [ ] **Step 7: Commit**
 
-  permissions:
-    contents: read
-
-  jobs:
-    quality:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - uses: actions/setup-node@v4
-          with:
-            node-version: 22
-            cache: npm
-        - run: npm ci
-        - run: npm run validate:content
-        - run: npm run typecheck
-        - run: npm run lint
-        - run: npm run test
-        - run: npm run build
-  ```
-
-  Pin actions to immutable commit SHAs before merge if repository policy requires supply-chain pinning.
-
-- [ ] Configure Dependabot for monthly npm and GitHub Actions updates with a small open-pull-request limit.
-
-- [ ] Run the full local gate.
-
-  ```bash
-  npm run check
-  ```
-
-- [ ] Commit repository and release surfaces.
-
-  ```bash
-  git add app lib/site-config.ts README.md CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md LICENSE .github
-  git commit -m "docs: prepare the project for open-source contribution"
-  ```
+```bash
+git add README.md LICENSE CONTRIBUTING.md SECURITY.md .github
+git commit -m "docs: add the open-source release surface"
+```
 
 ---
 
-## Task 13: Final content, visual, privacy, and release verification
+## Acceptance checklist
 
-**Files**
-
-- Modify only files implicated by verification failures
-- Create only if the repository uses them: `docs/release-checklist.md`
-
-### Steps
-
-- [ ] Run the complete clean gate with fresh dependency state in CI or a clean checkout.
-
-  ```bash
-  npm ci
-  npm run validate:content
-  npm run typecheck
-  npm run lint
-  npm run test
-  npm run build
-  ```
-
-  Expected: every command exits zero. Manual route and accessibility review is recorded separately because the repository intentionally has no automated browser-test harness.
-
-- [ ] Inspect the production build for exactly the intended public routes. Confirm every playbook detail route is statically generated, unknown slugs 404, and only Policy Evidence Workbench presents a recorded demo.
-
-- [ ] Run repository privacy scans from the repository root. Extend the patterns to any organisation-specific secret scanner available in CI.
-
-  ```bash
-  git grep -n -I -E "C:\\\\Users\\\\|/Users/|BEGIN (RSA|OPENSSH|EC) PRIVATE KEY|api[_-]?key|client[_-]?secret|national insurance|health and care number"
-  git grep -n -I -E "@[A-Za-z0-9.-]+\\.(com|net|org|gov|uk)" -- ':!package-lock.json'
-  ```
-
-  Expected: no personal local paths, keys, secrets, real contact details, or sensitive identifiers. Review documentation examples manually rather than blindly deleting legitimate security guidance.
-
-- [ ] Verify fixture integrity independently:
-
-  - reparse the committed dataset against its contract and recompute source, prompt, recorded-output, and evaluation hashes;
-  - confirm all citations match exact substring offsets;
-  - regenerate the synthetic corpus twice with no diff;
-  - confirm source samples contain no respondent text or metadata;
-  - confirm every synthetic record has the disclosure label;
-  - confirm recorded output displays its date, model identifier, and not-live statement.
-
-- [ ] Perform the approved Evidence Desk visual review at 320px, 768px, 1024px, and 1440px widths. Check hierarchy, 65–72ch measure, dossier row alignment, metadata-rail order, evidence-thread legibility, restrained shadow use, print output, and absence of generic AI decoration.
-
-- [ ] Perform manual accessibility review:
-
-  - keyboard-only navigation and workbench operation;
-  - visible focus against every surface;
-  - 200% zoom and 320px reflow;
-  - reduced motion;
-  - Windows High Contrast or browser forced colours;
-  - screen-reader-oriented landmark, heading, filter-summary, evidence-link, and disposition announcements;
-  - no-JavaScript reading path.
-
-- [ ] Ask a non-technical reviewer to use the Policy Evidence Workbench and answer the eight public questions in `DESIGN.md` section 2. Record only anonymised, non-sensitive findings in an issue or pull request. Treat inability to distinguish source, synthetic, baseline, and recorded output as a release blocker.
-
-- [ ] Ask a technical reviewer to find the schema, synthetic dataset, source register, baseline, recorded manifest, evaluation, and tests without guidance. Treat an ambiguous contribution path as a documentation defect.
-
-- [ ] Review every user-facing claim against the repository evidence. Remove or qualify claims about accuracy, efficiency, savings, adoption, fairness, or outcomes that are not directly supported. Confirm all assessed concepts say what must be validated next.
-
-- [ ] Confirm open-source essentials are present and internally linked: licence, contributing guide, code of conduct, security policy, issue forms, pull-request checklist, CI, and third-party source terms.
-
-- [ ] Inspect the final diff and commit history.
-
-  ```bash
-  git diff --check
-  git status --short
-  git log --oneline --decorate -15
-  ```
-
-- [ ] Create a final release commit only for verified corrections, then open a pull request summarising scope, evidence boundaries, test results, manual accessibility checks, privacy scan, and remaining limitations.
-
-## MVP acceptance checklist
-
-- [ ] Seventeen schema-valid playbooks render in the catalogue.
-- [ ] Exactly one playbook is a recorded exemplar.
-- [ ] Every playbook shows official sources, data accessibility, baseline, evaluation state, risks, human oversight, limitations, and next validation questions.
-- [ ] Policy Evidence Workbench runs without a key, live API, database, or private data.
-- [ ] Official source sample, synthetic corpus, recorded output, baseline, and human review state are visually and semantically distinct.
-- [ ] Every committed synthetic dataset parses against its contract, and all source-sample and recorded-output hashes verify.
-- [ ] Every recorded finding citation points to exact synthetic text.
-- [ ] The baseline is transparent and evaluated against the same labelled set.
-- [ ] The hosted page says **Recorded demonstration** and **Not operationally validated**.
-- [ ] A no-demo playbook explains the barrier rather than showing an empty interactive shell.
-- [ ] Core explanation and evidence remain available without JavaScript.
-- [ ] JSX accessibility linting passes; keyboard, zoom, reduced-motion, forced-colours, responsive, screen-reader-oriented, and no-JavaScript checks pass manual release review.
-- [ ] Content validation, typecheck, lint, unit and focused component tests, and production build pass in CI.
-- [ ] Tracked content contains no personal names, personal local paths, credentials, private endpoints, or sensitive person-level records.
-- [ ] README, licence, contributing guide, code of conduct, security policy, issue forms, and CI are complete.
+- [ ] Seventeen schema-v2 playbooks render in the catalogue; each detail page has exactly the five sections in order.
+- [ ] Fifteen playbooks ship an envelope-valid synthetic dataset; `violence-risk-research` and `diagnostic-imaging-support` state plainly why theirs would not be responsible.
+- [ ] Exactly one playbook — policy-evidence — has an available demo, fully server-rendered, readable and navigable without JavaScript.
+- [ ] Every citation in the demo is an exact substring of the committed dataset, enforced by test.
+- [ ] Every dataset file carries the `Synthetic working data` disclosure and passes the privacy walk in `npm run validate:content`.
+- [ ] No maturity, risk-tier, evaluation, gold-label, recorded-AI, or hash machinery remains anywhere in `lib/`, `features/`, `content/`, `scripts/`, or the three product documents.
+- [ ] `npm run check` passes clean; CI runs it on push and pull request.
+- [ ] README, LICENSE, CONTRIBUTING, and SECURITY exist and agree with the contribute page.

@@ -2,42 +2,38 @@
 
 ## 1. Purpose
 
-This repository is an open-source catalogue of public-service AI playbooks. It helps a broad audience understand a public problem by example, while giving delivery teams a credible technical starting point for further discovery and implementation.
+This repository is an open-source starting point for anyone who wants to engage with Northern Ireland's draft Artificial Intelligence Strategy — particularly the example public-service projects the draft calls out. Those examples are this site's playbooks.
 
-The product must connect four things that are usually separated:
+Every playbook answers four questions in the same order:
 
-1. the public-service problem and the decision that needs support;
-2. the official evidence and realistic data constraints;
-3. a bounded, inspectable demonstration;
-4. the implementation, evaluation, governance, and contribution path.
+1. **A — what the strategy draft proposed** for this service, in plain English, with a link to the draft.
+2. **B — which real data sources were investigated** as appropriate to that example: who publishes them, what they cover, how open they are, and why they fit.
+3. **C — what synthetic dataset stands in for that data**, so anyone can try the idea with no API key, no account, and no data-sharing agreement — or, where a stand-in would not be responsible, why not and what a contributor would need instead.
+4. **D — what a demo shows**, where one has been built, or plainly that none has.
 
-The website is a presentation layer for everyone. The repository beneath it is a working reference for technical implementers. Both surfaces tell the same truth at different levels of detail.
+Each playbook closes with one short caveats block.
 
-The founding source is Northern Ireland's draft Artificial Intelligence Strategy and its proposed public-service use cases. The project is independent, must not imply government endorsement, and must not imitate an official government service.
+The website is a presentation layer for everyone. The repository beneath it is a working reference for people who want to fork it. Both surfaces tell the same truth at different levels of detail.
+
+The project is independent. It must not imply government endorsement and must not imitate an official government service.
 
 ## 2. Product promise
 
-> Understand the problem. Try a bounded example. Inspect the evidence. Reuse the pattern.
+> See what the draft proposed. See what data exists. Take the dataset. Try the idea.
 
-A visitor should be able to answer these questions without reading the code:
+A visitor should be able to answer four questions about any playbook without reading the code:
 
-- What public-service problem is being addressed?
-- Who is affected, and what decision might be supported?
-- Why might AI help, and what is the non-AI alternative?
-- What official sources inform the example?
-- Which data is source material, which is synthetic, and which output is recorded?
-- How mature is the evidence?
-- What could go wrong, and where does a person retain control?
-- What would a real team need to validate next?
+- What did the draft strategy propose for this service?
+- What real data exists behind it, and how open is it?
+- What is the synthetic dataset, and what can it never prove?
+- What does the demo do — and what does it not show? (Or: is there a demo at all?)
 
 A technical contributor should additionally be able to answer:
 
-- Where is the typed playbook definition?
-- How were fixtures generated and versioned?
-- How does the deterministic baseline work?
-- How is recorded AI-assisted output evaluated?
-- Which components and domain functions can be reused?
-- What tests must pass before a contribution is accepted?
+- Where is the typed playbook definition and the schema it must satisfy?
+- Where is the dataset file, and what makes it valid?
+- How does the demo compute its result, without a model or a key?
+- What must pass before a contribution is accepted?
 
 ## 3. Audience model
 
@@ -45,74 +41,73 @@ The product serves two audiences through progressive disclosure, not separate pr
 
 ### Public and policy audience
 
-Members of the public, policymakers, service leaders, researchers, and subject-matter experts need plain-English explanations, visible evidence, and honest limitations. Their default path ends with understanding and informed scrutiny.
+Members of the public, policymakers, service leaders, researchers, and subject-matter experts need plain-English explanations, real source links, and honest limits. Their default path ends with understanding and informed scrutiny.
 
 ### Delivery and technical audience
 
-Public-sector teams, civic technologists, designers, data practitioners, and software engineers need structured metadata, fixtures, interfaces, evaluation logic, and local run instructions. Their path continues from the same public explanation into implementation details.
+Public-sector teams, civic technologists, designers, data practitioners, and software engineers need the typed definition, the dataset, the analysis code, and local run instructions. Their path continues from the same public explanation into the repository.
 
-Technical detail must be available without making the public explanation feel like documentation. Plain language is the default; implementation detail expands in place or appears later in the page.
+Technical detail must be available without making the public explanation feel like documentation. Plain language is the default; file paths, schema names, and method notes sit inside the section they belong to.
 
 ## 4. Product principles
 
-### Explain by example
+### Answer the four questions
 
-Begin with a recognisable task and a decision, not a model or technology. Examples are small enough to understand and complete enough to inspect.
+Every playbook says what the draft proposed, what data exists, what the synthetic dataset is, and what a demo does. Nothing else competes with those four answers for space.
 
-### Evidence before spectacle
+### Say what is missing
 
-Every demonstration exposes provenance, baseline, evaluation method, maturity, limitations, and known failure modes. Animation or novelty must never outrank comprehension.
+An unbuilt demo, an absent dataset, or a restricted source is stated in words. A gap is never implied by an empty space, a hopeful label, or a section quietly left out.
 
 ### Synthetic but honest
 
-Synthetic data makes examples safe, reproducible, and contribution-friendly. It is never presented as a real case, real person, official dataset, or evidence of operational effectiveness.
+Synthetic data makes an idea safe, free, and reproducible to try. It is never presented as a real case, a real person, an official dataset, or evidence of operational effectiveness.
+
+### No key, no account, no agreement
+
+Anyone can validate an idea from a clean checkout. That is the point of C, and it is why no hosted page calls a model.
 
 ### One contract, many domains
 
-Every playbook uses the same core metadata and page order. Domain-specific sections may extend the contract, but they may not hide or rename core evidence and governance fields.
-
-### Public value with human control
-
-Benefits, accountability, contestability, accessibility, and redress are part of the product design. Each playbook must identify the person who remains responsible for the supported decision.
-
-### AI is optional, not assumed
-
-Every interactive exemplar includes a deterministic non-AI baseline. A playbook may conclude that AI is not justified, that better data or service design should come first, or that a safe public demonstration is inappropriate.
+Every playbook uses the same schema and the same five page sections. A domain may say different things in them; it may not rename, reorder, or omit them.
 
 ## 5. Scope
 
 ### MVP
 
 - One Next.js application, one package manifest, and one deployment unit.
-- A home page that explains the method and highlights the first exemplar.
-- A filterable catalogue of all assessed strategy use cases.
-- A consistent detail page for every playbook.
-- One complete interactive exemplar: **Policy Evidence Workbench**.
-- A method page documenting evidence maturity, synthetic data, evaluation, and contribution rules.
-- Versioned, non-sensitive fixtures and recorded outputs that work without credentials or live services.
-- Open-source governance and contributor documentation.
+- A home page that explains the draft, the A/B/C/D structure, and the one demo.
+- A catalogue of all seventeen playbooks with search and sector filtering.
+- A detail page for every playbook with the same five sections in the same order.
+- A, B, and C for all seventeen playbooks — with an honest `not-responsible` answer to C where a synthetic stand-in would be irresponsible.
+- Exactly one D: the Policy Evidence Workbench demo.
+- A "How this works" page covering the four sections, how datasets are made and labelled, and what a demo can never show.
+- Committed, non-sensitive datasets that work with no credentials and no live service.
+- Open-source release surface: licence, contributing, security, and CI running the quality gate.
 
 ### Explicit non-goals
 
 - No live departmental system or production decision support.
 - No ingestion pipelines, scheduled jobs, API-key onboarding, or private integrations.
-- No runtime calls to an AI model in the hosted MVP.
+- No calls to an AI model from any hosted page, at build time or at request time.
 - No real person-level health, justice, education, housing, employment, benefits, or consultation-response data.
-- No claim that a recorded demonstration has been operationally validated.
-- No login, personalisation, user accounts, analytics profile, or database in the MVP.
-- No attempt to make every catalogue card look equally mature.
+- No accuracy, fairness, or benchmark metrics, and no labelled answer keys: this project measures nothing about model quality.
+- No recorded or live AI output presented as a result on a page.
+- No governance apparatus layered over the four sections — no rung ladders, no risk tiers, no review workflows, no per-playbook sign-off fields.
+- No login, personalisation, user accounts, analytics profile, or database.
+- No attempt to make every catalogue row look equally complete.
 - No dark theme in the MVP; forced-colours and operating-system contrast modes remain supported.
 
 ## 6. Positioning and research synthesis
 
 Existing patterns establish parts of the answer:
 
-- public-sector algorithm registers explain use and accountability but usually stop before a runnable example;
-- interactive model galleries make capabilities tangible but often omit public-service provenance, governance, and reuse guidance;
-- open-source government catalogues improve discovery and reuse but are generally registries rather than guided evidence experiences;
-- government AI use-case inventories show breadth but often make concepts appear more complete than their evidence permits.
+- public-sector algorithm registers explain use and accountability but usually stop before anything runnable;
+- interactive model galleries make capabilities tangible but often omit the public-service context and the real sources;
+- open-source government catalogues improve discovery and reuse but are generally registries rather than guided explanations;
+- government AI use-case inventories show breadth but often make concepts appear more settled than their data reality permits.
 
-This product's distinctive unit is an **evidence-backed playbook**: a comparable public dossier with an optional bounded demonstration and a reusable implementation path. The interface should feel like an independent research desk, not a procurement catalogue, model leaderboard, or government marketing site.
+This product's distinctive unit is a **playbook**: one strategy-draft example, the real sources behind it, a dataset anyone can take, and — where one exists — a demo whose method is readable. The interface should feel like an independent research desk, not a procurement catalogue, model leaderboard, or government marketing site.
 
 ## 7. Information architecture
 
@@ -120,102 +115,85 @@ This product's distinctive unit is an **evidence-backed playbook**: a comparable
 
 | Route | Purpose | Primary audience |
 | --- | --- | --- |
-| `/` | Explain the proposition, evidence chain, first exemplar, and catalogue entry points | Everyone |
-| `/playbooks` | Browse and filter all assessed use cases | Everyone |
-| `/playbooks/[slug]` | Read one playbook in a fixed, comparable order | Everyone |
-| `/playbooks/[slug]/demo` | Use a complete bounded demonstration when maturity permits | Everyone, with technical depth available |
-| `/method` | Explain the schema, evidence ladder, synthetic-data policy, evaluation, and contribution process | Public reviewers and contributors |
-| `/contribute` | Give focused contribution routes and repository expectations | Contributors |
+| `/` | Explain the draft, the A/B/C/D structure, the one demo, and the catalogue entry point | Everyone |
+| `/playbooks` | Browse, search, and filter all playbooks | Everyone |
+| `/playbooks/[slug]` | Read one playbook in the same five-section order | Everyone |
+| `/playbooks/[slug]/demo` | Use the demo, or read why there is not one yet | Everyone |
+| `/method` | "How this works": the four sections, how datasets are made, what a demo cannot show | Public reviewers and contributors |
+| `/contribute` | Four contribution tracks and repository expectations | Contributors |
 
 All routes are part of the same App Router application. Folders, feature modules, and content modules are internal organisation, not separate applications or packages.
 
 ### Home page narrative
 
-The home page follows one evidence chain:
+The home page follows the same four steps as a playbook, as one accessible ordered list:
 
-1. **Public problem** — why abstract use-case lists are hard to assess or reuse.
-2. **Official source sample** — where a realistic example begins.
-3. **Synthetic working data** — how safe, repeatable fixtures are derived.
-4. **Bounded demonstration** — what the visitor can inspect or try.
-5. **Evidence and code** — what is known, what is not, and how to reuse the work.
+1. **Strategy example** — what the draft proposed.
+2. **Investigated sources** — the real data behind it.
+3. **Synthetic dataset** — try the idea with no key or agreement.
+4. **Working demo** — see it run end to end.
 
-The primary call to action is **Explore the playbooks**. The exemplar receives a secondary **Try the recorded demonstration** action. Repository links appear after the proposition is understood.
+The primary call to action is **Explore the playbooks**. The Policy Evidence demo receives a secondary action. Repository links appear after the proposition is understood.
 
 ### Catalogue
 
-The catalogue uses dossier rows on desktop and stacked sheets on small screens. It is not a wall of equal marketing cards. Each item exposes enough metadata to compare maturity and feasibility before opening it.
+The catalogue uses dossier rows on desktop and stacked sheets on small screens. It is not a wall of equal marketing cards. Each row carries title, plain-English summary, sector, whether a synthetic dataset exists, whether a demo exists, and the date it was last reviewed.
 
-Filters are encoded in the URL so a view can be linked and restored:
+Filtering is deliberately small and encoded in the URL so a view can be linked and restored:
 
-- sector;
-- technical pattern;
-- data accessibility;
-- maturity;
-- risk level.
+- `q` — search across title, summary, and sector;
+- `sector` — repeatable, OR within the group.
 
-Search matches title, plain-English summary, problem, sector, pattern, and tags. Sorting defaults to maturity, then data accessibility, then title. The filter summary is announced to assistive technology.
+Invalid values are ignored rather than thrown. Default order puts playbooks with an available demo first, then title order. The result count and the active filter summary are announced to assistive technology.
 
 ### Playbook detail sequence
 
-Every playbook page uses this order:
+Every playbook page has one `h1` (the title) and exactly five `h2` sections, in this order:
 
-1. At a glance
-2. The public-service problem
-3. Intended user and supported decision
-4. Demonstration or demonstration-readiness assessment
-5. Official sources
-6. Source sample and synthetic-data method
-7. Non-AI baseline
-8. Evaluation and evidence maturity
-9. Risks, human oversight, contestability, and redress
-10. Technical implementation
-11. References and contribution path
+1. What the strategy draft proposed
+2. Data sources investigated
+3. Synthetic dataset
+4. Demo
+5. Caveats
 
-The order is a governance feature: attractive output may not appear without its data and evidence context nearby.
+The header above the first section carries the summary, the sector, and the date the playbook was last reviewed. There is no table of contents and no sixth section: five headings is the contract, and a test asserts their names and order.
 
 ### Detail-page rendering contract
 
-The eleven-section sequence is also the document order. Each page has one `h1`, one labelled section for every item above, and stable fragment IDs so a source, caveat, or implementation note can be linked directly. The small-screen reading order is the source of truth; the desktop 3/6/3 dossier layout is produced with CSS Grid, not a second copy of the content or breakpoint-driven DOM reordering.
+The five-section sequence is also the document order, with stable fragment IDs `strategy-example`, `data-sources`, `synthetic-dataset`, `demo`, and `caveats` so a section can be linked directly. The small-screen reading order is the source of truth; wider layouts are produced with CSS Grid, not a second copy of the content or breakpoint-driven DOM reordering.
 
-**At a glance** contains maturity, data accessibility, risk, sector, technical patterns, and review status. The summary immediately below the title is the first explanatory prose. The source register and evaluation evidence remain in their numbered sections rather than being promoted into decorative sidebars ahead of the problem statement.
+Each section renders every state its schema allows, in words:
 
-The page renders every state in the content schema:
+- **Synthetic dataset** — `available` shows the provenance label, the method sentence, every limitation, and the dataset's repository path; `not-responsible` shows the reason and what a contributor would need instead, and shows no path.
+- **Demo** — `available` links to the playbook's own demo route with the one-sentence explanation of how it works; `not-yet` shows the note and no link.
 
-- `none` explains the evidence, data, or risk barrier and presents the next validation steps;
-- `baseline-only` links to a hosted example that runs the deterministic non-AI baseline and nothing else, and states the controlled vocabulary version it used;
-- `recorded` links to the checked-in demonstration and states its recording date, model label, and limitations;
-- `live-local` links to local setup guidance and shows the supplied warning;
-- `partner` explains why a controlled integration is required.
-
-The maturity ladder marks the current rung and uses `nextValidationSteps` as the evidence for what remains to reach a more credible state. It must not imply that later rungs have been achieved. It reuses the ladder presentation and accessible name already established on the method page, so the site has one ladder treatment rather than two.
-
-Because the sequence is long, the dossier opens with a contents block between the title and the first section: a labelled `nav` containing an ordered list of the eleven fragment links in document order. Its label is a paragraph rather than a heading, so the document still carries exactly eleven section headings. It is plain server-rendered anchors — no JavaScript, no scroll observation, no active-section highlighting — and the contents list and the sections are generated from one definition so they cannot drift apart.
+An exhaustive switch over each union means a new status fails typecheck rather than rendering a blank section.
 
 ## 8. Catalogue inventory
 
-The initial inventory translates the strategy examples into contribution-sized playbooks. Names are working, plain-English labels rather than claims about deployed systems. Data accessibility and risk are provisional assessments until each source register is researched.
+The inventory translates the strategy draft's examples into contribution-sized playbooks. Titles are working, plain-English labels rather than claims about deployed systems.
 
-| Slug | Working title | Sector | Initial data view | Initial risk view | MVP state |
-| --- | --- | --- | --- | --- | --- |
-| `policy-evidence` | Policy Evidence Workbench | Cross-government | Open or public documents | Moderate | Recorded exemplar |
-| `diagnostic-imaging-support` | Diagnostic Imaging Support | Health | Restricted | High | Assessed concept |
-| `health-operations` | Health Service Demand and Operations | Health | Restricted | High | Assessed concept |
-| `lesson-planning-feedback` | Lesson Planning and Feedback Support | Education | Partial | Moderate | Assessed concept |
-| `adaptive-tutoring` | Adaptive Tutoring | Education | Restricted | High | Assessed concept |
-| `wastewater-monitoring` | Wastewater Monitoring | Environment | Partial | Moderate | Assessed concept |
-| `traffic-flow` | Traffic Flow Management | Transport | Open or partial | Moderate | Assessed concept |
-| `road-maintenance` | Road Maintenance Planning | Transport | Open or partial | Moderate | Assessed concept |
-| `justice-research` | Justice Research and Analysis | Justice | Mixed or restricted | High | Assessed concept |
-| `offender-learning` | Learning Support in Custodial Settings | Justice and education | Restricted | High | Assessed concept |
-| `violence-risk-research` | Violence Risk Pattern Research | Community safety | Restricted and sensitive | Very high | Assessment only |
-| `earth-observation` | Earth Observation for Public Services | Environment | Open | Moderate | Assessed concept |
-| `farm-advisory` | Farm Advisory Support | Agriculture | Open or partial | Moderate | Assessed concept |
-| `water-management` | Water Resource Management | Infrastructure | Open or partial | Moderate | Assessed concept |
-| `community-participation` | Community Participation Analysis | Communities | Open or public submissions | Moderate | Assessed concept |
-| `housing-insight` | Housing Need and Service Insight | Housing | Mixed or restricted | High | Assessed concept |
-| `life-event-services` | Joined-up Support after a Life Event | Citizen services | Restricted | High | Assessed concept |
+| Slug | Working title | Sector | C — synthetic dataset | D — demo |
+| --- | --- | --- | --- | --- |
+| `policy-evidence` | Policy Evidence Workbench | Cross-government | Available | **Available** |
+| `diagnostic-imaging-support` | Diagnostic Imaging Support | Health | Not responsible | Not yet |
+| `health-operations` | Health Service Demand and Operations | Health | Available | Not yet |
+| `lesson-planning-feedback` | Lesson Planning and Feedback Support | Education | Available | Not yet |
+| `adaptive-tutoring` | Adaptive Tutoring | Education | Available | Not yet |
+| `wastewater-monitoring` | Wastewater Monitoring | Infrastructure | Available | Not yet |
+| `water-management` | Water Resource Management | Infrastructure | Available | Not yet |
+| `traffic-flow` | Traffic Flow Management | Transport | Available | Not yet |
+| `road-maintenance` | Road Maintenance Planning | Transport | Available | Not yet |
+| `justice-research` | Justice Research and Analysis | Justice | Available | Not yet |
+| `offender-learning` | Learning Support in Custodial Settings | Justice and education | Available | Not yet |
+| `violence-risk-research` | Violence Risk Pattern Research | Community safety | Not responsible | Not yet |
+| `earth-observation` | Earth Observation for Public Services | Environment | Available | Not yet |
+| `farm-advisory` | Farm Advisory Support | Agriculture | Available | Not yet |
+| `community-participation` | Community Participation Analysis | Communities | Available | Not yet |
+| `housing-insight` | Housing Need and Service Insight | Housing | Available | Not yet |
+| `life-event-services` | Joined-up Support after a Life Event | Citizen services | Available | Not yet |
 
-`violence-risk-research` is intentionally marked **assessment only**. It must not receive a public interactive demo without independent safeguarding, domain, legal, equality, and affected-community review.
+Two playbooks answer C with `not-responsible`, and say so on the page: `diagnostic-imaging-support`, because imaging cannot honestly be stood in for by a JSON file and any useful tabular substitute trends person-shaped, and `violence-risk-research`, because any stand-in useful for that research would be person-shaped by construction. Neither may receive a public demo without independent safeguarding, domain, legal, equality, and affected-community review.
 
 ## 9. The playbook contract
 
@@ -223,211 +201,253 @@ The initial inventory translates the strategy examples into contribution-sized p
 
 Playbook content is stored as typed TypeScript data and validated with Zod at build and test time. This keeps the repository within one application, gives contributors precise feedback, supports static generation, and avoids adding a content system before one is needed.
 
-Each playbook lives at `content/playbooks/<slug>/playbook.ts`. A central registry imports definitions explicitly, checks unique slugs, and exports public query functions. Fixtures sit below the same playbook directory but are loaded only by that playbook's feature module.
+Each playbook lives at `content/playbooks/<slug>/playbook.ts`, and its dataset — if it has one — at `content/playbooks/<slug>/<slug>.data.json`. A central registry imports definitions explicitly, checks unique slugs, and exports the public query functions. A dataset is loaded only by the feature module that reads it.
 
-### Required metadata
+### The schema
+
+`lib/playbooks/schema.ts`, `schemaVersion: 2`:
+
+```ts
+const relativePathSchema = z
+  .string()
+  .min(1)
+  .refine(
+    (value) =>
+      !/^[A-Za-z]:[\\/]/.test(value) &&
+      !/^[\\/]/.test(value) &&
+      !/(?:^|[\\/])\.\.(?:[\\/]|$)/.test(value),
+    "Use a repository-relative path without parent-directory segments",
+  )
+
+const sentenceSchema = z.string().trim().min(10)
+const nonEmptyList = <T extends z.ZodType>(item: T) => z.array(item).min(1)
+
+const demoRouteSchema = z
+  .string()
+  .regex(
+    new RegExp(`^/playbooks/${kebabSlugSource}/demo$`),
+    "Use the playbook's own demo route",
+  )
+
+export const sectorValues = [
+  "Agriculture",
+  "Citizen services",
+  "Communities",
+  "Community safety",
+  "Cross-government",
+  "Education",
+  "Environment",
+  "Health",
+  "Housing",
+  "Infrastructure",
+  "Justice",
+  "Justice and education",
+  "Transport",
+] as const
+
+export const accessValues = ["open", "registration-or-key", "restricted"] as const
+
+/** A — the example as the strategy draft gave it. Our words, their link. */
+export const strategyExampleSchema = z.strictObject({
+  proposal: sentenceSchema,
+  draftReference: z.string().trim().min(3),
+  url: z.url(),
+})
+
+/** B — one investigated source: what it covers, how open it is, why it fits. */
+export const dataSourceSchema = z.strictObject({
+  id: slugSchema,
+  publisher: z.string().trim().min(2),
+  title: z.string().trim().min(4),
+  url: z.url(),
+  covers: sentenceSchema,
+  access: z.enum(accessValues),
+  relevance: sentenceSchema,
+})
+
+/**
+ * C — either a committed synthetic dataset, or a plain statement of why a
+ * synthetic stand-in is not responsible in this domain and what a contributor
+ * would need instead. There is no third state: every playbook answers C.
+ */
+export const syntheticDataSchema = z.discriminatedUnion("status", [
+  z.strictObject({
+    status: z.literal("available"),
+    dataPath: relativePathSchema,
+    method: sentenceSchema,
+    limitations: nonEmptyList(sentenceSchema),
+  }),
+  z.strictObject({
+    status: z.literal("not-responsible"),
+    reason: sentenceSchema,
+    whatContributorsNeed: sentenceSchema,
+  }),
+])
+
+/** D — a hosted demo or a one-sentence honest note that none exists yet. */
+export const demoSchema = z.discriminatedUnion("status", [
+  z.strictObject({
+    status: z.literal("available"),
+    route: demoRouteSchema,
+    howItWorks: sentenceSchema,
+  }),
+  z.strictObject({
+    status: z.literal("not-yet"),
+    note: sentenceSchema,
+  }),
+])
+
+export const playbookSchema = z
+  .strictObject({
+    schemaVersion: z.literal(2),
+    slug: slugSchema,
+    title: z.string().trim().min(4),
+    summary: sentenceSchema,
+    sector: z.enum(sectorValues),
+    strategyExample: strategyExampleSchema,
+    dataSources: nonEmptyList(dataSourceSchema),
+    syntheticData: syntheticDataSchema,
+    demo: demoSchema,
+    caveats: nonEmptyList(sentenceSchema),
+    lastReviewed: isoDateSchema,
+  })
+  .superRefine(/* three rules, below */)
+```
+
+The `superRefine` adds exactly three rules, each reporting against the field it concerns:
+
+1. data-source IDs are unique within a playbook;
+2. an available demo requires an available synthetic dataset — the demo reads the dataset on every render, so it cannot be offered without one;
+3. an available demo's route is `/playbooks/<its own slug>/demo`.
+
+`PlaybookSummary` — the catalogue's projection — is `slug`, `title`, `summary`, `sector`, `syntheticData`, `demo`, and `lastReviewed`. It deliberately omits `strategyExample`, `dataSources`, and `caveats`: those are read on the detail page.
+
+### Required fields
 
 | Field | Meaning |
 | --- | --- |
-| `schemaVersion` | Version of the contribution contract |
+| `schemaVersion` | Version of the contribution contract; `2` |
 | `slug`, `title`, `summary` | Stable route key and plain-English identity |
-| `sector`, `tags`, `technicalPatterns` | Catalogue classification |
-| `problem` | Current service problem, without assuming AI is the answer |
-| `intendedUsers` | People who would use or review the intervention |
-| `affectedGroups` | People who may experience benefits or harms |
-| `supportedDecision` | Decision or task supported; never described as fully automated unless that is explicitly and safely true |
-| `publicBenefit` | Intended public value stated without invented metrics |
-| `maturity` | Current evidence and implementation state |
-| `dataAccessibility` | Realistic access level for necessary data |
-| `risk` | Provisional risk tier with reasons |
-| `officialSources` | Versioned source register entries |
-| `syntheticData` | Method, dataset path, boundaries, and labelling statement |
-| `nonAiBaseline` | Existing or deterministic alternative used for comparison |
-| `evaluation` | Questions, metrics, labelled fixture, and result status |
-| `humanOversight` | Responsible role, review point, escalation, and redress path |
-| `limitations`, `failureModes` | Known gaps and ways the example may mislead or fail |
-| `implementation` | Architecture, inputs, outputs, reusable pieces, and partner requirements |
-| `references` | Supporting publications and repository material |
-| `demo` | Availability and route, or a reason no demo is provided |
-| `lastReviewed` | ISO date for content staleness checks |
+| `sector` | Catalogue classification, from the fixed sector list |
+| `strategyExample` | **A** — the draft's proposal in our words, where it appears, and the draft's URL |
+| `dataSources` | **B** — one or more investigated sources: publisher, title, URL, what it covers, access level, why it fits |
+| `syntheticData` | **C** — dataset path, method, and limitations; or the reason a stand-in is not responsible and what a contributor would need |
+| `demo` | **D** — route and how it works; or a one-sentence note that none exists yet |
+| `caveats` | The one honest block: what this page is not |
+| `lastReviewed` | ISO date, displayed as a date; nothing is computed from it |
 
 ### Controlled vocabularies
 
-#### Maturity
+Three small vocabularies, each with exactly one definition in the application, keyed by the schema's own values:
 
-1. `assessed` — the problem, data reality, risks, and likely implementation pattern are documented; no interactive result is claimed.
-2. `recorded-demo` — a bounded interaction uses a synthetic dataset and checked-in recorded output; there is no live model service.
-3. `partner-ready` — the playbook has explicit validation protocols and interfaces ready for a data-owning partner. This state is not available in the MVP without partner review.
-4. `operational-pilot` — the system has been tested in a controlled real-world setting with governance and monitoring. A repository maintainer cannot self-declare this state.
-5. `evaluated-service` — operational outcomes and harms have been independently evaluated. A repository maintainer cannot self-declare this state.
+- **Sector** — the thirteen strings above, used for browsing only.
+- **Data access** — `open`, `registration-or-key`, `restricted`.
+- **Statuses** — `syntheticData.status` is `available` or `not-responsible`; `demo.status` is `available` or `not-yet`.
 
-The interface displays the current rung and the missing evidence needed for the next rung. It must not collapse maturity into a percentage.
-
-#### Data accessibility
-
-- `open` — openly accessible under a recorded licence or clear reuse terms;
-- `public-readonly` — publicly viewable, but reuse or bulk extraction needs confirmation;
-- `partial` — some useful open material exists, while key inputs require a partner;
-- `restricted` — necessary data is protected, confidential, licensed, or held in operational systems;
-- `unknown` — source research is incomplete.
-
-#### Risk
-
-- `low` — limited consequence and no sensitive population or consequential decision;
-- `moderate` — material interpretation or service implications requiring human review;
-- `high` — sensitive data, protected groups, or consequential allocation, diagnosis, justice, education, or eligibility contexts;
-- `very-high` — foreseeable severe harm, safeguarding implications, or an unacceptable public demo without specialist oversight.
-
-Risk status always includes plain-English reasons and is never communicated by colour alone.
-
-#### Demo availability
-
-- `none` — assessed card and detail page only;
-- `baseline-only` — hosted example running the deterministic non-AI baseline over the synthetic dataset, with no model involved;
-- `recorded` — synthetic dataset plus checked-in recorded AI-assisted output;
-- `live-local` — future optional adapter that a developer may run locally with their own service and credentials;
-- `partner` — future controlled integration, not exposed publicly.
-
-The MVP may use only `none`, `baseline-only`, and `recorded`.
-
-`baseline-only` is a weaker claim than `recorded`, not a step towards it on
-the maturity ladder. It carries its own label literal, records the vocabulary
-version that produced the result on the page, requires an available synthetic
-dataset, and leaves maturity at `assessed`: running no model is not evidence of
-one. It exists because the non-AI baseline is publishable in its own right. A
-playbook can show the task, the evidence trail, and the honest limits of a
-keyword method before anything cleverer exists, and a reader can see the
-comparison any AI-assisted analysis would have to beat.
+A new schema value fails a test rather than rendering a blank label.
 
 ## 10. Source and synthetic-data contract
 
 ### Source register
 
-Every official source entry records:
+Each entry in `dataSources` records a stable ID, the publisher, the title, the canonical public URL, what the data covers, an honest access classification, and why it fits this playbook. A URL alone is not an entry: a reader must be able to tell what is behind the link and whether they could obtain it.
 
-- stable source ID;
-- publisher and jurisdiction;
-- title and canonical public URL;
-- source type and covered period;
-- access date;
-- licence or reuse-status statement;
-- local sample path, if a small extract is committed;
-- SHA-256 hash of the committed sample;
-- purpose in the playbook;
-- transformations applied;
-- caveats and staleness notes.
+`access` is a statement about reality, not an aspiration: `open` means published for anyone to read or download, `registration-or-key` means an account or key stands in the way, and `restricted` means the data is protected, licensed, or held in operational systems.
 
-A source URL alone is insufficient. If reuse terms are unclear, the playbook records that uncertainty and commits only a minimal fact or structure necessary for analysis.
-
-The interface presents sources as an ordered list of semantic source dossiers. Each dossier uses a heading, an external link, and a definition list for publisher, jurisdiction, source type, covered period, access date, reuse status, local sample and hash when present, purpose, transformations, and caveats. Wide layouts may arrange those fields in a compact grid; narrow layouts stack the same elements. Do not maintain separate table and mobile-card markup.
+The interface presents sources as an ordered list of semantic source dossiers. Each uses a heading, an external link, and a definition list for publisher, what it covers, access, and relevance. Wide layouts may arrange those fields in a compact grid; narrow layouts stack the same elements. Do not maintain separate table and mobile-card markup.
 
 ### One-off sourcing approach
 
-The project deliberately does not build production data pipelines. A contributor may make a one-off retrieval from an official public source to understand fields, structure, vocabulary, categories, scale, and realistic constraints. They then commit only a small, permissible source sample and a source-register record.
+The project deliberately does not build data pipelines. A contributor makes a one-off visit to an official public source to understand its fields, structure, vocabulary, categories, scale, and realistic constraints. They then record the source in section B and, where responsible, author a synthetic dataset shaped by what that source publishes.
 
-The example runs against a synthetic dataset that stands in for the source service. This is the point of the pattern rather than a limitation of it: a visitor can try the task without an account, an API key, or a data-sharing agreement, and the example stays reviewable, safe to fork, and independent of changing endpoints.
+Nothing on a page fetches a source at run time. This is the point of the pattern rather than a limitation of it: a visitor can try the task without an account, an API key, or a data-sharing agreement, and the playbook stays reviewable, safe to fork, and independent of changing endpoints.
 
 ### Synthetic-data method
 
-Every synthetic dataset must:
+Every committed dataset lives at `content/playbooks/<slug>/<slug>.data.json` and uses one envelope:
 
-1. name the real source it stands in for, and be small enough to read in full;
-2. use invented entity IDs rather than human names, emails, phone numbers, exact addresses, or other person identifiers;
-3. derive only defensible structure, categories, distributions, or language characteristics from that source, recorded in a structure note beside the data;
-4. document which characteristics were copied, approximated, deliberately altered, or excluded;
-5. include conspicuous `synthetic: true` metadata and a visible label in the interface;
-6. be committed as a single readable `<slug>.data.json` file that the example reads directly, with no generator, seed, or build step between the file and the page;
-7. avoid rare combinations that could resemble or disclose a real individual;
-8. state that it cannot establish model efficacy, fairness, or production readiness.
+```json
+{
+  "disclosure": "Synthetic working data",
+  "description": "one plain sentence on what this stands in for",
+  "records": [ ... ]
+}
+```
 
-The repository keeps source samples, synthetic datasets, recorded outputs, and evaluation labels separately identifiable, and their visual treatment remains distinct.
+A shared Zod schema (`lib/playbooks/dataset.ts`) validates the envelope: the exact disclosure literal, a non-empty description, and a non-empty array of record objects. Record shape is per-domain and is deliberately not given a per-domain contract — the disclosure literal, the privacy walk, and the reading rules below are the guarantee. The one exception is `policy-evidence`, whose demo consumes its records and therefore keeps a typed corpus contract over them.
 
-### Recorded AI-assisted output
+Datasets are authored by AI — Claude, in this project's case — and shaped by what the real sources in section B publish. That is stated plainly on the page and in the playbook's `method` sentence: the dataset is a generated stand-in, not an extract of anything real.
 
-The hosted exemplar does not call a model. A checked-in recorded result includes:
+Every dataset must:
 
-- provider-neutral model label and model/version identifier used at recording time;
-- record date;
-- prompt or procedure version;
-- hashes of the exact input fixture and prompt;
-- structured output;
-- citations back to fixture excerpts;
-- human review dispositions;
-- known failures and evaluation result;
-- a prominent statement that this is a recorded demonstration, not a live service.
+1. name, in `description`, the real thing it stands in for, and be small enough to read in full — roughly 12 to 24 records;
+2. use invented IDs and aggregate or invented categories, never human names, emails, phone numbers, exact addresses, or any other person identifier;
+3. take only defensible structure, categories, ranges, or language characteristics from the published sources in section B, and copy no respondent's or subject's words;
+4. state in the playbook's `syntheticData.method` what was shaped by a real source, and in `limitations` what it cannot represent;
+5. carry the `Synthetic working data` disclosure once, in the envelope, and a visible provenance label wherever it is rendered;
+6. be read directly from the committed file, with no generator, seed, hash, or build step between the file and the page — an authored dataset is its own original;
+7. avoid rare combinations that could resemble or disclose a real individual, place, or premises;
+8. never be described as establishing accuracy, fairness, or production readiness.
 
-Secrets, credentials, private endpoints, full request logs, and personal operator identity are never recorded.
+`scripts/validate-content` walks every dataset: the JSON parses, the envelope parses, no key matches `sensitiveKeyPattern`, and no string matches `findPersonalDataShape` (both from `lib/privacy-patterns.ts`, which must not be weakened). Any dataset that would need person-shaped records to be useful is not authored at all: the playbook answers C with `not-responsible` instead.
 
-## 11. Policy Evidence Workbench
+Real published sources and synthetic working data remain separately identifiable in the repository and visually distinct in the interface.
+
+## 11. The demo: Policy Evidence Workbench
 
 ### Scenario
 
-A policy team has a public source document and a small corpus of consultation-style responses. It needs to identify recurring themes, inspect supporting excerpts, compare a simple baseline with AI-assisted analysis, and decide which findings deserve further human investigation.
+A policy team has a large set of free-text consultation responses and wants to see which themes recur and which passages support each one. The draft strategy names this kind of analysis as a public-service application; the demo shows what the task looks like over a dataset anyone can hold.
 
-The workbench supports research and synthesis. It does not decide policy, calculate public support, or claim that frequency equals importance.
+The demo supports reading and orientation. It does not decide policy, measure public support, or claim that frequency equals importance.
+
+### What it is, and what it is not
+
+The page states what it is not before what it is. It is not a model: no model is involved, no account or key is needed, and nothing is sent anywhere. It is a transparent keyword analysis — a declared list of theme phrases, matched against the committed synthetic dataset, recomputed on every render.
 
 ### Hosted flow
 
-1. **Orient** — read the task, maturity, limitations, and the recorded-demo label.
-2. **Inspect source** — view a small official public-document excerpt and its source-register entry.
-3. **Inspect synthetic corpus** — see how source-informed consultation responses were generated and labelled.
-4. **Run the baseline** — apply deterministic keyword and phrase grouping to the same corpus. Where no recorded analysis exists yet, this is the whole of the hosted result, and the page says so rather than implying an AI stage is merely hidden.
-5. **Open recorded analysis** — explore a previously generated, structured AI-assisted thematic analysis.
-6. **Follow an evidence thread** — move from finding to citation, source excerpt, synthetic-data note, evaluation item, and human disposition.
-7. **Review findings** — accept for further investigation, reject as unsupported, or flag for subject-matter review. State remains local to the browser and resets on refresh.
-8. **Compare** — inspect precision-oriented evaluation against a small labelled set and compare the recorded analysis with the baseline.
-9. **Reuse** — open the domain interfaces, fixtures, tests, and local-run guidance.
+1. **Read the intro** — what this is not, what it is, and how it works in one sentence.
+2. **Read the dataset** — the envelope's description, the `Synthetic working data` label, and every record in full, each with its own anchor.
+3. **Read the findings** — one section per theme the analysis produced, with its summary and the honest limitations of a phrase list.
+4. **Follow a citation** — each citation is a link to the exact record it came from, quoting the exact passage.
+5. **Reuse** — the analysis module, the dataset, and the tests are linked from the playbook.
 
 ### Core domain objects
 
-- `CorpusDocument` — synthetic response ID, text, tags, and disclosure label;
-- `SourceExcerpt` — official sample reference, location, text, and source ID;
-- `Finding` — label, summary, confidence wording, evidence references, and limitations;
-- `Citation` — exact link from a finding to a corpus excerpt;
-- `AnalysisResult` — analysis metadata and findings;
-- `EvaluationCase` — labelled expectation and rationale;
-- `EvaluationResult` — metric values, per-case outcomes, and caveats;
-- `ReviewDisposition` — `unreviewed`, `investigate`, `unsupported`, or `specialist-review`.
+- `CorpusDocument` — synthetic response ID, theme, stance, and text;
+- `Citation` — a document ID plus exact start and end offsets and the quoted passage;
+- `Finding` — ID, label, summary, citations, and limitations;
+- `Analysis` — `{ findings: Finding[] }`, and nothing else.
 
-### Non-AI baseline
+### The analysis
 
-The baseline is deterministic and transparent. It tokenises a controlled vocabulary of themes, scores exact and phrase matches, records the matched excerpts, and applies stable tie-breaking. It provides a meaningful comparison, not a deliberately weak straw person.
+The analysis is deterministic and readable: it tokenises a declared vocabulary of theme phrases, scores exact and phrase matches, records the enclosing sentence of each match as a citation with exact offsets, caps citations per finding, and orders findings by the declared theme order. It is presented as what it is — a keyword method with real failure modes, named on the page — not as a stand-in for anything cleverer.
 
-### Evaluation
+Citation integrity is a test, not a display state: every citation's quote must equal `text.slice(start, end)` over the committed dataset. Because nothing non-deterministic feeds the page, there is no broken-citation path to render.
 
-The MVP evaluates evidence retrieval rather than the subjective quality of prose. For a small labelled fixture it reports:
+### Rendering
 
-- citation precision;
-- evidence coverage or recall;
-- unsupported-finding count;
-- finding-to-evidence link integrity;
-- difference from the deterministic baseline.
-
-Metrics include denominators, case-level results, and limitations. A small synthetic evaluation is a software and interaction check, not proof of policy quality or social value.
-
-### Human control
-
-The interface makes review a first-class action. Findings begin unreviewed. A reviewer may mark them for investigation, unsupported, or specialist review. No state implies final approval or policy adoption. The page explains that a real workflow would require records management, authorisation, equality assessment, subject-matter review, and a defined route for challenge or correction.
+The whole demo is server-rendered with no client components. Intro, dataset, and findings are all present in the HTML, citation anchors are plain fragment links, and the page is complete with JavaScript disabled. Playbooks whose `demo.status` is `not-yet` render their note and a link back to the playbook at the same route.
 
 ## 12. Technical architecture
 
 ### Runtime boundary
 
-The MVP is static-first. Content, source registers, synthetic datasets, and recorded outputs are imported at build time. Server Components render public pages by default. Client Components are limited to catalogue filters, evidence-thread selection, tabs or disclosure controls, and local review state.
+The site is static-first. Playbook definitions and synthetic datasets are imported at build time. Server Components render every public page. The only client boundary in the application is the catalogue filter control; the demo feature has none.
 
-There is no database, authentication layer, background worker, or public API route in the MVP.
+There is no database, authentication layer, background worker, or public API route.
 
 ```mermaid
 flowchart LR
   A["Typed playbook definitions"] --> B["Validated registry"]
-  C["Versioned source samples"] --> D["Playbook feature modules"]
-  E["Synthetic dataset"] --> D
-  F["Recorded analysis"] --> D
-  B --> G["Server-rendered catalogue and detail pages"]
-  D --> G
-  D --> H["Bounded client-side demo"]
-  H --> I["Local review state only"]
+  B --> C["Server-rendered catalogue and detail pages"]
+  D["Committed synthetic datasets"] --> E["Transparent keyword analysis"]
+  B --> F["Server-rendered demo page"]
+  E --> F
 ```
+
+The detail page names a dataset and links to its file; only the demo reads its contents.
 
 ### Target repository shape
 
@@ -448,13 +468,10 @@ components/
   site/
 content/
   playbooks/
-    <slug>/playbook.ts
-    policy-evidence/
-      fixtures/
-        source/
-        synthetic/
-        recorded/
-        evaluation/
+    strategy-draft.ts
+    <slug>/
+      playbook.ts
+      <slug>.data.json
 features/
   playbooks/
     catalogue/
@@ -465,8 +482,13 @@ features/
 lib/
   playbooks/
     schema.ts
+    dataset.ts
     define-playbook.ts
     registry.ts
+    vocabulary.ts
+  privacy-patterns.ts
+scripts/
+  validate-content-core.ts
 tests/
   smoke.test.ts
 ```
@@ -479,12 +501,12 @@ tests/
 - `content` imports the playbook schema but no React component.
 - `features/playbooks` reads the public playbook registry.
 - `features/policy-evidence/domain` is framework-agnostic and has no React or Next.js imports.
-- `features/policy-evidence/components` consumes domain results and fixtures.
+- `features/policy-evidence/components` consumes domain results and the committed dataset.
 - No feature imports from `app`.
 
 ### Static routes
 
-`generateStaticParams` returns every registry slug for `/playbooks/[slug]`. `dynamicParams = false` makes unknown playbook paths a 404. The demo route uses the same set but renders an unavailable explanation for any playbook whose demo is not published; direct access never produces a broken workbench.
+`generateStaticParams` returns every registry slug for `/playbooks/[slug]`. `dynamicParams = false` makes unknown playbook paths a 404. The demo route uses the same set and renders the `not-yet` note for any playbook without a demo; direct access never produces a broken page.
 
 `generateMetadata` reads the same registry entry as the page. Metadata remains server-only and does not duplicate content literals.
 
@@ -520,9 +542,9 @@ Light mode is the designed MVP experience.
 | `--evidence-hover` | `#005555` | Hover and pressed evidence state |
 | `--annotation` | `#F4D35E` | Selected excerpt and note marker |
 | `--annotation-ink` | `#332A00` | Text on annotation |
-| `--success` | `#147D64` | Supported or completed state |
-| `--warning` | `#8A5200` | Caveat and review-needed state |
-| `--danger` | `#B42318` | Unsupported or severe-risk state |
+| `--success` | `#147D64` | Available or completed state |
+| `--warning` | `#8A5200` | Caveat state |
+| `--danger` | `#B42318` | Unavailable or blocked state |
 | `--focus` | `#006B6B` | Focus ring with canvas offset |
 
 Colour is paired with text, icon, border pattern, or state label. Contrast is tested against WCAG 2.2 AA. Forced-colours mode receives explicit focus, selected, and border rules.
@@ -530,7 +552,7 @@ Colour is paired with text, icon, border pattern, or state label. Contrast is te
 ### Typography
 
 - **Archivo Variable** for headings, labels, navigation, and body text.
-- **Fragment Mono** only for identifiers, file names, hashes, dates, measurements, and code.
+- **Fragment Mono** only for identifiers, file names, dates, measurements, and code.
 - Body copy: `1rem` to `1.125rem`, line-height `1.6`, maximum measure `65–72ch`.
 - Technical text: never below `0.875rem`, with tabular numbers where values are compared.
 - Headings use weight and spacing before size. Page titles should not exceed roughly `clamp(2.25rem, 5vw, 4.75rem)`.
@@ -542,8 +564,8 @@ The implementation uses `next/font/google` for deterministic font loading and ex
 
 - 12-column desktop grid, 6-column tablet grid, 4-column mobile grid.
 - Maximum content width: `90rem`; long-form measure remains narrower.
-- Standard desktop detail layout: 3-column metadata rail, 6-column narrative, 3-column evidence notes. Visual placement never changes the semantic section order.
-- Mobile order: title, summary, and status followed by the fixed eleven-section playbook sequence. Metadata and evidence remain inside their corresponding sections.
+- Visual placement never changes the semantic section order.
+- Mobile order: title, summary, and availability, followed by the five playbook sections in contract order.
 - Spacing uses a 4px base with principal steps of `4, 8, 12, 16, 24, 32, 48, 64, 96px`.
 - Corners are modest: `4px` for evidence markers, `8px` for controls and sheets, `12px` maximum for large working surfaces.
 - Shadows are rare and indicate an active layer; structure normally comes from background, rules, and spacing.
@@ -551,44 +573,38 @@ The implementation uses `next/font/google` for deterministic font loading and ex
 
 ### Components
 
-Use shadcn/ui through its CLI and preserve the generated primitive boundary. The planned primitives are Button, Badge, Card, Tabs, Table, Select, Command, Alert, Collapsible, Separator, Skeleton, and Tooltip.
+Use shadcn/ui through its CLI and preserve the generated primitive boundary. Button and Badge are in use. Add another primitive only when a component needs it — a shrinking surface should not accumulate unused primitives.
 
 Project-specific components include:
 
 - `SiteHeader` and `SiteFooter`;
-- `EvidenceChain`;
+- `EvidenceChain` — the four-step A/B/C/D strip;
 - `PlaybookDossierRow`;
-- `FilterBar` and `FilterSummary`;
-- `StatusBadge` and `RiskBadge`;
-- `MetadataRail`;
-- `SourceRegister`;
-- `MaturityLadder`;
-- `RecordedDemoBanner`;
-- `EvidenceThread`;
-- `BaselineComparison`;
-- `FindingReviewControls`;
-- `ImplementationIndex`.
+- `CatalogueFilters` and `FilterSummary`;
+- `AvailabilityBadge` — dataset and demo availability, always with text;
+- `ProvenanceLabel` and `ExternalLink`;
+- `StrategyExampleSection`, `DataSourcesSection`, `SyntheticDataSection`, `DemoSection`;
+- `PolicyEvidenceWorkbench`.
 
 Component names describe meaning, not visual appearance.
 
-### Signature interaction: evidence thread
+### Signature treatment: citation to record
 
-Selecting a finding reveals a connected evidence thread:
+A finding's citation is a plain fragment link to the record it quotes:
 
 ```text
-Finding → citation → corpus excerpt → synthetic-data note → evaluation case → human disposition
+Finding → citation → the exact passage inside the record
 ```
 
-The active finding uses a left rule and background shift rather than elevation. Connected evidence markers share an identifier and shape. On desktop the evidence panel remains visible beside the finding list; on mobile it follows the active finding in document order. The URL may store the selected finding ID, but review state stays local and ephemeral.
+The quote is rendered as a quotation, the link's accessible name identifies the record it targets, and the target record is emphasised on focus with a left rule and background shift rather than elevation. No JavaScript participates: this is anchors and CSS, so the trail works in a fresh tab, in print, and with scripting disabled.
 
 ### Motion
 
 - immediate feedback: approximately `120ms`;
 - filters and state transitions: `180–220ms`;
-- evidence-panel transition: no more than `320ms`;
 - easing: restrained ease-out for entry, ease-in-out for layout changes;
 - no ambient motion, parallax, looping decoration, or staggered page-load reveal;
-- `prefers-reduced-motion` removes translation and makes evidence changes immediate.
+- `prefers-reduced-motion` removes translation and makes state changes immediate.
 
 ### Responsive behaviour
 
@@ -596,8 +612,7 @@ The design is content-first at all widths.
 
 - Catalogue filter controls collapse into an explicit labelled disclosure, while current filters remain visible as removable text controls.
 - Wide comparison tables become labelled stacked records, not horizontally clipped miniature tables.
-- The metadata rail becomes a definition list after the narrative on mobile.
-- The evidence thread preserves source-before-judgement reading order in the DOM.
+- Dataset records and findings stack in document order; a citation link always precedes its target in reading order or names its target in its accessible name.
 - Touch targets are at least 44 by 44 CSS pixels.
 
 ## 14. Content design
@@ -606,12 +621,12 @@ The design is content-first at all widths.
 
 Use clear, direct, specific language. Prefer:
 
-- "recorded demonstration";
 - "synthetic dataset";
-- "not operationally validated";
-- "partner data required";
-- "supports review";
-- "evidence not found in this fixture".
+- "no model is involved";
+- "no account or key is needed";
+- "this is not evidence that it would work operationally";
+- "no demo has been built yet";
+- "the data is restricted".
 
 Avoid:
 
@@ -625,62 +640,55 @@ Avoid:
 
 Provenance labels are literal and persistent:
 
-- **Official source sample**
+- **Real published source**
 - **Synthetic working data**
-- **Recorded AI-assisted output**
-- **Deterministic non-AI baseline**
-- **Human review state**
+- **Demo output**
 
-These terms appear in navigation, legends, downloadable filenames, and accessible names where relevant.
+These terms appear in navigation, legends, and accessible names where relevant.
 
-Controlled vocabularies — maturity, data accessibility, risk, and source type — have exactly one definition in the application, keyed by the content schema's own values. A filter chip, a catalogue row, a badge, and a dossier field describe the same value with the same words, and a new schema value fails a test rather than rendering a blank label.
+The three controlled vocabularies — sector, data access, and the two availability statuses — have exactly one definition in the application, keyed by the content schema's own values. A filter control, a catalogue row, a badge, and a dossier field describe the same value with the same words, and a new schema value fails a test rather than rendering a blank label.
 
-### Dates and staleness
+### Dates
 
-Display source access date and playbook review date in human-readable form while keeping ISO dates in metadata. One shared UTC formatter renders every date as `18 August 2026`, and the ISO value always remains in `<time dateTime>`. Treat `lastReviewed` as a UTC calendar date. A playbook remains current through its twelve-month anniversary and displays **Review needed** only after that date; anniversary calculation clamps leap-day reviews to the final valid day of February. The status includes the exact recorded review date and never implies that an external source was checked live.
-
-Review status is calculated at build time, so the recorded review date and the review-due date are the primary signal and the flag is secondary. Never show the flag without both dates: a deployment older than the review window would otherwise assert **Current** with nothing for the reader to check it against.
+Display the playbook review date in human-readable form while keeping the ISO date in metadata. One shared UTC formatter renders every date as `18 August 2026`, and the ISO value always remains in `<time dateTime>`. `lastReviewed` is a UTC calendar date that is displayed and nothing more: no due date is computed from it, and no status is derived from it. It says when a person last read the page, and never implies that an external source was checked live.
 
 ## 15. States and failure handling
 
 ### Catalogue
 
-- No results: restate active filters and offer a single **Clear all filters** action.
-- JavaScript unavailable: render the full catalogue server-side and provide links for principal filter views; search enhancement may be unavailable.
+- No results: restate the active search and sectors and offer a single **Clear all filters** action.
+- JavaScript unavailable: render the full catalogue server-side and provide links for principal sector views; search enhancement may be unavailable.
 - Invalid query value: ignore it, retain valid values, and do not throw.
 
 ### Playbook
 
 - Unknown slug: use a designed 404 with a catalogue link.
-- Missing or invalid definition: fail validation in tests and the production build rather than rendering partial evidence.
-- Stale source: show the recorded access date and caveat; do not imply a live check.
-- Unavailable external source: keep the source record and local permitted sample; label the link as last verified on the access date.
+- Missing or invalid definition: fail schema validation in tests and the production build rather than rendering a partial playbook.
+- No synthetic dataset: the C section states the reason and what a contributor would need instead. It never renders an empty dataset or a promise.
+- Dataset file missing, unparseable, or failing the envelope or privacy walk: `npm run validate:content` fails and the build does not proceed.
+- Unavailable external source: keep the source record and say the link was last checked on the playbook's review date; do not imply a live check.
 
-### Demonstration
+### Demo
 
-- No demo: explain the data, risk, or evidence barrier and link to the readiness assessment.
-- Recorded fixture mismatch: fail a hash-integrity test and refuse to label the result as verified.
-- Empty evaluation set: render "Evaluation not available" rather than a zero score.
-- Broken finding reference: fail validation before build.
-- Client JavaScript unavailable: retain the scenario, source, synthetic method, recorded findings, and evaluation as readable server content; interactive review controls may be absent.
-- Reset: clearly state that browser-only review state will be discarded, then reset without a page reload.
+- No demo: the route renders the playbook title, the `not-yet` note, and a link back to the playbook.
+- A citation that is not an exact passage of the committed dataset: a test fails. There is no display path for it.
+- Client JavaScript unavailable: the intro, the whole dataset, every finding, and every citation anchor remain readable and navigable.
 
 ### Loading
 
-Playbook detail content is local, validated, and rendered at build time, so the detail route has no `loading.tsx` boundary or dossier skeleton. Add a loading treatment only if a future client transition performs genuine asynchronous work, and never replace the core explanation with a loading state.
+Playbook and demo content is local, validated, and rendered at build time, so neither route has a `loading.tsx` boundary or a skeleton. Add a loading treatment only if a future client transition performs genuine asynchronous work, and never replace the core explanation with a loading state.
 
 ## 16. Accessibility and inclusion
 
 WCAG 2.2 AA is the minimum acceptance standard.
 
 - A skip link reaches the main content.
-- Landmarks and heading levels reflect the document structure.
+- Landmarks and heading levels reflect the document structure: one `h1` and five `h2`s on a playbook page.
 - Catalogue rows remain links with descriptive accessible names.
 - Filters have persistent labels, keyboard support, and announced result counts.
-- Tabs follow expected keyboard behaviour; content that matters is not hidden only behind hover.
-- Evidence relationships use text IDs and semantic descriptions, not connector lines alone.
-- Source excerpts use semantic quotations with citation context.
-- Review controls expose selected state and do not use colour alone.
+- Availability badges carry their state in text and a shape, never in colour alone.
+- Citation links have accessible names that identify the record they target.
+- Dataset records use semantic markup with their identifier available as text.
 - Focus is visible on every interactive element and is not obscured by sticky content.
 - Reduced motion and forced colours are explicitly tested.
 - At 200% zoom and 320 CSS pixels width, no core content or action is lost.
@@ -691,73 +699,72 @@ WCAG 2.2 AA is the minimum acceptance standard.
 
 - Commit no secrets, credentials, private endpoints, personal names, personal machine paths, or sensitive person-level records.
 - Treat all real consultation responses as potentially personal data unless an official, licensed, safely aggregate sample proves otherwise.
-- Synthetic datasets must not contain realistic contact details or exact residential locations.
-- Render fixture text as text, never raw HTML.
-- Do not accept arbitrary file upload or prompt input in the hosted MVP.
+- Synthetic datasets must not contain realistic contact details or exact residential locations, and `lib/privacy-patterns.ts` is the arbiter enforced over every dataset string.
+- Render dataset text as text, never raw HTML.
+- Do not accept arbitrary file upload or free-text prompt input.
 - External links use safe rel attributes when opening a new context.
-- Dependency updates and source-fixture changes receive review like application code.
-- Fixture hashes protect provenance integrity; they are not a security guarantee.
+- Dependency updates and dataset changes receive review like application code.
 - A `SECURITY.md` gives a private reporting route without listing an individual's contact details.
 
 ## 18. Testing and quality gates
 
 ### Unit and schema tests
 
-- Every playbook parses against the current schema.
-- Slugs, source IDs, document IDs, and finding IDs are unique.
-- Demo routes and recorded outputs reference existing playbooks and fixtures.
-- Source sample and prompt hashes match recorded metadata. Authored synthetic datasets carry no hash.
-- Every committed synthetic dataset parses against its typed contract.
-- The baseline is deterministic and returns cited evidence.
-- Evaluation handles zero denominators explicitly.
-- Catalogue filters are pure, composable, and URL-safe.
+- Every playbook parses against schema v2, and unknown fields are rejected.
+- Playbook slugs and per-playbook data-source IDs are unique.
+- Exactly one playbook has an available demo.
+- An available demo requires an available dataset, and its route matches its slug.
+- Every dataset file parses through the shared envelope and the privacy walk, with the dataset at the conventional path.
+- The policy-evidence records additionally parse through the demo's corpus contract.
+- The keyword analysis is deterministic, and every citation is an exact passage of the committed dataset.
+- Catalogue query parsing and filtering are pure, order-stable, and URL-safe.
+- Playbook summaries and proposals contain no marketing claims and no person-shaped metadata keys.
 
 ### Component tests
 
-- Labels, provenance, maturity, and risk reasons remain visible.
-- Evidence selection and review dispositions work by keyboard.
-- Reset behaviour is explicit.
-- Empty and unavailable states provide a next action.
+- The five detail sections render their names, in order, with one `h1` above them.
+- Each section renders both of its states honestly, including the `not-responsible` and `not-yet` copy.
+- Provenance labels and availability badges remain visible as text.
+- The demo page renders, server-side, the whole dataset, every finding, and citation anchors that resolve to record IDs — with no interactive roles present.
 
 ### Accessibility linting and manual route review
 
 - The existing `eslint-config-next/core-web-vitals` configuration supplies `eslint-plugin-jsx-a11y` and fails CI on the configured static accessibility rules.
 - Each route has a unique, descriptive title so the built-in Next.js route announcer has a useful name.
-- Before release, manually browse from home to catalogue to a playbook, exercise combined filters, and follow a complete evidence thread.
-- Manually compare baseline and recorded output, review and reset a finding, confirm no-demo explanations, and confirm unknown slugs return the designed 404.
+- Before release, manually browse from home to catalogue to a playbook to the demo, exercise search and sector filters, and follow a citation to its record.
+- Manually confirm that a `not-responsible` playbook and a `not-yet` demo read honestly, and that unknown slugs return the designed 404.
 - Manually inspect the core routes with JavaScript disabled and with keyboard-only navigation, 200% zoom, reduced motion, and forced colours.
-- Browser automation is intentionally outside the MVP test strategy; these checks are recorded in the pull request or release review.
+- Browser automation is intentionally outside the test strategy; these checks are recorded in the pull request or release review.
 
 ### Build gates
 
-The merge gate is content validation, typecheck, ESLint (including `eslint-plugin-jsx-a11y`), unit and focused component tests, and a production build. Manual route, keyboard, no-JavaScript, zoom, reduced-motion, forced-colours, and screen-reader-oriented inspection complete the release gate.
+The merge gate is `npm run check`: content validation, typecheck, ESLint (including `eslint-plugin-jsx-a11y`), unit and focused component tests, and a production build. Manual route, keyboard, no-JavaScript, zoom, reduced-motion, forced-colours, and screen-reader-oriented inspection complete the release gate.
 
 ## 19. Open-source contribution model
 
-A contribution may improve an assessed playbook without building a demo. The smallest valid contribution is a schema-valid playbook with a credible problem statement, source register, data-access assessment, non-AI baseline proposal, risks, and next validation questions.
+There are four contribution tracks, and none of them requires building a demo:
 
-A recorded demonstration additionally requires:
+1. **Improve a playbook's plain-English content** — a clearer proposal, a better summary, an honest caveat.
+2. **Add or verify a data source** — a real published source with a working URL, what it covers, an honest access classification, and why it fits.
+3. **Contribute a synthetic dataset** — in the shared envelope, at the conventional path, carrying the `Synthetic working data` disclosure, passing `npm run validate:content` and the privacy walk, with the method and limitations written into the playbook.
+4. **Build a demo** for a playbook that already has a dataset — computed from committed data, with no model call and no key, server-rendered, and readable without JavaScript.
 
-- a permissible source sample or a clear reason no sample is committed;
-- a readable synthetic dataset and its method documentation;
-- a meaningful non-AI baseline;
-- recorded output with input and prompt hashes;
-- a labelled evaluation fixture;
-- human oversight and failure modes;
-- unit and focused component coverage, plus a recorded manual route and accessibility review.
+Every contribution must pass `npm run check` and keep the page in plain English. A contributor may also conclude, and record in the playbook, that a synthetic stand-in would not be responsible in a domain.
 
-The repository uses the Apache License 2.0 for original code and documentation. Third-party source material retains its original licence and is recorded per source. Contributors must not assume that a public webpage permits redistribution.
+The repository uses the Apache License 2.0 for original code and content. Linked official sources keep their own terms; contributors must not assume that a public webpage permits redistribution.
 
 ## 20. Design decisions
 
 | Decision | Why | Revisit when |
 | --- | --- | --- |
-| One Next.js application | The catalogue, detail pages, and demos share navigation, schema, components, and deployment needs | A demonstrated scaling or ownership boundary exists |
+| One Next.js application | The catalogue, detail pages, and demo share navigation, schema, components, and deployment needs | A demonstrated scaling or ownership boundary exists |
 | Typed TypeScript content plus Zod | Strong contribution feedback and static generation without a CMS or extra build pipeline | Non-technical contribution volume makes a separate authoring layer necessary |
-| One complete exemplar | Proves the full contract without spreading effort across shallow demos | Policy Evidence Workbench passes the complete quality gate |
-| Recorded output, no hosted model calls | Reproducible, inspectable, safe, inexpensive, and key-free | A separately reviewed live adapter has a clear public benefit and abuse model |
-| One-off official samples plus synthetic datasets | Avoids brittle pipelines and sensitive data while preserving realism | A data-owning partner sponsors a controlled integration |
-| Deterministic non-AI baseline | Makes the value and limits of AI contestable | Never remove; improve when domain practice offers a better baseline |
+| Five sections, nothing more | The four questions plus caveats are what a reader actually needs; every extra field competed with them for attention | A reader question recurs that none of the five can answer |
+| Removed the maturity ladder, risk tiers, evaluation metrics, gold labels, recorded-AI output, human-oversight fields, and fixture hashes | They were governance apparatus around examples that claim nothing operational; deleting them made the honest content legible | Real deployments or partner validation give those fields something true to hold |
+| A/B/C for every playbook, D for one | Proves the whole structure without spreading effort across shallow demos | A contributor lands a demo for another playbook |
+| No model calls anywhere | Reproducible, inspectable, safe, inexpensive, and key-free | A separately reviewed adapter has a clear public benefit and abuse model |
+| AI-authored datasets shaped by published sources | Avoids brittle pipelines and sensitive data while keeping the structure realistic; an authored dataset is its own original, so no generator, seed, or hash is needed | A data owner publishes an open sample that can be used directly |
+| `not-responsible` as a first-class answer to C | Some domains cannot be honestly stood in for, and silence would read as a gap rather than a decision | Never remove; it is the honest path |
 | Evidence Desk visual language | Signals scrutiny and provenance without pretending to be an official service | User research shows the metaphor obstructs comprehension |
 | Light mode first | Concentrates design and accessibility effort on one finished theme | Core routes pass accessibility and content-quality gates |
 | URL-backed catalogue filters | Makes research views shareable and resilient | Never remove without an equally linkable alternative |
@@ -766,11 +773,13 @@ The repository uses the Apache License 2.0 for original code and documentation. 
 
 The MVP is complete when:
 
-- all seventeen catalogue entries validate and render with honest maturity and data-access labels;
-- Policy Evidence Workbench completes the full source-to-review evidence thread without a network service or credential;
-- every official source, synthetic fixture, recorded result, and evaluation item is visibly distinct and internally linked;
-- a non-specialist can explain the exemplar's purpose and limitations after using the page;
-- a technical contributor can locate the schema, dataset, baseline, evaluation, and tests without reverse engineering the app;
-- the site remains understandable without client JavaScript;
-- the quality gate passes in a clean checkout;
+- all seventeen playbooks validate against schema v2 and render exactly the five sections in contract order;
+- fifteen playbooks ship a synthetic dataset, and the two sensitive domains state plainly why theirs would not be responsible and what a contributor would need instead;
+- every dataset file parses through the shared envelope and privacy walk in `npm run validate:content`;
+- exactly one playbook has an available demo, and every other playbook says in one sentence what a demo would show and that none has been built;
+- the demo recomputes its findings from the committed dataset with no model, no key, and no client JavaScript, and every citation is an exact passage of that dataset;
+- a non-specialist can say, after reading a playbook, what the draft proposed, what data exists, what the synthetic dataset is, and what the demo does and does not show;
+- a contributor can locate the schema, a dataset, the analysis module, and the tests without reverse engineering the app;
+- the whole site, including the demo, is understandable without client JavaScript;
+- `npm run check` passes in a clean checkout, and CI runs it on push and pull request;
 - repository history and tracked files contain no personal names, personal local paths, secrets, or sensitive records.
