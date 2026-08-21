@@ -1,162 +1,126 @@
-[
-  {
-    "id": "SYN-0001",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "access-to-services",
-    "stance": "critical",
-    "text": "We work with people who have no home internet and no smartphone. The proposal assumes a digital route is a choice. For the people we support it is not, and the paper alternative has been quietly withdrawn from three of the offices they used to be able to walk to."
-  },
-  {
-    "id": "SYN-0002",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "access-to-services",
-    "stance": "supportive",
-    "text": "Anything that stops people telling the same story four times to four different teams is welcome. Please make sure the single record can be corrected by the person it describes, and not only by staff."
-  },
-  {
-    "id": "SYN-0003",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "access-to-services",
-    "stance": "uncertain",
-    "text": "It is hard to comment without knowing what happens at the point of refusal. If a decision is reached faster but the review afterwards still takes eleven weeks, we are not sure the change helps the people who most need it."
-  },
-  {
-    "id": "SYN-0004",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "access-to-services",
-    "stance": "mixed",
-    "text": "The ambition is right and the timetable is not. Broadband where we are is still unreliable in bad weather, so a service that only works well online will only work well for some of us."
-  },
-  {
-    "id": "SYN-0005",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "workforce-capability",
-    "stance": "critical",
-    "text": "Our members are already covering vacancies. Adding a new system without removing anything else is not a productivity gain, it is unpaid overtime. The consultation is clear about what will be introduced and silent about what will stop."
-  },
-  {
-    "id": "SYN-0006",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "workforce-capability",
-    "stance": "supportive",
-    "text": "Training is mentioned, which is more than usual. We would ask that it is delivered before go-live rather than as a recording sent round the week after, and that staff who raise problems during training are actually listened to."
-  },
-  {
-    "id": "SYN-0007",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "workforce-capability",
-    "stance": "mixed",
-    "text": "Experienced staff can usually tell when an output is wrong. Newer staff often cannot, and they will be the ones using the tool most. We support the aim but the risk sits with the least experienced, which is the opposite of how the proposal reads."
-  },
-  {
-    "id": "SYN-0008",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "workforce-capability",
-    "stance": "uncertain",
-    "text": "We could not tell from the document whether a member of staff is permitted to disagree with a recommendation, or whether disagreeing creates extra work for them. The answer to that changes our view entirely."
-  },
-  {
-    "id": "SYN-0009",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "data-governance",
-    "stance": "critical",
-    "text": "Consultation responses are not anonymous simply because a name has been removed. Ours describes a specific site, a specific dispute, and a small number of people. Please do not treat structured text as safe by default."
-  },
-  {
-    "id": "SYN-0010",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "data-governance",
-    "stance": "mixed",
-    "text": "We accept there is a lawful basis for the processing described. We do not accept that having a lawful basis answers the question of whether the processing is proportionate, and the two are treated as the same thing throughout."
-  },
-  {
-    "id": "SYN-0011",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "data-governance",
-    "stance": "supportive",
-    "text": "Publishing the retention period alongside the service itself is good practice and we would like to see it kept. Please also publish what happens to the working copies held by contractors."
-  },
-  {
-    "id": "SYN-0012",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "data-governance",
-    "stance": "uncertain",
-    "text": "It is not clear to us who holds the record once it has been shared with a partner body. If both hold it then both should say so in their own privacy notice, and we cannot tell from the proposal whether that is the intention."
-  },
-  {
-    "id": "SYN-0013",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "accountability",
-    "stance": "critical",
-    "text": "There is a named responsible officer in the diagram and no named responsible officer in the process. When something goes wrong the person affected will be told that the system decided, and that is not an accountable answer."
-  },
-  {
-    "id": "SYN-0014",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "accountability",
-    "stance": "supportive",
-    "text": "We welcome the commitment that a person can ask why a decision was reached. The test will be whether the answer they get is one they can actually act on, rather than a reference to a policy number."
-  },
-  {
-    "id": "SYN-0015",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "accountability",
-    "stance": "mixed",
-    "text": "Ownership is clear at the top and unclear in the middle. Between the policy lead and the frontline there are two teams and a supplier, and the proposal does not say which of them holds the decision when they disagree with each other."
-  },
-  {
-    "id": "SYN-0016",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "procurement-and-reuse",
-    "stance": "critical",
-    "text": "The specification effectively describes one product already on the market. If that is deliberate the consultation should say so, and if it is not then the requirements need rewriting before anything goes to tender."
-  },
-  {
-    "id": "SYN-0017",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "procurement-and-reuse",
-    "stance": "mixed",
-    "text": "Buying something proven is sensible and being unable to leave is not. We would want an exit plan, an export in a format another supplier can read, and the cost of both written down before signature rather than after."
-  },
-  {
-    "id": "SYN-0018",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "procurement-and-reuse",
-    "stance": "uncertain",
-    "text": "We support reuse in principle but do not know what is actually available to reuse. A published list of what other departments already hold would let us answer this question properly instead of guessing."
-  },
-  {
-    "id": "SYN-0019",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "environmental-cost",
-    "stance": "critical",
-    "text": "The impact assessment counts the electricity used by the building and not the electricity used by the computation. That omission makes the net figure look better than it is, and the omission is nowhere acknowledged."
-  },
-  {
-    "id": "SYN-0020",
-    "synthetic": true,
-    "disclosure": "Synthetic working data",
-    "theme": "environmental-cost",
-    "stance": "mixed",
-    "text": "Fewer site visits genuinely does reduce mileage and we recognise that. Whether the saving survives once the processing and the storage are counted is not shown, and the assessment should show it either way."
-  }
-]
+{
+  "disclosure": "Synthetic working data",
+  "description": "Twenty synthetic consultation responses standing in for a real consultation mailbox, so the analysis task can be tried without holding one.",
+  "records": [
+    {
+      "id": "SYN-0001",
+      "theme": "access-to-services",
+      "stance": "critical",
+      "text": "We work with people who have no home internet and no smartphone. The proposal assumes a digital route is a choice. For the people we support it is not, and the paper alternative has been quietly withdrawn from three of the offices they used to be able to walk to."
+    },
+    {
+      "id": "SYN-0002",
+      "theme": "access-to-services",
+      "stance": "supportive",
+      "text": "Anything that stops people telling the same story four times to four different teams is welcome. Please make sure the single record can be corrected by the person it describes, and not only by staff."
+    },
+    {
+      "id": "SYN-0003",
+      "theme": "access-to-services",
+      "stance": "uncertain",
+      "text": "It is hard to comment without knowing what happens at the point of refusal. If a decision is reached faster but the review afterwards still takes eleven weeks, we are not sure the change helps the people who most need it."
+    },
+    {
+      "id": "SYN-0004",
+      "theme": "access-to-services",
+      "stance": "mixed",
+      "text": "The ambition is right and the timetable is not. Broadband where we are is still unreliable in bad weather, so a service that only works well online will only work well for some of us."
+    },
+    {
+      "id": "SYN-0005",
+      "theme": "workforce-capability",
+      "stance": "critical",
+      "text": "Our members are already covering vacancies. Adding a new system without removing anything else is not a productivity gain, it is unpaid overtime. The consultation is clear about what will be introduced and silent about what will stop."
+    },
+    {
+      "id": "SYN-0006",
+      "theme": "workforce-capability",
+      "stance": "supportive",
+      "text": "Training is mentioned, which is more than usual. We would ask that it is delivered before go-live rather than as a recording sent round the week after, and that staff who raise problems during training are actually listened to."
+    },
+    {
+      "id": "SYN-0007",
+      "theme": "workforce-capability",
+      "stance": "mixed",
+      "text": "Experienced staff can usually tell when an output is wrong. Newer staff often cannot, and they will be the ones using the tool most. We support the aim but the risk sits with the least experienced, which is the opposite of how the proposal reads."
+    },
+    {
+      "id": "SYN-0008",
+      "theme": "workforce-capability",
+      "stance": "uncertain",
+      "text": "We could not tell from the document whether a member of staff is permitted to disagree with a recommendation, or whether disagreeing creates extra work for them. The answer to that changes our view entirely."
+    },
+    {
+      "id": "SYN-0009",
+      "theme": "data-governance",
+      "stance": "critical",
+      "text": "Consultation responses are not anonymous simply because a name has been removed. Ours describes a specific site, a specific dispute, and a small number of people. Please do not treat structured text as safe by default."
+    },
+    {
+      "id": "SYN-0010",
+      "theme": "data-governance",
+      "stance": "mixed",
+      "text": "We accept there is a lawful basis for the processing described. We do not accept that having a lawful basis answers the question of whether the processing is proportionate, and the two are treated as the same thing throughout."
+    },
+    {
+      "id": "SYN-0011",
+      "theme": "data-governance",
+      "stance": "supportive",
+      "text": "Publishing the retention period alongside the service itself is good practice and we would like to see it kept. Please also publish what happens to the working copies held by contractors."
+    },
+    {
+      "id": "SYN-0012",
+      "theme": "data-governance",
+      "stance": "uncertain",
+      "text": "It is not clear to us who holds the record once it has been shared with a partner body. If both hold it then both should say so in their own privacy notice, and we cannot tell from the proposal whether that is the intention."
+    },
+    {
+      "id": "SYN-0013",
+      "theme": "accountability",
+      "stance": "critical",
+      "text": "There is a named responsible officer in the diagram and no named responsible officer in the process. When something goes wrong the person affected will be told that the system decided, and that is not an accountable answer."
+    },
+    {
+      "id": "SYN-0014",
+      "theme": "accountability",
+      "stance": "supportive",
+      "text": "We welcome the commitment that a person can ask why a decision was reached. The test will be whether the answer they get is one they can actually act on, rather than a reference to a policy number."
+    },
+    {
+      "id": "SYN-0015",
+      "theme": "accountability",
+      "stance": "mixed",
+      "text": "Ownership is clear at the top and unclear in the middle. Between the policy lead and the frontline there are two teams and a supplier, and the proposal does not say which of them holds the decision when they disagree with each other."
+    },
+    {
+      "id": "SYN-0016",
+      "theme": "procurement-and-reuse",
+      "stance": "critical",
+      "text": "The specification effectively describes one product already on the market. If that is deliberate the consultation should say so, and if it is not then the requirements need rewriting before anything goes to tender."
+    },
+    {
+      "id": "SYN-0017",
+      "theme": "procurement-and-reuse",
+      "stance": "mixed",
+      "text": "Buying something proven is sensible and being unable to leave is not. We would want an exit plan, an export in a format another supplier can read, and the cost of both written down before signature rather than after."
+    },
+    {
+      "id": "SYN-0018",
+      "theme": "procurement-and-reuse",
+      "stance": "uncertain",
+      "text": "We support reuse in principle but do not know what is actually available to reuse. A published list of what other departments already hold would let us answer this question properly instead of guessing."
+    },
+    {
+      "id": "SYN-0019",
+      "theme": "environmental-cost",
+      "stance": "critical",
+      "text": "The impact assessment counts the electricity used by the building and not the electricity used by the computation. That omission makes the net figure look better than it is, and the omission is nowhere acknowledged."
+    },
+    {
+      "id": "SYN-0020",
+      "theme": "environmental-cost",
+      "stance": "mixed",
+      "text": "Fewer site visits genuinely does reduce mileage and we recognise that. Whether the saving survives once the processing and the storage are counted is not shown, and the assessment should show it either way."
+    }
+  ]
+}

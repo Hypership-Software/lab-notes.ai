@@ -9,8 +9,6 @@ import {
 
 const validDocument = {
   id: "SYN-0001",
-  synthetic: true,
-  disclosure: "Synthetic working data",
   theme: "access-to-services",
   stance: "supportive",
   text: "Respondents welcomed a single point of contact but asked how it would work outside office hours.",
@@ -21,17 +19,18 @@ describe("corpusDocumentSchema", () => {
     expect(corpusDocumentSchema.parse(validDocument).id).toBe("SYN-0001")
   })
 
-  it("requires the exact disclosure label", () => {
-    const result = corpusDocumentSchema.safeParse({
-      ...validDocument,
-      disclosure: "Synthetic data",
-    })
-    expect(result.success).toBe(false)
+  it("rejects a document carrying a synthetic flag", () => {
+    expect(
+      corpusDocumentSchema.safeParse({ ...validDocument, synthetic: true }).success,
+    ).toBe(false)
   })
 
-  it("refuses a document that does not declare itself synthetic", () => {
+  it("rejects a document carrying a disclosure field", () => {
     expect(
-      corpusDocumentSchema.safeParse({ ...validDocument, synthetic: false }).success,
+      corpusDocumentSchema.safeParse({
+        ...validDocument,
+        disclosure: "Synthetic working data",
+      }).success,
     ).toBe(false)
   })
 

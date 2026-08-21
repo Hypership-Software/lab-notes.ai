@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 
-import { baselineVocabularyVersion, runBaseline, themeVocabulary } from "./run-baseline"
+import { policyEvidenceCorpus } from "../fixtures"
+import { runAnalysis, themeVocabulary } from "./run-analysis"
 import { corpusThemeValues, type CorpusDocument } from "./types"
 
 function document(
@@ -10,8 +11,6 @@ function document(
 ): CorpusDocument {
   return {
     id,
-    synthetic: true,
-    disclosure: "Synthetic working data",
     theme: "accountability",
     stance: "critical",
     text,
@@ -48,19 +47,15 @@ describe("themeVocabulary", () => {
   })
 })
 
-describe("runBaseline", () => {
+describe("runAnalysis", () => {
   it("returns no findings for an empty corpus", () => {
-    const result = runBaseline([])
+    const result = runAnalysis([])
 
-    expect(result).toEqual({
-      kind: "baseline",
-      vocabularyVersion: baselineVocabularyVersion,
-      findings: [],
-    })
+    expect(result.findings).toEqual([])
   })
 
   it("groups a document under the theme whose vocabulary it matches", () => {
-    const result = runBaseline([
+    const result = runAnalysis([
       document("SYN-0001", "Staff need training before any change is switched on."),
     ])
 
@@ -70,7 +65,7 @@ describe("runBaseline", () => {
   })
 
   it("matches a phrase across differing case and punctuation", () => {
-    const result = runBaseline([
+    const result = runAnalysis([
       document("SYN-0001", "There is a Lawful   basis, they said, for all of it."),
     ])
 
@@ -78,7 +73,7 @@ describe("runBaseline", () => {
   })
 
   it("does not match a vocabulary term inside a longer word", () => {
-    const result = runBaseline([
+    const result = runAnalysis([
       document("SYN-0001", "Retraining programmes were mentioned in passing only."),
     ])
 
@@ -88,7 +83,7 @@ describe("runBaseline", () => {
   it("cites the sentence containing the match, at exact offsets", () => {
     const text =
       "The proposal is short. Staff need training before go-live. Nothing else changes."
-    const result = runBaseline([document("SYN-0001", text)])
+    const result = runAnalysis([document("SYN-0001", text)])
     const citation = result.findings[0]?.evidence[0]
 
     expect(citation).toBeDefined()
@@ -97,7 +92,7 @@ describe("runBaseline", () => {
   })
 
   it("cites a document at most once per finding", () => {
-    const result = runBaseline([
+    const result = runAnalysis([
       document(
         "SYN-0001",
         "Training is mentioned. Training is promised again. Training is never funded.",
@@ -112,7 +107,7 @@ describe("runBaseline", () => {
   })
 
   it("orders findings by theme declaration order, not by how many documents matched", () => {
-    const result = runBaseline([
+    const result = runAnalysis([
       document("SYN-0001", "Training for staff was raised by several responses."),
       document("SYN-0002", "More training for staff is needed before go-live."),
       document("SYN-0003", "No internet access at home makes this route unusable."),
@@ -127,7 +122,7 @@ describe("runBaseline", () => {
   })
 
   it("orders evidence by score, breaking ties by document identifier", () => {
-    const result = runBaseline([
+    const result = runAnalysis([
       document("SYN-0009", "Training was mentioned."),
       document("SYN-0002", "Training was mentioned."),
       document(
@@ -150,11 +145,11 @@ describe("runBaseline", () => {
       document("SYN-0002", "There is a lawful basis but no retention period."),
     ]
 
-    expect(JSON.stringify(runBaseline(corpus))).toBe(JSON.stringify(runBaseline(corpus)))
+    expect(JSON.stringify(runAnalysis(corpus))).toBe(JSON.stringify(runAnalysis(corpus)))
   })
 
   it("states a limitation on every finding it produces", () => {
-    const result = runBaseline([
+    const result = runAnalysis([
       document("SYN-0001", "Training for staff must come before go-live."),
     ])
 
@@ -162,12 +157,26 @@ describe("runBaseline", () => {
   })
 
   it("produces no finding for a theme whose vocabulary never matches", () => {
-    const result = runBaseline([
+    const result = runAnalysis([
       document("SYN-0001", "Training for staff must come before go-live."),
     ])
 
     expect(result.findings.map((finding) => finding.id)).not.toContain(
       "F-environmental-cost",
     )
+  })
+
+  it("cites only exact passages of the committed dataset", () => {
+    const documents = new Map(policyEvidenceCorpus.map((document) => [document.id, document]))
+    const { findings } = runAnalysis(policyEvidenceCorpus)
+
+    expect(findings.length).toBeGreaterThan(0)
+    for (const finding of findings) {
+      for (const citation of finding.evidence) {
+        const document = documents.get(citation.documentId)
+        expect(document, `${finding.id} cites unknown ${citation.documentId}`).toBeDefined()
+        expect(document!.text.slice(citation.start, citation.end)).toBe(citation.quote)
+      }
+    }
   })
 })

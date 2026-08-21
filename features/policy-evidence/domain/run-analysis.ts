@@ -2,7 +2,7 @@ import { toRecord } from "@/lib/to-record"
 
 import {
   corpusThemeValues,
-  type BaselineAnalysis,
+  type Analysis,
   type Citation,
   type CorpusDocument,
   type CorpusDocumentId,
@@ -11,22 +11,14 @@ import {
 } from "./types"
 
 /**
- * Bump whenever a term is added, removed, or reworded. The version travels with
- * every result so a comparison between the baseline and a recorded analysis can
- * say which word list produced it, rather than leaving the reader to assume the
- * list never changed.
- */
-export const baselineVocabularyVersion = "1.0.0"
-
-/**
- * The whole baseline, in one readable place. This is deliberately a word list
+ * The whole method, in one readable place. This is deliberately a word list
  * and nothing else: no embeddings, no model call, no learned weights. A policy
- * researcher can read it, disagree with it, and edit it, which is the property
- * that makes it a fair comparison rather than a straw person.
+ * researcher can read it, disagree with it, and edit it, which is what makes
+ * the demo's method transparent rather than a black box.
  *
  * Terms are lowercase and matched case-insensitively. No term may appear under
  * two themes: a shared term would make theme attribution depend on iteration
- * order, which `run-baseline.test.ts` forbids.
+ * order, which `run-analysis.test.ts` forbids.
  */
 export const themeVocabulary: Record<CorpusTheme, readonly string[]> = {
   "access-to-services": [
@@ -109,9 +101,9 @@ const maxEvidencePerFinding = 6
 /**
  * The weaknesses of a phrase list, stated on every finding it produces. These
  * are not boilerplate caveats: each one names a failure this method actually
- * has, so a reader can tell what the baseline cannot see.
+ * has, so a reader can tell what the analysis cannot see.
  */
-const baselineLimitations = [
+const analysisLimitations = [
   "A matched term shows only that a response used the word, not whether it supported, opposed, or merely mentioned the theme.",
   "A response raising the same concern in different words is not matched at all.",
   "The number of matching responses is not a measure of importance, agreement, or how many people hold the view.",
@@ -229,14 +221,16 @@ function scoreDocument(
 }
 
 /**
- * Group a corpus into one finding per theme whose vocabulary it matches.
+ * Group a corpus into one finding per theme whose vocabulary it matches. This
+ * is the demo's transparent method for turning a corpus into findings, not a
+ * control arm awaiting comparison against some other analysis.
  *
  * Findings are returned in theme declaration order rather than ranked by how
  * many documents matched. Ranking would read as a claim about which concern
  * matters most, which a word list cannot support and which this playbook
  * explicitly disclaims.
  */
-export function runBaseline(corpus: readonly CorpusDocument[]): BaselineAnalysis {
+export function runAnalysis(corpus: readonly CorpusDocument[]): Analysis {
   const findings: Finding[] = []
 
   for (const theme of corpusThemeValues) {
@@ -257,9 +251,9 @@ export function runBaseline(corpus: readonly CorpusDocument[]): BaselineAnalysis
       evidence: matches
         .slice(0, maxEvidencePerFinding)
         .map((match) => match.citation),
-      limitations: [...baselineLimitations],
+      limitations: [...analysisLimitations],
     })
   }
 
-  return { kind: "baseline", vocabularyVersion: baselineVocabularyVersion, findings }
+  return { findings }
 }
