@@ -389,7 +389,7 @@ Every dataset must:
 7. avoid rare combinations that could resemble or disclose a real individual, place, or premises;
 8. never be described as establishing accuracy, fairness, or production readiness.
 
-`scripts/validate-content` walks every dataset: the JSON parses, the envelope parses, no key matches `sensitiveKeyPattern`, and no string matches `findPersonalDataShape` (both from `lib/privacy-patterns.ts`, which must not be weakened). Any dataset that would need person-shaped records to be useful is not authored at all: the playbook answers C with `not-responsible` instead.
+`content/playbooks/content.test.ts` walks every dataset from the path its playbook declares: the file is there, the JSON parses, the envelope parses, no key matches `sensitiveKeyPattern`, and no string matches `findPersonalDataShape` (both from `lib/privacy-patterns.ts`, which must not be weakened). Any dataset that would need person-shaped records to be useful is not authored at all: the playbook answers C with `not-responsible` instead.
 
 Real published sources and synthetic working data remain separately identifiable in the repository and visually distinct in the interface.
 
@@ -487,8 +487,6 @@ lib/
     registry.ts
     vocabulary.ts
   privacy-patterns.ts
-scripts/
-  validate-content-core.ts
 tests/
   smoke.test.ts
 ```
@@ -665,7 +663,7 @@ Display the playbook review date in human-readable form while keeping the ISO da
 - Unknown slug: use a designed 404 with a catalogue link.
 - Missing or invalid definition: fail schema validation in tests and the production build rather than rendering a partial playbook.
 - No synthetic dataset: the C section states the reason and what a contributor would need instead. It never renders an empty dataset or a promise.
-- Dataset file missing, unparseable, or failing the envelope or privacy walk: `npm run validate:content` fails and the build does not proceed.
+- Dataset file missing, unparseable, or failing the envelope or privacy walk: the dataset tests in `content/playbooks/content.test.ts` fail and name the playbook, so `npm run check` does not reach the build.
 - Unavailable external source: keep the source record and say the link was last checked on the playbook's review date; do not imply a live check.
 
 ### Demo
@@ -746,7 +744,7 @@ There are four contribution tracks, and none of them requires building a demo:
 
 1. **Improve a playbook's plain-English content** — a clearer proposal, a better summary, an honest caveat.
 2. **Add or verify a data source** — a real published source with a working URL, what it covers, an honest access classification, and why it fits.
-3. **Contribute a synthetic dataset** — in the shared envelope, at the conventional path, carrying the `Synthetic working data` disclosure, passing `npm run validate:content` and the privacy walk, with the method and limitations written into the playbook.
+3. **Contribute a synthetic dataset** — in the shared envelope, at the conventional path, carrying the `Synthetic working data` disclosure, passing the envelope and privacy-walk tests in `content/playbooks/content.test.ts`, with the method and limitations written into the playbook.
 4. **Build a demo** for a playbook that already has a dataset — computed from committed data, with no model call and no key, server-rendered, and readable without JavaScript.
 
 Every contribution must pass `npm run check` and keep the page in plain English. A contributor may also conclude, and record in the playbook, that a synthetic stand-in would not be responsible in a domain.
@@ -775,7 +773,7 @@ The MVP is complete when:
 
 - all seventeen playbooks validate against schema v2 and render exactly the five sections in contract order;
 - fifteen playbooks ship a synthetic dataset, and the two sensitive domains state plainly why theirs would not be responsible and what a contributor would need instead;
-- every dataset file parses through the shared envelope and privacy walk in `npm run validate:content`;
+- every dataset file parses through the shared envelope and privacy walk in the test suite;
 - exactly one playbook has an available demo, and every other playbook says in one sentence what a demo would show and that none has been built;
 - the demo recomputes its findings from the committed dataset with no model, no key, and no client JavaScript, and every citation is an exact passage of that dataset;
 - a non-specialist can say, after reading a playbook, what the draft proposed, what data exists, what the synthetic dataset is, and what the demo does and does not show;

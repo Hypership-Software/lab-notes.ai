@@ -924,56 +924,107 @@ git commit -m "content: rewrite justice and participation playbooks; retire the 
 
 ---
 
-## Task 9: Retarget content validation
+## Task 9: Delete the content validator, fold its checks into the test suite
+
+**Decision (2026-08-21):** the standalone validator was over-engineering and is
+removed rather than retargeted. It was 309 lines across three files — a core
+module, a CLI shim, and a temp-root harness that mostly tested the validator
+rather than the content — guarding checks that amount to about twenty lines. It
+had also already rotted: it was written against v1's `officialSources`,
+`structureNotePath`, and `sha256` fields, which Task 2 deleted. Two checks did
+earn their keep and move into `content/playbooks/content.test.ts`, which already
+loops every playbook.
 
 **Files:**
-- Modify: `scripts/validate-content-core.ts` (full rewrite)
-- Modify: `scripts/validate-content.test.ts`
+- Modify: `content/playbooks/content.test.ts` (add a `synthetic datasets` describe)
+- Delete: `scripts/` entirely — `validate-content-core.ts`,
+  `validate-content.test.ts`, `validate-content.mts`
+- Modify: `package.json` (drop `validate:content`; `check` becomes
+  `typecheck && lint && test && build`)
 - Modify: `lib/schema-primitives.ts` (delete `sha256Schema`)
+- Modify: `DESIGN.md` §10, §17 file tree, §17 failure modes, §19 track 3, §21
 
 **Interfaces:**
-- Consumes: `playbookSchema`, `getAllPlaybooks`, `syntheticDatasetSchema`, `sensitiveKeyPattern`, `findPersonalDataShape`, `corpusSchema`.
-- Produces: `validateContent(rootDirectory?): Promise<string[]>` — same signature; `scripts/validate-content.mts` CLI shim needs no change.
+- Consumes: `getAllPlaybooks`, `syntheticDatasetSchema`, `sensitiveKeyPattern`,
+  `findPersonalDataShape`.
+- Produces: nothing exported. `validateContent` is gone; no caller remains.
 
-- [ ] **Step 1: Write the failing tests first.** Rework `scripts/validate-content.test.ts` to the new branches, keeping its existing temp-root technique (copy real content into a scratch root, break one thing, assert the error names the playbook):
-  - a dataset file missing from disk → error names `<slug>/dataset` and the filename;
-  - invalid JSON → error names the playbook;
-  - an envelope without the disclosure literal → error;
-  - a record string containing `"call me on 028 9012 3456"` → error naming the personal-data shape;
-  - a record key `email` → error naming the key;
-  - the real repository root → zero errors.
+**What is kept and why:**
+- **Dataset reachability.** Reading each file from the `dataPath` its playbook
+  declares is the check that the path still resolves. The detail route prints
+  that path and the demo reads the file, so a renamed dataset is a broken page
+  that neither typecheck nor any other test catches.
+- **The privacy walk.** Every key against `sensitiveKeyPattern` and every record
+  string against `findPersonalDataShape`. This is not aimed at the authors of the
+  committed datasets; it is aimed at the contribution track in DESIGN.md §19,
+  where someone pastes real text into a JSON file. A reviewer skimming a
+  twenty-record diff misses a phone number; the pattern does not.
 
-  Run: `npm run test -- scripts/validate-content.test.ts`
-  Expected: FAIL.
+**What is dropped and why:**
+- All hashing — `sha256`, `HashCheck`, `checkFileHash`, `sha256Schema`. Nothing
+  is downloaded and byte-compared any more; a hash over an authored dataset only
+  ever fires when someone legitimately edits it.
+- `structureNotePath` reading. The field does not exist in v2.
+- `resolveInsideRoot`. `relativePathSchema` in `lib/playbooks/schema.ts` already
+  refuses absolute paths, drive letters, and `..` segments, and
+  `schema.test.ts` covers it — the guard was belt over braces.
+- The `corpusSchema` check on the policy-evidence records.
+  `features/policy-evidence/fixtures.ts` already parses the envelope and the
+  corpus at module load, so a bad corpus fails the build without a second check.
+- The temp-root test harness. With the checks inside a content test there is no
+  validator left to write tests for.
 
-- [ ] **Step 2: Rewrite `validate-content-core.ts`.** Keep `resolveInsideRoot` and `collectKeys` verbatim; delete `sha256`, `HashCheck`, and `checkFileHash` (nothing hashes any more). Add a string walk beside the key walk:
+- [ ] **Step 1: Extend `content/playbooks/content.test.ts`.** Add `collectStrings`
+  beside the existing `collectKeys`, then a second describe block that derives its
+  cases from the registry so a new playbook is covered without editing the test:
 
 ```ts
-function collectStrings(value: unknown): string[] {
-  if (typeof value === "string") return [value]
-  if (Array.isArray(value)) return value.flatMap(collectStrings)
-  if (!value || typeof value !== "object") return []
-  return Object.values(value).flatMap(collectStrings)
-}
+const withDataset = getAllPlaybooks().flatMap((playbook) =>
+  playbook.syntheticData.status === "available"
+    ? [{ slug: playbook.slug, dataPath: playbook.syntheticData.dataPath }]
+    : [],
+)
 ```
 
-  The loop per playbook: schema `safeParse` (report issues), duplicate-slug guard (both kept from the current file), then for `syntheticData.status === "available"`: resolve `dataPath` inside the root, read + `JSON.parse` (report `cannot parse`), `syntheticDatasetSchema.safeParse` (report issues), then over the parsed envelope report any key matching `sensitiveKeyPattern` and, for each record string, any `findPersonalDataShape(text)` hit as `` `${playbook.slug}/dataset: record contains a ${shape}` ``. For `policy-evidence` only, additionally parse the envelope's `records` through `corpusSchema` so the demo's contract is enforced at validation time, not just at build time.
+  Three cases: `withDataset` has length 15; per dataset, the envelope parses and
+  carries the disclosure literal with at least one record; per dataset, no key
+  matches `sensitiveKeyPattern` and no string matches `findPersonalDataShape`.
+  Use `it.each` with `$slug` in the title so a failure names its own playbook.
 
-- [ ] **Step 3: Delete `sha256Schema` from `lib/schema-primitives.ts`** and confirm nothing imports it:
+- [ ] **Step 2: Prove both checks fail when broken.** A check that cannot fail is
+  not a check. Inject `"Ring me on 028 9012 3456"` into a record and confirm the
+  failure names `telephone number` and the playbook; move a dataset file aside and
+  confirm the failure names the playbook and the missing path. Revert both.
 
-  Run: `grep -rn "sha256" lib features scripts content app components --include="*.ts" --include="*.tsx" --include="*.mts"`
-  Expected: no hits.
-
-- [ ] **Step 4: Run the validator suite and the real validator.**
-
-  Run: `npm run test -- scripts/validate-content.test.ts && npm run validate:content`
-  Expected: both PASS with zero errors.
-
-- [ ] **Step 5: Commit**
+- [ ] **Step 3: Delete the validator and its wiring.**
 
 ```bash
-git add scripts lib/schema-primitives.ts
-git commit -m "feat: validate every synthetic dataset through the shared envelope and privacy walk"
+git rm -r scripts
+```
+
+  Then drop `validate:content` from `package.json`, shorten `check`, and delete
+  `sha256Schema`. Confirm nothing is left behind:
+
+  Run: `grep -rn "sha256\|validate-content" lib features scripts content app components package.json --include="*.ts" --include="*.tsx" --include="*.mts" --include="*.json"`
+  Expected: hits only in `features/playbooks/detail/` — `source-register.tsx` and
+  `detail-primitives.test.tsx` still render a v1 hash field and are deleted in
+  Task 10.
+
+- [ ] **Step 4: Update `DESIGN.md`.** Five references point at
+  `npm run validate:content`: §10 (the privacy walk paragraph), the §17 file tree,
+  the §17 playbook failure modes, §19 contribution track 3, and the §21 definition
+  of done. Each now names the test suite. The guarantees themselves do not change.
+
+- [ ] **Step 5: Run the suite.**
+
+  Run: `npm run test -- content/playbooks/content.test.ts lib/playbooks`
+  Expected: PASS, 37 tests in the content file.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add -A content/playbooks/content.test.ts lib/schema-primitives.ts package.json DESIGN.md build-plan.md scripts
+git commit -m "refactor!: replace the content validator with dataset tests"
 ```
 
 ---
@@ -1188,7 +1239,7 @@ git commit -m "feat: rebuild the demo as a server-rendered dataset-and-findings 
 
 - [ ] **Step 3: Rewrite `/method` as "How this works":** one section per letter — where A comes from (the draft, Table 2, one link), how B sources are chosen and access-classified, how C datasets are made (AI-authored, shaped by what real sources publish, envelope-labelled `Synthetic working data`, privacy-walked, no generator/seed/hash) and what they can never prove, and what a D demo does (transparent computation over committed data, no model, no key) and does not show. Keep the route at `/method`; set the page `<h1>` and metadata title to "How this works".
 
-- [ ] **Step 4: Rewrite `/contribute` to four tracks:** improve a playbook's plain-English content; add or verify a data source; contribute a synthetic dataset (must use the envelope, pass `npm run validate:content`, and follow the privacy rules); build a demo for a playbook that has a dataset. State the privacy rules inline.
+- [ ] **Step 4: Rewrite `/contribute` to four tracks:** improve a playbook's plain-English content; add or verify a data source; contribute a synthetic dataset (must use the envelope, pass the dataset tests in `content/playbooks/content.test.ts`, and follow the privacy rules); build a demo for a playbook that has a dataset. State the privacy rules inline.
 
 - [ ] **Step 5: Full gate plus manual review.**
 
@@ -1281,7 +1332,7 @@ git commit -m "docs: add the open-source release surface"
 - [ ] Fifteen playbooks ship an envelope-valid synthetic dataset; `violence-risk-research` and `diagnostic-imaging-support` state plainly why theirs would not be responsible.
 - [ ] Exactly one playbook — policy-evidence — has an available demo, fully server-rendered, readable and navigable without JavaScript.
 - [ ] Every citation in the demo is an exact substring of the committed dataset, enforced by test.
-- [ ] Every dataset file carries the `Synthetic working data` disclosure and passes the privacy walk in `npm run validate:content`.
+- [ ] Every dataset file carries the `Synthetic working data` disclosure and passes the privacy walk in `content/playbooks/content.test.ts`.
 - [ ] No maturity, risk-tier, evaluation, gold-label, recorded-AI, or hash machinery remains anywhere in `lib/`, `features/`, `content/`, `scripts/`, or the three product documents.
 - [ ] `npm run check` passes clean; CI runs it on push and pull request.
 - [ ] README, LICENSE, CONTRIBUTING, and SECURITY exist and agree with the contribute page.

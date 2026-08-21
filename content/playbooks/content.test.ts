@@ -1,7 +1,10 @@
+import { readFile } from "node:fs/promises"
+
 import { describe, expect, it } from "vitest"
 
+import { syntheticDatasetSchema } from "@/lib/playbooks/dataset"
 import { getAllPlaybooks } from "@/lib/playbooks/registry"
-import { sensitiveKeyPattern } from "@/lib/privacy-patterns"
+import { findPersonalDataShape, sensitiveKeyPattern } from "@/lib/privacy-patterns"
 
 const expectedSlugs = [
   "adaptive-tutoring",
@@ -30,6 +33,13 @@ function collectKeys(value: unknown): string[] {
   if (Array.isArray(value)) return value.flatMap(collectKeys)
   if (!value || typeof value !== "object") return []
   return Object.entries(value).flatMap(([key, child]) => [key, ...collectKeys(child)])
+}
+
+function collectStrings(value: unknown): string[] {
+  if (typeof value === "string") return [value]
+  if (Array.isArray(value)) return value.flatMap(collectStrings)
+  if (!value || typeof value !== "object") return []
+  return Object.values(value).flatMap(collectStrings)
 }
 
 describe("playbook inventory", () => {
@@ -74,5 +84,45 @@ describe("playbook inventory", () => {
     for (const playbook of playbooks) {
       expect(collectKeys(playbook).filter((key) => sensitiveKeyPattern.test(key))).toEqual([])
     }
+  })
+})
+
+/**
+ * The committed datasets, checked from the paths the playbooks declare. Reading
+ * each file here is also the check that a declared `dataPath` still points at
+ * something: the detail route prints that path and the demo reads the file, so
+ * a renamed dataset is a broken page rather than a typecheck error.
+ */
+describe("synthetic datasets", () => {
+  const withDataset = getAllPlaybooks().flatMap((playbook) =>
+    playbook.syntheticData.status === "available"
+      ? [{ slug: playbook.slug, dataPath: playbook.syntheticData.dataPath }]
+      : [],
+  )
+
+  async function readDataset(dataPath: string) {
+    return syntheticDatasetSchema.parse(JSON.parse(await readFile(dataPath, "utf8")))
+  }
+
+  it("ships one for every playbook that claims one", () => {
+    expect(withDataset).toHaveLength(15)
+  })
+
+  it.each(withDataset)("$slug parses through the shared envelope", async ({ dataPath }) => {
+    const dataset = await readDataset(dataPath)
+
+    expect(dataset.disclosure).toBe("Synthetic working data")
+    expect(dataset.records.length).toBeGreaterThan(0)
+  })
+
+  it.each(withDataset)("$slug holds no person-shaped data", async ({ dataPath }) => {
+    const dataset = await readDataset(dataPath)
+
+    expect(collectKeys(dataset).filter((key) => sensitiveKeyPattern.test(key))).toEqual([])
+    expect(
+      collectStrings(dataset)
+        .map((text) => findPersonalDataShape(text))
+        .filter((shape) => shape !== undefined),
+    ).toEqual([])
   })
 })
