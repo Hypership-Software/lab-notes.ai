@@ -1,63 +1,59 @@
-import { defineAssessedPlaybook } from "../define-assessed-playbook"
+import { definePlaybook } from "@/lib/playbooks/define-playbook"
 
-export const diagnosticImagingSupport = defineAssessedPlaybook({
+import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
+
+export const diagnosticImagingSupport = definePlaybook({
+  schemaVersion: 2,
   slug: "diagnostic-imaging-support",
   title: "Diagnostic Imaging Support",
   summary:
-    "Assess how image-analysis support might assist qualified clinicians without replacing diagnosis or clinical accountability.",
+    "Look at what it would actually take to help a reporting clinician decide which scan to read next, and why this is the one example here with no stand-in data.",
   sector: "Health",
-  tags: ["diagnostics", "imaging", "clinical-safety"],
-  technicalPatterns: ["computer-vision", "ranking", "human-review"],
-  problem:
-    "Imaging services face high demand, but missing or mis-prioritising a finding can cause serious patient harm.",
-  intendedUsers: ["Radiologists", "Reporting clinicians", "Imaging service managers"],
-  affectedGroups: ["Patients whose care involves diagnostic imaging"],
-  supportedDecision:
-    "Which study a qualified clinician should review next and which image regions merit attention.",
-  publicBenefit:
-    "Could help clinical teams investigate workload support while keeping diagnosis with qualified professionals.",
-  dataAccessibility: "restricted",
-  riskLevel: "high",
-  riskReasons: [
-    "Imaging and linked outcomes are sensitive health data used in consequential care decisions.",
-    "False negatives, false positives, and performance differences across groups can cause serious harm.",
-  ],
-  mitigations: [
-    "Require clinical-safety governance, subgroup evaluation, and independent human interpretation.",
-    "Do not expose a public diagnostic simulation based on realistic patient records.",
-  ],
-  sourceApplication: "AI-based diagnostics from medical images",
-  sourceRationale:
-    "The strategy describes possible support for fractures, cancer, and strokes but supplies no clinical dataset or safety evaluation.",
-  syntheticMethod:
-    "If a safe teaching fixture is justified, generate abstract image-quality and workflow metadata rather than diagnostic patient images.",
-  baseline: {
-    name: "Clinician-led worklist rules",
-    description:
-      "Existing urgency categories and referral information order studies for qualified clinical review.",
-    method:
-      "Apply documented clinical priority and service rules without inferring a diagnosis from image content.",
-    limitations: ["Rule-based prioritisation cannot surface unrecorded visual concerns."],
+  strategyExample: {
+    proposal:
+      "The draft strategy names AI-based analysis of medical images as a potential public-service application: support for spotting fractures, cancers, and strokes in scans, with no clinical dataset or safety work attached to the suggestion.",
+    draftReference: strategyDraftReference,
+    url: strategyDraftUrl,
   },
-  limitations: [
-    "Open data is unlikely to represent the local population, equipment, workflow, or prevalence.",
-    "A browser proof of concept cannot establish clinical safety or diagnostic performance.",
+  dataSources: [
+    {
+      id: "doh-diagnostic-waiting-times",
+      publisher: "Department of Health",
+      title: "Diagnostic waiting times",
+      url: "https://www.health-ni.gov.uk/articles/diagnostic-waiting-times",
+      covers:
+        "How many people are waiting for a diagnostic test in Northern Ireland, how long they have waited, and how long reporting turnaround takes at each health and social care trust.",
+      access: "open",
+      relevance:
+        "It is the closest published figure to the pressure this example is meant to relieve, and it counts people and weeks rather than describing a single image.",
+    },
+    {
+      id: "doh-hospital-waiting-times",
+      publisher: "Department of Health",
+      title: "Hospital waiting times statistics",
+      url: "https://www.health-ni.gov.uk/topics/hospital-waiting-times-statistics",
+      covers:
+        "Quarterly outpatient, inpatient, diagnostic, and cancer waiting figures broken down by trust and by length of wait.",
+      access: "open",
+      relevance:
+        "It shows what is publicly available around imaging services and, by omission, that no image and no report ever leaves the clinical record.",
+    },
   ],
-  failureModes: [
-    "A confident overlay may anchor a clinician on an incorrect region.",
-    "Performance may degrade with different scanners, protocols, or patient groups.",
+  syntheticData: {
+    status: "not-responsible",
+    reason:
+      "A scan cannot be honestly stood in for by a file of invented numbers, and every tabular stand-in we sketched for this task drifted towards describing individual patients rather than groups.",
+    whatContributorsNeed:
+      "Anyone taking this further needs a partner radiology service and access to a real imaging archive under formal clinical-research governance, with a named sponsor, ethics approval, and reporting clinicians involved from the start.",
+  },
+  demo: {
+    status: "not-yet",
+    note: "A demo would have to show real scans being reordered in a reporting clinician's worklist, which is exactly the thing this page says we cannot responsibly fake, so nobody has built one.",
+  },
+  caveats: [
+    "Missing a finding, or marking one that is not there, changes what happens to a patient, so nothing on this page should be read as a claim that image analysis is safe to use in care.",
+    "Openly published imaging collections come from other populations, other scanners, and other working practices, so how a system behaved on them says little about how it would behave here.",
+    "A confident outline drawn on a scan can pull a clinician's eye to the wrong place, which makes the support itself a source of harm rather than only a missed benefit.",
   ],
-  nextValidationSteps: [
-    "Define the clinical task and intended-use statement with radiology specialists.",
-    "Identify lawful, representative evaluation data and a clinical-safety case.",
-    "Agree subgroup, false-negative, workflow, and human-factors evaluation before prototyping.",
-  ],
-  demoBarrier:
-    "Restricted clinical data, medical-device considerations, and patient-safety risk make a public diagnostic demo inappropriate at this stage.",
-  responsibleRole: "Qualified reporting clinician",
-  partnerRequirements: [
-    "Clinical safety officer",
-    "Radiology service partner",
-    "Information governance and medical-device review",
-  ],
+  lastReviewed: "2026-08-21",
 })

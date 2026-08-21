@@ -1,0 +1,132 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Eighteen invented lesson objectives standing in for the rough notes a teacher writes before a lesson, so drafting and feedback support can be looked at without using anyone's real planning or any pupil's work.",
+  "records": [
+    {
+      "id": "SYN-LP-01",
+      "keyStage": "Key Stage 2",
+      "subject": "Mathematics and Numeracy",
+      "topic": "Fractions of amounts",
+      "draftObjective": "By the end of the lesson most of them should be able to find a fraction of a whole number without drawing it out first."
+    },
+    {
+      "id": "SYN-LP-02",
+      "keyStage": "Key Stage 2",
+      "subject": "Language and Literacy",
+      "topic": "Writing a recount",
+      "draftObjective": "Pupils write a short recount of the trip in the right order, using at least three time words from the wall."
+    },
+    {
+      "id": "SYN-LP-03",
+      "keyStage": "Key Stage 2",
+      "subject": "The World Around Us",
+      "topic": "Materials and their uses",
+      "draftObjective": "I want them to be able to say why we would not make a window out of wood, in their own words rather than mine."
+    },
+    {
+      "id": "SYN-LP-04",
+      "keyStage": "Key Stage 2",
+      "subject": "The World Around Us",
+      "topic": "Mapping the local area",
+      "draftObjective": "Might need two lessons for this. Pupils use a simple key to mark four features of the local area on a sketch map."
+    },
+    {
+      "id": "SYN-LP-05",
+      "keyStage": "Key Stage 2",
+      "subject": "The Arts",
+      "topic": "Mixing shades of one colour",
+      "draftObjective": "Pupils mix three shades of the same colour and tell me what they changed each time."
+    },
+    {
+      "id": "SYN-LP-06",
+      "keyStage": "Key Stage 3",
+      "subject": "Mathematics",
+      "topic": "Solving linear equations",
+      "draftObjective": "Pupils solve an equation with the unknown on both sides and check the answer by putting it back in."
+    },
+    {
+      "id": "SYN-LP-07",
+      "keyStage": "Key Stage 3",
+      "subject": "English",
+      "topic": "Persuasive writing",
+      "draftObjective": "By the end of the double period they should be able to tell the difference between an opinion stated firmly and an opinion backed up with something."
+    },
+    {
+      "id": "SYN-LP-08",
+      "keyStage": "Key Stage 3",
+      "subject": "Science",
+      "topic": "Particle model of matter",
+      "draftObjective": "Pupils explain what happens to the particles when ice melts, without saying that the particles themselves melt."
+    },
+    {
+      "id": "SYN-LP-09",
+      "keyStage": "Key Stage 3",
+      "subject": "Geography",
+      "topic": "Rivers and erosion",
+      "draftObjective": "Pupils should be able to explain, in their own words, why the river slows down where the valley widens out."
+    },
+    {
+      "id": "SYN-LP-10",
+      "keyStage": "Key Stage 3",
+      "subject": "History",
+      "topic": "Working with sources",
+      "draftObjective": "Pupils read two accounts of the same event and say which one they trust more, and why."
+    },
+    {
+      "id": "SYN-LP-11",
+      "keyStage": "Key Stage 3",
+      "subject": "Technology and Design",
+      "topic": "Designing for a user",
+      "draftObjective": "Pupils name who their product is for and two things that person actually needs from it."
+    },
+    {
+      "id": "SYN-LP-12",
+      "keyStage": "Key Stage 3",
+      "subject": "Learning for Life and Work",
+      "topic": "Managing a weekly budget",
+      "draftObjective": "Pupils work out what is left once the fixed costs come off a weekly budget, then say what they would cut first and defend it."
+    },
+    {
+      "id": "SYN-LP-13",
+      "keyStage": "Key Stage 3",
+      "subject": "Modern Languages",
+      "topic": "Describing a daily routine",
+      "draftObjective": "Pupils describe their own morning routine out loud for about a minute, with the prompts still on the board."
+    },
+    {
+      "id": "SYN-LP-14",
+      "keyStage": "Key Stage 3",
+      "subject": "Music",
+      "topic": "Rhythm and pulse",
+      "draftObjective": "Pupils keep a steady pulse in a group while one of them changes the rhythm over the top of it."
+    },
+    {
+      "id": "SYN-LP-15",
+      "keyStage": "Key Stage 4",
+      "subject": "Mathematics",
+      "topic": "Percentage change",
+      "draftObjective": "Pupils work out a percentage increase and, more importantly, notice when the question is really asking for the original amount."
+    },
+    {
+      "id": "SYN-LP-16",
+      "keyStage": "Key Stage 4",
+      "subject": "English Language",
+      "topic": "Comparing two texts",
+      "draftObjective": "Pupils write one paragraph comparing how both writers open their article, with a short quotation from each."
+    },
+    {
+      "id": "SYN-LP-17",
+      "keyStage": "Key Stage 4",
+      "subject": "Chemistry",
+      "topic": "Rates of reaction",
+      "draftObjective": "Pupils plan a fair test for the effect of temperature on rate and say out loud which variables they are holding still."
+    },
+    {
+      "id": "SYN-LP-18",
+      "keyStage": "Key Stage 4",
+      "subject": "Religious Studies",
+      "topic": "Ethics and decision making",
+      "draftObjective": "Pupils set out two views on the question fairly before giving their own, and say what would change their mind."
+    }
+  ]
+}

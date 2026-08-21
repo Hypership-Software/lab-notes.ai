@@ -1,0 +1,146 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Twenty invented, banded waiting counts standing in for the quarterly specialty figures a health and social care trust already holds, so the demand and capacity task can be looked at without them.",
+  "records": [
+    {
+      "id": "SYN-HO-01",
+      "specialty": "General surgery",
+      "quarter": "2025-Q3",
+      "waitingBand": "0-6 weeks",
+      "patientsWaitingBand": "2500-5000"
+    },
+    {
+      "id": "SYN-HO-02",
+      "specialty": "General surgery",
+      "quarter": "2025-Q3",
+      "waitingBand": "over 52 weeks",
+      "patientsWaitingBand": "10000-20000"
+    },
+    {
+      "id": "SYN-HO-03",
+      "specialty": "Trauma and orthopaedics",
+      "quarter": "2025-Q3",
+      "waitingBand": "14-26 weeks",
+      "patientsWaitingBand": "5000-10000"
+    },
+    {
+      "id": "SYN-HO-04",
+      "specialty": "Trauma and orthopaedics",
+      "quarter": "2025-Q4",
+      "waitingBand": "over 52 weeks",
+      "patientsWaitingBand": "20000-30000"
+    },
+    {
+      "id": "SYN-HO-05",
+      "specialty": "Ear, nose and throat",
+      "quarter": "2025-Q4",
+      "waitingBand": "7-13 weeks",
+      "patientsWaitingBand": "2500-5000"
+    },
+    {
+      "id": "SYN-HO-06",
+      "specialty": "Ear, nose and throat",
+      "quarter": "2025-Q4",
+      "waitingBand": "27-52 weeks",
+      "patientsWaitingBand": "5000-10000"
+    },
+    {
+      "id": "SYN-HO-07",
+      "specialty": "Ophthalmology",
+      "quarter": "2025-Q4",
+      "waitingBand": "0-6 weeks",
+      "patientsWaitingBand": "1000-2500"
+    },
+    {
+      "id": "SYN-HO-08",
+      "specialty": "Ophthalmology",
+      "quarter": "2026-Q1",
+      "waitingBand": "over 52 weeks",
+      "patientsWaitingBand": "10000-20000"
+    },
+    {
+      "id": "SYN-HO-09",
+      "specialty": "Urology",
+      "quarter": "2025-Q4",
+      "waitingBand": "14-26 weeks",
+      "patientsWaitingBand": "2500-5000"
+    },
+    {
+      "id": "SYN-HO-10",
+      "specialty": "Urology",
+      "quarter": "2026-Q1",
+      "waitingBand": "27-52 weeks",
+      "patientsWaitingBand": "2500-5000"
+    },
+    {
+      "id": "SYN-HO-11",
+      "specialty": "Cardiology",
+      "quarter": "2025-Q4",
+      "waitingBand": "0-6 weeks",
+      "patientsWaitingBand": "1000-2500"
+    },
+    {
+      "id": "SYN-HO-12",
+      "specialty": "Cardiology",
+      "quarter": "2026-Q1",
+      "waitingBand": "27-52 weeks",
+      "patientsWaitingBand": "5000-10000"
+    },
+    {
+      "id": "SYN-HO-13",
+      "specialty": "Dermatology",
+      "quarter": "2025-Q4",
+      "waitingBand": "7-13 weeks",
+      "patientsWaitingBand": "2500-5000"
+    },
+    {
+      "id": "SYN-HO-14",
+      "specialty": "Dermatology",
+      "quarter": "2026-Q1",
+      "waitingBand": "over 52 weeks",
+      "patientsWaitingBand": "10000-20000"
+    },
+    {
+      "id": "SYN-HO-15",
+      "specialty": "Gastroenterology",
+      "quarter": "2026-Q1",
+      "waitingBand": "14-26 weeks",
+      "patientsWaitingBand": "2500-5000"
+    },
+    {
+      "id": "SYN-HO-16",
+      "specialty": "Gastroenterology",
+      "quarter": "2026-Q1",
+      "waitingBand": "over 52 weeks",
+      "patientsWaitingBand": "5000-10000"
+    },
+    {
+      "id": "SYN-HO-17",
+      "specialty": "Neurology",
+      "quarter": "2026-Q1",
+      "waitingBand": "27-52 weeks",
+      "patientsWaitingBand": "2500-5000"
+    },
+    {
+      "id": "SYN-HO-18",
+      "specialty": "Neurology",
+      "quarter": "2026-Q1",
+      "waitingBand": "over 52 weeks",
+      "patientsWaitingBand": "5000-10000"
+    },
+    {
+      "id": "SYN-HO-19",
+      "specialty": "Rheumatology",
+      "quarter": "2026-Q1",
+      "waitingBand": "0-6 weeks",
+      "patientsWaitingBand": "500-1000"
+    },
+    {
+      "id": "SYN-HO-20",
+      "specialty": "Rheumatology",
+      "quarter": "2026-Q1",
+      "waitingBand": "14-26 weeks",
+      "patientsWaitingBand": "1000-2500"
+    }
+  ]
+}

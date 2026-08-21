@@ -1,63 +1,63 @@
-import { defineAssessedPlaybook } from "../define-assessed-playbook"
+import { definePlaybook } from "@/lib/playbooks/define-playbook"
 
-export const healthOperations = defineAssessedPlaybook({
+import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
+
+export const healthOperations = definePlaybook({
+  schemaVersion: 2,
   slug: "health-operations",
   title: "Health Service Demand and Operations",
   summary:
-    "Examine demand, bed, discharge, and allocation support as an operational decision problem with explicit safety constraints.",
+    "Work out which published figures would tell a hospital planning team anything useful about demand, beds, and discharge, and what a stand-in version of those figures looks like.",
   sector: "Health",
-  tags: ["operations", "capacity", "discharge"],
-  technicalPatterns: ["forecasting", "optimisation", "scenario-modelling"],
-  problem:
-    "Teams coordinate uncertain demand and constrained capacity across services where delays and poor allocation can affect care.",
-  intendedUsers: ["Operational managers", "Discharge teams", "Clinical service leads"],
-  affectedGroups: ["Patients waiting for, receiving, or leaving care"],
-  supportedDecision:
-    "Which operational scenario deserves review when planning capacity, discharge coordination, or resource allocation.",
-  publicBenefit:
-    "Could make capacity assumptions and trade-offs more visible to accountable operational teams.",
-  dataAccessibility: "restricted",
-  riskLevel: "high",
-  riskReasons: [
-    "Operational records can reveal sensitive health information and vulnerable circumstances.",
-    "Optimisation targets can disadvantage people whose needs are complex or poorly represented.",
-  ],
-  mitigations: [
-    "Evaluate service and equality impacts rather than optimising a single throughput measure.",
-    "Keep clinical suitability and individual discharge decisions outside the model.",
-  ],
-  sourceApplication: "AI-supported health operational processes",
-  sourceRationale:
-    "The strategy mentions discharge, bed demand, and allocation but does not define objectives, constraints, or safety measures.",
-  syntheticMethod:
-    "Stand in for the aggregate arrival, capacity, and pathway data a trust already holds, so the pattern could be tried without it: invented service identifiers and a small set of deliberately varied demand scenarios, shaped by whatever published structure can be recorded first.",
-  baseline: {
-    name: "Rolling aggregate forecast",
-    description:
-      "A transparent moving average and documented capacity rules provide the comparison.",
-    method:
-      "Calculate recent aggregate demand, apply known capacity constraints, and display assumptions for planner adjustment.",
-    limitations: ["Simple averages respond slowly to structural changes and unusual events."],
+  strategyExample: {
+    proposal:
+      "The draft strategy names AI support for health operational processes as a potential public-service application: help with discharge coordination, bed demand, and how limited capacity is shared out, without saying what the system would be aiming at or what it must never do.",
+    draftReference: strategyDraftReference,
+    url: strategyDraftUrl,
   },
-  limitations: [
-    "Synthetic flows cannot reproduce local dependencies, clinical complexity, or human behaviour.",
-    "A useful forecast does not determine a safe allocation or discharge decision.",
+  dataSources: [
+    {
+      id: "doh-hospital-waiting-times",
+      publisher: "Department of Health",
+      title: "Hospital waiting times statistics",
+      url: "https://www.health-ni.gov.uk/topics/hospital-waiting-times-statistics",
+      covers:
+        "Quarterly outpatient, inpatient and day case, diagnostic, and cancer waiting figures for Northern Ireland, broken down by health and social care trust and by how long people have waited.",
+      access: "open",
+      relevance:
+        "It is the published shape this playbook's synthetic records imitate: a specialty, a period, a length-of-wait band, and a count of people, and nothing about any one person.",
+    },
+    {
+      id: "nisra-health-and-social-care",
+      publisher: "Northern Ireland Statistics and Research Agency",
+      title: "Health and social care statistics",
+      url: "https://www.nisra.gov.uk/statistics/health-and-social-care",
+      covers:
+        "The wider collection of Northern Ireland health statistics, including hospital activity and waiting lists, primary care, social care, workforce, and health inequalities.",
+      access: "open",
+      relevance:
+        "It shows how much of the picture a planning team would need sits in separate publications, which is most of the real work in this example.",
+    },
   ],
-  failureModes: [
-    "Optimising average flow may hide unsafe tail risks or unequal delays.",
-    "Historical constraints may be learned as if they were desirable practice.",
+  syntheticData: {
+    status: "available",
+    dataPath: "content/playbooks/health-operations/health-operations.data.json",
+    method:
+      "Twenty invented waiting records written by hand in the shape the published quarterly statistics use, with specialty names, quarters, length-of-wait bands, and banded counts of people, so the planning task can be discussed without holding trust data.",
+    limitations: [
+      "The numbers are invented bands, not rounded real figures, so nothing here should be quoted as how long anyone in Northern Ireland is waiting.",
+      "Real planning needs arrivals, beds, staffing, and discharge delays together, and this file has only one of those.",
+      "A tidy quarterly table hides the day-to-day movement and the individual circumstances that actually decide when someone leaves hospital.",
+    ],
+  },
+  demo: {
+    status: "not-yet",
+    note: "A demo could take these banded records and show a plain forecast of next quarter's waiting alongside the assumptions behind it, but nobody has built that here yet.",
+  },
+  caveats: [
+    "Operational records describe people who are ill, so the real version of this work involves sensitive information even when the output looks like a chart.",
+    "Aiming at one number, such as average flow, can quietly make things worse for people whose needs are complicated or unusual.",
+    "Knowing how many people are likely to arrive does not tell anyone whether a particular person is ready to go home, and that decision has to stay with clinicians.",
   ],
-  nextValidationSteps: [
-    "Map the exact operational decision, responsible roles, and non-negotiable clinical constraints.",
-    "Compare forecasting value against existing planning tools using aggregate historical back-testing.",
-    "Evaluate distributional effects and failure procedures with service and patient representatives.",
-  ],
-  demoBarrier:
-    "Operational health data is restricted and the objectives and clinical constraints require a data-owning service partner.",
-  responsibleRole: "Accountable health service operations lead",
-  partnerRequirements: [
-    "Health service operations partner",
-    "Clinical safety and equality review",
-    "Lawful aggregate evaluation data",
-  ],
+  lastReviewed: "2026-08-21",
 })

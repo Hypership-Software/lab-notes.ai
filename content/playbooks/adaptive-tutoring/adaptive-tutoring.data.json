@@ -1,0 +1,132 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Eighteen invented practice summaries standing in for the totals a tutoring tool would build up over a term, banded by topic so that nothing describes a single learner.",
+  "records": [
+    {
+      "id": "SYN-AT-01",
+      "topic": "Equivalent fractions",
+      "difficulty": "foundation",
+      "attemptsBand": "500-1000",
+      "successRateBand": "70-85%"
+    },
+    {
+      "id": "SYN-AT-02",
+      "topic": "Fractions of amounts",
+      "difficulty": "foundation",
+      "attemptsBand": "250-500",
+      "successRateBand": "55-70%"
+    },
+    {
+      "id": "SYN-AT-03",
+      "topic": "Rounding to significant figures",
+      "difficulty": "foundation",
+      "attemptsBand": "500-1000",
+      "successRateBand": "over 85%"
+    },
+    {
+      "id": "SYN-AT-04",
+      "topic": "Negative numbers in context",
+      "difficulty": "foundation",
+      "attemptsBand": "500-1000",
+      "successRateBand": "70-85%"
+    },
+    {
+      "id": "SYN-AT-05",
+      "topic": "Reading a bus timetable",
+      "difficulty": "foundation",
+      "attemptsBand": "250-500",
+      "successRateBand": "70-85%"
+    },
+    {
+      "id": "SYN-AT-06",
+      "topic": "Adding fractions with different denominators",
+      "difficulty": "developing",
+      "attemptsBand": "250-500",
+      "successRateBand": "40-55%"
+    },
+    {
+      "id": "SYN-AT-07",
+      "topic": "Simplifying expressions",
+      "difficulty": "developing",
+      "attemptsBand": "250-500",
+      "successRateBand": "55-70%"
+    },
+    {
+      "id": "SYN-AT-08",
+      "topic": "Solving linear equations",
+      "difficulty": "developing",
+      "attemptsBand": "100-250",
+      "successRateBand": "40-55%"
+    },
+    {
+      "id": "SYN-AT-09",
+      "topic": "Ratio and proportion",
+      "difficulty": "developing",
+      "attemptsBand": "250-500",
+      "successRateBand": "55-70%"
+    },
+    {
+      "id": "SYN-AT-10",
+      "topic": "Area of compound shapes",
+      "difficulty": "developing",
+      "attemptsBand": "100-250",
+      "successRateBand": "55-70%"
+    },
+    {
+      "id": "SYN-AT-11",
+      "topic": "Probability of a single event",
+      "difficulty": "developing",
+      "attemptsBand": "250-500",
+      "successRateBand": "70-85%"
+    },
+    {
+      "id": "SYN-AT-12",
+      "topic": "Solving equations with brackets",
+      "difficulty": "secure",
+      "attemptsBand": "100-250",
+      "successRateBand": "under 40%"
+    },
+    {
+      "id": "SYN-AT-13",
+      "topic": "Percentage change",
+      "difficulty": "secure",
+      "attemptsBand": "250-500",
+      "successRateBand": "40-55%"
+    },
+    {
+      "id": "SYN-AT-14",
+      "topic": "Volume of a prism",
+      "difficulty": "secure",
+      "attemptsBand": "100-250",
+      "successRateBand": "40-55%"
+    },
+    {
+      "id": "SYN-AT-15",
+      "topic": "Angles in parallel lines",
+      "difficulty": "secure",
+      "attemptsBand": "100-250",
+      "successRateBand": "55-70%"
+    },
+    {
+      "id": "SYN-AT-16",
+      "topic": "Averages from a frequency table",
+      "difficulty": "secure",
+      "attemptsBand": "100-250",
+      "successRateBand": "40-55%"
+    },
+    {
+      "id": "SYN-AT-17",
+      "topic": "Reverse percentages",
+      "difficulty": "stretch",
+      "attemptsBand": "under 100",
+      "successRateBand": "under 40%"
+    },
+    {
+      "id": "SYN-AT-18",
+      "topic": "Interpreting a pie chart",
+      "difficulty": "stretch",
+      "attemptsBand": "under 100",
+      "successRateBand": "40-55%"
+    }
+  ]
+}
