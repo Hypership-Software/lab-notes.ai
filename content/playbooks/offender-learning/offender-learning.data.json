@@ -1,0 +1,146 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Twenty invented quarterly rows standing in for course activity in a custodial learning service, with five course types, a banded number of enrolments, and a banded completion rate. No published source reports either figure by course.",
+  "records": [
+    {
+      "id": "SYN-OL-01",
+      "course": "Essential skills: literacy",
+      "quarter": "2025-Q1",
+      "enrolmentsBand": "50-100",
+      "completionBand": "40-60%"
+    },
+    {
+      "id": "SYN-OL-02",
+      "course": "Essential skills: literacy",
+      "quarter": "2025-Q2",
+      "enrolmentsBand": "50-100",
+      "completionBand": "40-60%"
+    },
+    {
+      "id": "SYN-OL-03",
+      "course": "Essential skills: literacy",
+      "quarter": "2025-Q3",
+      "enrolmentsBand": "20-50",
+      "completionBand": "60-80%"
+    },
+    {
+      "id": "SYN-OL-04",
+      "course": "Essential skills: literacy",
+      "quarter": "2025-Q4",
+      "enrolmentsBand": "50-100",
+      "completionBand": "40-60%"
+    },
+    {
+      "id": "SYN-OL-05",
+      "course": "Essential skills: numeracy",
+      "quarter": "2025-Q1",
+      "enrolmentsBand": "20-50",
+      "completionBand": "40-60%"
+    },
+    {
+      "id": "SYN-OL-06",
+      "course": "Essential skills: numeracy",
+      "quarter": "2025-Q2",
+      "enrolmentsBand": "20-50",
+      "completionBand": "40-60%"
+    },
+    {
+      "id": "SYN-OL-07",
+      "course": "Essential skills: numeracy",
+      "quarter": "2025-Q3",
+      "enrolmentsBand": "20-50",
+      "completionBand": "under 40%"
+    },
+    {
+      "id": "SYN-OL-08",
+      "course": "Essential skills: numeracy",
+      "quarter": "2025-Q4",
+      "enrolmentsBand": "20-50",
+      "completionBand": "40-60%"
+    },
+    {
+      "id": "SYN-OL-09",
+      "course": "Digital skills",
+      "quarter": "2025-Q1",
+      "enrolmentsBand": "20-50",
+      "completionBand": "60-80%"
+    },
+    {
+      "id": "SYN-OL-10",
+      "course": "Digital skills",
+      "quarter": "2025-Q2",
+      "enrolmentsBand": "50-100",
+      "completionBand": "60-80%"
+    },
+    {
+      "id": "SYN-OL-11",
+      "course": "Digital skills",
+      "quarter": "2025-Q3",
+      "enrolmentsBand": "50-100",
+      "completionBand": "40-60%"
+    },
+    {
+      "id": "SYN-OL-12",
+      "course": "Digital skills",
+      "quarter": "2025-Q4",
+      "enrolmentsBand": "over 100",
+      "completionBand": "60-80%"
+    },
+    {
+      "id": "SYN-OL-13",
+      "course": "Employability",
+      "quarter": "2025-Q1",
+      "enrolmentsBand": "50-100",
+      "completionBand": "60-80%"
+    },
+    {
+      "id": "SYN-OL-14",
+      "course": "Employability",
+      "quarter": "2025-Q2",
+      "enrolmentsBand": "50-100",
+      "completionBand": "over 80%"
+    },
+    {
+      "id": "SYN-OL-15",
+      "course": "Employability",
+      "quarter": "2025-Q3",
+      "enrolmentsBand": "50-100",
+      "completionBand": "60-80%"
+    },
+    {
+      "id": "SYN-OL-16",
+      "course": "Employability",
+      "quarter": "2025-Q4",
+      "enrolmentsBand": "over 100",
+      "completionBand": "60-80%"
+    },
+    {
+      "id": "SYN-OL-17",
+      "course": "Open University access module",
+      "quarter": "2025-Q1",
+      "enrolmentsBand": "under 20",
+      "completionBand": "over 80%"
+    },
+    {
+      "id": "SYN-OL-18",
+      "course": "Open University access module",
+      "quarter": "2025-Q2",
+      "enrolmentsBand": "under 20",
+      "completionBand": "60-80%"
+    },
+    {
+      "id": "SYN-OL-19",
+      "course": "Open University access module",
+      "quarter": "2025-Q3",
+      "enrolmentsBand": "under 20",
+      "completionBand": "over 80%"
+    },
+    {
+      "id": "SYN-OL-20",
+      "course": "Open University access module",
+      "quarter": "2025-Q4",
+      "enrolmentsBand": "under 20",
+      "completionBand": "60-80%"
+    }
+  ]
+}

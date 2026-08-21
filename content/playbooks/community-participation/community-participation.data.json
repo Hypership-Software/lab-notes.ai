@@ -1,0 +1,114 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Eighteen synthetic public comments on local issues, authored for this project across five topics with a stance recorded for each, written to keep the disagreements and the minority views that a real set of responses contains. No real submission was copied and no respondent is imitated.",
+  "records": [
+    {
+      "id": "SYN-CP-01",
+      "topic": "bus-service-changes",
+      "stance": "critical",
+      "text": "The new timetable went up as a leaflet in the library and nowhere else. The first I knew about losing the evening bus was standing at the stop at half nine wondering where it was. If this was open for eight weeks, it did not reach our end of the road."
+    },
+    {
+      "id": "SYN-CP-02",
+      "topic": "bus-service-changes",
+      "stance": "supportive",
+      "text": "The extra morning service has made a real difference getting the children to school. I would only ask that it keeps running through the summer, because childcare does not stop in July."
+    },
+    {
+      "id": "SYN-CP-03",
+      "topic": "bus-service-changes",
+      "stance": "uncertain",
+      "text": "Hard to say yet. On paper more buses is better. The ones added are at times that suit the depot rather than times anyone here is actually travelling, so I do not know whether it helps or not."
+    },
+    {
+      "id": "SYN-CP-04",
+      "topic": "bus-service-changes",
+      "stance": "mixed",
+      "text": "Two things at once: the route change is sensible, and the stop it removed was the only sheltered one for a mile. Please do not treat those as cancelling each other out."
+    },
+    {
+      "id": "SYN-CP-05",
+      "topic": "park-and-green-space",
+      "stance": "supportive",
+      "text": "The clean-up mornings have brought people out who would never come to a meeting. Whatever it costs, it has done more for how people feel about this place than the last three strategies did."
+    },
+    {
+      "id": "SYN-CP-06",
+      "topic": "park-and-green-space",
+      "stance": "critical",
+      "text": "Every plan for that field starts with a drawing of families and ends with a car park. We have said no twice. Asking a third time in different words is not consultation."
+    },
+    {
+      "id": "SYN-CP-07",
+      "topic": "park-and-green-space",
+      "stance": "mixed",
+      "text": "Lighting the path would get me walking there in winter. It would also take out the only dark corridor left for the wildlife. I do not know how you weigh those against each other, and I would rather you said so than pretended there was no trade-off."
+    },
+    {
+      "id": "SYN-CP-08",
+      "topic": "planning-and-housing",
+      "stance": "critical",
+      "text": "There are eleven empty houses on this street. Building on the edge of the village while those sit boarded up is a choice somebody is making, and there is no box on the form for saying that."
+    },
+    {
+      "id": "SYN-CP-09",
+      "topic": "planning-and-housing",
+      "stance": "supportive",
+      "text": "More homes please, and the smaller ones. Everyone my age has moved away because there is nothing here between a room in your parents' house and a four-bedroom new build."
+    },
+    {
+      "id": "SYN-CP-10",
+      "topic": "planning-and-housing",
+      "stance": "uncertain",
+      "text": "I would need to see the school places and the sewer capacity before I could answer honestly. The last development was approved on a promise about both and nobody has come back to check either."
+    },
+    {
+      "id": "SYN-CP-11",
+      "topic": "planning-and-housing",
+      "stance": "critical",
+      "text": "The drawings are lovely and the bus stop in them does not exist."
+    },
+    {
+      "id": "SYN-CP-12",
+      "topic": "street-safety-at-night",
+      "stance": "critical",
+      "text": "I stopped walking home from the late shift about two years ago. It is not one bad street, it is the stretch between the last light and the corner. A survey asking whether I feel safe is not going to change that stretch."
+    },
+    {
+      "id": "SYN-CP-13",
+      "topic": "street-safety-at-night",
+      "stance": "mixed",
+      "text": "More cameras would make some people feel safer and some people feel watched, and the second group are mostly the young lads who already get stopped for nothing. Both of those are real and I would like the report to say both."
+    },
+    {
+      "id": "SYN-CP-14",
+      "topic": "street-safety-at-night",
+      "stance": "supportive",
+      "text": "The taxi marshals at the weekend worked. Bring them back. That is the whole of my response."
+    },
+    {
+      "id": "SYN-CP-15",
+      "topic": "street-safety-at-night",
+      "stance": "uncertain",
+      "text": "Is this about crime or about how safe people feel? They are not the same thing, and the questions seem to move between the two without saying which one you are counting."
+    },
+    {
+      "id": "SYN-CP-16",
+      "topic": "waste-collection",
+      "stance": "critical",
+      "text": "The new calendar assumes somebody in the house can lift a wheelie bin up three steps. Mine cannot. There is a form for assisted collection and it took eleven weeks to come back."
+    },
+    {
+      "id": "SYN-CP-17",
+      "topic": "waste-collection",
+      "stance": "supportive",
+      "text": "The food caddies have been grand. The smaller bin made us think about what we were throwing out, which I suppose was the point of it."
+    },
+    {
+      "id": "SYN-CP-18",
+      "topic": "waste-collection",
+      "stance": "mixed",
+      "text": "Fortnightly is fine for us and it will not be fine for the flats. Whoever writes the report, please keep those two apart rather than averaging them into one satisfied number."
+    }
+  ]
+}

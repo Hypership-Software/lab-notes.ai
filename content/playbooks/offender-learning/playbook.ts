@@ -1,63 +1,63 @@
-import { defineAssessedPlaybook } from "../define-assessed-playbook"
+import { definePlaybook } from "@/lib/playbooks/define-playbook"
 
-export const offenderLearning = defineAssessedPlaybook({
+import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
+
+export const offenderLearning = definePlaybook({
+  schemaVersion: 2,
   slug: "offender-learning",
   title: "Learning Support in Custodial Settings",
   summary:
-    "Explore educator-led learning support in custody with explicit consent, safeguarding, access, and non-punitive data boundaries.",
+    "Ask what a suggestion about someone's next course would need to know, note that enrolments and completions are not published by course, and keep the stand-in figures at course level.",
   sector: "Justice and education",
-  tags: ["custody", "learning", "rehabilitation"],
-  technicalPatterns: ["recommendation", "content-adaptation", "offline-first"],
-  problem:
-    "Learners in custody have varied education, language, disability, access, and sentence circumstances within a constrained environment.",
-  intendedUsers: ["Custodial educators", "Learners in custody", "Learning-support staff"],
-  affectedGroups: ["People receiving education in custodial settings"],
-  supportedDecision:
-    "Which reviewed learning resource an educator and learner should consider next.",
-  publicBenefit:
-    "Could help teams examine accessible learning pathways without using educational data for discipline, risk, or release decisions.",
-  dataAccessibility: "restricted",
-  riskLevel: "high",
-  riskReasons: [
-    "Education, justice, disability, and behavioural information can be sensitive and coercive in custody.",
-    "A recommendation can limit opportunity or be repurposed for unrelated consequential decisions.",
-  ],
-  mitigations: [
-    "Enforce purpose limitation and a technical separation from discipline, risk, and release systems.",
-    "Provide educator control, learner choice, accessible alternatives, and an offline fallback.",
-  ],
-  sourceApplication: "AI support for education in justice settings",
-  sourceRationale:
-    "The strategy links personalisation with rehabilitation but supplies no learner protections, curriculum, or outcome definition.",
-  syntheticMethod:
-    "Generate invented learning goals, accessibility preferences, resource prerequisites, and progress events without justice histories.",
-  baseline: {
-    name: "Educator-curated pathway",
-    description:
-      "An educator and learner choose from a reviewed resource map using explicit prerequisites and goals.",
-    method:
-      "Match stated goals and completed prerequisites to a fixed list, with manual adjustment and learner choice.",
-    limitations: ["A curated map may not cover specialised needs or changes in available provision."],
+  strategyExample: {
+    proposal:
+      "The draft strategy names AI support for education in justice settings as a potential public-service application, linking personalised material with rehabilitation, without saying what protects the learner, what the curriculum is, or what would count as a good outcome.",
+    draftReference: strategyDraftReference,
+    url: strategyDraftUrl,
   },
-  limitations: [
-    "Synthetic learner paths cannot establish rehabilitation, education, or inclusion outcomes.",
-    "Custodial constraints and power imbalances cannot be represented by a public interface alone.",
+  dataSources: [
+    {
+      id: "doj-prisons-learning-and-skills",
+      publisher: "Department of Justice",
+      title: "Learning and skills",
+      url: "https://www.justice-ni.gov.uk/topics/learning-and-skills",
+      covers:
+        "How learning in Northern Ireland's prisons is organised: delivery by two further education colleges under agreement with the Prison Service, essential skills in literacy and numeracy, higher-level study by distance learning, and personal development plans used to schedule what each person does.",
+      access: "open",
+      relevance:
+        "It is where this playbook's course types come from, and it publishes no counts at all, which is why the numbers in the synthetic file have nothing published to check them against.",
+    },
+    {
+      id: "doj-ni-prison-service-statistics",
+      publisher: "Department of Justice",
+      title: "NI Prison Service statistics",
+      url: "https://www.justice-ni.gov.uk/topics/ni-prison-service-statistics",
+      covers:
+        "The Prison Service's official statistics publications and the notes on how they are compiled and what they can be used for.",
+      access: "open",
+      relevance:
+        "It is where prison figures do get published, and comparing it with the learning pages shows that course-level activity is not among them.",
+    },
   ],
-  failureModes: [
-    "A learner may be channelled into a narrow pathway based on incomplete historical data.",
-    "Data collected for support may be perceived or used as surveillance.",
+  syntheticData: {
+    status: "available",
+    dataPath: "content/playbooks/offender-learning/offender-learning.data.json",
+    method:
+      "Twenty invented quarterly rows written by hand, five course types each with a banded number of enrolments and a banded completion rate, so the choice of a next resource can be discussed with nothing about any learner in the file.",
+    limitations: [
+      "Enrolments and completions by course are not published, so the two most useful columns here have no published counterpart at all.",
+      "The bands are invented, so nothing here describes learning in any prison.",
+      "A course-level table cannot hold what actually decides things in custody: what is running this week, who is allowed to attend, and whether a sentence is about to end.",
+    ],
+  },
+  demo: {
+    status: "not-yet",
+    note: "A demo could show which course these bands would suggest next and say plainly what it was reasoning from, but nobody has built one, and a reviewed resource map and an educator would have to come first.",
+  },
+  caveats: [
+    "Education, justice, disability, and behaviour information sit close together in custody, and consent means something different in a place people cannot leave.",
+    "Anything collected to support learning can be experienced as surveillance, or later used for a decision about discipline or release, which is why this file holds no learner records.",
+    "A suggestion built from a partial history can quietly narrow what someone is ever offered, and in custody there is rarely another route to the same course.",
   ],
-  nextValidationSteps: [
-    "Co-design the purpose and prohibited uses with learners, educators, and independent advocates.",
-    "Define a small reviewed resource map and accessibility requirements.",
-    "Evaluate choice, opportunity, privacy, offline use, and error correction before personalisation quality.",
-  ],
-  demoBarrier:
-    "Custodial power dynamics, restricted data, safeguarding, and purpose-limitation requirements need independent review before any demo.",
-  responsibleRole: "Qualified custodial education lead",
-  partnerRequirements: [
-    "Custodial education partner",
-    "Independent learner advocacy",
-    "Safeguarding, equality, accessibility, and data-protection review",
-  ],
+  lastReviewed: "2026-08-21",
 })

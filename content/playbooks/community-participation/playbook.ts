@@ -1,63 +1,63 @@
-import { defineAssessedPlaybook } from "../define-assessed-playbook"
+import { definePlaybook } from "@/lib/playbooks/define-playbook"
 
-export const communityParticipation = defineAssessedPlaybook({
+import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
+
+export const communityParticipation = definePlaybook({
+  schemaVersion: 2,
   slug: "community-participation",
   title: "Community Participation Analysis",
   summary:
-    "Explore how communities could inspect and challenge analysis of public participation without treating volume as democratic legitimacy.",
+    "Group public comments on local issues into themes people could argue with, and be clear about what a count of comments does not tell anyone.",
   sector: "Communities",
-  tags: ["participation", "civic-data", "inclusion"],
-  technicalPatterns: ["text-analysis", "aggregation", "participatory-design"],
-  problem:
-    "Participation evidence can be large and uneven while some communities face digital, language, trust, time, or accessibility barriers.",
-  intendedUsers: ["Community engagement teams", "Community organisations", "Policy researchers"],
-  affectedGroups: ["People and communities represented or missing from participation data"],
-  supportedDecision:
-    "Which participation gap, theme, or disagreement deserves further community-led investigation.",
-  publicBenefit:
-    "Could make participation gaps and supporting evidence more visible to communities and accountable teams.",
-  dataAccessibility: "public-readonly",
-  riskLevel: "moderate",
-  riskReasons: [
-    "Participation data may include personal views and may not represent the wider population.",
-    "Automated grouping can erase minority views, disagreement, or reasons for non-participation.",
-  ],
-  mitigations: [
-    "Use invented submissions publicly and show missingness and representation limits beside every summary.",
-    "Give community reviewers a route to contest categories and add contextual evidence.",
-  ],
-  sourceApplication: "AI for community-led social change",
-  sourceRationale:
-    "The strategy encourages citizens to use data for change but does not define participation, consent, representation, or decision power.",
-  syntheticMethod:
-    "Generate invented participation channels, area-level aggregates, access barriers, and submission excerpts with deliberately unequal coverage.",
-  baseline: {
-    name: "Published coding framework",
-    description:
-      "Human reviewers apply a visible theme codebook and record disagreements and uncategorised evidence.",
-    method:
-      "Double-code a small sample, reconcile differences, publish definitions, and keep counts separate from representativeness.",
-    limitations: ["Manual coding still reflects reviewer judgement and does not solve participation gaps."],
+  strategyExample: {
+    proposal:
+      "The draft strategy names AI for community-led social change as a potential public-service application, encouraging people to use data to change things where they live, without saying who is taking part, who is missing, or who ends up deciding.",
+    draftReference: strategyDraftReference,
+    url: strategyDraftUrl,
   },
-  limitations: [
-    "Synthetic participation cannot reproduce trust, power, identity, or lived experience.",
-    "More submissions do not establish greater need, support, or democratic legitimacy.",
+  dataSources: [
+    {
+      id: "ni-consultations-portal",
+      publisher: "nidirect",
+      title: "Northern Ireland consultations portal",
+      url: "https://consultations.nidirect.gov.uk/",
+      covers:
+        "The consultation platform used by several Northern Ireland departments and public bodies, listing what is open, forthcoming, and closed, with a separate portal carrying the remaining departments.",
+      access: "open",
+      relevance:
+        "It is where public comment on local and policy questions is actually gathered here, and the split across two portals is part of why participation is uneven in the first place.",
+    },
+    {
+      id: "circular-economy-consultation-report",
+      publisher: "Department for the Economy",
+      title: "Draft Circular Economy Strategy — public consultation response report",
+      url: "https://www.economy-ni.gov.uk/publications/draft-circular-economy-strategy-northern-ireland-public-consultation-response-report",
+      covers:
+        "How one Northern Ireland department grouped, counted, and reported back on the responses to a public consultation.",
+      access: "open",
+      relevance:
+        "It shows what happens to comments after they are submitted, which is the step this example would be automating, and its vocabulary shaped how the synthetic comments are grouped.",
+    },
   ],
-  failureModes: [
-    "A majority theme may crowd out a severe concern raised by few participants.",
-    "Digital participation patterns may be mistaken for community-wide opinion.",
+  syntheticData: {
+    status: "available",
+    dataPath: "content/playbooks/community-participation/community-participation.data.json",
+    method:
+      "Eighteen synthetic public comments authored for this project across five local topics, each with a stance, written to read like real submissions and to keep the disagreements and minority views a real set contains, so grouping can be tried without holding anybody's words.",
+    limitations: [
+      "Eighteen comments are far fewer, tidier, and more evenly spread across topics than any real set of responses.",
+      "The five topics and four stances are this project's own choices, checked against no official framework.",
+      "A synthetic set cannot contain the thing that matters most about participation: who did not write in, and why.",
+    ],
+  },
+  demo: {
+    status: "not-yet",
+    note: "A demo could group these comments by topic and quote the passage behind every group, which is what the policy-evidence demo already does with its own corpus, so this one has not been built.",
+  },
+  caveats: [
+    "A count of comments measures who had the time, the connection, and the confidence to write, not what a community thinks.",
+    "Automatic grouping tends to lose the single sharp objection, and the single sharp objection is often the one worth reading.",
+    "People whose words are being grouped should be able to see the categories and argue with them, which is a design commitment rather than a technical one.",
   ],
-  nextValidationSteps: [
-    "Co-design the question, categories, and contestability process with community organisations.",
-    "Define representation and missingness disclosures before analysing any submissions.",
-    "Compare automated grouping with double-coded review and investigate every disagreement.",
-  ],
-  demoBarrier:
-    "A credible demonstration needs community co-design, a published coding framework, and safely invented participation material.",
-  responsibleRole: "Accountable community engagement lead",
-  partnerRequirements: [
-    "Community-organisation participation",
-    "Equality and accessibility review",
-    "Public-engagement methods specialist",
-  ],
+  lastReviewed: "2026-08-21",
 })

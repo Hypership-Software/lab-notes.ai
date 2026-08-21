@@ -1,0 +1,146 @@
+{
+  "disclosure": "Synthetic working data",
+  "description": "Twenty invented quarterly rows standing in for the published court disposal counts, with five offence groups, a banded number of disposals, and a median number of days from start to disposal.",
+  "records": [
+    {
+      "id": "SYN-JR-01",
+      "offenceGroup": "Violence against the person",
+      "quarter": "2025-Q1",
+      "disposalsBand": "500-1000",
+      "medianDaysToDisposal": 480
+    },
+    {
+      "id": "SYN-JR-02",
+      "offenceGroup": "Violence against the person",
+      "quarter": "2025-Q2",
+      "disposalsBand": "500-1000",
+      "medianDaysToDisposal": 495
+    },
+    {
+      "id": "SYN-JR-03",
+      "offenceGroup": "Violence against the person",
+      "quarter": "2025-Q3",
+      "disposalsBand": "500-1000",
+      "medianDaysToDisposal": 510
+    },
+    {
+      "id": "SYN-JR-04",
+      "offenceGroup": "Violence against the person",
+      "quarter": "2025-Q4",
+      "disposalsBand": "500-1000",
+      "medianDaysToDisposal": 505
+    },
+    {
+      "id": "SYN-JR-05",
+      "offenceGroup": "Theft",
+      "quarter": "2025-Q1",
+      "disposalsBand": "1000-2500",
+      "medianDaysToDisposal": 320
+    },
+    {
+      "id": "SYN-JR-06",
+      "offenceGroup": "Theft",
+      "quarter": "2025-Q2",
+      "disposalsBand": "1000-2500",
+      "medianDaysToDisposal": 315
+    },
+    {
+      "id": "SYN-JR-07",
+      "offenceGroup": "Theft",
+      "quarter": "2025-Q3",
+      "disposalsBand": "1000-2500",
+      "medianDaysToDisposal": 330
+    },
+    {
+      "id": "SYN-JR-08",
+      "offenceGroup": "Theft",
+      "quarter": "2025-Q4",
+      "disposalsBand": "1000-2500",
+      "medianDaysToDisposal": 340
+    },
+    {
+      "id": "SYN-JR-09",
+      "offenceGroup": "Criminal damage",
+      "quarter": "2025-Q1",
+      "disposalsBand": "500-1000",
+      "medianDaysToDisposal": 290
+    },
+    {
+      "id": "SYN-JR-10",
+      "offenceGroup": "Criminal damage",
+      "quarter": "2025-Q2",
+      "disposalsBand": "500-1000",
+      "medianDaysToDisposal": 300
+    },
+    {
+      "id": "SYN-JR-11",
+      "offenceGroup": "Criminal damage",
+      "quarter": "2025-Q3",
+      "disposalsBand": "500-1000",
+      "medianDaysToDisposal": 285
+    },
+    {
+      "id": "SYN-JR-12",
+      "offenceGroup": "Criminal damage",
+      "quarter": "2025-Q4",
+      "disposalsBand": "500-1000",
+      "medianDaysToDisposal": 295
+    },
+    {
+      "id": "SYN-JR-13",
+      "offenceGroup": "Drug offences",
+      "quarter": "2025-Q1",
+      "disposalsBand": "100-500",
+      "medianDaysToDisposal": 410
+    },
+    {
+      "id": "SYN-JR-14",
+      "offenceGroup": "Drug offences",
+      "quarter": "2025-Q2",
+      "disposalsBand": "100-500",
+      "medianDaysToDisposal": 425
+    },
+    {
+      "id": "SYN-JR-15",
+      "offenceGroup": "Drug offences",
+      "quarter": "2025-Q3",
+      "disposalsBand": "100-500",
+      "medianDaysToDisposal": 400
+    },
+    {
+      "id": "SYN-JR-16",
+      "offenceGroup": "Drug offences",
+      "quarter": "2025-Q4",
+      "disposalsBand": "100-500",
+      "medianDaysToDisposal": 415
+    },
+    {
+      "id": "SYN-JR-17",
+      "offenceGroup": "Motoring offences",
+      "quarter": "2025-Q1",
+      "disposalsBand": "over 2500",
+      "medianDaysToDisposal": 180
+    },
+    {
+      "id": "SYN-JR-18",
+      "offenceGroup": "Motoring offences",
+      "quarter": "2025-Q2",
+      "disposalsBand": "over 2500",
+      "medianDaysToDisposal": 175
+    },
+    {
+      "id": "SYN-JR-19",
+      "offenceGroup": "Motoring offences",
+      "quarter": "2025-Q3",
+      "disposalsBand": "over 2500",
+      "medianDaysToDisposal": 190
+    },
+    {
+      "id": "SYN-JR-20",
+      "offenceGroup": "Motoring offences",
+      "quarter": "2025-Q4",
+      "disposalsBand": "over 2500",
+      "medianDaysToDisposal": 185
+    }
+  ]
+}
