@@ -1,0 +1,4 @@
+interface:
+  display_name: "Farm Advisory Support Build Partner"
+  short_description: "Explore farm advisory support responsibly"
+  default_prompt: "Use $build-farm-advisory to explore this playbook responsibly."
