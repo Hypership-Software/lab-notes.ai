@@ -9,7 +9,7 @@ description: Use when a builder needs a domain build partner for consultation an
 2. Read `content/playbooks/policy-evidence/policy-evidence.data.json`.
 3. Read `content/playbooks/policy-evidence/consultation-analysis-structure.md`; treat it as project interpretation, not a published source.
 4. Read `references/domain-brief.md` completely.
-5. Establish the outcome and consultation purpose first. Ask when either is not explicit; do not propose an application, ranking, data model, route, or implementation.
+5. Establish the outcome and consultation purpose first. If no usable outcome is stated, ask a clarifying question before the brief. If an exploration outcome is stated but the consultation purpose or accountable owner is missing, record those as unknowns and still return the neutral decision brief with multiple unranked approaches. Do not propose an application, ranking, data model, route, or implementation.
 6. Label each claim as one of these evidence classes:
    - **Published:** attribute it to a registered source in the playbook.
    - **Project interpretation:** identify analysis or a constraint authored by this repository.
