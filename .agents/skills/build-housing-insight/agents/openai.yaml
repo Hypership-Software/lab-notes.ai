@@ -1,0 +1,4 @@
+interface:
+  display_name: "Housing Need and Service Insight Build Partner"
+  short_description: "Explore housing evidence without household inference."
+  default_prompt: "Use $build-housing-insight to explore this playbook responsibly."
