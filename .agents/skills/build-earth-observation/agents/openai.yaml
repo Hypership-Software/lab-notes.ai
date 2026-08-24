@@ -1,0 +1,4 @@
+interface:
+  display_name: "Earth Observation for Public Services Build Partner"
+  short_description: "Explore earth observation responsibly"
+  default_prompt: "Use $build-earth-observation to explore this playbook responsibly."
