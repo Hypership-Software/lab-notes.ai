@@ -50,6 +50,19 @@ const datasets: ReadonlyMap<string, SyntheticDataset> = new Map(
   ]),
 )
 
+export type DatasetFieldSummary = {
+  name: string
+  types: readonly ("string" | "number" | "boolean" | "null")[]
+  populatedCount: number
+  sampleValues: readonly (string | number | boolean)[]
+}
+
+export type DatasetSummary = {
+  recordCount: number
+  defaultView: "records" | "table"
+  fields: readonly DatasetFieldSummary[]
+}
+
 export function getSyntheticDataset(slug: string): SyntheticDataset | undefined {
   return datasets.get(slug)
 }
@@ -88,4 +101,46 @@ export function hasLongFormFields(dataset: SyntheticDataset): boolean {
       (value) => typeof value === "string" && value.length > 120,
     ),
   )
+}
+
+export function getDatasetSummary(slug: string): DatasetSummary | undefined {
+  const dataset = getSyntheticDataset(slug)
+  if (!dataset) return undefined
+
+  return {
+    recordCount: dataset.records.length,
+    defaultView: hasLongFormFields(dataset) ? "records" : "table",
+    fields: getDatasetFields(dataset).map((name) => {
+      const types = new Set<DatasetFieldSummary["types"][number]>()
+      const sampleValues = new Set<DatasetFieldSummary["sampleValues"][number]>()
+      let populatedCount = 0
+
+      for (const record of dataset.records) {
+        if (!Object.hasOwn(record, name)) continue
+
+        populatedCount += 1
+        const value = record[name]
+
+        if (value === null) {
+          types.add("null")
+        } else if (typeof value === "string") {
+          types.add("string")
+          if (sampleValues.size < 3) sampleValues.add(value)
+        } else if (typeof value === "number") {
+          types.add("number")
+          if (sampleValues.size < 3) sampleValues.add(value)
+        } else if (typeof value === "boolean") {
+          types.add("boolean")
+          if (sampleValues.size < 3) sampleValues.add(value)
+        }
+      }
+
+      return {
+        name,
+        types: [...types],
+        populatedCount,
+        sampleValues: [...sampleValues],
+      }
+    }),
+  }
 }

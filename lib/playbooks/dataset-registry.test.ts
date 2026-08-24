@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 
 import {
+  getDatasetSummary,
   getDatasetFields,
   getDatasetSlugs,
   getSyntheticDataset,
@@ -62,6 +63,16 @@ describe("dataset registry", () => {
       hasLongFormFields(getSyntheticDataset("community-participation")!),
     ).toBe(true)
     expect(hasLongFormFields(getSyntheticDataset("traffic-flow")!)).toBe(false)
+  })
+
+  it("describes record count, fields, and the default view", () => {
+    expect(getDatasetSummary("life-event-services")).toMatchObject({
+      recordCount: 16,
+      defaultView: "table",
+    })
+    expect(
+      getDatasetSummary("life-event-services")?.fields.map((field) => field.name),
+    ).toEqual(["id", "lifeEvent", "journeyStep", "medianDays", "dropOffShareBand"])
   })
 
   it("returns nothing for a slug that is not a playbook at all", () => {
