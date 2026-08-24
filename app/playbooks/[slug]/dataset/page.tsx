@@ -14,7 +14,8 @@ export const dynamicParams = false
  * Every playbook gets a dataset route, including the two that withhold one. A
  * slug that resolves on the playbook page but 404s here would be a worse
  * answer than a page saying why the dataset is not there, so the params cover
- * the whole registry and the page branches on the playbook's own answer to C.
+ * the whole registry and the page branches on the playbook's synthetic-data
+ * answer.
  */
 export function generateStaticParams() {
   return getPlaybookSlugs().map((slug) => ({ slug }))
@@ -50,7 +51,7 @@ export default async function PlaybookDatasetPage({
     return (
       <div className="page-shell dataset-page">
         <header className="page-intro reading-width">
-          <p className="workbench-page__breadcrumb">
+          <p className="dataset-page__breadcrumb">
             <Link href={`/playbooks/${playbook.slug}`}>
               Back to the {playbook.title} playbook
             </Link>
@@ -59,7 +60,10 @@ export default async function PlaybookDatasetPage({
           <p>{playbook.syntheticData.reason}</p>
         </header>
 
-        <section className="limits reading-width" aria-labelledby="needed-title">
+        <section
+          className="dataset-limits reading-width"
+          aria-labelledby="needed-title"
+        >
           <h2 id="needed-title">What a contributor would need instead</h2>
           <p>{playbook.syntheticData.whatContributorsNeed}</p>
         </section>
@@ -82,7 +86,7 @@ export default async function PlaybookDatasetPage({
   return (
     <div className="page-shell dataset-page">
       <header className="dataset-page__header">
-        <p className="workbench-page__breadcrumb">
+        <p className="dataset-page__breadcrumb">
           <Link href={`/playbooks/${playbook.slug}`}>
             Back to the {playbook.title} playbook
           </Link>
@@ -106,16 +110,16 @@ export default async function PlaybookDatasetPage({
         </dl>
       </header>
 
-      <section className="workbench-section" aria-labelledby="method-title">
-        <div className="workbench-heading">
+      <section className="dataset-section" aria-labelledby="method-title">
+        <div className="dataset-section__heading">
           <h2 id="method-title">How it was made</h2>
         </div>
         <p className="reading-width">{purpose}</p>
         <p className="reading-width">{preparation}</p>
 
-        <div className="limits reading-width">
+        <div className="dataset-limits reading-width">
           <h3>What this dataset cannot be used for</h3>
-          <ol className="limits__list">
+          <ol className="dataset-limits__list">
             {limitations.map((limitation) => (
               <li key={limitation}>{limitation}</li>
             ))}
@@ -128,8 +132,8 @@ export default async function PlaybookDatasetPage({
         </div>
       </section>
 
-      <section className="workbench-section" aria-labelledby="records-title">
-        <div className="workbench-heading">
+      <section className="dataset-section" aria-labelledby="records-title">
+        <div className="dataset-section__heading">
           <h2 id="records-title">Every record</h2>
           <p>
             The whole file, rendered from the committed JSON on every build.

@@ -7,7 +7,7 @@ import type { Playbook } from "@/lib/playbooks/schema"
 import { dataAccessLabels } from "@/lib/playbooks/vocabulary"
 
 /**
- * B — the real, published sources investigated for this playbook. Each one
+ * The real, published sources investigated for this playbook. Each one
  * is a dossier rather than a bare link: what it covers, how open it is, and
  * why it was considered, so a reader can judge the evidence without opening
  * every tab.

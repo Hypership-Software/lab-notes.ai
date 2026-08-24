@@ -1,4 +1,4 @@
-/** The one document every playbook's A-section points at. */
+/** The one strategy document every playbook opportunity points at. */
 export const strategyDraftUrl =
   "https://consultations.nidirect.gov.uk/teo/artificial-intelligence-public-consultation"
 

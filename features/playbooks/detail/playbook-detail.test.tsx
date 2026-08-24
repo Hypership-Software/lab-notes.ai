@@ -74,6 +74,25 @@ describe("PlaybookDetail", () => {
     }
   })
 
+  it("renders research sources as self-contained cards without rail wrappers", () => {
+    render(<PlaybookDetail playbook={playbook} />)
+
+    const research = screen.getByRole("region", { name: "Research already done" })
+    const sources = within(research).getAllByRole("article")
+    expect(sources).toHaveLength(playbook.dataSources.length)
+
+    for (const [index, source] of sources.entries()) {
+      expect(source.firstElementChild).toBe(
+        within(source).getByRole("heading", {
+          level: 3,
+          name: playbook.dataSources[index].title,
+        }),
+      )
+      expect(source.querySelector(".source-dossier__index")).toBeNull()
+      expect(source.querySelector(".source-dossier__body")).toBeNull()
+    }
+  })
+
   it("keeps the four sections for a playbook without a responsible dataset", () => {
     expect(withheld.syntheticData.status).toBe("not-responsible")
     render(<PlaybookDetail playbook={withheld} />)

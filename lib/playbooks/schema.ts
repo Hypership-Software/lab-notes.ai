@@ -40,14 +40,14 @@ export const sectorValues = [
 
 export const accessValues = ["open", "registration-or-key", "restricted"] as const
 
-/** A — the example as the strategy draft gave it. Our words, their link. */
+/** The opportunity as the strategy draft gave it: our words, their link. */
 export const strategyExampleSchema = z.strictObject({
   proposal: sentenceSchema,
   draftReference: z.string().trim().min(3),
   url: z.url(),
 })
 
-/** B — one investigated source: what it covers, how open it is, why it fits. */
+/** One investigated source: what it covers, how open it is, and why it fits. */
 export const dataSourceSchema = z.strictObject({
   id: slugSchema,
   publisher: z.string().trim().min(2),
@@ -64,9 +64,9 @@ export const caveatSchema = z.strictObject({
 })
 
 /**
- * C — either a committed synthetic dataset, or a plain statement of why a
+ * Either a committed synthetic dataset, or a plain statement of why a
  * synthetic stand-in is not responsible in this domain and what a contributor
- * would need instead. There is no third state: every playbook answers C.
+ * would need instead. There is no third synthetic-data state.
  */
 export const syntheticDataSchema = z.discriminatedUnion("status", [
   z.strictObject({

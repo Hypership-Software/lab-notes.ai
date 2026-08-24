@@ -11,8 +11,8 @@ import { repositoryFileUrl, repositoryRawUrl } from "@/lib/repository"
 
 import { DefinitionListRow } from "./definition-list-row"
 
-// Exhaustive over the C union: a new status fails typecheck here rather than
-// rendering an empty section.
+// Exhaustive over the synthetic-data answer: a new status fails typecheck here
+// rather than rendering an empty section.
 function datasetBody(
   syntheticData: Playbook["syntheticData"],
   slug: string,
@@ -81,11 +81,11 @@ function datasetBody(
 }
 
 /**
- * C — either the committed synthetic dataset that lets someone try the idea
- * without a key or an agreement, or a plain statement of why standing this
- * domain in with invented data would not be responsible. A withheld dataset
- * carries no provenance label, no file path, and no links: there is nothing to
- * label and nowhere to send anyone.
+ * Either the committed synthetic dataset that lets someone explore the
+ * opportunity without a key or an agreement, or a plain statement of why
+ * standing this domain in with invented data would not be responsible. A
+ * withheld dataset carries no provenance label, no file path, and no links:
+ * there is nothing to label and nowhere to send anyone.
  */
 export function SyntheticDataSection({
   syntheticData,

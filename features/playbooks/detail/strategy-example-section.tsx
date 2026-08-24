@@ -4,7 +4,7 @@ import { ExternalLink } from "@/components/site/external-link"
 import type { Playbook } from "@/lib/playbooks/schema"
 
 /**
- * A — the example as the draft strategy gave it. The proposal is this
+ * The opportunity as the draft strategy gave it. The proposal is this
  * project's plain-English reading; the link is the draft itself, so a reader
  * can check the reading against the source in one step.
  *
