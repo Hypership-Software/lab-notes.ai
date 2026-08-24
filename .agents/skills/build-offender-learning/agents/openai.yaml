@@ -1,0 +1,4 @@
+interface:
+  display_name: "Learning Support in Custodial Settings Build Partner"
+  short_description: "Explore custodial learning with learner control."
+  default_prompt: "Use $build-offender-learning to explore this playbook responsibly."
