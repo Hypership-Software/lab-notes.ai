@@ -1,0 +1,4 @@
+interface:
+  display_name: "Water Resource Management Build Partner"
+  short_description: "Explore water resource management responsibly"
+  default_prompt: "Use $build-water-management to explore this playbook responsibly."
