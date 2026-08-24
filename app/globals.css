@@ -342,8 +342,7 @@
   font-weight: 650;
 }
 
-.status-badge,
-.risk-badge {
+.status-badge {
   min-height: 1.75rem;
   border-color: currentColor;
   background: var(--surface);
@@ -352,24 +351,6 @@
 
 .status-badge {
   color: var(--evidence-hover);
-}
-
-.risk-badge[data-risk="low"] {
-  color: var(--success);
-}
-
-.risk-badge[data-risk="moderate"] {
-  color: var(--warning);
-}
-
-.risk-badge[data-risk="high"],
-.risk-badge[data-risk="very-high"] {
-  color: var(--danger);
-}
-
-.risk-badge[data-risk="very-high"] {
-  border-style: double;
-  border-width: 3px;
 }
 
 .provenance-label {
@@ -393,7 +374,7 @@
   color: var(--warning);
 }
 
-.provenance-label[data-provenance="recorded"],
+.provenance-label[data-provenance="demo"],
 .provenance-label[data-provenance="source"] {
   color: var(--evidence-hover);
 }
@@ -640,12 +621,6 @@
 
 .exemplar-dossier__main > p {
   max-width: 65ch;
-}
-
-.decision-statement {
-  margin-top: 2rem;
-  padding-top: 1rem;
-  border-top: 1px solid var(--line);
 }
 
 .exemplar-dossier__evidence {
@@ -1000,69 +975,6 @@
   color: var(--muted-ink);
 }
 
-.maturity-ladder {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-bottom: 1px solid var(--line-strong);
-}
-
-.maturity-ladder li {
-  min-height: 7rem;
-  padding: 1.25rem 0;
-  display: grid;
-  grid-template-columns: minmax(3rem, 1fr) minmax(0, 11fr);
-  gap: 1rem;
-  align-items: start;
-  border-top: 1px solid var(--line);
-}
-
-.maturity-ladder li > span {
-  color: var(--evidence-hover);
-  font-family: var(--font-fragment-mono), "Courier New", monospace;
-  font-variant-numeric: tabular-nums;
-}
-
-.maturity-ladder h3,
-.maturity-ladder p {
-  margin: 0;
-}
-
-.maturity-ladder p {
-  margin-top: 0.35rem;
-}
-
-/* The current rung is marked on its own number rather than with a thick
-   accent border down one side. A full ring reads as "you are here" on a
-   numbered ladder, it keeps a boundary on all four sides in print and in
-   forced-colours mode — where the `--accent` tint is discarded — and it
-   cannot be mistaken for a link the way an underlined heading can. The
-   visible "Current maturity" line and `aria-current="step"` remain the
-   primary non-visual signals; the tint only reinforces them.
-   Padding and margin cancel out so the tint gains breathing room without
-   jogging this rung's text out of line with the others. */
-.maturity-ladder li[aria-current="step"] {
-  padding-inline: 0.75rem;
-  margin-inline: -0.75rem;
-  background: var(--accent);
-}
-
-.maturity-ladder li[aria-current="step"] > span {
-  justify-self: start;
-  display: grid;
-  place-items: center;
-  inline-size: 2rem;
-  block-size: 2rem;
-  border: 1px solid currentColor;
-  border-radius: 999px;
-}
-
-.maturity-ladder li[aria-current="step"] ~ li h3,
-.maturity-ladder li[aria-current="step"] ~ li p,
-.maturity-ladder li[aria-current="step"] ~ li > span {
-  color: var(--muted-ink);
-}
-
 .method-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1407,7 +1319,6 @@ dd[data-technical] {
     grid-column: auto;
   }
 
-  .maturity-ladder li,
   .contribution-tracks li {
     grid-template-columns: 2rem minmax(0, 1fr);
   }
@@ -1436,10 +1347,8 @@ dd[data-technical] {
   .site-header,
   .site-footer,
   .status-badge,
-  .risk-badge,
   .source-dossier,
-  .demo-readiness,
-  .maturity-ladder li[aria-current="step"] > span {
+  .demo-readiness {
     border-color: CanvasText;
     forced-color-adjust: auto;
   }

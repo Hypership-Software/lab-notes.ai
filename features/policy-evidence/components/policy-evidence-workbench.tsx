@@ -111,6 +111,7 @@ export function PolicyEvidenceWorkbench({
       >
         <div className="section-heading section-heading--compact">
           <h2 id="workbench-findings-title">What the analysis found</h2>
+          <ProvenanceLabel kind="demo" />
           <p>
             One finding per theme whose words appear, in the order the
             vocabulary declares them. The order is not a ranking, and the number

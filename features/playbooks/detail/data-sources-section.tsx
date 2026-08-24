@@ -2,6 +2,7 @@ import { Database } from "lucide-react"
 import type { ReactNode } from "react"
 
 import { ExternalLink } from "@/components/site/external-link"
+import { ProvenanceLabel } from "@/components/site/provenance-label"
 import type { Playbook } from "@/lib/playbooks/schema"
 import { dataAccessLabels } from "@/lib/playbooks/vocabulary"
 
@@ -21,6 +22,7 @@ export function DataSourcesSection({
   return (
     <section className="playbook-detail__section" aria-labelledby={headingId}>
       <h2 id={headingId}>Data sources investigated</h2>
+      <ProvenanceLabel kind="source" />
       <ol className="source-register">
         {dataSources.map((source) => (
           <li key={source.id}>

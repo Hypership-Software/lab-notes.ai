@@ -117,6 +117,9 @@ describe("DataSourcesSection", () => {
     const section = screen.getByRole("region", {
       name: "Data sources investigated",
     })
+    // These are the one kind of material on the page that is not invented.
+    expect(within(section).getByText("Real published source")).toBeVisible()
+
     const articles = within(section).getAllByRole("article")
     expect(articles).toHaveLength(dataSources.length)
 

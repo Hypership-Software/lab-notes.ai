@@ -62,6 +62,17 @@ describe("PolicyEvidenceWorkbench", () => {
     expect(within(first).getByText("Critical")).toBeVisible()
   })
 
+  it("labels the input as synthetic and the findings as computed output", () => {
+    // The three provenance words DESIGN.md fixes, so a reader never has to
+    // work out whether what they are looking at is real, invented, or derived.
+    const synthetic = screen.getAllByText("Synthetic working data")[0]
+    const computed = screen.getByText("Demo output")
+
+    expect(synthetic).toBeVisible()
+    expect(computed).toBeVisible()
+    expect(isBefore(synthetic, computed)).toBe(true)
+  })
+
   it("renders one section per finding, with its summary and every limitation", () => {
     expect(analysis.findings.length).toBeGreaterThan(0)
 
