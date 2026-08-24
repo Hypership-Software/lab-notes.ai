@@ -1,0 +1,4 @@
+interface:
+  display_name: "Diagnostic Imaging Support Build Partner"
+  short_description: "Explore imaging support without clinical shortcuts."
+  default_prompt: "Use $build-diagnostic-imaging-support to explore this playbook responsibly."
