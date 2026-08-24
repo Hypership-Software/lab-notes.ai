@@ -1,0 +1,4 @@
+interface:
+  display_name: "Violence Risk Research Build Partner"
+  short_description: "Explore violence-risk research without profiling."
+  default_prompt: "Use $build-violence-risk-research to explore this playbook responsibly."
