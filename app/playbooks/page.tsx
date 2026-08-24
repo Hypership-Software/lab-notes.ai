@@ -9,7 +9,7 @@ import { getPlaybookSummaries } from "@/lib/playbooks/registry"
 export const metadata: Metadata = {
   title: "Playbooks",
   description:
-    "Browse assessed public-service AI proposals by sector, data accessibility, maturity, risk, and technical pattern.",
+    "Browse the public-service AI examples from Northern Ireland's draft AI strategy by sector, and see which ones have a synthetic dataset or a working demo.",
 }
 
 type PlaybooksPageProps = {
@@ -26,9 +26,10 @@ export default async function PlaybooksPage({ searchParams }: PlaybooksPageProps
       <header className="page-intro">
         <h1>Public-service AI playbooks</h1>
         <p>
-          Compare the problem, evidence state, data reality, risks, and reusable
-          technical pattern behind every proposal. An assessed concept is not a
-          deployed service.
+          One playbook per example project in the draft strategy. Each says what
+          the draft proposed, which real sources were investigated, whether a
+          synthetic dataset exists to try the idea with, and whether a demo runs
+          yet. None of them is a deployed service.
         </p>
       </header>
       <PlaybookCatalogue

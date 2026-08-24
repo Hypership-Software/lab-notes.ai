@@ -1,71 +1,33 @@
-import type {
-  DataAccessibility,
-  Maturity,
-  PlaybookSummary,
-  RiskLevel,
-} from "@/lib/playbooks/schema"
-import {
-  dataAccessibilityLabel,
-  maturityLabel,
-  riskLabel,
-} from "@/lib/playbooks/vocabulary"
+import type { PlaybookSummary } from "@/lib/playbooks/schema"
 
-export type CatalogueFilterOption<Value extends string = string> = {
-  value: Value
+export type CatalogueFilterOption = {
+  value: string
   label: string
   count: number
 }
 
 export type CatalogueFilterOptions = {
   sectors: CatalogueFilterOption[]
-  patterns: CatalogueFilterOption[]
-  dataAccessibility: CatalogueFilterOption<DataAccessibility>[]
-  maturity: CatalogueFilterOption<Maturity>[]
-  risk: CatalogueFilterOption<RiskLevel>[]
 }
 
 const collator = new Intl.Collator("en-GB", { sensitivity: "base" })
 
-function countValues<Value extends string>(values: readonly Value[]) {
-  const counts = new Map<Value, number>()
-  for (const value of values) counts.set(value, (counts.get(value) ?? 0) + 1)
-  return counts
-}
-
-function textOptions(values: readonly string[]) {
-  return [...countValues(values)]
-    .map(([value, count]) => ({ value, label: value, count }))
-    .sort((left, right) => collator.compare(left.label, right.label))
-}
-
-function controlledOptions<Value extends string>(
-  values: readonly Value[],
-  labels: Record<Value, string>,
-): CatalogueFilterOption<Value>[] {
-  return [...countValues(values)]
-    .map(([value, count]) => ({ value, label: labels[value], count }))
-    .sort((left, right) => collator.compare(left.label, right.label))
-}
-
+/**
+ * Sector options come from the inventory itself, so the filter can never
+ * offer a sector no playbook uses. Counts are of the whole inventory, not
+ * of the current result set: they describe what is there to be found.
+ */
 export function getCatalogueFilterOptions(
   playbooks: readonly PlaybookSummary[],
 ): CatalogueFilterOptions {
+  const counts = new Map<string, number>()
+  for (const playbook of playbooks) {
+    counts.set(playbook.sector, (counts.get(playbook.sector) ?? 0) + 1)
+  }
+
   return {
-    sectors: textOptions(playbooks.map((playbook) => playbook.sector)),
-    patterns: textOptions(
-      playbooks.flatMap((playbook) => playbook.technicalPatterns),
-    ),
-    dataAccessibility: controlledOptions(
-      playbooks.map((playbook) => playbook.dataAccessibility),
-      dataAccessibilityLabel,
-    ),
-    maturity: controlledOptions(
-      playbooks.map((playbook) => playbook.maturity),
-      maturityLabel,
-    ),
-    risk: controlledOptions(
-      playbooks.map((playbook) => playbook.risk.level),
-      riskLabel,
-    ),
+    sectors: [...counts]
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((left, right) => collator.compare(left.label, right.label)),
   }
 }

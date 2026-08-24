@@ -1,28 +1,8 @@
-import type {
-  DataAccessibility,
-  Maturity,
-  PlaybookSummary,
-} from "@/lib/playbooks/schema"
+import type { PlaybookSummary } from "@/lib/playbooks/schema"
 
 import type { CatalogueQuery } from "./catalogue-query"
 
 const collator = new Intl.Collator("en-GB", { sensitivity: "base" })
-
-const maturityRank: Record<Maturity, number> = {
-  "recorded-demo": 0,
-  assessed: 1,
-  "partner-ready": 2,
-  "operational-pilot": 3,
-  "evaluated-service": 4,
-}
-
-const dataAccessibilityRank: Record<DataAccessibility, number> = {
-  open: 0,
-  "public-readonly": 1,
-  partial: 2,
-  restricted: 3,
-  unknown: 4,
-}
 
 function normalise(value: string) {
   return value
@@ -31,29 +11,26 @@ function normalise(value: string) {
     .toLocaleLowerCase("en-GB")
 }
 
+// Search covers only what a row actually shows: title, summary, and sector.
+// Nothing here searches text the reader cannot see on the page.
 function matchesSearch(playbook: PlaybookSummary, query: string) {
   if (!query) return true
 
   const haystack = normalise(
-    [
-      playbook.title,
-      playbook.summary,
-      playbook.problem,
-      playbook.sector,
-      ...playbook.technicalPatterns,
-      ...playbook.tags,
-    ].join(" "),
+    [playbook.title, playbook.summary, playbook.sector].join(" "),
   )
 
   return haystack.includes(normalise(query))
 }
 
+// A playbook someone can actually try comes first; everything else is
+// alphabetical, so the order never implies a quality ranking.
 function comparePlaybooks(left: PlaybookSummary, right: PlaybookSummary) {
+  const demoRank = (playbook: PlaybookSummary) =>
+    playbook.demo.status === "available" ? 0 : 1
+
   return (
-    maturityRank[left.maturity] - maturityRank[right.maturity] ||
-    dataAccessibilityRank[left.dataAccessibility] -
-      dataAccessibilityRank[right.dataAccessibility] ||
-    collator.compare(left.title, right.title)
+    demoRank(left) - demoRank(right) || collator.compare(left.title, right.title)
   )
 }
 
@@ -66,24 +43,6 @@ export function filterPlaybooks(
     .filter(
       (playbook) =>
         query.sectors.length === 0 || query.sectors.includes(playbook.sector),
-    )
-    .filter(
-      (playbook) =>
-        query.patterns.length === 0 ||
-        playbook.technicalPatterns.some((pattern) => query.patterns.includes(pattern)),
-    )
-    .filter(
-      (playbook) =>
-        query.dataAccessibility.length === 0 ||
-        query.dataAccessibility.includes(playbook.dataAccessibility),
-    )
-    .filter(
-      (playbook) =>
-        query.maturity.length === 0 || query.maturity.includes(playbook.maturity),
-    )
-    .filter(
-      (playbook) =>
-        query.risk.length === 0 || query.risk.includes(playbook.risk.level),
     )
     .sort(comparePlaybooks)
 }

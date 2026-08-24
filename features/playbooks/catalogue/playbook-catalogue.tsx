@@ -42,7 +42,7 @@ export function PlaybookCatalogue({
         <section className="catalogue-empty" aria-labelledby="empty-title">
           <h2 id="empty-title">No playbooks match</h2>
           <p>
-            The current search and filters do not match an assessed playbook.
+            No playbook matches the current search and sector filters.
           </p>
           <Link href="/playbooks">Clear all filters</Link>
         </section>

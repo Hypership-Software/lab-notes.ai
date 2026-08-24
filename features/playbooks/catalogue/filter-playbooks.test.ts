@@ -7,86 +7,88 @@ import {
   serializeCatalogueQuery,
   type CatalogueQuery,
 } from "./catalogue-query"
-import { filterPlaybooks } from "./filter-playbooks"
 import { getCatalogueFilterOptions } from "./filter-options"
+import { filterPlaybooks } from "./filter-playbooks"
 
-const emptyQuery: CatalogueQuery = {
-  query: "",
-  sectors: [],
-  patterns: [],
-  dataAccessibility: [],
-  maturity: [],
-  risk: [],
-}
+const emptyQuery: CatalogueQuery = { query: "", sectors: [] }
+
+const slugsOf = (playbooks: readonly { slug: string }[]) =>
+  playbooks.map((playbook) => playbook.slug)
 
 describe("catalogue query and filtering", () => {
   const summaries = getPlaybookSummaries()
 
-  it("matches text case-insensitively across narrative and tags", () => {
+  it("searches title, summary, and sector, ignoring case", () => {
+    // One term per searched field, so a field dropped from the haystack
+    // fails this test rather than silently narrowing what search can find.
     expect(
-      filterPlaybooks(summaries, { ...emptyQuery, query: "GRIEF" }).map(
-        (playbook) => playbook.slug,
+      slugsOf(filterPlaybooks(summaries, { ...emptyQuery, query: "WORKBENCH" })),
+    ).toEqual(["policy-evidence"])
+    expect(
+      slugsOf(filterPlaybooks(summaries, { ...emptyQuery, query: "curriculum" })),
+    ).toEqual(["lesson-planning-feedback"])
+    expect(
+      slugsOf(
+        filterPlaybooks(summaries, { ...emptyQuery, query: "Citizen Services" }),
       ),
     ).toEqual(["life-event-services"])
-
-    expect(
-      filterPlaybooks(summaries, { ...emptyQuery, query: "PRECISION-AGRICULTURE" }).map(
-        (playbook) => playbook.slug,
-      ),
-    ).toEqual(["farm-advisory"])
   })
 
   it("normalises diacritics for search", () => {
-    const [summary] = summaries
-    const accented = [{ ...summary, title: "Café evidence review" }]
-
-    expect(filterPlaybooks(accented, { ...emptyQuery, query: "cafe" })).toHaveLength(1)
-  })
-
-  it("uses OR within a filter group and AND across groups", () => {
-    expect(
-      filterPlaybooks(summaries, {
-        ...emptyQuery,
-        sectors: ["Health", "Education"],
-      }),
-    ).toHaveLength(4)
+    const accented = [{ ...summaries[0], title: "Café evidence review" }]
 
     expect(
-      filterPlaybooks(summaries, {
-        ...emptyQuery,
-        sectors: ["Health"],
-        risk: ["moderate"],
-      }),
-    ).toEqual([])
+      filterPlaybooks(accented, { ...emptyQuery, query: "cafe" }),
+    ).toHaveLength(1)
+    expect(
+      filterPlaybooks(accented, { ...emptyQuery, query: "café" }),
+    ).toHaveLength(1)
   })
 
-  it("keeps repeated valid values and ignores invalid enum values", () => {
+  it("uses OR within the sector group and AND across search and sector", () => {
+    expect(
+      slugsOf(
+        filterPlaybooks(summaries, {
+          ...emptyQuery,
+          sectors: ["Health", "Education"],
+        }),
+      ),
+    ).toEqual([
+      "adaptive-tutoring",
+      "diagnostic-imaging-support",
+      "health-operations",
+      "lesson-planning-feedback",
+    ])
+
+    expect(
+      slugsOf(
+        filterPlaybooks(summaries, {
+          query: "stand-in",
+          sectors: ["Education"],
+        }),
+      ),
+    ).toEqual(["adaptive-tutoring"])
+  })
+
+  it("keeps repeated sector params and drops values no playbook uses", () => {
     expect(
       parseCatalogueQuery({
         q: "  road  ",
-        sector: ["Transport", "Health"],
-        data: ["open", "not-a-value", "partial"],
-        maturity: ["assessed", "imagined"],
-        risk: ["moderate", "unknown"],
+        sector: ["Transport", "Kingdom of Mourne", "Health", "Transport"],
       }),
-    ).toEqual({
-      query: "road",
-      sectors: ["Transport", "Health"],
-      patterns: [],
-      dataAccessibility: ["open", "partial"],
-      maturity: ["assessed"],
-      risk: ["moderate"],
-    })
+    ).toEqual({ query: "road", sectors: ["Transport", "Health"] })
   })
 
-  it("caps text queries and round-trips serialised values", () => {
+  it("ignores parameters the catalogue no longer offers", () => {
+    expect(
+      parseCatalogueQuery({ maturity: "assessed", risk: "high", pattern: "rag" }),
+    ).toEqual(emptyQuery)
+  })
+
+  it("caps text queries at 120 characters and round-trips serialised values", () => {
     const query: CatalogueQuery = {
       query: "x".repeat(140),
       sectors: ["Health", "Education"],
-      patterns: ["forecasting"],
-      dataAccessibility: ["partial"],
-      maturity: ["assessed"],
-      risk: ["high", "moderate"],
     }
     const serialised = serializeCatalogueQuery(query)
     const searchParams = Object.fromEntries(
@@ -95,36 +97,63 @@ describe("catalogue query and filtering", () => {
         return [key, values.length === 1 ? values[0] : values]
       }),
     )
-    const parsed = parseCatalogueQuery(searchParams)
 
-    expect(parsed).toEqual({ ...query, query: "x".repeat(120) })
+    expect(parseCatalogueQuery(searchParams)).toEqual({
+      ...query,
+      query: "x".repeat(120),
+    })
   })
 
-  it("returns zero results without mutating input and uses stable default order", () => {
-    const before = summaries.map((summary) => summary.slug)
+  it("orders playbooks with a demo first, then by title", () => {
+    // policy-evidence is the only playbook with an available demo; every
+    // other slug follows in en-GB title order.
+    expect(slugsOf(filterPlaybooks(summaries, emptyQuery))).toEqual([
+      "policy-evidence",
+      "adaptive-tutoring",
+      "community-participation",
+      "diagnostic-imaging-support",
+      "earth-observation",
+      "farm-advisory",
+      "health-operations",
+      "housing-insight",
+      "life-event-services",
+      "justice-research",
+      "offender-learning",
+      "lesson-planning-feedback",
+      "road-maintenance",
+      "traffic-flow",
+      "violence-risk-research",
+      "wastewater-monitoring",
+      "water-management",
+    ])
+  })
+
+  it("returns an empty array for no match and never mutates its input", () => {
+    const before = slugsOf(summaries)
     const ordered = filterPlaybooks(summaries, emptyQuery)
 
-    expect(filterPlaybooks(summaries, { ...emptyQuery, query: "no-such-playbook" })).toEqual(
-      [],
-    )
-    expect(ordered[0]?.slug).toBe("earth-observation")
-    expect(ordered.slice(1, 3).map((playbook) => playbook.slug)).toEqual([
-      "community-participation",
-      "policy-evidence",
-    ])
-    expect(summaries.map((summary) => summary.slug)).toEqual(before)
+    expect(
+      filterPlaybooks(summaries, { ...emptyQuery, query: "no-such-playbook" }),
+    ).toEqual([])
+    expect(slugsOf(summaries)).toEqual(before)
     expect(ordered).not.toBe(summaries)
   })
 
-  it("derives filter options and inventory counts from content", () => {
+  it("derives sector options and inventory counts from the content itself", () => {
     const options = getCatalogueFilterOptions(summaries)
 
-    expect(options.sectors.find((option) => option.value === "Health")).toMatchObject({
-      label: "Health",
-      count: 2,
+    expect(Object.keys(options)).toEqual(["sectors"])
+    expect(options.sectors).toHaveLength(13)
+    expect(options.sectors[0]).toEqual({
+      value: "Agriculture",
+      label: "Agriculture",
+      count: 1,
     })
     expect(
-      options.risk.find((option) => option.value === "very-high"),
-    ).toMatchObject({ count: 1 })
+      options.sectors.find((option) => option.value === "Health"),
+    ).toEqual({ value: "Health", label: "Health", count: 2 })
+    expect(
+      options.sectors.reduce((total, option) => total + option.count, 0),
+    ).toBe(summaries.length)
   })
 })

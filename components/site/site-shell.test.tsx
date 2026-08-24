@@ -2,11 +2,10 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
+import { AvailabilityBadge } from "./availability-badge"
 import { ExternalLink } from "./external-link"
-import { RiskBadge } from "./risk-badge"
 import { SiteFooter } from "./site-footer"
 import { SiteHeader } from "./site-header"
-import { StatusBadge } from "./status-badge"
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/playbooks",
@@ -32,21 +31,20 @@ describe("site shell", () => {
     )
   })
 
-  it("describes maturity and risk in text rather than colour alone", () => {
+  it("states dataset and demo availability in text rather than colour alone", () => {
     render(
       <>
-        <StatusBadge maturity="assessed" />
-        <RiskBadge
-          level="high"
-          reasons={["The task uses restricted and consequential service data."]}
-        />
+        <AvailabilityBadge kind="dataset" available />
+        <AvailabilityBadge kind="demo" available={false} />
       </>,
     )
 
-    expect(screen.getByText("Assessed concept")).toBeVisible()
-    expect(screen.getByText("High risk")).toHaveAccessibleDescription(
-      "The task uses restricted and consequential service data.",
-    )
+    // Both answers are words. The bullet is decorative, so stripping every
+    // symbol and colour must leave the state still readable.
+    expect(
+      screen.getByText("Synthetic dataset available"),
+    ).toBeVisible()
+    expect(screen.getByText("No demo yet")).toBeVisible()
   })
 
   it("opens explicitly external links safely", () => {
