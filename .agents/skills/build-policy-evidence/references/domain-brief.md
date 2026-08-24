@@ -1,4 +1,4 @@
-# Policy Evidence Workbench — domain brief
+# Policy Evidence — domain brief
 
 ## Domain vocabulary
 
@@ -20,7 +20,7 @@ The Executive Office publishes the Northern Ireland Artificial Intelligence Stra
 - **Northern Ireland Artificial Intelligence Strategy consultation** — open access at <https://consultations.nidirect.gov.uk/teo/artificial-intelligence-public-consultation/>. It sets out the draft strategy consultation's purpose, asks for views, says responses will be analysed and inform the final strategy, and offers alternative formats on request. It does not validate this project's synthetic themes or a preferred analysis application.
 - **Draft Circular Economy Strategy for Northern Ireland — Public Consultation Response Report** — open access from <https://www.economy-ni.gov.uk/publications/draft-circular-economy-strategy-northern-ireland-public-consultation-response-report>. It documents one consultation's channels, response counts, supplementary material, qualitative and quantitative methods, specialist review, theme development, confidentiality treatment, reporting, and next steps. It reports the responses received rather than public opinion and does not establish a reusable data model or workflow for another consultation.
 
-Treat both as real published sources. Treat `consultation-analysis-structure.md`, the playbook caveats, and any description of the former workbench as project interpretation. Treat the committed JSON as synthetic working data, never as published evidence.
+Treat both as real published sources. Treat `consultation-analysis-structure.md`, the playbook caveats, and any description of the deleted analysis product as project interpretation. Treat the committed JSON as synthetic working data, never as published evidence.
 
 ## Synthetic fields
 
@@ -50,7 +50,7 @@ The 20 records are smaller and tidier than a real consultation corpus. They do n
 - Four project-authored stance labels cannot be assumed to capture all disagreement or uncertainty.
 - A complete count of the supplied JSON does not establish completeness of any real consultation corpus.
 - Analysis of what responses raise is not the accountable body's response, decision, or recommendation.
-- The shape of one published report and this project's adjacent interpretation do not establish a preferred product, workbench, data model, ranking, or workflow.
+- The shape of one published report and this project's adjacent interpretation do not establish a preferred product, interface, data model, ranking, or workflow.
 - The registered sources do not establish that AI is needed; manual reading, facilitation, editorial review, or another service-design approach may meet the outcome.
 
 ## Questions before building
