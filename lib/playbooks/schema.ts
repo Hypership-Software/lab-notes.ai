@@ -3,7 +3,6 @@ import { z } from "zod"
 import {
   isoDateSchema,
   kebabSlugSchema as slugSchema,
-  kebabSlugSource,
 } from "@/lib/schema-primitives"
 
 const relativePathSchema = z
@@ -18,14 +17,8 @@ const relativePathSchema = z
   )
 
 const sentenceSchema = z.string().trim().min(10)
+const conciseSentenceSchema = z.string().trim().min(10).max(240)
 const nonEmptyList = <T extends z.ZodType>(item: T) => z.array(item).min(1)
-
-const demoRouteSchema = z
-  .string()
-  .regex(
-    new RegExp(`^/playbooks/${kebabSlugSource}/demo$`),
-    "Use the playbook's own demo route",
-  )
 
 // The sector strings already used in content/playbooks, verbatim and
 // alphabetical (Task 2 Step 1 verifies). Do not invent a sector no playbook uses.
@@ -65,6 +58,11 @@ export const dataSourceSchema = z.strictObject({
   relevance: sentenceSchema,
 })
 
+export const caveatSchema = z.strictObject({
+  title: z.string().trim().min(4).max(80),
+  detail: z.string().trim().min(10).max(360),
+})
+
 /**
  * C — either a committed synthetic dataset, or a plain statement of why a
  * synthetic stand-in is not responsible in this domain and what a contributor
@@ -74,7 +72,8 @@ export const syntheticDataSchema = z.discriminatedUnion("status", [
   z.strictObject({
     status: z.literal("available"),
     dataPath: relativePathSchema,
-    method: sentenceSchema,
+    purpose: conciseSentenceSchema,
+    preparation: conciseSentenceSchema,
     limitations: nonEmptyList(sentenceSchema),
   }),
   z.strictObject({
@@ -84,22 +83,9 @@ export const syntheticDataSchema = z.discriminatedUnion("status", [
   }),
 ])
 
-/** D — a hosted demo or a one-sentence honest note that none exists yet. */
-export const demoSchema = z.discriminatedUnion("status", [
-  z.strictObject({
-    status: z.literal("available"),
-    route: demoRouteSchema,
-    howItWorks: sentenceSchema,
-  }),
-  z.strictObject({
-    status: z.literal("not-yet"),
-    note: sentenceSchema,
-  }),
-])
-
 export const playbookSchema = z
   .strictObject({
-    schemaVersion: z.literal(2),
+    schemaVersion: z.literal(3),
     slug: slugSchema,
     title: z.string().trim().min(4),
     summary: sentenceSchema,
@@ -107,8 +93,7 @@ export const playbookSchema = z
     strategyExample: strategyExampleSchema,
     dataSources: nonEmptyList(dataSourceSchema),
     syntheticData: syntheticDataSchema,
-    demo: demoSchema,
-    caveats: nonEmptyList(sentenceSchema),
+    caveats: nonEmptyList(caveatSchema),
     lastReviewed: isoDateSchema,
   })
   .superRefine((playbook, context) => {
@@ -121,26 +106,6 @@ export const playbookSchema = z
       })
     }
 
-    // The demo reads the playbook's dataset on every render, so it cannot be
-    // offered without one.
-    if (playbook.demo.status === "available" && playbook.syntheticData.status !== "available") {
-      context.addIssue({
-        code: "custom",
-        path: ["demo"],
-        message: "An available demo requires an available synthetic dataset",
-      })
-    }
-
-    if (
-      playbook.demo.status === "available" &&
-      playbook.demo.route !== `/playbooks/${playbook.slug}/demo`
-    ) {
-      context.addIssue({
-        code: "custom",
-        path: ["demo", "route"],
-        message: "The demo route must match the playbook slug",
-      })
-    }
   })
 
 export type PlaybookInput = z.input<typeof playbookSchema>
@@ -148,11 +113,11 @@ export type Playbook = z.output<typeof playbookSchema>
 
 export type PlaybookSummary = Pick<
   Playbook,
-  "slug" | "title" | "summary" | "sector" | "syntheticData" | "demo" | "lastReviewed"
->
+  "slug" | "title" | "summary" | "sector" | "syntheticData" | "lastReviewed"
+> & { dataSourceCount: number }
 
 export type Sector = Playbook["sector"]
 export type DataAccess = (typeof accessValues)[number]
 export type DataSource = Playbook["dataSources"][number]
+export type Caveat = Playbook["caveats"][number]
 export type SyntheticData = Playbook["syntheticData"]
-export type PlaybookDemo = Playbook["demo"]

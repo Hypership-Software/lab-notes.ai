@@ -29,8 +29,8 @@ function toSummary(playbook: Playbook): PlaybookSummary {
     summary: playbook.summary,
     sector: playbook.sector,
     syntheticData: playbook.syntheticData,
-    demo: playbook.demo,
     lastReviewed: playbook.lastReviewed,
+    dataSourceCount: playbook.dataSources.length,
   })
 }
 

@@ -6,7 +6,7 @@ import type { PlaybookInput } from "./schema"
 
 function makePlaybook(slug: string, title: string) {
   const input = {
-    schemaVersion: 2,
+    schemaVersion: 3,
     slug,
     title,
     summary: `A bounded assessment for ${title.toLowerCase()} in a public-service context.`,
@@ -32,11 +32,10 @@ function makePlaybook(slug: string, title: string) {
       reason: "A useful stand-in would still be shaped like real, sensitive records.",
       whatContributorsNeed: "Formal research access agreed with the responsible data owner.",
     },
-    demo: {
-      status: "not-yet",
-      note: "No hosted demonstration exists for this example yet.",
-    },
-    caveats: ["This is an early example and not evidence of service effectiveness."],
+    caveats: [{
+      title: "Early exploration only",
+      detail: "This is an early example and not evidence of service effectiveness.",
+    }],
     lastReviewed: "2026-08-18",
   } satisfies PlaybookInput
 
@@ -86,8 +85,10 @@ describe("createPlaybookRegistry", () => {
       sector: "Cross-government",
     })
     expect(summary).not.toHaveProperty("strategyExample")
+    expect(summary).not.toHaveProperty("demo")
     expect(summary).not.toHaveProperty("dataSources")
     expect(summary).not.toHaveProperty("caveats")
+    expect(summary.dataSourceCount).toBe(1)
     expect(Object.isFrozen(registry.getPlaybookSummaries())).toBe(true)
   })
 })
