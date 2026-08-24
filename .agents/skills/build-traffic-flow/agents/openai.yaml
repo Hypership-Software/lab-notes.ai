@@ -1,0 +1,4 @@
+interface:
+  display_name: "Traffic Flow Management Build Partner"
+  short_description: "Explore traffic flow management responsibly"
+  default_prompt: "Use $build-traffic-flow to explore this playbook responsibly."
