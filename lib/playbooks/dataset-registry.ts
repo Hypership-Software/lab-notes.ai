@@ -103,10 +103,7 @@ export function hasLongFormFields(dataset: SyntheticDataset): boolean {
   )
 }
 
-export function getDatasetSummary(slug: string): DatasetSummary | undefined {
-  const dataset = getSyntheticDataset(slug)
-  if (!dataset) return undefined
-
+export function summarizeDataset(dataset: SyntheticDataset): DatasetSummary {
   return {
     recordCount: dataset.records.length,
     defaultView: hasLongFormFields(dataset) ? "records" : "table",
@@ -143,4 +140,9 @@ export function getDatasetSummary(slug: string): DatasetSummary | undefined {
       }
     }),
   }
+}
+
+export function getDatasetSummary(slug: string): DatasetSummary | undefined {
+  const dataset = getSyntheticDataset(slug)
+  return dataset ? summarizeDataset(dataset) : undefined
 }
