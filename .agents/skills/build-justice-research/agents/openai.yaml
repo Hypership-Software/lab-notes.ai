@@ -1,0 +1,4 @@
+interface:
+  display_name: "Justice Research and Analysis Build Partner"
+  short_description: "Explore justice research without coercive inference."
+  default_prompt: "Use $build-justice-research to explore this playbook responsibly."
