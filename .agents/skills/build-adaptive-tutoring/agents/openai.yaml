@@ -1,0 +1,4 @@
+interface:
+  display_name: "Adaptive Tutoring Build Partner"
+  short_description: "Explore adaptive learning with learner control."
+  default_prompt: "Use $build-adaptive-tutoring to explore this playbook responsibly."
