@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const trafficFlow = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "traffic-flow",
   title: "Traffic Flow Management",
   summary:
-    "Set what a junction-level signal decision would need to know against what traffic counts and travel surveys actually publish, and keep the stand-in figures counting vehicles rather than travellers.",
+    "Explore what a junction-level signal decision would need to know compared with the traffic counts and travel surveys currently published.",
   sector: "Transport",
   strategyExample: {
     proposal:
@@ -42,22 +42,32 @@ export const trafficFlow = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/traffic-flow/traffic-flow.data.json",
-    method:
-      "Twenty invented hourly counts written by hand, four numbered junctions across five time bands, each with a vehicle count and bus and cycle shares as percentages of the vehicles counted, so a signal-timing discussion can happen without a real network.",
+    purpose:
+      "Use 20 synthetic hourly counts across four junctions to explore signal timing without using a real traffic network.",
+    preparation:
+      "AI authored fictional vehicle counts and bus and cycle shares across five time bands for each junction.",
     limitations: [
       "The junctions are numbers and the counts are invented, so nothing here describes traffic anywhere in Northern Ireland.",
       "Four junctions are not a network: queues, incidents, and the effect of one junction on the next are exactly what a small table cannot hold.",
       "Counting vehicles counts the people who are not in one badly, and the pedestrians who cross here do not appear in this file at all.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could compare a fixed time-of-day signal plan against these counts and report which time bands it fits worst, but nobody has built that here yet.",
-  },
   caveats: [
-    "A change to a signal plan reaches road safety, the people crossing on foot, emissions, and which streets end up carrying the traffic.",
-    "Counts under-represent whatever is least counted, so a route with no counter looks quiet and a mode with no survey looks absent.",
-    "Average delay can fall while the burden moves onto pedestrians, buses, or one neighbourhood, and the headline figure will not show it.",
+    {
+      title: "Signal changes have wider effects",
+      detail:
+        "A change to a signal plan reaches road safety, the people crossing on foot, emissions, and which streets end up carrying the traffic.",
+    },
+    {
+      title: "Counts under-represent what is not measured",
+      detail:
+        "Counts under-represent whatever is least counted, so a route with no counter looks quiet and a mode with no survey looks absent.",
+    },
+    {
+      title: "Average delay can move the burden",
+      detail:
+        "Average delay can fall while the burden moves onto pedestrians, buses, or one neighbourhood, and the headline figure will not show it.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

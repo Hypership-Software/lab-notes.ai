@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const farmAdvisory = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "farm-advisory",
   title: "Farm Advisory Support",
   summary:
-    "Work out what a farm would have to be measured on before a general recommendation counted as advice for that farm, and keep the stand-in figures at field-group level.",
+    "Explore which farm measurements would be needed before a general recommendation could become field-specific advice.",
   sector: "Agriculture",
   strategyExample: {
     proposal:
@@ -42,22 +42,32 @@ export const farmAdvisory = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/farm-advisory/farm-advisory.data.json",
-    method:
-      "Eighteen invented field-group rows written by hand, six lettered groups each with a crop, a soil pH, a soil nitrogen supply index, and a banded yield, so an advisory question can be worked through without any real holding's records.",
+    purpose:
+      "Use 18 synthetic rows across six field groups to explore an advisory question without using a real holding's records.",
+    preparation:
+      "AI authored fictional field groups with crops, soil pH, soil nitrogen supply indexes, and banded yields.",
     limitations: [
       "The groups are letters and the figures are invented, so nothing here is a measurement of any soil, crop, or yield.",
       "Six lettered field groups cannot stand in for the range of farm types, soils, and weather here, and there is no authoritative guidance table sitting behind the rows.",
       "A pH and an index leave out the weather, the livestock, the costs, and the local knowledge that decide whether a suggestion is any use on the day.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could show which field groups fall outside published pH and nutrient ranges and quote the range it used, but nobody has built that here, and it would need guidance an adviser had signed off first.",
-  },
   caveats: [
-    "Getting this wrong reaches livelihoods, animal welfare, water quality, and soil, and the farm carries that cost rather than whoever built the tool.",
-    "Farms with fuller digital records are better represented in the data behind any tool like this, so its advice tends to fit those farms best.",
-    "Improving one input can quietly move the harm somewhere else — to water, emissions, biodiversity, or welfare — and no general model replaces walking the field or a qualified adviser.",
+    {
+      title: "Farms carry the cost of wrong advice",
+      detail:
+        "Getting this wrong reaches livelihoods, animal welfare, water quality, and soil, and the farm carries that cost rather than whoever built the tool.",
+    },
+    {
+      title: "Digital records create representation gaps",
+      detail:
+        "Farms with fuller digital records are better represented in the data behind any tool like this, so its advice tends to fit those farms best.",
+    },
+    {
+      title: "Improvement can move harm elsewhere",
+      detail:
+        "Improving one input can quietly move the harm somewhere else — to water, emissions, biodiversity, or welfare — and no general model replaces walking the field or a qualified adviser.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

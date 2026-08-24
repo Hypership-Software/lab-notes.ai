@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const housingInsight = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "housing-insight",
   title: "Housing Need and Service Insight",
   summary:
-    "Work out what can honestly be said about housing need and stock condition from figures that count households by area and quarter, and keep the stand-in data well away from any tenancy.",
+    "Explore what area-level quarterly figures can show about housing need and stock condition without using tenancy records.",
   sector: "Housing",
   strategyExample: {
     proposal:
@@ -42,22 +42,32 @@ export const housingInsight = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/housing-insight/housing-insight.data.json",
-    method:
-      "Twenty invented quarterly rows written by hand, five lettered area bands each carrying a banded count of households waiting and a banded description of the condition of the stock around them, so service patterns can be discussed with no property, household, or tenancy in the file.",
+    purpose:
+      "Use 20 synthetic quarterly rows across five area bands to explore service patterns without property, household, or tenancy records.",
+    preparation:
+      "AI authored fictional waiting-count and stock-condition bands for lettered areas across four quarters.",
     limitations: [
       "The areas are letters and the bands are invented, so nothing here describes housing need or housing condition anywhere in Northern Ireland.",
       "A banded count by area and quarter cannot show an urgent circumstance, and urgency is usually the thing that matters.",
       "Condition and need are held here as two coarse bands, which is the safe choice and also removes almost everything a housing team would actually work from.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could show which area bands moved between quarters and state plainly what a band change does and does not imply, but nobody has built that here yet.",
-  },
   caveats: [
-    "Housing records can reveal finances, disability, household circumstances, address, and vulnerability, which is why this file counts households in bands and never describes one.",
-    "Recorded demand partly measures who managed to get recorded, so a low count can mean a barrier to reporting rather than less need.",
-    "Service and maintenance patterns must not be turned round to judge a tenant or a household, and nothing here belongs anywhere near an allocation, eligibility, or enforcement decision.",
+    {
+      title: "Housing records reveal sensitive circumstances",
+      detail:
+        "Housing records can reveal finances, disability, household circumstances, address, and vulnerability, which is why this file counts households in bands and never describes one.",
+    },
+    {
+      title: "Recorded demand can hide barriers",
+      detail:
+        "Recorded demand partly measures who managed to get recorded, so a low count can mean a barrier to reporting rather than less need.",
+    },
+    {
+      title: "Patterns must not judge households",
+      detail:
+        "Service and maintenance patterns must not be turned round to judge a tenant or a household, and nothing here belongs anywhere near an allocation, eligibility, or enforcement decision.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

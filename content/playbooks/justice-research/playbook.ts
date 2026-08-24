@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const justiceResearch = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "justice-research",
   title: "Justice Research and Analysis",
   summary:
-    "Work out what a researcher could honestly ask of the court figures that are published, and keep the stand-in data at counts by offence group and quarter.",
+    "Explore which research questions published court figures can support when the available data is limited to quarterly offence-group counts.",
   sector: "Justice",
   strategyExample: {
     proposal:
@@ -43,23 +43,37 @@ export const justiceResearch = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/justice-research/justice-research.data.json",
-    method:
-      "Twenty invented quarterly rows written by hand, five offence groups each with a banded count of disposals and a median number of days to disposal, so a research question can be framed without going near a case or a person.",
+    purpose:
+      "Use 20 synthetic quarterly rows across five offence groups to frame research questions without case or person-level data.",
+    preparation:
+      "AI authored fictional banded disposal counts and median days to disposal for each offence group.",
     limitations: [
       "The counts and the day figures are invented, so no row here describes what happens in any Northern Ireland court.",
       "Five offence groups over one year cannot show the linkage error, missing records, and changes of process that a real analysis spends most of its time on.",
       "A count of disposals says nothing about what happened to anyone, and a pattern found in a table like this cannot be turned into a statement about a person.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could chart how the median days move by offence group and print the caveats beside every line, but nobody has built that here yet.",
-  },
   caveats: [
-    "Justice records can be sensitive, stigmatising, incomplete, and consequential all at once, which is why nothing person-level appears here.",
-    "Patterns in these records reflect who gets reported, stopped, and prosecuted as much as anything about behaviour, and anything trained on them learns that too.",
-    "A model asked about law can invent a rule that sounds right, or leave out the exception that decides the case.",
-    "An exploratory pattern is not a cause, and it must never become a reason to do something to an individual.",
+    {
+      title: "Justice records are sensitive and consequential",
+      detail:
+        "Justice records can be sensitive, stigmatising, incomplete, and consequential all at once, which is why nothing person-level appears here.",
+    },
+    {
+      title: "Recorded patterns reflect institutional action",
+      detail:
+        "Patterns in these records reflect who gets reported, stopped, and prosecuted as much as anything about behaviour, and anything trained on them learns that too.",
+    },
+    {
+      title: "Models can invent legal rules",
+      detail:
+        "A model asked about law can invent a rule that sounds right, or leave out the exception that decides the case.",
+    },
+    {
+      title: "Exploratory patterns are not causes",
+      detail:
+        "An exploratory pattern is not a cause, and it must never become a reason to do something to an individual.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

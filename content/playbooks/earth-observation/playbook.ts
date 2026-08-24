@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const earthObservation = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "earth-observation",
   title: "Earth Observation for Public Services",
   summary:
-    "Ask what a mapped change would have to show before an analyst could act on it, and keep the stand-in version at survey squares and broad habitat classes.",
+    "Explore what a mapped land-cover change would need to show before an analyst could act, using survey squares and broad habitat classes.",
   sector: "Environment",
   strategyExample: {
     proposal:
@@ -42,22 +42,32 @@ export const earthObservation = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/earth-observation/earth-observation.data.json",
-    method:
-      "Twenty invented change rows written by hand, ten lettered tiles the size of a survey square, each with one broad habitat class and a hectares-changed figure for two periods, so change detection can be discussed without imagery or licence questions.",
+    purpose:
+      "Use 20 synthetic change rows across ten survey-sized tiles to explore land-cover change without imagery or licensing questions.",
+    preparation:
+      "AI authored fictional lettered tiles with one broad habitat class and hectares-changed figures for two periods.",
     limitations: [
       "The tiles are numbers and the hectares are invented, so no row here says anything about land anywhere in Northern Ireland.",
       "A hectares-changed figure has already thrown the picture away: cloud, shadow, tide, season, and alignment error are what a real pipeline argues about, and none of them survive into a table.",
       "One class per tile is a fiction — a real square holds a mosaic — and where one class ends and the next begins is itself a judgement.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could sort these tiles by how much changed and name the class that moved, but nobody has built one here, and it would need a real imagery source and labels an analyst had checked.",
-  },
   caveats: [
-    "A wrong class sends inspection, planning, or an intervention to the wrong field, and the map goes on looking authoritative either way.",
-    "Fine-grained imagery can expose sensitive habitats and sites, so what gets published needs deciding separately from whether the analysis works.",
-    "Surface change does not explain cause, ownership, or legality, and a coarse image can miss a small change that matters more than a large one.",
+    {
+      title: "Wrong classes misdirect action",
+      detail:
+        "A wrong class sends inspection, planning, or an intervention to the wrong field, and the map goes on looking authoritative either way.",
+    },
+    {
+      title: "Detailed imagery can expose sensitive sites",
+      detail:
+        "Fine-grained imagery can expose sensitive habitats and sites, so what gets published needs deciding separately from whether the analysis works.",
+    },
+    {
+      title: "Surface change does not explain cause",
+      detail:
+        "Surface change does not explain cause, ownership, or legality, and a coarse image can miss a small change that matters more than a large one.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

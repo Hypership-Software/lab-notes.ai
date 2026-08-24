@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const diagnosticImagingSupport = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "diagnostic-imaging-support",
   title: "Diagnostic Imaging Support",
   summary:
-    "Look at what it would actually take to help a reporting clinician decide which scan to read next, and why this is the one example here with no stand-in data.",
+    "Explore what it would take to support a reporting clinician deciding which scan to read next, without creating an irresponsible stand-in dataset.",
   sector: "Health",
   strategyExample: {
     proposal:
@@ -46,14 +46,22 @@ export const diagnosticImagingSupport = definePlaybook({
     whatContributorsNeed:
       "Anyone taking this further needs a partner radiology service and access to a real imaging archive under formal clinical-research governance, with a named sponsor, ethics approval, and reporting clinicians involved from the start.",
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo would have to show real scans being reordered in a reporting clinician's worklist, which is exactly the thing this page says we cannot responsibly fake, so nobody has built one.",
-  },
   caveats: [
-    "Missing a finding, or marking one that is not there, changes what happens to a patient, so nothing on this page should be read as a claim that image analysis is safe to use in care.",
-    "Openly published imaging collections come from other populations, other scanners, and other working practices, so how a system behaved on them says little about how it would behave here.",
-    "A confident outline drawn on a scan can pull a clinician's eye to the wrong place, which makes the support itself a source of harm rather than only a missed benefit.",
+    {
+      title: "Image errors change patient care",
+      detail:
+        "Missing a finding, or marking one that is not there, changes what happens to a patient, so nothing on this page should be read as a claim that image analysis is safe to use in care.",
+    },
+    {
+      title: "Published collections may not transfer",
+      detail:
+        "Openly published imaging collections come from other populations, other scanners, and other working practices, so how a system behaved on them says little about how it would behave here.",
+    },
+    {
+      title: "Visual support can misdirect attention",
+      detail:
+        "A confident outline drawn on a scan can pull a clinician's eye to the wrong place, which makes the support itself a source of harm rather than only a missed benefit.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

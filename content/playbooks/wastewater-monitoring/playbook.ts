@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const wastewaterMonitoring = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "wastewater-monitoring",
   title: "Wastewater Monitoring",
   summary:
-    "Work out what a monitoring feed would have to tell an operator before an unusual reading was worth acting on, and what a stand-in version of that feed looks like.",
+    "Explore what a wastewater monitoring feed would need to tell an operator before an unusual reading warrants investigation.",
   sector: "Infrastructure",
   strategyExample: {
     proposal:
@@ -42,22 +42,32 @@ export const wastewaterMonitoring = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/wastewater-monitoring/wastewater-monitoring.data.json",
-    method:
-      "Eighteen invented weekly readings written by hand in the shape a discharge consent monitors: six lettered works with a banded daily flow and ammonia and phosphorus in milligrams per litre, including two weeks that stand out from their own site's pattern.",
+    purpose:
+      "Use 18 synthetic weekly readings across six works to explore unusual-reading detection without operational network data.",
+    preparation:
+      "AI authored fictional flow, ammonia, and phosphorus readings, including two weeks that differ from their site's pattern.",
     limitations: [
       "The readings are invented and the works are letters, so nothing here describes any real site, network, or discharge.",
       "Weekly figures per works hide the rainfall, hydraulics, and sensor faults that decide what an unusual reading actually means.",
       "Two measures cannot identify what is in the water, and a real feed also carries the gaps, drift, and maintenance events this tidy file does not.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could rank these weeks by how far each reading sits from its own site's usual range and show the arithmetic behind the ranking, but nobody has built that here yet.",
-  },
   caveats: [
-    "A missed or noisy alert either delays a response to something happening in the environment or sends a limited crew to the wrong place.",
-    "Published detail about where a network runs and how it behaves carries its own risk, which is why the works in this file are letters rather than places.",
-    "An unusual reading is not a diagnosis: it cannot say what is in the water or what should be done, and a drifting sensor looks much the same as a real event.",
+    {
+      title: "Alert errors waste time or delay response",
+      detail:
+        "A missed or noisy alert either delays a response to something happening in the environment or sends a limited crew to the wrong place.",
+    },
+    {
+      title: "Network details carry their own risk",
+      detail:
+        "Published detail about where a network runs and how it behaves carries its own risk, which is why the works in this file are letters rather than places.",
+    },
+    {
+      title: "An unusual reading is not a diagnosis",
+      detail:
+        "An unusual reading is not a diagnosis: it cannot say what is in the water or what should be done, and a drifting sensor looks much the same as a real event.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

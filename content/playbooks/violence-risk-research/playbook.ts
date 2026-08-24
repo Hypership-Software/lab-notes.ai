@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const violenceRiskResearch = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "violence-risk-research",
   title: "Violence Risk Pattern Research",
   summary:
-    "Set out why this is one of the two examples here with no stand-in data: anything useful for risk research in this domain describes individual people by construction.",
+    "Explore the evidence and safeguards violence-risk research would require without creating person-level stand-in data.",
   sector: "Community safety",
   strategyExample: {
     proposal:
@@ -46,15 +46,27 @@ export const violenceRiskResearch = definePlaybook({
     whatContributorsNeed:
       "Anyone taking this further needs formal research access under ethics and data-protection approval, with domain experts and people with lived experience owning the question from the start rather than reviewing an answer at the end.",
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo would mean showing people sorted by predicted risk, which is the thing this page says should not be built here, so there is none.",
-  },
   caveats: [
-    "Linked justice and health records are exceptionally sensitive, and a risk label seen by the wrong person can leave someone in more danger than they were in before.",
-    "False positives bring attention to people who did not need it while false negatives quietly withdraw help from people who did, and both happen at the same time.",
-    "Institutional reporting patterns are not individual behaviour, so anything trained on who was recorded will mostly learn who gets recorded.",
-    "Being identified is only useful if there is something safe to offer, and whether that exists is a question about services rather than about models.",
+    {
+      title: "Linked records create exceptional sensitivity",
+      detail:
+        "Linked justice and health records are exceptionally sensitive, and a risk label seen by the wrong person can leave someone in more danger than they were in before.",
+    },
+    {
+      title: "Both kinds of error cause harm",
+      detail:
+        "False positives bring attention to people who did not need it while false negatives quietly withdraw help from people who did, and both happen at the same time.",
+    },
+    {
+      title: "Reporting patterns are not behaviour",
+      detail:
+        "Institutional reporting patterns are not individual behaviour, so anything trained on who was recorded will mostly learn who gets recorded.",
+    },
+    {
+      title: "Safe services must exist first",
+      detail:
+        "Being identified is only useful if there is something safe to offer, and whether that exists is a question about services rather than about models.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

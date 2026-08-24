@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const offenderLearning = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "offender-learning",
   title: "Learning Support in Custodial Settings",
   summary:
-    "Ask what a suggestion about someone's next course would need to know, note that enrolments and completions are not published by course, and keep the stand-in figures at course level.",
+    "Explore what a suggestion about a learner's next course would need to know when enrolments and completions are not published by course.",
   sector: "Justice and education",
   strategyExample: {
     proposal:
@@ -42,22 +42,32 @@ export const offenderLearning = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/offender-learning/offender-learning.data.json",
-    method:
-      "Twenty invented quarterly rows written by hand, five course types each with a banded number of enrolments and a banded completion rate, so the choice of a next resource can be discussed with nothing about any learner in the file.",
+    purpose:
+      "Use 20 synthetic quarterly rows across five course types to explore next-resource choices without learner records.",
+    preparation:
+      "AI authored fictional banded enrolment counts and completion rates for each course type.",
     limitations: [
       "Enrolments and completions by course are not published, so the two most useful columns here have no published counterpart at all.",
       "The bands are invented, so nothing here describes learning in any prison.",
       "A course-level table cannot hold what actually decides things in custody: what is running this week, who is allowed to attend, and whether a sentence is about to end.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could show which course these bands would suggest next and say plainly what it was reasoning from, but nobody has built one, and a reviewed resource map and an educator would have to come first.",
-  },
   caveats: [
-    "Education, justice, disability, and behaviour information sit close together in custody, and consent means something different in a place people cannot leave.",
-    "Anything collected to support learning can be experienced as surveillance, or later used for a decision about discipline or release, which is why this file holds no learner records.",
-    "A suggestion built from a partial history can quietly narrow what someone is ever offered, and in custody there is rarely another route to the same course.",
+    {
+      title: "Consent is different in custody",
+      detail:
+        "Education, justice, disability, and behaviour information sit close together in custody, and consent means something different in a place people cannot leave.",
+    },
+    {
+      title: "Learning data can become surveillance",
+      detail:
+        "Anything collected to support learning can be experienced as surveillance, or later used for a decision about discipline or release, which is why this file holds no learner records.",
+    },
+    {
+      title: "Partial histories can narrow opportunity",
+      detail:
+        "A suggestion built from a partial history can quietly narrow what someone is ever offered, and in custody there is rarely another route to the same course.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const lifeEventServices = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "life-event-services",
   title: "Joined-up Support after a Life Event",
   summary:
-    "Follow the steps someone actually has to take after a death, and show that nothing published says where in that sequence people get stuck.",
+    "Explore the fragmented steps people face after a bereavement and where a joined-up service would need stronger evidence.",
   sector: "Citizen services",
   strategyExample: {
     proposal:
@@ -42,23 +42,36 @@ export const lifeEventServices = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/life-event-services/life-event-services.data.json",
-    method:
-      "Sixteen invented rows written by hand, following the one journey the published guidance sets out, each step carrying an invented median number of days and an invented band for how many people do not complete it; the file covers a single life event because that is the journey the cited guidance describes.",
+    purpose:
+      "Use 16 synthetic journey steps to explore where delays or drop-off might occur after a bereavement.",
+    preparation:
+      "AI authored fictional timings and completion bands around the sequence described in published nidirect guidance.",
     limitations: [
-      "The days and the drop-off bands are invented and no published source measures either, so the most interesting numbers in this file are the least trustworthy.",
-      "A tidy sequence is not what a bereavement is: grief, disputes about who has authority, complicated estates, and accessibility needs all decide the real order.",
-      "Naming a step says nothing about whether anyone had the authority to take it, which is the part that would matter most.",
+      "The days and drop-off bands are invented because no published source measures either figure.",
+      "A tidy sequence cannot represent grief, disputed authority, complicated estates, or accessibility needs.",
+      "A named step does not establish that anyone has authority to complete it.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could lay out the published steps as a checklist a person ticks off themselves, with no notification sent anywhere, but nobody has built that here yet.",
-  },
   caveats: [
-    "A bereavement record ties together identity, family, money, health, property, and legal circumstances across services, so joining them up is the risk as much as the benefit.",
-    "Notifying a service too early, or without the authority to do it, causes distress, loss, or exposure to fraud at the worst possible time.",
-    "A wrong match can disclose a death, or someone's private circumstances, to the wrong party.",
-    "Most of the difficulty here is service design, consent, and systems talking to each other rather than anything a model does, and a checklist a person can follow would have to work first.",
+    {
+      title: "Joining records creates risk",
+      detail:
+        "Bereavement can connect identity, family, money, health, property, and legal circumstances across services.",
+    },
+    {
+      title: "Authority comes first",
+      detail:
+        "A notification sent too early or without authority can cause distress, loss, or fraud exposure.",
+    },
+    {
+      title: "Matching errors disclose private information",
+      detail: "A wrong match can reveal a death or private circumstances to the wrong party.",
+    },
+    {
+      title: "Service design may be the real intervention",
+      detail:
+        "Consent, accessible journeys, and systems working together matter before any model is considered.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

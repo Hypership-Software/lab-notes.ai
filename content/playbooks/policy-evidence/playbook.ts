@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const policyEvidence = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "policy-evidence",
   title: "Policy Evidence Workbench",
   summary:
-    "Group consultation responses into themes a policy team could investigate further, with every theme citing the exact passages behind it.",
+    "Explore how consultation responses might be grouped into themes for further investigation while keeping the supporting passages visible.",
   sector: "Cross-government", // the sector string this playbook already uses
   strategyExample: {
     proposal:
@@ -39,22 +39,26 @@ export const policyEvidence = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/policy-evidence/policy-evidence.data.json",
-    method:
-      "Twenty synthetic consultation responses authored by AI, shaped by the structure and vocabulary of a published consultation response report, so the analysis task can be tried without holding a consultation mailbox.",
+    purpose:
+      "Use 20 synthetic consultation responses to explore theme grouping without holding a consultation mailbox.",
+    preparation:
+      "AI authored fictional responses shaped by the structure and vocabulary of a published consultation response report.",
     limitations: [
       "The dataset is far smaller and tidier than a real consultation mailbox.",
       "The six themes and four stances are this project's own choices, verified in no official source.",
     ],
   },
-  demo: {
-    status: "available",
-    route: "/playbooks/policy-evidence/demo",
-    howItWorks:
-      "A transparent keyword analysis — no model, no key — groups the synthetic responses into themes and cites the exact passages it matched, recomputed from the committed dataset on every render.",
-  },
   caveats: [
-    "A matched keyword shows a response used a word, not what the respondent meant by it; a real analysis needs human reading.",
-    "Nothing on this page is evidence that an AI system would analyse a real consultation accurately, fairly, or lawfully.",
+    {
+      title: "Keywords do not establish meaning",
+      detail:
+        "A matched keyword shows a response used a word, not what the respondent meant by it; a real analysis needs human reading.",
+    },
+    {
+      title: "Synthetic analysis proves no operational outcome",
+      detail:
+        "Nothing on this page is evidence that an AI system would analyse a real consultation accurately, fairly, or lawfully.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

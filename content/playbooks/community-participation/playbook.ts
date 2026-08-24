@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const communityParticipation = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "community-participation",
   title: "Community Participation Analysis",
   summary:
-    "Group public comments on local issues into themes people could argue with, and be clear about what a count of comments does not tell anyone.",
+    "Explore how public comments on local issues might be grouped into themes while keeping the limits of participation counts visible.",
   sector: "Communities",
   strategyExample: {
     proposal:
@@ -42,22 +42,32 @@ export const communityParticipation = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/community-participation/community-participation.data.json",
-    method:
-      "Eighteen synthetic public comments authored for this project across five local topics, each with a stance, written to read like real submissions and to keep the disagreements and minority views a real set contains, so grouping can be tried without holding anybody's words.",
+    purpose:
+      "Use 18 synthetic comments across five local topics to explore theme grouping without holding anyone's submitted words.",
+    preparation:
+      "AI authored fictional comments and stances to preserve disagreement and minority views found in public submissions.",
     limitations: [
       "Eighteen comments are far fewer, tidier, and more evenly spread across topics than any real set of responses.",
       "The five topics and four stances are this project's own choices, checked against no official framework.",
       "A synthetic set cannot contain the thing that matters most about participation: who did not write in, and why.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could group these comments by topic and quote the passage behind every group, which is what the policy-evidence demo already does with its own corpus, so this one has not been built.",
-  },
   caveats: [
-    "A count of comments measures who had the time, the connection, and the confidence to write, not what a community thinks.",
-    "Automatic grouping tends to lose the single sharp objection, and the single sharp objection is often the one worth reading.",
-    "People whose words are being grouped should be able to see the categories and argue with them, which is a design commitment rather than a technical one.",
+    {
+      title: "Participation counts are not public opinion",
+      detail:
+        "A count of comments measures who had the time, the connection, and the confidence to write, not what a community thinks.",
+    },
+    {
+      title: "Grouping can hide a sharp objection",
+      detail:
+        "Automatic grouping tends to lose the single sharp objection, and the single sharp objection is often the one worth reading.",
+    },
+    {
+      title: "Categories must remain contestable",
+      detail:
+        "People whose words are being grouped should be able to see the categories and argue with them, which is a design commitment rather than a technical one.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

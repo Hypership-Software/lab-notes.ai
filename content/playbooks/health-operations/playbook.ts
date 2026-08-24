@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const healthOperations = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "health-operations",
   title: "Health Service Demand and Operations",
   summary:
-    "Work out which published figures would tell a hospital planning team anything useful about demand, beds, and discharge, and what a stand-in version of those figures looks like.",
+    "Explore which published figures could help a hospital planning team understand demand, beds, and discharge, and where the evidence remains incomplete.",
   sector: "Health",
   strategyExample: {
     proposal:
@@ -42,22 +42,32 @@ export const healthOperations = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/health-operations/health-operations.data.json",
-    method:
-      "Twenty invented waiting records written by hand in the shape the published quarterly statistics use, with specialty names, quarters, length-of-wait bands, and banded counts of people, so the planning task can be discussed without holding trust data.",
+    purpose:
+      "Use 20 synthetic waiting records to explore a hospital planning question without holding health and social care trust data.",
+    preparation:
+      "AI authored fictional specialty, quarter, wait-band, and count-band values in the shape of published statistics.",
     limitations: [
       "The numbers are invented bands, not rounded real figures, so nothing here should be quoted as how long anyone in Northern Ireland is waiting.",
       "Real planning needs arrivals, beds, staffing, and discharge delays together, and this file has only one of those.",
       "A tidy quarterly table hides the day-to-day movement and the individual circumstances that actually decide when someone leaves hospital.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could take these banded records and show a plain forecast of next quarter's waiting alongside the assumptions behind it, but nobody has built that here yet.",
-  },
   caveats: [
-    "Operational records describe people who are ill, so the real version of this work involves sensitive information even when the output looks like a chart.",
-    "Aiming at one number, such as average flow, can quietly make things worse for people whose needs are complicated or unusual.",
-    "Knowing how many people are likely to arrive does not tell anyone whether a particular person is ready to go home, and that decision has to stay with clinicians.",
+    {
+      title: "Operational records are sensitive",
+      detail:
+        "Operational records describe people who are ill, so the real version of this work involves sensitive information even when the output looks like a chart.",
+    },
+    {
+      title: "Single targets can distort care",
+      detail:
+        "Aiming at one number, such as average flow, can quietly make things worse for people whose needs are complicated or unusual.",
+    },
+    {
+      title: "Discharge decisions remain clinical",
+      detail:
+        "Knowing how many people are likely to arrive does not tell anyone whether a particular person is ready to go home, and that decision has to stay with clinicians.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

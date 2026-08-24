@@ -49,9 +49,24 @@ describe("playbook inventory", () => {
     expect(playbooks.map((playbook) => playbook.slug)).toEqual(expectedSlugs)
   })
 
-  it("has exactly one available demo, on policy-evidence", () => {
-    const withDemo = playbooks.filter((playbook) => playbook.demo.status === "available")
-    expect(withDemo.map((playbook) => playbook.slug)).toEqual(["policy-evidence"])
+  it("ships seventeen complete accelerator playbooks", () => {
+    expect(playbooks).toHaveLength(17)
+
+    for (const playbook of playbooks) {
+      expect(playbook.schemaVersion).toBe(3)
+      expect(playbook.dataSources.length).toBeGreaterThan(0)
+      expect(playbook.caveats.length).toBeGreaterThan(0)
+      expect("demo" in playbook).toBe(false)
+    }
+  })
+
+  it("keeps available starter-data copy concise and separated by purpose", () => {
+    for (const playbook of playbooks) {
+      if (playbook.syntheticData.status !== "available") continue
+      expect(playbook.syntheticData.purpose.length).toBeLessThanOrEqual(240)
+      expect(playbook.syntheticData.preparation.length).toBeLessThanOrEqual(240)
+      expect(playbook.syntheticData.purpose).not.toBe(playbook.syntheticData.preparation)
+    }
   })
 
   it("answers C on every playbook, with datasets at the conventional path", () => {

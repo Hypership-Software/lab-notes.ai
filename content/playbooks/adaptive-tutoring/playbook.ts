@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const adaptiveTutoring = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "adaptive-tutoring",
   title: "Adaptive Tutoring",
   summary:
-    "Ask what a practice tool would have to record before it could choose a learner's next activity, and keep the stand-in data at the level of topics rather than children.",
+    "Explore what a practice tool would need to record before choosing a learner's next activity, using topic-level data rather than learner records.",
   sector: "Education",
   strategyExample: {
     proposal:
@@ -42,23 +42,37 @@ export const adaptiveTutoring = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/adaptive-tutoring/adaptive-tutoring.data.json",
-    method:
-      "Eighteen invented practice summaries written by hand, one per topic and difficulty step, holding banded attempt counts and banded success rates so the choice of next activity can be discussed without collecting anything from a learner.",
+    purpose:
+      "Use 18 synthetic topic-level practice summaries to explore how a tool might choose a next activity without learner records.",
+    preparation:
+      "AI authored fictional topic and difficulty steps with banded attempt counts and success rates.",
     limitations: [
       "The bands were invented for this project and are not measurements, so no figure here is evidence about how hard any topic really is.",
       "Everything is aggregated by topic, which is the safe choice and also removes the sequence of attempts that a real adaptive tool would work from.",
       "Eighteen topics from one subject area cannot stand in for a curriculum, and there is no reviewed bank of activities behind them.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could show which topic these bands would offer next and say plainly why, but nobody has built one, and it would need a bank of activities a teacher had approved first.",
-  },
   caveats: [
-    "Practice data about children can reveal age, ability, additional needs, and behaviour, which is why this file counts attempts by topic and never by learner.",
-    "A tool that keeps choosing the wrong next step can narrow what a learner is ever offered, and each individual choice looks too small to notice.",
-    "Attempts and success rates say nothing about whether anyone understood the topic, and a low score may only mean the wording, the language, or the device got in the way.",
-    "Sorting learners by a preferred way of learning is not a sound basis for deciding what they see next, whatever the tool reports.",
+    {
+      title: "Learner data reveals sensitive details",
+      detail:
+        "Practice data about children can reveal age, ability, additional needs, and behaviour, which is why this file counts attempts by topic and never by learner.",
+    },
+    {
+      title: "Small choices can narrow opportunity",
+      detail:
+        "A tool that keeps choosing the wrong next step can narrow what a learner is ever offered, and each individual choice looks too small to notice.",
+    },
+    {
+      title: "Practice scores do not prove understanding",
+      detail:
+        "Attempts and success rates say nothing about whether anyone understood the topic, and a low score may only mean the wording, the language, or the device got in the way.",
+    },
+    {
+      title: "Learning styles are not a sound basis",
+      detail:
+        "Sorting learners by a preferred way of learning is not a sound basis for deciding what they see next, whatever the tool reports.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

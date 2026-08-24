@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const roadMaintenance = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "road-maintenance",
   title: "Road Maintenance Planning",
   summary:
-    "Follow how a road defect becomes an inspected, prioritised, and repaired one, and what a stand-in version of those records can and cannot settle.",
+    "Explore how road defects move through inspection, prioritisation, and repair, and what published records cannot settle.",
   sector: "Transport",
   strategyExample: {
     proposal:
@@ -42,22 +42,32 @@ export const roadMaintenance = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/road-maintenance/road-maintenance.data.json",
-    method:
-      "Twenty invented defect records written by hand using the published road classes and the R1 to R3 severity codes, each with a defect type, the week it was reported, and where it has reached in the queue, so triage can be discussed without a real authority's records.",
+    purpose:
+      "Use 20 synthetic defect records to explore triage without using a road authority's operational records.",
+    preparation:
+      "AI authored fictional defect types, report weeks, and queue statuses using published road classes and R1 to R3 severity codes.",
     limitations: [
       "The records are invented, so nothing here describes a defect, a road, or a repair backlog anywhere in Northern Ireland.",
       "There is no imagery behind any of these rows, so this file cannot say anything about whether a classifier would recognise a defect on a real surface, in real weather, from a real camera.",
       "A severity code and a status leave out cost, repair method, and what else on the network is competing for the same crew.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could order these defects by severity, road class, and how long they have waited, and name the rule behind each position, but nobody has built that here yet.",
-  },
   caveats: [
-    "A missed defect is a safety problem, and a false one spends inspection time that was already short.",
-    "Defects only enter the figures once someone has inspected or reported them, so places that are surveyed and reported less can look as though they need less.",
-    "Shadows, standing water, road markings, and old repairs all look like damage in an image, and a classification decides nothing about repair method, cost, or what the network needs most.",
+    {
+      title: "Both missed and false defects carry costs",
+      detail:
+        "A missed defect is a safety problem, and a false one spends inspection time that was already short.",
+    },
+    {
+      title: "Recorded defects reflect inspection coverage",
+      detail:
+        "Defects only enter the figures once someone has inspected or reported them, so places that are surveyed and reported less can look as though they need less.",
+    },
+    {
+      title: "Image classifications do not choose repairs",
+      detail:
+        "Shadows, standing water, road markings, and old repairs all look like damage in an image, and a classification decides nothing about repair method, cost, or what the network needs most.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })

@@ -3,11 +3,11 @@ import { definePlaybook } from "@/lib/playbooks/define-playbook"
 import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 
 export const waterManagement = definePlaybook({
-  schemaVersion: 2,
+  schemaVersion: 3,
   slug: "water-management",
   title: "Water Resource Management",
   summary:
-    "Find out which published figures a water team could actually put side by side — rainfall, river level, and how much is being taken out — and how coarse the stand-in version has to stay.",
+    "Explore how published rainfall, river-level, and abstraction figures could be compared, and where their different scales limit a water-management question.",
   sector: "Infrastructure",
   strategyExample: {
     proposal:
@@ -53,22 +53,32 @@ export const waterManagement = definePlaybook({
   syntheticData: {
     status: "available",
     dataPath: "content/playbooks/water-management/water-management.data.json",
-    method:
-      "Twenty invented monthly rows written by hand, four lettered catchments across one spring and summer, each row carrying a rainfall total, a river level described as a band against normal, and an abstraction band taken from the licensing thresholds.",
+    purpose:
+      "Use 20 synthetic monthly rows across four catchments to explore rainfall, river-level, and abstraction questions together.",
+    preparation:
+      "AI authored fictional rainfall totals, river-level bands, and abstraction bands based on published licensing thresholds.",
     limitations: [
       "The catchments are letters and the figures are invented, so nothing here describes rainfall, a river, or an abstraction anywhere in Northern Ireland.",
       "Monthly rows cannot show a flood, which happens in hours, and a level band against normal is not a flow.",
       "Flooding, pollution, and sharing water out are three different decisions, and one small table appearing to serve all three is part of what this example is meant to expose.",
     ],
   },
-  demo: {
-    status: "not-yet",
-    note: "A demo could work through a plain water balance for one catchment month and show the assumption behind every term, but nobody has built that here, and it would need one of the three decisions chosen first.",
-  },
   caveats: [
-    "A missed or false signal here reaches emergency response, pollution control, and whether there is water to go round, and those costs do not fall on the same people.",
-    "Detail about assets and networks can be sensitive in itself, which is why the catchments in this file are letters.",
-    "A sensor that has failed or drifted can hide the event that matters most, and anything judged on average performance is being judged mostly on ordinary months.",
+    {
+      title: "Signal errors distribute costs unevenly",
+      detail:
+        "A missed or false signal here reaches emergency response, pollution control, and whether there is water to go round, and those costs do not fall on the same people.",
+    },
+    {
+      title: "Asset details can be sensitive",
+      detail:
+        "Detail about assets and networks can be sensitive in itself, which is why the catchments in this file are letters.",
+    },
+    {
+      title: "Ordinary months can hide sensor failure",
+      detail:
+        "A sensor that has failed or drifted can hide the event that matters most, and anything judged on average performance is being judged mostly on ordinary months.",
+    },
   ],
   lastReviewed: "2026-08-21",
 })
