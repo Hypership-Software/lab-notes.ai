@@ -498,7 +498,6 @@
 }
 
 .primary-action svg,
-.dossier-row__link svg,
 .exemplar-dossier__evidence a svg {
   width: 1.1rem;
   height: 1.1rem;
@@ -955,18 +954,6 @@
   color: var(--evidence-hover);
 }
 
-.dossier-row__link {
-  min-height: 2.75rem;
-  grid-column: span 2;
-  display: inline-flex;
-  align-items: center;
-  justify-content: flex-end;
-  align-self: center;
-  gap: 0.4rem;
-  color: var(--evidence-hover);
-  font-weight: 750;
-}
-
 .catalogue-empty {
   padding-block: clamp(4rem, 9vw, 8rem);
   border-top: 1px solid var(--line-strong);
@@ -1153,41 +1140,6 @@
   font-size: 0.925rem;
 }
 
-.playbook-detail__toc {
-  padding: 1.5rem 0;
-  border-top: 3px solid var(--evidence);
-  border-bottom: 1px solid var(--line-strong);
-}
-
-.playbook-detail__toc > p {
-  margin: 0 0 1rem;
-  font-weight: 750;
-}
-
-.playbook-detail__toc ol {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.75rem 1.5rem;
-  list-style: none;
-}
-
-.playbook-detail__toc a {
-  min-height: 2.75rem;
-  display: inline-flex;
-  align-items: center;
-  color: var(--evidence-hover);
-  font-weight: 650;
-}
-
-.playbook-detail__grid {
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: clamp(2rem, 4vw, 3rem) 1.5rem;
-  align-items: start;
-}
-
 .playbook-detail__section {
   padding-top: 1.75rem;
   border-top: 1px solid var(--line-strong);
@@ -1200,44 +1152,11 @@
 
 /* Direct-child combinator only: this composes the document's own h3s
    (Supported decision, Public benefit, the baseline name, Human oversight),
-   not the h3s nested inside SourceRegister, DemoReadiness, or MaturityLadder
-   — those sit deeper than a direct child of the section and must keep each
-   primitive's own heading rhythm. */
+   not the h3s nested inside a source dossier — those sit deeper than a
+   direct child of the section and keep the dossier's own heading rhythm. */
 .playbook-detail__section > h3 {
   margin: 1.5rem 0 0.5rem;
   font-size: 1.1rem;
-}
-
-.playbook-detail__section--rail {
-  grid-column: 1 / span 3;
-}
-
-.playbook-detail__section--narrative {
-  grid-column: 4 / span 6;
-}
-
-/* The dense, evidence-heavy sections (official sources, synthetic-data
-   method, evaluation and maturity, technical implementation) span the
-   narrative and evidence bands together — 9 of 12 columns — so hashes,
-   paths, and definition-list values get real width instead of being
-   stranded alone in a 3-column lane. */
-.playbook-detail__section--evidence {
-  grid-column: 4 / span 9;
-}
-
-.metadata-rail {
-  margin: 0;
-  display: grid;
-  gap: 1rem;
-  padding: 1.25rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 0.5rem;
-  background: var(--surface);
-}
-
-.metadata-rail > div {
-  display: grid;
-  gap: 0.3rem;
 }
 
 .source-register {
@@ -1297,51 +1216,21 @@
   overflow-wrap: anywhere;
 }
 
-.evaluation-evidence > * + * {
-  margin-top: 1.5rem;
-}
-
-.evaluation-questions,
-.evaluation-limitations {
-  margin: 0.5rem 0 0;
-  padding-left: 1.25rem;
-}
-
-.maturity-ladder-block > * + * {
-  margin-top: 1rem;
-}
-
-.maturity-next-steps {
-  margin: 0;
-  padding-left: 1.25rem;
-}
-
-.synthetic-data-method dl,
-.evaluation-metrics dl,
-.implementation-index dl,
-.human-oversight {
+.synthetic-data-method dl {
   margin: 1rem 0 0;
 }
 
-.synthetic-data-method dl > div,
-.evaluation-metrics dl > div,
-.implementation-index dl > div,
-.human-oversight > div {
+.synthetic-data-method dl > div {
   padding-block: 0.6rem;
   border-top: 1px solid var(--line);
 }
 
 /* One shared definition-list treatment for every dt/dd pair this route
-   renders — metadata rail, source dossier, synthetic-data method,
-   evaluation metrics, implementation index, and human oversight — so a
-   dossier built for comparability presents one label/value structure
-   throughout, not a different one per component. */
-.metadata-rail dt,
+   renders — the source dossiers and the synthetic-dataset section — so a
+   page built for comparability presents one label/value structure
+   throughout, not a different one per section. */
 .source-dossier dt,
-.synthetic-data-method dt,
-.evaluation-metrics dt,
-.implementation-index dt,
-.human-oversight dt {
+.synthetic-data-method dt {
   color: var(--muted-ink);
   font-size: 0.72rem;
   font-weight: 750;
@@ -1349,35 +1238,22 @@
   text-transform: uppercase;
 }
 
-.metadata-rail dd,
 .source-dossier dd,
-.synthetic-data-method dd,
-.evaluation-metrics dd,
-.implementation-index dd,
-.human-oversight dd {
+.synthetic-data-method dd {
   margin: 0;
   font-size: 0.925rem;
 }
 
-/* Rows that stack dt above dd in plain block flow (rather than metadata
-   rail's/source dossier's own grid-gap spacing) need the gap set directly
-   on the term. */
-.synthetic-data-method dt,
-.evaluation-metrics dt,
-.implementation-index dt,
-.human-oversight dt {
+/* Rows that stack dt above dd in plain block flow (rather than the source
+   dossier's own grid-gap spacing) need the gap set directly on the term. */
+.synthetic-data-method dt {
   margin-bottom: 0.3rem;
 }
 
-.implementation-index dd ul {
-  margin: 0;
-  padding-left: 1.25rem;
-}
-
-/* Hashes and file paths are marked `data-technical` at the source
-   (`source-register.tsx`, `synthetic-data-method.tsx`); this is the one
-   rule that wrapping requires beyond the existing `[data-technical]`
-   monospace treatment in the base layer. */
+/* Dataset paths are marked `data-technical` at the source
+   (`synthetic-data-section.tsx`); this is the one rule that wrapping
+   requires beyond the existing `[data-technical]` monospace treatment in
+   the base layer. */
 dd[data-technical] {
   overflow-wrap: anywhere;
 }
@@ -1411,11 +1287,6 @@ dd[data-technical] {
   .dossier-row__identity,
   .dossier-row__metadata {
     grid-column: span 6;
-  }
-
-  .dossier-row__link {
-    grid-column: 1 / -1;
-    justify-content: flex-start;
   }
 }
 
@@ -1515,8 +1386,7 @@ dd[data-technical] {
   }
 
   .dossier-row__identity,
-  .dossier-row__metadata,
-  .dossier-row__link {
+  .dossier-row__metadata {
     grid-column: 1;
   }
 
@@ -1531,20 +1401,6 @@ dd[data-technical] {
   .maturity-ladder li,
   .contribution-tracks li {
     grid-template-columns: 2rem minmax(0, 1fr);
-  }
-
-  .playbook-detail__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .playbook-detail__section--rail,
-  .playbook-detail__section--narrative,
-  .playbook-detail__section--evidence {
-    grid-column: 1;
-  }
-
-  .playbook-detail__toc ol {
-    grid-template-columns: 1fr;
   }
 
   .source-dossier dl {
@@ -1572,7 +1428,6 @@ dd[data-technical] {
   .site-footer,
   .status-badge,
   .risk-badge,
-  .metadata-rail,
   .source-dossier,
   .demo-readiness,
   .maturity-ladder li[aria-current="step"] > span {
@@ -1617,16 +1472,6 @@ dd[data-technical] {
 
   .source-dossier {
     break-inside: avoid;
-  }
-
-  .playbook-detail__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .playbook-detail__section--rail,
-  .playbook-detail__section--narrative,
-  .playbook-detail__section--evidence {
-    grid-column: 1;
   }
 }
 
@@ -1691,7 +1536,7 @@ dd[data-technical] {
   background: var(--surface);
 }
 
-.corpus-document h4 {
+.corpus-document h3 {
   margin: 0;
   font-size: 0.9rem;
 }
@@ -1725,92 +1570,11 @@ dd[data-technical] {
   font-size: 0.925rem;
 }
 
-/* Finding navigation. */
+/* What the analysis found: one card per theme, each carrying its own
+   citations and its own limits. There is no selected state and no active
+   finding — every finding is open, because there is nothing to click. */
 
-.finding-list ol {
-  display: grid;
-  gap: 0.5rem;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
-}
-
-.finding-list a {
-  display: grid;
-  gap: 0.25rem;
-  height: 100%;
-  padding: 0.75rem 0.9rem;
-  border: 1px solid var(--line);
-  border-radius: 0.4rem;
-  background: var(--surface);
-  color: inherit;
-  text-decoration: none;
-}
-
-/* Selection is a ring drawn inside the existing border, not a tab down one
-   edge, matching how the maturity ladder marks its current rung. The state is
-   also written out in `.finding-list__disposition`, so nothing here is the only
-   carrier of the meaning. */
-.finding-list a[data-active="true"] {
-  border-color: var(--evidence);
-  outline: 2px solid var(--evidence);
-  outline-offset: -2px;
-  background: var(--accent);
-}
-
-.finding-list__label {
-  font-weight: 650;
-}
-
-.finding-list__count,
-.finding-list__disposition {
-  color: var(--muted-ink);
-  font-size: 0.78rem;
-}
-
-/* Client-side review state. */
-
-.workbench-client__review-state {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 1.25rem;
-  padding: 0.85rem 1rem;
-  border: 1px dashed var(--line-strong);
-  border-radius: 0.5rem;
-}
-
-.workbench-client__review-state p {
-  margin: 0;
-  font-size: 0.925rem;
-}
-
-.workbench-client__reset-confirm {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  align-items: center;
-}
-
-.workbench-client__review-state button {
-  padding: 0.4rem 0.8rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 0.35rem;
-  background: var(--surface);
-  font: inherit;
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-
-.workbench-client__review-state button:disabled {
-  color: var(--muted-ink);
-  cursor: not-allowed;
-}
-
-.workbench-client__thread {
+.workbench-finding {
   margin-top: 2rem;
   padding: 1.25rem 1.5rem;
   border: 1px solid var(--line);
@@ -1818,37 +1582,13 @@ dd[data-technical] {
   background: var(--surface);
 }
 
-.workbench-client__thread[data-active="true"] {
-  border-color: var(--evidence);
-  outline: 2px solid var(--evidence);
-  outline-offset: -2px;
-}
-
-.workbench-client__thread > h3 {
+.workbench-finding > h3 {
   margin: 0;
   font-size: clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem);
 }
 
-/* The evidence thread: six labelled stages in a fixed order. */
-
-.evidence-thread {
-  margin: 1.25rem 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.evidence-thread__stage {
-  padding: 1rem 0 1rem 1.25rem;
-  border-top: 1px solid var(--line);
-  border-left: 2px solid var(--line);
-}
-
-.evidence-thread__stage:first-child {
-  border-top: 0;
-}
-
-.evidence-thread__stage h4 {
-  margin: 0 0 0.5rem;
+.workbench-finding h4 {
+  margin: 1.5rem 0 0.5rem;
   color: var(--muted-ink);
   font-size: 0.72rem;
   font-weight: 750;
@@ -1856,226 +1596,44 @@ dd[data-technical] {
   text-transform: uppercase;
 }
 
-.evidence-thread__stage p,
-.evidence-thread__stage li {
+.workbench-finding__summary {
   max-width: 76ch;
-  font-size: 0.925rem;
-}
-
-.evidence-thread__finding-summary {
-  font-size: 1rem;
   font-weight: 600;
 }
 
-.evidence-thread__citations,
-.evidence-thread__documents {
+/* A citation is one link carrying the response ID and the sentence it
+   matched, so the whole quotation is the target rather than a bare
+   "see SYN-0004" that says nothing about what is being cited. */
+
+.workbench-finding__citations,
+.workbench-finding__limitations {
   display: grid;
-  gap: 0.9rem;
+  gap: 0.6rem;
   margin: 0;
-  padding: 0;
+  padding: 0 0 0 1.25rem;
+}
+
+.workbench-finding__citations {
+  padding-left: 0;
   list-style: none;
 }
 
-/* The same quotation rule the corpus list uses, so a citation and the response
-   it came from read as the same kind of thing. Kept neutral so that the broken
-   state below is the only coloured citation, and never the only signal: the
-   thread also says in words that the citation does not resolve. */
-.evidence-thread__citations blockquote,
-.evidence-thread__documents blockquote {
-  margin: 0 0 0.4rem;
+.workbench-finding__citations a {
+  display: block;
+  max-width: 76ch;
   padding-left: 0.9rem;
   border-left: 2px solid var(--line-strong);
-}
-
-.evidence-thread__citations blockquote p,
-.evidence-thread__documents blockquote p {
-  margin: 0;
-}
-
-.evidence-thread__citations li[data-citation-state="broken"] blockquote {
-  border-left-color: var(--danger);
-}
-
-.evidence-thread__broken {
-  color: var(--danger);
-  font-weight: 600;
-}
-
-.evidence-thread__case {
-  margin: 0.75rem 0 0;
-}
-
-.evidence-thread__case > div {
-  padding-block: 0.5rem;
-  border-top: 1px solid var(--line);
-}
-
-.evidence-thread__case dt {
-  color: var(--muted-ink);
-  font-size: 0.72rem;
-  font-weight: 750;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.evidence-thread__case dd {
-  margin: 0.25rem 0 0;
   font-size: 0.925rem;
 }
 
-/* Review controls. */
-
-.review-controls {
-  margin: 0;
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 0.5rem;
-}
-
-.review-controls legend {
-  padding-inline: 0.35rem;
-  font-size: 0.875rem;
-  font-weight: 650;
-}
-
-.review-controls__options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 1.25rem;
-}
-
-.review-controls__option {
-  display: flex;
-  gap: 0.4rem;
-  align-items: baseline;
-  font-size: 0.9rem;
-}
-
-.review-controls__description,
-.review-controls__caveat {
-  margin: 0.75rem 0 0;
-}
-
-.review-controls__caveat {
-  color: var(--muted-ink);
-  font-size: 0.85rem;
-}
-
-/* Evaluation. */
-
-.evaluation-summary__metrics {
-  display: grid;
-  gap: 0 2rem;
-  margin: 0;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
-}
-
-.evaluation-summary__metrics > div {
-  padding-block: 0.8rem;
-  border-top: 1px solid var(--line);
-}
-
-.evaluation-summary__metrics dt {
-  color: var(--muted-ink);
-  font-size: 0.72rem;
-  font-weight: 750;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.evaluation-summary__metrics dd {
-  margin: 0.35rem 0 0;
-}
-
-.evaluation-summary__metrics dd p {
-  max-width: 50ch;
-  margin: 0.35rem 0 0;
-  color: var(--muted-ink);
-  font-size: 0.875rem;
-}
-
-.metric__value strong {
-  font-size: clamp(1.4rem, 1.2rem + 0.8vw, 2rem);
-}
-
-.metric__working {
-  color: var(--muted-ink);
-  font-size: 0.925rem;
-}
-
-.metric__value[data-metric-state="unavailable"] {
-  font-weight: 650;
-}
-
-.evaluation-summary__cases {
-  margin-top: 2rem;
-  overflow-x: auto;
-}
-
-.evaluation-summary__cases table {
-  min-width: 34rem;
-  border-collapse: collapse;
-  font-size: 0.9rem;
-}
-
-.evaluation-summary__cases caption {
-  max-width: 70ch;
-  margin-bottom: 0.75rem;
-  color: var(--muted-ink);
-  font-size: 0.875rem;
-  text-align: left;
-}
-
-.evaluation-summary__cases th,
-.evaluation-summary__cases td {
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid var(--line);
-  text-align: left;
-  vertical-align: top;
-}
-
-.evaluation-summary__cases thead th {
-  border-bottom: 2px solid var(--line-strong);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.evaluation-summary__limitations {
-  margin-top: 2rem;
-}
-
-.evaluation-summary__limitations li {
+.workbench-finding__limitations li {
   max-width: 76ch;
   font-size: 0.925rem;
-}
-
-.evaluation-summary h4 {
-  margin: 0 0 0.5rem;
-  font-size: 1.05rem;
-}
-
-@media (max-width: 60rem) {
-  .workbench-client__thread {
-    padding-inline: 1rem;
-  }
-
-  .workbench-client__review-state {
-    justify-content: flex-start;
-  }
 }
 
 @media (forced-colors: active) {
   .demo-banner,
-  .corpus-document,
-  .finding-list a,
-  .workbench-client__thread,
-  .review-controls {
+  .corpus-document {
     border-color: CanvasText;
-  }
-
-  .finding-list a[data-active="true"],
-  .workbench-client__thread[data-active="true"] {
-    border-left-color: Highlight;
   }
 }

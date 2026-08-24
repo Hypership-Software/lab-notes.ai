@@ -86,7 +86,8 @@ export const themeVocabulary: Record<CorpusTheme, readonly string[]> = {
   ],
 }
 
-const themeLabels: Record<CorpusTheme, string> = {
+/** Plain-English names for the themes, shared by the findings and the demo. */
+export const themeLabels: Record<CorpusTheme, string> = {
   "access-to-services": "Access to services",
   "workforce-capability": "Workforce capability",
   "data-governance": "Data governance",

@@ -1,18 +1,10 @@
-import type { CorpusDocumentId, FindingId } from "../domain/types"
+import type { CorpusDocumentId } from "../domain/types"
 
 /**
- * Anchor IDs shared by the server-rendered corpus list and the client-rendered
- * evidence threads, so a citation can link to the response it quotes.
- *
- * These live in their own module with no `"use client"` directive: exporting
- * them from the client component would turn them into client references, and
- * the server could no longer call them while rendering the corpus.
+ * The anchor a citation links back to, built in one place so the record list
+ * and the findings that quote it cannot disagree about the ID.
  */
-export type ThreadElementId = (findingId: FindingId) => string
 export type DocumentElementId = (documentId: CorpusDocumentId) => string
-
-export const threadElementId: ThreadElementId = (findingId) =>
-  `thread-${findingId}`
 
 export const documentElementId: DocumentElementId = (documentId) =>
   `document-${documentId}`

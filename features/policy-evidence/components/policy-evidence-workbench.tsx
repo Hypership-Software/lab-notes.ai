@@ -1,46 +1,41 @@
 import Link from "next/link"
 import type { ReactNode } from "react"
 
-import { SourceRegister } from "@/features/playbooks/detail/source-register"
-import { SyntheticDataMethod } from "@/features/playbooks/detail/synthetic-data-method"
+import { ProvenanceLabel } from "@/components/site/provenance-label"
 import type { Playbook } from "@/lib/playbooks/schema"
 
-import { buildEvidenceThreads } from "../domain/build-evidence-threads"
-import { evaluateAnalysis } from "../domain/evaluate-analysis"
-import { runBaseline } from "../domain/run-baseline"
-import { policyEvidenceCorpus, policyEvidenceGold } from "../fixtures"
+import { runAnalysis, themeLabels } from "../domain/run-analysis"
+import type { CorpusStance } from "../domain/types"
+import { policyEvidenceCorpus, policyEvidenceDataset } from "../fixtures"
 
-import { BaselineDemoBanner } from "./baseline-demo-banner"
-import { EvaluationSummary } from "./evaluation-summary"
-import { SyntheticCorpusInspector } from "./synthetic-corpus-inspector"
 import { documentElementId } from "./element-ids"
-import { WorkbenchClient } from "./workbench-client"
+
+const stanceLabels: Record<CorpusStance, string> = {
+  supportive: "Supportive",
+  critical: "Critical",
+  mixed: "Mixed",
+  uncertain: "Uncertain",
+}
 
 /**
- * The workbench, assembled on the server.
+ * The demo, assembled entirely on the server.
  *
- * Everything expensive or trust-bearing happens here: both fixtures are parsed
- * through their schemas at module load, the baseline runs, the evaluation
- * scores it, and the evidence threads are joined. The browser receives the
- * finished threads and nothing that produced them.
+ * The dataset is parsed through its envelope and the corpus contract at module
+ * load; the analysis is recomputed from that committed data on every render.
+ * There is no client boundary anywhere in this feature, so every state on the
+ * page is text and the page reads the same with JavaScript switched off.
  *
- * The page is ordered as the design's hosted flow: orient, read the source,
- * read the synthetic data, see the method, follow the findings, then see the
- * evaluation and how to reuse it.
+ * Order is deliberate: what this is not, then the whole input, then what the
+ * analysis made of it. A reader who cannot see the input has no way to judge a
+ * finding drawn from it, so the records come first and every citation links
+ * back up to the one it quotes.
  */
 export function PolicyEvidenceWorkbench({
   playbook,
 }: {
   playbook: Playbook
 }): ReactNode {
-  const analysis = runBaseline(policyEvidenceCorpus)
-  const evaluation = evaluateAnalysis(analysis, policyEvidenceGold, policyEvidenceCorpus)
-  const threads = buildEvidenceThreads(
-    analysis,
-    policyEvidenceGold,
-    evaluation,
-    policyEvidenceCorpus,
-  )
+  const analysis = runAnalysis(policyEvidenceCorpus)
 
   return (
     <div className="page-shell workbench-page">
@@ -50,110 +45,107 @@ export function PolicyEvidenceWorkbench({
             Back to the {playbook.title} playbook
           </Link>
         </p>
-        <h1>{playbook.title}</h1>
-        <p className="home-intro__lede">{playbook.problem}</p>
+        <h1>{playbook.title}: demo</h1>
       </header>
 
-      <BaselineDemoBanner />
+      <section
+        className="demo-banner reading-width"
+        aria-labelledby="demo-honesty-title"
+      >
+        <ProvenanceLabel kind="synthetic" />
+        <h2 id="demo-honesty-title">What this is, and what it is not</h2>
+        <p>
+          No model is involved. Nothing on this page is evidence that an AI
+          system would analyse a real consultation accurately, fairly, or
+          lawfully, and none of it has been operationally validated.
+        </p>
+        <p>
+          What it is: a transparent keyword analysis over invented responses,
+          recomputed from a committed file every time the page renders. It asks
+          for no account or key, because there is no service behind it to sign
+          in to.
+        </p>
+        {playbook.demo.status === "available" ? (
+          <p>{playbook.demo.howItWorks}</p>
+        ) : null}
+      </section>
 
-      <section className="workbench-section" aria-labelledby="workbench-task-title">
+      <section
+        className="workbench-section"
+        aria-labelledby="workbench-dataset-title"
+      >
         <div className="section-heading section-heading--compact">
-          <h2 id="workbench-task-title">The task</h2>
-          <p>What a policy team would be trying to do, and what it must not do.</p>
+          <h2 id="workbench-dataset-title">The synthetic dataset</h2>
+          <p>Read the whole input before judging any finding drawn from it.</p>
         </div>
-        <div className="reading-width">
+        <p className="reading-width">{policyEvidenceDataset.description}</p>
+        <ol className="corpus-inspector__list">
+          {policyEvidenceCorpus.map((record) => (
+            <li key={record.id}>
+              <article
+                id={documentElementId(record.id)}
+                className="corpus-document"
+                aria-labelledby={`${record.id}-title`}
+              >
+                <h3 id={`${record.id}-title`}>
+                  <span data-technical>{record.id}</span>
+                </h3>
+                <p className="corpus-document__tags">
+                  <span className="corpus-document__disclosure">
+                    {themeLabels[record.theme]}
+                  </span>
+                  <span>{stanceLabels[record.stance]}</span>
+                </p>
+                <blockquote>
+                  <p>{record.text}</p>
+                </blockquote>
+              </article>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section
+        className="workbench-section"
+        aria-labelledby="workbench-findings-title"
+      >
+        <div className="section-heading section-heading--compact">
+          <h2 id="workbench-findings-title">What the analysis found</h2>
           <p>
-            <strong>Supports the decision:</strong> {playbook.supportedDecision}
-          </p>
-          <p>This example does not decide policy, measure public support, or treat how often a theme appears as a measure of how much it matters.</p>
-          <ul>
-            {playbook.limitations.map((limitation) => (
-              <li key={limitation}>{limitation}</li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="workbench-section" aria-labelledby="workbench-source-title">
-        <div className="section-heading section-heading--compact">
-          <h2 id="workbench-source-title">Where the shape came from</h2>
-          <p>
-            The real, public sources this example was modelled on. No text from
-            any of them is reproduced here.
-          </p>
-        </div>
-        <SourceRegister sources={playbook.officialSources} />
-      </section>
-
-      <section className="workbench-section" aria-labelledby="workbench-method-title">
-        <div className="section-heading section-heading--compact">
-          <h2 id="workbench-method-title">How the data was made</h2>
-          <p>What was borrowed from those sources, what was invented, and what was left out.</p>
-        </div>
-        <SyntheticDataMethod syntheticData={playbook.syntheticData} />
-      </section>
-
-      <section className="workbench-section" aria-labelledby="workbench-corpus-title">
-        <div className="section-heading section-heading--compact">
-          <h2 id="workbench-corpus-title">The responses being analysed</h2>
-          <p>Read the whole input before judging any finding over it.</p>
-        </div>
-        <SyntheticCorpusInspector
-          corpus={policyEvidenceCorpus}
-          documentElementId={documentElementId}
-        />
-      </section>
-
-      <section className="workbench-section" aria-labelledby="workbench-baseline-title">
-        <div className="section-heading section-heading--compact">
-          <h2 id="workbench-baseline-title">What the baseline found</h2>
-          <p>
-            {playbook.nonAiBaseline.method} Controlled vocabulary{" "}
-            <span data-technical>{analysis.vocabularyVersion}</span>.
-          </p>
-        </div>
-        <WorkbenchClient
-          threads={threads}
-          syntheticMethod={playbook.syntheticData.method}
-        />
-      </section>
-
-      <section className="workbench-section" aria-labelledby="workbench-evaluation-title">
-        <div className="section-heading section-heading--compact">
-          <h2 id="workbench-evaluation-title">How well it did</h2>
-          <p>
-            Measured against a hand-labelled expectation set covering every
-            response in the dataset.
+            One finding per theme whose words appear, in the order the
+            vocabulary declares them. The order is not a ranking, and the number
+            of matches is not a measure of importance.
           </p>
         </div>
-        <EvaluationSummary evaluation={evaluation} />
-      </section>
+        {analysis.findings.map((finding) => (
+          <section
+            key={finding.id}
+            className="workbench-finding"
+            aria-labelledby={`${finding.id}-title`}
+          >
+            <h3 id={`${finding.id}-title`}>{finding.label}</h3>
+            <p className="workbench-finding__summary">{finding.summary}</p>
 
-      <section className="workbench-section" aria-labelledby="workbench-reuse-title">
-        <div className="section-heading section-heading--compact">
-          <h2 id="workbench-reuse-title">Taking this further</h2>
-          <p>What exists in the repository, and what a real deployment would still need.</p>
-        </div>
-        <div className="reading-width">
-          <p>{playbook.implementation.summary}</p>
-          <p>Reusable parts:</p>
-          <ul>
-            {playbook.implementation.reusableParts.map((part) => (
-              <li key={part}>{part}</li>
-            ))}
-          </ul>
-          <p>Before this pattern could be used with real responses:</p>
-          <ul>
-            {playbook.nextValidationSteps.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ul>
-          <p>
-            <Link href={`/playbooks/${playbook.slug}`}>
-              Read the full assessed playbook, including risk and oversight
-            </Link>
-          </p>
-        </div>
+            <h4>The passages it matched</h4>
+            <ul className="workbench-finding__citations">
+              {finding.evidence.map((citation) => (
+                <li key={`${citation.documentId}-${citation.start}`}>
+                  <a href={`#${documentElementId(citation.documentId)}`}>
+                    <span data-technical>{citation.documentId}</span>{" "}
+                    <q>{citation.quote}</q>
+                  </a>
+                </li>
+              ))}
+            </ul>
+
+            <h4>What this finding cannot show</h4>
+            <ul className="workbench-finding__limitations">
+              {finding.limitations.map((limitation) => (
+                <li key={limitation}>{limitation}</li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </section>
     </div>
   )
