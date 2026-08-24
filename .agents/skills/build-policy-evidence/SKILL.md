@@ -1,9 +1,9 @@
 ---
 name: build-policy-evidence
-description: Use when a builder needs a domain build partner for consultation analysis or policy-evidence work in the Policy Evidence Workbench playbook in this repository.
+description: Use when a builder needs a domain build partner for consultation analysis or policy-evidence work in the Policy Evidence playbook in this repository.
 ---
 
-# Build with the Policy Evidence Workbench playbook
+# Build with the Policy Evidence playbook
 
 1. Read `content/playbooks/policy-evidence/playbook.ts`.
 2. Read `content/playbooks/policy-evidence/policy-evidence.data.json`.
