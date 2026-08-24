@@ -1,0 +1,4 @@
+interface:
+  display_name: "Health Service Demand and Operations Build Partner"
+  short_description: "Explore health operations using aggregate evidence."
+  default_prompt: "Use $build-health-operations to explore this playbook responsibly."
