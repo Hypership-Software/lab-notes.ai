@@ -1,13 +1,23 @@
 import type { Metadata } from "next"
-import { Archivo, Fragment_Mono } from "next/font/google"
+import {
+  Bricolage_Grotesque,
+  Fragment_Mono,
+  Spline_Sans,
+} from "next/font/google"
 
 import { SiteFooter } from "@/components/site/site-footer"
 import { SiteHeader } from "@/components/site/site-header"
 
 import "./globals.css"
 
-const archivo = Archivo({
-  variable: "--font-archivo",
+const display = Bricolage_Grotesque({
+  variable: "--font-bricolage",
+  subsets: ["latin"],
+  display: "swap",
+})
+
+const body = Spline_Sans({
+  variable: "--font-spline",
   subsets: ["latin"],
   display: "swap",
 })
@@ -25,18 +35,18 @@ export const metadata: Metadata = {
     template: "%s | Public-Service AI Playbooks",
   },
   description:
-    "Independent open-source playbooks for understanding, testing, and scrutinising public-service AI proposals.",
+    "An independent open-source accelerator for exploring 17 public-service opportunities with published sources, safe starter data, and domain build partners.",
 }
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${fragmentMono.variable} h-full antialiased`}
+      className={`${display.variable} ${body.variable} ${fragmentMono.variable} h-full antialiased`}
     >
-      <body>
+      <body className="flex min-h-full flex-col bg-paper font-sans text-peat">
         <SiteHeader />
-        <main id="main-content" tabIndex={-1}>
+        <main id="main-content" className="w-full flex-1" tabIndex={-1}>
           {children}
         </main>
         <SiteFooter />
