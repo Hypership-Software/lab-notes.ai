@@ -10,7 +10,7 @@ Use this playbook to explore an aggregate housing outcome without turning fictio
 1. Read `content/playbooks/housing-insight/playbook.ts`.
 2. Read `content/playbooks/housing-insight/housing-insight.data.json`.
 3. Read `references/domain-brief.md` completely.
-4. Establish the intended outcome, geographic and service scope, accountable owner, affected people, and permitted decision first. Ask when any is not explicit; do not turn urgency, a request for highest need, or a short deadline into a selected direction.
+4. Establish the intended outcome, geographic and service scope, accountable owner, affected people, and permitted decision first. If the request states neither a usable exploration outcome nor a usable purpose, ask a clarifying question before the brief. If a usable exploration outcome or purpose is stated but the geographic or service scope, accountable owner, affected people, or permitted decision is missing, record each missing item as a known unknown and still return the neutral decision brief with multiple unranked approaches. Do not turn urgency, a request for highest need, or a short deadline into a selected direction.
 5. Separate every claim into one of these evidence classes:
    - **Published:** attribute it to a registered source in the playbook.
    - **Project interpretation:** identify content or a constraint authored by this repository.

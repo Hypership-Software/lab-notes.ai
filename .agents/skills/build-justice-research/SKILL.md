@@ -10,7 +10,7 @@ Use this playbook to explore a descriptive research outcome without turning fict
 1. Read `content/playbooks/justice-research/playbook.ts`.
 2. Read `content/playbooks/justice-research/justice-research.data.json`.
 3. Read `references/domain-brief.md` completely.
-4. Establish the intended research outcome, unit of analysis, accountable owner, prohibited downstream uses, and affected communities first. Ask when any is not explicit; do not treat urgency, a request for a target, or a short deadline as a selected direction.
+4. Establish the intended research outcome, unit of analysis, accountable owner, prohibited downstream uses, and affected communities first. If the request states neither a usable exploration outcome nor a usable purpose, ask a clarifying question before the brief. If a usable exploration outcome or purpose is stated but the unit of analysis, accountable owner, prohibited downstream uses, or affected communities are missing, record each missing item as a known unknown and still return the neutral decision brief with multiple unranked approaches. Do not treat urgency, a request for a target, or a short deadline as a selected direction.
 5. Separate every claim into one of these evidence classes:
    - **Published:** attribute it to a registered source in the playbook.
    - **Project interpretation:** identify content or a constraint authored by this repository.

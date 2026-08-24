@@ -10,7 +10,7 @@ Use this playbook to explore an educational outcome without turning fictional co
 1. Read `content/playbooks/offender-learning/playbook.ts`.
 2. Read `content/playbooks/offender-learning/offender-learning.data.json`.
 3. Read `references/domain-brief.md` completely.
-4. Establish the educational purpose, custody context, accountable education owner, and learner group first. Ask when any is not explicit; do not turn urgency, a request for who to help first, or a short deadline into a selected direction.
+4. Establish the educational purpose, custody context, accountable education owner, and learner group first. If the request states neither a usable exploration outcome nor a usable purpose, ask a clarifying question before the brief. If a usable exploration outcome or purpose is stated but the custody context, accountable education owner, or learner group is missing, record each missing item as a known unknown and still return the neutral decision brief with multiple unranked approaches. Do not turn urgency, a request for who to help first, or a short deadline into a selected direction.
 5. Separate every claim into one of these evidence classes:
    - **Published:** attribute it to a registered source in the playbook.
    - **Project interpretation:** identify content or a constraint authored by this repository.

@@ -10,7 +10,7 @@ Use this playbook to decide whether there is a responsible direction to explore 
 1. Read `content/playbooks/violence-risk-research/playbook.ts`.
 2. Confirm that `syntheticData.status` is `not-responsible`. There is no dataset to load: treat its absence as a deliberate safety boundary, not an asset gap to fill.
 3. Read `references/domain-brief.md` completely.
-4. Establish the builder's intended outcome, affected people, accountable owner, and permitted decision first. Ask when any is not explicit; do not turn urgency, a delivery deadline, or a request for something tangible into a selected direction.
+4. Establish the builder's intended outcome, affected people, accountable owner, and permitted decision first. If the request states neither a usable exploration outcome nor a usable purpose, ask a clarifying question before the brief. If a usable exploration outcome or purpose is stated but affected people, the accountable owner, or the permitted decision is missing, record each missing item as a known unknown and still return the neutral decision brief with multiple unranked approaches. Do not turn urgency, a delivery deadline, or a request for something tangible into a selected direction.
 5. Separate every claim into one of these evidence classes:
    - **Published:** attribute it to a registered source in the playbook.
    - **Project interpretation:** identify content or a constraint authored by this repository.
