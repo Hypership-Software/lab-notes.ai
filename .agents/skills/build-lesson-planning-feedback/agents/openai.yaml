@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lesson Planning and Feedback Support Build Partner"
+  short_description: "Explore lesson support with teacher judgement."
+  default_prompt: "Use $build-lesson-planning-feedback to explore this playbook responsibly."
