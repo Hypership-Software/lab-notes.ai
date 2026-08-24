@@ -3,6 +3,7 @@ import { join } from "node:path"
 import { describe, expect, it } from "vitest"
 
 import { getBuildPartnerDescriptor } from "@/lib/playbooks/build-partner"
+import { getPlaybookSlugs } from "@/lib/playbooks/registry"
 
 const skillsRoot = join(process.cwd(), ".agents", "skills")
 
@@ -12,6 +13,15 @@ function frontmatterValue(source: string, key: string) {
 }
 
 describe("playbook domain build partners", () => {
+  it("has exactly one build skill for every registered playbook", async () => {
+    const actual = (await readdir(skillsRoot))
+      .filter((name) => name.startsWith("build-"))
+      .sort()
+    const expected = getPlaybookSlugs().map((slug) => `build-${slug}`).sort()
+
+    expect(actual).toEqual(expected)
+  })
+
   it("validates every checked-in playbook skill", async () => {
     const actual = (await readdir(skillsRoot)).filter((name) => name.startsWith("build-"))
 
