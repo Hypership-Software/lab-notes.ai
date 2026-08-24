@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wastewater Monitoring Build Partner"
+  short_description: "Explore wastewater monitoring responsibly"
+  default_prompt: "Use $build-wastewater-monitoring to explore this playbook responsibly."
