@@ -1,4 +1,4 @@
-import { Calculator, FileCheck2, FlaskConical } from "lucide-react"
+import { FileCheck2, FlaskConical } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -11,7 +11,6 @@ import { cn } from "@/lib/utils"
 const provenance = {
   source: { label: "Real published source", icon: FileCheck2 },
   synthetic: { label: "Synthetic working data", icon: FlaskConical },
-  demo: { label: "Demo output", icon: Calculator },
 } as const
 
 export function ProvenanceLabel({

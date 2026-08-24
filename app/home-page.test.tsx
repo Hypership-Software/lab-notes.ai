@@ -34,36 +34,23 @@ describe("HomePage", () => {
         summaries.filter((p) => p.syntheticData.status === "available").length,
       ),
     )
-    expect(value("With a working demo")).toBe(
-      String(summaries.filter((p) => p.demo.status === "available").length),
-    )
   })
 
-  it("shows the A/B/C/D strip and leads to the one working demo", () => {
+  it("contains no retired showcase copy or route", () => {
     render(<HomePage />)
 
-    expect(
-      within(
-        screen.getByRole("list", { name: "How a playbook is built" }),
-      ).getAllByRole("listitem"),
-    ).toHaveLength(4)
-    expect(screen.getByRole("link", { name: /Try the demo/ })).toHaveAttribute(
-      "href",
-      "/playbooks/policy-evidence/demo",
-    )
+    expect(screen.queryByText(/de\u006do/i)).toBeNull()
+    expect(screen.queryByRole("link", { name: /de\u006do/i })).toBeNull()
   })
 
-  it("previews the catalogue without repeating the featured playbook", () => {
+  it("previews the catalogue", () => {
     render(<HomePage />)
 
     const preview = screen.getByRole("region", {
-      name: "The rest of the catalogue",
+      name: "Explore the catalogue",
     })
     const rows = within(preview).getAllByRole("article")
     expect(rows).toHaveLength(4)
-    expect(
-      within(preview).queryByRole("link", { name: "Policy Evidence Workbench" }),
-    ).toBeNull()
     expect(
       within(preview).getByRole("link", { name: `See all ${summaries.length}` }),
     ).toHaveAttribute("href", "/playbooks")
@@ -73,7 +60,7 @@ describe("HomePage", () => {
     render(<HomePage />)
 
     const close = screen.getByRole("region", {
-      name: /A playbook is useful before it has a demo/,
+      name: "Explore or improve the research",
     })
     expect(
       within(close).getByRole("link", { name: "How this works" }),

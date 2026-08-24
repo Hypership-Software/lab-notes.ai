@@ -9,7 +9,7 @@ import { getPlaybookSummaries } from "@/lib/playbooks/registry"
 export const metadata: Metadata = {
   title: "Playbooks",
   description:
-    "Browse the public-service AI examples from Northern Ireland's draft AI strategy by sector, and see which ones have a synthetic dataset or a working demo.",
+    "Browse the public-service AI examples from Northern Ireland's draft AI strategy by sector and inspect their published sources and starter-data state.",
 }
 
 type PlaybooksPageProps = {
@@ -28,8 +28,8 @@ export default async function PlaybooksPage({ searchParams }: PlaybooksPageProps
         <p>
           One playbook per example project in the draft strategy. Each says what
           the draft proposed, which real sources were investigated, whether a
-          synthetic dataset exists to try the idea with, and whether a demo runs
-          yet. None of them is a deployed service.
+          synthetic dataset exists to explore the idea with, and what must be
+          considered before building. None of them is a deployed service.
         </p>
       </header>
       <PlaybookCatalogue

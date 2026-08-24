@@ -5,18 +5,18 @@ import { formatUtcDate } from "@/lib/format-date"
 import type { PlaybookSummary } from "@/lib/playbooks/schema"
 
 /**
- * `headingLevel` exists because the same row appears under a page `h1` in the
- * catalogue and under a section `h2` on the home page; the title has to sit
- * one level below whichever heading introduces the list.
+ * `headingLevel` exists because the same row appears under a group `h2` in the
+ * catalogue and under a section `h2` on the home page; the title has to sit one
+ * level below whichever heading introduces the list.
  */
 export function PlaybookDossierRow({
   playbook,
-  headingLevel = 2,
+  headingLevel = 3,
 }: {
   playbook: PlaybookSummary
-  headingLevel?: 2 | 3
+  headingLevel?: 2 | 3 | 4
 }) {
-  const Title = headingLevel === 3 ? "h3" : "h2"
+  const Title = headingLevel === 2 ? "h2" : headingLevel === 3 ? "h3" : "h4"
 
   return (
     <article className="dossier-row">
@@ -25,37 +25,31 @@ export function PlaybookDossierRow({
         <Title>
           <Link href={`/playbooks/${playbook.slug}`}>{playbook.title}</Link>
         </Title>
-        <p>{playbook.summary}</p>
+        <p className="dossier-row__summary">{playbook.summary}</p>
       </div>
 
-      <dl className="dossier-row__metadata">
-        <div>
-          <dt>Synthetic dataset</dt>
-          <dd>
-            <AvailabilityBadge
-              kind="dataset"
-              available={playbook.syntheticData.status === "available"}
-            />
-          </dd>
-        </div>
-        <div>
-          <dt>Demo</dt>
-          <dd>
-            <AvailabilityBadge
-              kind="demo"
-              available={playbook.demo.status === "available"}
-            />
-          </dd>
-        </div>
-        <div>
-          <dt>Last reviewed</dt>
-          <dd>
-            <time dateTime={playbook.lastReviewed}>
-              {formatUtcDate(playbook.lastReviewed)}
-            </time>
-          </dd>
-        </div>
-      </dl>
+      <div className="dossier-row__state">
+        <dl className="dossier-row__metadata">
+          <div>
+            <dt>Starter dataset</dt>
+            <dd>
+              <AvailabilityBadge
+                available={playbook.syntheticData.status === "available"}
+              />
+            </dd>
+          </div>
+          <div>
+            <dt>Published sources</dt>
+            <dd>{playbook.dataSourceCount} investigated</dd>
+          </div>
+        </dl>
+        <p className="dossier-row__reviewed">
+          Last reviewed{" "}
+          <time dateTime={playbook.lastReviewed}>
+            {formatUtcDate(playbook.lastReviewed)}
+          </time>
+        </p>
+      </div>
     </article>
   )
 }

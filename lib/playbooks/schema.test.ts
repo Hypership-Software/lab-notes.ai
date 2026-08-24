@@ -80,6 +80,9 @@ describe("playbookSchema", () => {
 
   it("rejects an available dataset purpose longer than 240 characters", () => {
     const playbook = validPlaybook()
+    if (playbook.syntheticData.status !== "available") {
+      throw new Error("The valid fixture must contain an available dataset")
+    }
     playbook.syntheticData = {
       ...playbook.syntheticData,
       purpose: "a".repeat(241),
@@ -89,6 +92,9 @@ describe("playbookSchema", () => {
 
   it("rejects an available dataset preparation longer than 240 characters", () => {
     const playbook = validPlaybook()
+    if (playbook.syntheticData.status !== "available") {
+      throw new Error("The valid fixture must contain an available dataset")
+    }
     playbook.syntheticData = {
       ...playbook.syntheticData,
       preparation: "a".repeat(241),

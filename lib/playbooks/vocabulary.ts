@@ -1,4 +1,4 @@
-import type { DataAccess, PlaybookDemo, SyntheticData } from "./schema"
+import type { DataAccess, SyntheticData } from "./schema"
 
 export const dataAccessLabels: Record<DataAccess, string> = {
   open: "Open data",
@@ -9,9 +9,4 @@ export const dataAccessLabels: Record<DataAccess, string> = {
 export const syntheticDataBadgeLabels: Record<SyntheticData["status"], string> = {
   available: "Synthetic dataset available",
   "not-responsible": "No synthetic dataset",
-}
-
-export const demoBadgeLabels: Record<PlaybookDemo["status"], string> = {
-  available: "Demo available",
-  "not-yet": "No demo yet",
 }

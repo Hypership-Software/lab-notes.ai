@@ -31,20 +31,14 @@ describe("site shell", () => {
     )
   })
 
-  it("states dataset and demo availability in text rather than colour alone", () => {
-    render(
-      <>
-        <AvailabilityBadge kind="dataset" available />
-        <AvailabilityBadge kind="demo" available={false} />
-      </>,
-    )
+  it("states dataset availability in text rather than colour alone", () => {
+    render(<AvailabilityBadge available />)
 
     // Both answers are words. The bullet is decorative, so stripping every
     // symbol and colour must leave the state still readable.
     expect(
       screen.getByText("Synthetic dataset available"),
     ).toBeVisible()
-    expect(screen.getByText("No demo yet")).toBeVisible()
   })
 
   it("opens explicitly external links safely", () => {

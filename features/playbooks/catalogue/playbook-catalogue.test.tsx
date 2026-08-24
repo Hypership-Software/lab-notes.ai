@@ -2,6 +2,7 @@ import { render, screen, within } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
 import { getPlaybookSummaries } from "@/lib/playbooks/registry"
+import { getServiceArea, serviceAreaValues } from "@/lib/playbooks/service-area"
 
 import type { CatalogueQuery } from "./catalogue-query"
 import { getCatalogueFilterOptions } from "./filter-options"
@@ -30,8 +31,8 @@ function renderCatalogue(
   )
 }
 
-// The catalogue's honesty rests on two claims per row, so the fixtures are
-// picked for the answers they give rather than for their subject.
+// The fixtures cover both literal starter-data answers rather than a particular
+// subject area.
 const withDataset = playbooks.find(
   (playbook) => playbook.syntheticData.status === "available",
 )
@@ -39,7 +40,7 @@ const withoutDataset = playbooks.find(
   (playbook) => playbook.syntheticData.status === "not-responsible",
 )
 if (!withDataset || !withoutDataset) {
-  throw new Error("The inventory must keep a playbook of each dataset answer")
+  throw new Error("The inventory must keep both starter-data answers")
 }
 
 describe("PlaybookCatalogue", () => {
@@ -58,7 +59,56 @@ describe("PlaybookCatalogue", () => {
     ).toHaveAttribute("href", `/playbooks/${playbooks[0].slug}`)
   })
 
-  it("states both availability answers in words on every row", () => {
+  it("groups an unfiltered catalogue by service area", () => {
+    renderCatalogue()
+
+    for (const area of serviceAreaValues) {
+      const group = screen.getByRole("region", { name: area })
+      const expected = playbooks.filter(
+        (playbook) => getServiceArea(playbook.sector) === area,
+      )
+
+      expect(within(group).getAllByRole("article")).toHaveLength(
+        expected.length,
+      )
+      for (const playbook of expected) {
+        expect(
+          within(group).getByRole("link", { name: playbook.title }),
+        ).toBeVisible()
+      }
+    }
+  })
+
+  it("describes and counts every group it shows", () => {
+    renderCatalogue()
+
+    for (const area of serviceAreaValues) {
+      const group = screen.getByRole("region", { name: area })
+      const count = playbooks.filter(
+        (playbook) => getServiceArea(playbook.sector) === area,
+      ).length
+
+      expect(
+        within(group).getByText(
+          `${count} ${count === 1 ? "playbook" : "playbooks"}`,
+        ),
+      ).toBeVisible()
+    }
+  })
+
+  it("drops the grouping for a search, so results are one ranked list", () => {
+    renderCatalogue({
+      playbooks: [withDataset],
+      query: { ...emptyQuery, query: "policy" },
+    })
+
+    expect(screen.getAllByRole("article")).toHaveLength(1)
+    for (const area of serviceAreaValues) {
+      expect(screen.queryByRole("region", { name: area })).toBeNull()
+    }
+  })
+
+  it("states starter-data availability in words on every row", () => {
     renderCatalogue({ playbooks: [withDataset, withoutDataset] })
 
     const [available, withheld] = screen.getAllByRole("article")
@@ -66,10 +116,22 @@ describe("PlaybookCatalogue", () => {
       within(available).getByText("Synthetic dataset available"),
     ).toBeVisible()
     expect(within(withheld).getByText("No synthetic dataset")).toBeVisible()
+  })
 
-    // Only policy-evidence has a demo, so at least one of these two rows
-    // must say so plainly rather than leaving the answer blank.
-    expect(screen.getAllByText("No demo yet").length).toBeGreaterThan(0)
+  it("counts the sources each playbook investigated", () => {
+    renderCatalogue({ playbooks: [withDataset] })
+
+    expect(
+      screen.getByText(`${withDataset.dataSourceCount} investigated`),
+    ).toBeVisible()
+    expect(withDataset.dataSourceCount).toBeGreaterThan(0)
+  })
+
+  it("contains no retired showcase copy or route", () => {
+    renderCatalogue()
+
+    expect(screen.queryByText(/de\u006do/i)).toBeNull()
+    expect(screen.queryByRole("link", { name: /de\u006do/i })).toBeNull()
   })
 
   it("offers one clear recovery action when no result matches", () => {

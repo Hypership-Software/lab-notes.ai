@@ -23,15 +23,9 @@ function matchesSearch(playbook: PlaybookSummary, query: string) {
   return haystack.includes(normalise(query))
 }
 
-// A playbook someone can actually try comes first; everything else is
-// alphabetical, so the order never implies a quality ranking.
+// Alphabetical order avoids implying a quality or readiness ranking.
 function comparePlaybooks(left: PlaybookSummary, right: PlaybookSummary) {
-  const demoRank = (playbook: PlaybookSummary) =>
-    playbook.demo.status === "available" ? 0 : 1
-
-  return (
-    demoRank(left) - demoRank(right) || collator.compare(left.title, right.title)
-  )
+  return collator.compare(left.title, right.title)
 }
 
 export function filterPlaybooks(

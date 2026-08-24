@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest"
 import { accessValues } from "./schema"
 import {
   dataAccessLabels,
-  demoBadgeLabels,
   syntheticDataBadgeLabels,
 } from "./vocabulary"
 
@@ -17,9 +16,5 @@ describe("playbook vocabulary", () => {
       "available",
       "not-responsible",
     ])
-  })
-
-  it("labels every demo status exactly once", () => {
-    expect(Object.keys(demoBadgeLabels)).toEqual(["available", "not-yet"])
   })
 })

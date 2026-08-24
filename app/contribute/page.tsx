@@ -4,7 +4,7 @@ import Link from "next/link"
 export const metadata: Metadata = {
   title: "Contribute",
   description:
-    "Four ways to move a playbook forward: improve its plain English, add or verify a data source, contribute a synthetic dataset, or build a demo.",
+    "Three ways to improve a playbook: clarify the opportunity, verify published research, or improve synthetic starter data.",
 }
 
 const tracks = [
@@ -13,7 +13,7 @@ const tracks = [
     description:
       "Sharpen the summary, the strategy example, or the caveats. If a sentence reads like documentation, or claims more than the evidence supports, rewrite it.",
     requirement:
-      "No dataset and no demo required. This is the most useful contribution most playbooks need.",
+      "No starter dataset is required. Clear, evidence-bounded writing is useful on its own.",
   },
   {
     title: "Add or verify a data source",
@@ -29,23 +29,15 @@ const tracks = [
     requirement:
       "It must use the shared envelope with the Synthetic working data disclosure, and pass the dataset tests in content/playbooks/content.test.ts.",
   },
-  {
-    title: "Build a demo",
-    description:
-      "Take a playbook that already has a dataset and show the idea running: server-rendered, computed from the committed file, with the method readable in the source.",
-    requirement:
-      "No model call, no API key, no client-side state. If it cannot be read without JavaScript, it is not finished.",
-  },
 ]
 
 export default function ContributePage() {
   return (
     <div className="page-shell contribute-page">
       <header className="page-intro reading-width">
-        <h1>Four ways to move a playbook forward</h1>
+        <h1>Three ways to move a playbook forward</h1>
         <p>
-          A playbook is a complete, useful contribution long before it has a
-          demo. Pick the track that matches what you can bring, and run{" "}
+          Pick the track that matches what you can bring, and run{" "}
           <code>npm run check</code> before opening a pull request.
         </p>
       </header>

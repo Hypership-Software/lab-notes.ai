@@ -11,25 +11,17 @@ if (!playbook) {
   throw new Error("The policy-evidence playbook must stay registered")
 }
 
-// The worked example answers C and D with `available`. A playbook that
-// answers both honestly the other way must still render the same five
-// sections, so the contract is asserted against that shape too.
 const withheld = getPlaybook("diagnostic-imaging-support")
 if (!withheld) {
   throw new Error("The diagnostic-imaging-support playbook must stay registered")
 }
 
-// [fragment ID, heading] transcribed from the A/B/C/D contract in
-// DESIGN.md §7 ("Playbook detail sequence" and "Detail-page rendering
-// contract"), so this pins the published contract rather than the
-// component's self-consistency. Five headings is the whole sequence:
-// there is no table of contents and no sixth section.
+// [fragment ID, heading] transcribed from the Task 4 intermediate contract.
 const expectedSections = [
-  ["strategy-example", "What the strategy draft proposed"],
-  ["data-sources", "Data sources investigated"],
-  ["synthetic-dataset", "Synthetic dataset"],
-  ["demo", "Demo"],
-  ["caveats", "Caveats"],
+  ["opportunity", "Opportunity"],
+  ["research", "Research already done"],
+  ["starter-dataset", "Starter dataset"],
+  ["before-you-build", "Before you build"],
 ] as const
 
 function isBefore(earlier: Element, later: Element) {
@@ -39,7 +31,7 @@ function isBefore(earlier: Element, later: Element) {
 }
 
 describe("PlaybookDetail", () => {
-  it("renders one title above exactly the five contract sections, in order", () => {
+  it("renders one title above exactly the four intermediate sections, in order", () => {
     render(<PlaybookDetail playbook={playbook} />)
 
     const [title] = screen.getAllByRole("heading", { level: 1 })
@@ -82,9 +74,8 @@ describe("PlaybookDetail", () => {
     }
   })
 
-  it("keeps the five sections for a playbook with no dataset and no demo", () => {
+  it("keeps the four sections for a playbook without a responsible dataset", () => {
     expect(withheld.syntheticData.status).toBe("not-responsible")
-    expect(withheld.demo.status).toBe("not-yet")
     render(<PlaybookDetail playbook={withheld} />)
 
     expect(
@@ -92,18 +83,22 @@ describe("PlaybookDetail", () => {
         .getAllByRole("heading", { level: 2 })
         .map(({ textContent }) => textContent),
     ).toEqual(expectedSections.map(([, heading]) => heading))
-    expect(
-      within(screen.getByRole("region", { name: "Demo" })).queryByRole("link"),
-    ).toBeNull()
+  })
+
+  it("contains no retired showcase copy or route", () => {
+    render(<PlaybookDetail playbook={playbook} />)
+
+    expect(screen.queryByText(/de\u006do/i)).toBeNull()
+    expect(screen.queryByRole("link", { name: /de\u006do/i })).toBeNull()
   })
 
   it("lists every caveat in the caveats section", () => {
     render(<PlaybookDetail playbook={playbook} />)
 
-    const caveats = screen.getByRole("region", { name: "Caveats" })
+    const caveats = screen.getByRole("region", { name: "Before you build" })
     const items = within(caveats).getAllByRole("listitem")
-    expect(items.map(({ textContent }) => textContent)).toEqual([
-      ...playbook.caveats,
-    ])
+    expect(items.map(({ textContent }) => textContent)).toEqual(
+      playbook.caveats.map(({ title, detail }) => `${title}${detail}`),
+    )
   })
 })

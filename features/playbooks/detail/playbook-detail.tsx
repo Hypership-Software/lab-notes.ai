@@ -1,22 +1,51 @@
+import Link from "next/link"
 import type { ReactNode } from "react"
 
+import { AvailabilityBadge } from "@/components/site/availability-badge"
+import { ExternalLink } from "@/components/site/external-link"
+import { ProvenanceLabel } from "@/components/site/provenance-label"
+import { assertNever } from "@/lib/assert-never"
 import { formatUtcDate } from "@/lib/format-date"
 import type { Playbook } from "@/lib/playbooks/schema"
+import { getServiceArea } from "@/lib/playbooks/service-area"
 
-import { DataSourcesSection } from "./data-sources-section"
-import { DemoSection } from "./demo-section"
-import { StrategyExampleSection } from "./strategy-example-section"
-import { SyntheticDataSection } from "./synthetic-data-section"
+function StarterDataset({ playbook }: { playbook: Playbook }): ReactNode {
+  switch (playbook.syntheticData.status) {
+    case "available":
+      return (
+        <>
+          <AvailabilityBadge available />
+          <ProvenanceLabel kind="synthetic" />
+          <p>{playbook.syntheticData.purpose}</p>
+          <p>{playbook.syntheticData.preparation}</p>
+          <p>
+            <Link href={`/playbooks/${playbook.slug}/dataset`}>
+              Inspect the starter dataset
+            </Link>
+          </p>
+          <ul>
+            {playbook.syntheticData.limitations.map((limitation) => (
+              <li key={limitation}>{limitation}</li>
+            ))}
+          </ul>
+        </>
+      )
+    case "not-responsible":
+      return (
+        <>
+          <AvailabilityBadge available={false} />
+          <p>{playbook.syntheticData.reason}</p>
+          <p>{playbook.syntheticData.whatContributorsNeed}</p>
+        </>
+      )
+    default:
+      return assertNever(playbook.syntheticData)
+  }
+}
 
 /**
- * A playbook dossier: one title, then the A/B/C/D chain and its caveats as
- * exactly five sections in exactly this order (DESIGN.md §7). Document
- * order is the reading order at every width — there is no table of
- * contents, no sixth section, and no breakpoint that reorders the page.
- *
- * Each section's `<h2>` carries the stable fragment ID and names its own
- * section, so `#synthetic-dataset` deep-links to the heading rather than to
- * an unlabelled container.
+ * The smallest v3 detail shell. Later visual work can reshape it, but this
+ * intermediate page exposes every surviving part of the typed contract.
  */
 export function PlaybookDetail({
   playbook,
@@ -25,8 +54,14 @@ export function PlaybookDetail({
 }): ReactNode {
   return (
     <article className="playbook-detail">
-      <header className="page-intro playbook-detail__header">
-        <p className="playbook-detail__sector">{playbook.sector}</p>
+      <header className="playbook-detail__header">
+        <p className="playbook-detail__eyebrow">
+          <Link href={`/playbooks?sector=${encodeURIComponent(playbook.sector)}`}>
+            {playbook.sector}
+          </Link>
+          <span aria-hidden="true">·</span>
+          <span>{getServiceArea(playbook.sector)}</span>
+        </p>
         <h1>{playbook.title}</h1>
         <p className="playbook-detail__summary">{playbook.summary}</p>
         <p className="playbook-detail__reviewed">
@@ -37,28 +72,60 @@ export function PlaybookDetail({
         </p>
       </header>
 
-      <StrategyExampleSection
-        strategyExample={playbook.strategyExample}
-        headingId="strategy-example"
-      />
-      <DataSourcesSection
-        dataSources={playbook.dataSources}
-        headingId="data-sources"
-      />
-      <SyntheticDataSection
-        syntheticData={playbook.syntheticData}
-        headingId="synthetic-dataset"
-      />
-      <DemoSection demo={playbook.demo} headingId="demo" />
+      <div className="playbook-detail__sections">
+        <section className="playbook-detail__section" aria-labelledby="opportunity">
+          <h2 id="opportunity">Opportunity</h2>
+          <p className="reading-width">{playbook.strategyExample.proposal}</p>
+          <p>
+            <ExternalLink href={playbook.strategyExample.url}>
+              Read {playbook.strategyExample.draftReference}
+            </ExternalLink>
+          </p>
+        </section>
 
-      <section className="playbook-detail__section" aria-labelledby="caveats">
-        <h2 id="caveats">Caveats</h2>
-        <ul className="reading-width">
-          {playbook.caveats.map((caveat) => (
-            <li key={caveat}>{caveat}</li>
-          ))}
-        </ul>
-      </section>
+        <section className="playbook-detail__section" aria-labelledby="research">
+          <h2 id="research">Research already done</h2>
+          <ProvenanceLabel kind="source" />
+          <ol className="source-register">
+            {playbook.dataSources.map((source) => (
+              <li key={source.id}>
+                <article className="source-dossier">
+                  <h3>{source.title}</h3>
+                  <p>{source.publisher}</p>
+                  <p>{source.covers}</p>
+                  <p>{source.relevance}</p>
+                  <ExternalLink href={source.url}>Open the source</ExternalLink>
+                </article>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section
+          className="playbook-detail__section"
+          aria-labelledby="starter-dataset"
+        >
+          <h2 id="starter-dataset">Starter dataset</h2>
+          <div className="synthetic-data-method">
+            <StarterDataset playbook={playbook} />
+          </div>
+        </section>
+
+        <section
+          className="playbook-detail__section"
+          aria-labelledby="before-you-build"
+        >
+          <h2 id="before-you-build">Before you build</h2>
+          <ul className="reading-width">
+            {playbook.caveats.map((caveat) => (
+              <li key={caveat.title}>
+                <strong>{caveat.title}</strong>
+                <p>{caveat.detail}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </article>
   )
 }

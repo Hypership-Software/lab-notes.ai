@@ -105,8 +105,8 @@ describe("playbook inventory", () => {
 /**
  * The committed datasets, checked from the paths the playbooks declare. Reading
  * each file here is also the check that a declared `dataPath` still points at
- * something: the detail route prints that path and the demo reads the file, so
- * a renamed dataset is a broken page rather than a typecheck error.
+ * something: the detail and dataset routes both use that path, so a renamed
+ * dataset is a broken page rather than a typecheck error.
  */
 describe("synthetic datasets", () => {
   const withDataset = getAllPlaybooks().flatMap((playbook) =>

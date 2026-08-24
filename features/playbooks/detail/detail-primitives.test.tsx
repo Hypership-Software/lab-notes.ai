@@ -4,14 +4,13 @@ import { describe, expect, it } from "vitest"
 import type { Playbook } from "@/lib/playbooks/schema"
 
 import { DataSourcesSection } from "./data-sources-section"
-import { DemoSection } from "./demo-section"
 import { StrategyExampleSection } from "./strategy-example-section"
 import { SyntheticDataSection } from "./synthetic-data-section"
 
 // Hand-built fixtures rather than a registered playbook: each section owns
 // one slice of the contract, and the states a section must render honestly
-// (`not-responsible`, `not-yet`) are the ones the worked example does not
-// have. Every fixture is typed against the schema's own output type, so a
+// (`not-responsible`) are the ones the worked example does not have. Every
+// fixture is typed against the schema's own output type, so a
 // contract change breaks these files at typecheck.
 
 const strategyExample = {
@@ -46,7 +45,9 @@ const dataSources = [
 const availableDataset = {
   status: "available",
   dataPath: "content/playbooks/policy-evidence/policy-evidence.data.json",
-  method:
+  purpose:
+    "A small corpus for exploring how policy consultation themes could be organised.",
+  preparation:
     "Twenty synthetic applications authored by AI, shaped by the categories a published statistics bulletin reports.",
   limitations: [
     "The dataset is far smaller and tidier than a real case management system.",
@@ -61,18 +62,6 @@ const withheldDataset = {
   whatContributorsNeed:
     "A data-sharing agreement with the holding department and an approved research protocol.",
 } satisfies Playbook["syntheticData"]
-
-const availableDemo = {
-  status: "available",
-  route: "/playbooks/policy-evidence/demo",
-  howItWorks:
-    "A transparent keyword analysis over the committed dataset — no model, no key — recomputed on every render.",
-} satisfies Playbook["demo"]
-
-const pendingDemo = {
-  status: "not-yet",
-  note: "No demo exists yet; the dataset is committed and a contributor could build one.",
-} satisfies Playbook["demo"]
 
 // Reads the value rendered beside a definition-list term.
 function definitionValue(container: HTMLElement, term: string) {
@@ -149,29 +138,75 @@ describe("DataSourcesSection", () => {
 })
 
 describe("SyntheticDataSection", () => {
-  it("labels an available dataset, states its method and limits, and names its file", () => {
+  it("labels an available dataset and states its purpose, preparation, and limits", () => {
     render(
       <SyntheticDataSection
         syntheticData={availableDataset}
+        slug="policy-evidence"
         headingId="synthetic-dataset"
       />,
     )
 
     const section = screen.getByRole("region", { name: "Synthetic dataset" })
     expect(within(section).getByText("Synthetic working data")).toBeVisible()
-    expect(within(section).getByText(availableDataset.method)).toBeVisible()
+    expect(within(section).getByText(availableDataset.purpose)).toBeVisible()
+    expect(within(section).getByText(availableDataset.preparation)).toBeVisible()
     for (const limitation of availableDataset.limitations) {
       expect(within(section).getByText(limitation)).toBeVisible()
     }
-    expect(definitionValue(section, "Dataset file")).toHaveTextContent(
-      availableDataset.dataPath,
+  })
+
+  it("sends a reader to the records, the file, and the raw download", () => {
+    render(
+      <SyntheticDataSection
+        syntheticData={availableDataset}
+        slug="policy-evidence"
+        headingId="synthetic-dataset"
+      />,
+    )
+
+    const section = screen.getByRole("region", { name: "Synthetic dataset" })
+
+    // The path used to be inert text. It is now three real destinations, and
+    // the on-site one names the number of records it will show.
+    expect(
+      within(section).getByRole("link", { name: /^Read all 20 records/ }),
+    ).toHaveAttribute("href", "/playbooks/policy-evidence/dataset")
+    expect(
+      within(section).getByRole("link", {
+        name: new RegExp(availableDataset.dataPath.replace(/[.]/g, "\\.")),
+      }),
+    ).toHaveAttribute(
+      "href",
+      `https://github.com/Hypership-Software/ats-us-nai/blob/main/${availableDataset.dataPath}`,
+    )
+    expect(
+      within(section).getByRole("link", { name: /^Download the raw JSON/ }),
+    ).toHaveAttribute(
+      "href",
+      `https://github.com/Hypership-Software/ats-us-nai/raw/main/${availableDataset.dataPath}`,
     )
   })
 
-  it("explains a withheld dataset and names no file", () => {
+  it("still offers the records link when no dataset is registered for the slug", () => {
+    render(
+      <SyntheticDataSection
+        syntheticData={availableDataset}
+        slug="not-a-playbook"
+        headingId="synthetic-dataset"
+      />,
+    )
+
+    expect(
+      screen.getByRole("link", { name: /^Read all the records/ }),
+    ).toHaveAttribute("href", "/playbooks/not-a-playbook/dataset")
+  })
+
+  it("explains a withheld dataset and offers nowhere to get one", () => {
     render(
       <SyntheticDataSection
         syntheticData={withheldDataset}
+        slug="violence-risk-research"
         headingId="synthetic-dataset"
       />,
     )
@@ -181,28 +216,7 @@ describe("SyntheticDataSection", () => {
     expect(
       definitionValue(section, "What a contributor would need instead"),
     ).toHaveTextContent(withheldDataset.whatContributorsNeed)
-    expect(within(section).queryByText("Dataset file")).toBeNull()
-    expect(within(section).queryByText("Synthetic working data")).toBeNull()
-  })
-})
-
-describe("DemoSection", () => {
-  it("explains an available demo and links to its route", () => {
-    render(<DemoSection demo={availableDemo} headingId="demo" />)
-
-    const section = screen.getByRole("region", { name: "Demo" })
-    expect(within(section).getByText(availableDemo.howItWorks)).toBeVisible()
-    expect(within(section).getByRole("link")).toHaveAttribute(
-      "href",
-      availableDemo.route,
-    )
-  })
-
-  it("states the honest note when no demo exists, and offers no link", () => {
-    render(<DemoSection demo={pendingDemo} headingId="demo" />)
-
-    const section = screen.getByRole("region", { name: "Demo" })
-    expect(within(section).getByText(pendingDemo.note)).toBeVisible()
     expect(within(section).queryByRole("link")).toBeNull()
+    expect(within(section).queryByText("Synthetic working data")).toBeNull()
   })
 })

@@ -60,6 +60,22 @@
   --danger: #b42318;
   --focus: #006b6b;
 
+  /* Figure palette (DESIGN.md §13). Every step below was computed from the
+     tokens above in OKLCH and checked, not chosen by eye — do not hand-edit
+     one. The ramp is the evidence hue at one hue and monotone lightness, so a
+     magnitude reads as a magnitude in greyscale and under any colour-vision
+     deficiency. The stance scale is a diverging one: two opposite hues with a
+     neutral, light middle, and every segment is labelled in words as well. */
+  --ramp-1: #7fb7b6;
+  --ramp-2: #559a99;
+  --ramp-3: #287f7e;
+  --ramp-4: #006b6b;
+  --figure-grid: #e6eae8;
+  --stance-critical: #b42318;
+  --stance-mixed: #e6715b;
+  --stance-uncertain: #d6dadd;
+  --stance-supportive: #006b6b;
+
   --background: var(--canvas);
   --foreground: var(--ink);
   --card: var(--surface);
@@ -154,6 +170,13 @@
   time,
   [data-technical] {
     font-family: var(--font-fragment-mono), "Courier New", monospace;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* A figure meant to be compared down a column of other figures. It keeps the
+     body face — only the digit widths are equalised, so the value lines up
+     with the one above it without reading as code. */
+  [data-numeric] {
     font-variant-numeric: tabular-nums;
   }
 
@@ -374,7 +397,6 @@
   color: var(--warning);
 }
 
-.provenance-label[data-provenance="demo"],
 .provenance-label[data-provenance="source"] {
   color: var(--evidence-hover);
 }
@@ -546,50 +568,16 @@
   margin-bottom: 2rem;
 }
 
-.evidence-chain,
 .exemplar-section,
 .home-close {
   margin-top: clamp(5rem, 10vw, 9rem);
 }
 
-.evidence-chain ol {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  list-style: none;
-  border-top: 1px solid var(--line-strong);
-  border-bottom: 1px solid var(--line-strong);
-}
-
-.evidence-chain li {
-  min-height: 16rem;
-  padding: 1.25rem;
-  position: relative;
-}
-
-.evidence-chain li + li {
-  border-left: 1px solid var(--line);
-}
-
-.evidence-chain__number,
 .contribution-tracks__number {
   color: var(--evidence-hover);
   font-family: var(--font-fragment-mono), "Courier New", monospace;
   font-variant-numeric: tabular-nums;
   font-weight: 700;
-}
-
-.evidence-chain h3 {
-  margin: 3rem 0 0.75rem;
-  font-size: 1.1rem;
-  line-height: 1.25;
-}
-
-.evidence-chain p {
-  margin: 0;
-  color: var(--muted-ink);
-  font-size: 0.925rem;
 }
 
 .exemplar-dossier {
@@ -856,28 +844,73 @@
   font-size: 0.9rem;
 }
 
+/* Areas, then rows. The heading band carries the count and one sentence of
+   scope, so a reader can skip a whole area without opening anything in it. */
+
+.catalogue-groups {
+  margin-top: 2rem;
+}
+
+.catalogue-group + .catalogue-group {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.catalogue-group__heading {
+  display: grid;
+  align-items: baseline;
+  gap: 0.25rem 1.5rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid var(--line-strong);
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+}
+
+.catalogue-group__heading h2 {
+  margin: 0;
+  font-size: clamp(1.35rem, 1.15rem + 0.9vw, 2rem);
+}
+
+.catalogue-group__count {
+  margin: 0;
+  color: var(--muted-ink);
+  font-size: 0.78rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.catalogue-group__description {
+  margin: 0.15rem 0 0;
+  max-width: 62ch;
+  color: var(--muted-ink);
+  font-size: 0.925rem;
+  grid-column: 1 / -1;
+}
+
 .dossier-list {
-  border-top: 1px solid var(--line-strong);
+  border-top: 1px solid var(--line);
 }
 
 .dossier-row {
   padding: 1.5rem 1rem;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 1.25rem;
-  border-bottom: 1px solid var(--line-strong);
+  gap: 1.25rem 2rem;
+  border-bottom: 1px solid var(--line);
+  border-left: 3px solid transparent;
   background: transparent;
-  transition-property: background-color;
+  transition-property: background-color, border-left-color;
   transition-duration: 160ms;
 }
 
 .dossier-row:hover,
 .dossier-row:focus-within {
+  border-left-color: var(--evidence);
   background: var(--surface);
 }
 
 .dossier-row__identity {
-  grid-column: span 5;
+  grid-column: span 6;
 }
 
 .dossier-row__sector {
@@ -887,31 +920,60 @@
   font-weight: 750;
 }
 
-.dossier-row h2,
-.dossier-row h3 {
+.dossier-row :where(h2, h3, h4) {
   margin: 0;
-  font-size: clamp(1.25rem, 2vw, 1.8rem);
+  font-size: clamp(1.2rem, 1.05rem + 0.8vw, 1.6rem);
 }
 
-.dossier-row__identity > p:last-child {
-  margin: 0.75rem 0 0;
+.dossier-row__summary {
+  margin: 0.6rem 0 0;
+  max-width: 58ch;
   color: var(--muted-ink);
 }
 
-.dossier-row__metadata {
+.dossier-row__state {
+  grid-column: span 6;
+}
+
+.dossier-row__reviewed {
+  margin: 0.75rem 0 0;
+  color: var(--muted-ink);
+  font-size: 0.78rem;
+}
+
+/* ---------------------------------------------------------------------------
+   The dataset route
+
+   One page per committed dataset, holding every record. It exists because a
+   file path printed as text is not a destination: a reader who wants the data
+   should be able to read all of it without cloning anything.
+   --------------------------------------------------------------------------- */
+
+.dataset-page__header {
+  padding-bottom: clamp(1.5rem, 3vw, 2rem);
+  border-bottom: 2px solid var(--line-strong);
+}
+
+.dataset-page__header h1 {
+  max-width: 30ch;
   margin: 0;
-  grid-column: span 5;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  font-size: clamp(1.9rem, 1.5rem + 2vw, 3rem);
 }
 
-.dossier-row__metadata div:last-child {
-  grid-column: 1 / -1;
+.dataset-page__lede {
+  max-width: 62ch;
+  margin: 1rem 0 0;
+  font-size: clamp(1.02rem, 1rem + 0.35vw, 1.2rem);
 }
 
-.dossier-row__metadata dt {
-  margin-bottom: 0.3rem;
+.dataset-page__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 2.5rem;
+  margin: 1.5rem 0 0;
+}
+
+.dataset-page__facts dt {
   color: var(--muted-ink);
   font-size: 0.72rem;
   font-weight: 750;
@@ -919,23 +981,86 @@
   text-transform: uppercase;
 }
 
-.dossier-row__metadata dd {
-  margin: 0;
-  font-size: 0.875rem;
+.dataset-page__facts dd {
+  margin: 0.2rem 0 0;
+  font-size: 0.95rem;
 }
 
-.data-access-label {
+.dataset-page__facts code {
+  overflow-wrap: anywhere;
+}
+
+.data-table--records {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+}
+
+.data-table--records caption {
   display: flex;
-  gap: 0.4rem;
-  align-items: start;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+  color: var(--muted-ink);
+  font-size: 0.85rem;
 }
 
-.data-access-label svg {
-  width: 1rem;
-  height: 1rem;
-  margin-top: 0.15rem;
-  flex: 0 0 auto;
-  color: var(--evidence-hover);
+.data-table--records :where(th, td) {
+  padding-right: 1.25rem;
+  white-space: nowrap;
+}
+
+.data-table--records tbody th {
+  position: sticky;
+  left: 0;
+  background: var(--canvas);
+}
+
+/* Records holding whole written responses. A paragraph in a table cell is a
+   column nobody can scan, so those datasets stack as labelled records. */
+.record-stack {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr));
+}
+
+.record-stack__item {
+  height: 100%;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--surface);
+}
+
+.record-stack__item h3 {
+  margin: 0 0 0.6rem;
+  font-size: 0.9rem;
+}
+
+.record-stack__item dl {
+  margin: 0;
+}
+
+.record-stack__item dl > div + div {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--line);
+}
+
+.record-stack__item dt {
+  color: var(--muted-ink);
+  font-size: 0.7rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.record-stack__item dd {
+  margin: 0.2rem 0 0;
+  font-size: 0.9rem;
 }
 
 .catalogue-empty {
@@ -1032,33 +1157,78 @@
   margin: 1rem 0 0;
 }
 
-.playbook-detail > * + * {
-  margin-top: clamp(2rem, 4vw, 3rem);
+.playbook-detail__header {
+  padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  border-bottom: 2px solid var(--line-strong);
 }
 
 .playbook-detail__header h1 {
-  max-width: 28ch;
+  max-width: 26ch;
+  margin: 0;
   font-size: clamp(2.1rem, 1.6rem + 2.2vw, 3.4rem);
 }
 
-.playbook-detail__header .playbook-detail__sector {
-  margin: 0 0 0.5rem;
+.playbook-detail__eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.6rem;
   color: var(--evidence-hover);
   font-size: 0.8rem;
   font-weight: 750;
+  letter-spacing: 0.02em;
 }
 
-.playbook-detail__header .playbook-detail__summary {
-  max-width: 60ch;
-  font-size: 1.125rem;
+.playbook-detail__eyebrow > span[aria-hidden] {
+  color: var(--line-strong);
 }
 
-/* The review date is header metadata, not part of the lede, so it opts out
-   of the `.page-intro p` lede sizing the sector and summary lines also
-   override. */
-.playbook-detail__header .playbook-detail__reviewed {
-  max-width: 60ch;
-  font-size: 0.925rem;
+.playbook-detail__eyebrow > span:not([aria-hidden]) {
+  color: var(--muted-ink);
+}
+
+.playbook-detail__summary {
+  max-width: 58ch;
+  margin: 1rem 0 0;
+  font-size: clamp(1.05rem, 1rem + 0.45vw, 1.25rem);
+  line-height: 1.5;
+}
+
+.playbook-detail__action {
+  margin: 1.5rem 0 0;
+}
+
+/* Sections in one lane, the contract rail beside them. The rail is a plain
+   list of fragment links, so losing the sticky behaviour costs nothing. */
+.playbook-detail__body {
+  display: grid;
+  align-items: start;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 17rem);
+}
+
+.playbook-detail__rail {
+  position: sticky;
+  top: 1.5rem;
+  order: 2;
+  padding: 1.15rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--surface);
+}
+
+.playbook-detail__reviewed {
+  margin: 0.9rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted-ink);
+  font-size: 0.8rem;
+}
+
+.playbook-detail__sections > * + * {
+  margin-top: clamp(2rem, 4vw, 3rem);
 }
 
 .playbook-detail__section {
@@ -1066,45 +1236,117 @@
   border-top: 1px solid var(--line-strong);
 }
 
+.playbook-detail__section:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
 .playbook-detail__section h2 {
   margin: 0 0 1rem;
   font-size: clamp(1.5rem, 2.5vw, 2.25rem);
 }
 
-/* Direct-child combinator only: this composes the document's own h3s
-   (Supported decision, Public benefit, the baseline name, Human oversight),
-   not the h3s nested inside a source dossier — those sit deeper than a
-   direct child of the section and keep the dossier's own heading rhythm. */
+/* Direct-child combinator only: this composes the document's own h3s, not the
+   h3s nested inside a source dossier — those sit deeper than a direct child of
+   the section and keep the dossier's own heading rhythm. */
 .playbook-detail__section > h3 {
   margin: 1.5rem 0 0.5rem;
   font-size: 1.1rem;
+}
+
+/* A provenance label and one line of scope, on the same baseline. */
+.section-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.section-meta p {
+  margin: 0;
+  max-width: 58ch;
+  color: var(--muted-ink);
+  font-size: 0.925rem;
 }
 
 .source-register {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 1.5rem;
+  gap: 1rem;
   list-style: none;
 }
 
 .source-dossier {
+  display: grid;
+  gap: 0 1rem;
   padding: 1.25rem;
-  border: 1px solid var(--line-strong);
+  border: 1px solid var(--line);
   border-radius: 0.5rem;
   background: var(--surface);
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+}
+
+.source-dossier__index {
+  margin: 0;
+  color: var(--line-strong);
+  font-family: var(--font-fragment-mono), "Courier New", monospace;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.source-dossier__publisher {
+  margin: 0 0 0.2rem;
+  color: var(--muted-ink);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .source-dossier h3 {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.6rem;
   font-size: 1.15rem;
 }
 
-/* `auto-fit`/`minmax` rather than a fixed two-column track: this dl now
-   lives in the 9-column evidence lane, but the column count must still
-   answer to the dossier's own rendered width (accounting for its padding),
-   not an approximated viewport breakpoint — below two genuinely-fit 16rem
-   columns it collapses to one on its own, no media query required. */
+/* How open a source is. The marks are a scale, the words are the value: the
+   label is always rendered, so the marks can be lost entirely. */
+.access-scale {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--muted-ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.access-scale__marks {
+  display: inline-flex;
+  gap: 0.15rem;
+}
+
+.access-scale__marks > span {
+  width: 0.5rem;
+  height: 0.9rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 0.1rem;
+}
+
+.access-scale__marks > span[data-filled="true"] {
+  background: var(--evidence);
+  border-color: var(--evidence);
+}
+
+.access-scale[data-access="restricted"] .access-scale__marks > span[data-filled="true"] {
+  background: var(--warning);
+  border-color: var(--warning);
+}
+
+/* `auto-fit`/`minmax` rather than a fixed two-column track: the column count
+   answers to the dossier's own rendered width, so below two genuinely-fit
+   16rem columns it collapses to one on its own, no media query required. */
 .source-dossier dl {
   margin: 1rem 0 0;
   display: grid;
@@ -1112,33 +1354,52 @@
   gap: 0.75rem 1.5rem;
 }
 
-.demo-readiness {
-  padding: 1.25rem;
-  border: 1px solid var(--line-strong);
+/* Where the data actually is: one primary destination on this site, then the
+   file and the raw download for anyone who would rather have the bytes. */
+.dataset-links {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--line);
   border-radius: 0.5rem;
-  background: var(--surface);
+  background: var(--canvas);
 }
 
-.demo-readiness[data-demo-availability="none"],
-.demo-readiness[data-demo-availability="partner"] {
-  background: var(--muted);
+.dataset-links__primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: fit-content;
+  color: var(--evidence);
+  font-size: 1rem;
+  font-weight: 700;
 }
 
-.demo-readiness[data-demo-availability="recorded"] {
-  border-color: var(--evidence);
+.dataset-links__primary svg {
+  width: 1.05rem;
+  height: 1.05rem;
 }
 
-.demo-readiness[data-demo-availability="live-local"] {
-  border-style: dashed;
-  border-color: var(--warning);
+.dataset-links__file,
+.dataset-links__raw {
+  margin: 0;
+  font-size: 0.85rem;
 }
 
-.demo-readiness code {
+.dataset-links__file code {
   overflow-wrap: anywhere;
 }
 
+.dataset-links__raw svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-right: 0.3rem;
+  vertical-align: -0.15em;
+}
+
 .synthetic-data-method dl {
-  margin: 1rem 0 0;
+  margin: 1.25rem 0 0;
 }
 
 .synthetic-data-method dl > div {
@@ -1171,43 +1432,29 @@
   margin-bottom: 0.3rem;
 }
 
-/* Dataset paths are marked `data-technical` at the source
-   (`synthetic-data-section.tsx`); this is the one rule that wrapping
-   requires beyond the existing `[data-technical]` monospace treatment in
+/* Identifiers and paths are marked `data-technical` at the source; this is the
+   one rule that wrapping requires beyond the existing monospace treatment in
    the base layer. */
-dd[data-technical] {
+:where(dd, td, th, p)[data-technical] {
   overflow-wrap: anywhere;
 }
 
 @media (max-width: 64rem) {
-  .evidence-chain ol {
-    grid-template-columns: 1fr;
+  /* The rail stops being a column and becomes the page's own summary, in the
+     document order DESIGN.md §13 fixes for mobile: title and summary, then
+     what the playbook answers, then the five sections themselves. */
+  .playbook-detail__body {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .evidence-chain li {
-    min-height: 0;
-    display: grid;
-    grid-template-columns: 3rem minmax(0, 1fr);
-    column-gap: 1rem;
-  }
-
-  .evidence-chain li + li {
-    border-top: 1px solid var(--line);
-    border-left: 0;
-  }
-
-  .evidence-chain h3 {
-    margin: 0;
-  }
-
-  .evidence-chain p {
-    margin-top: 0.4rem;
-    grid-column: 2;
+  .playbook-detail__rail {
+    position: static;
+    order: 0;
   }
 
   .dossier-row__identity,
-  .dossier-row__metadata {
-    grid-column: span 6;
+  .dossier-row__state {
+    grid-column: span 12;
   }
 }
 
@@ -1307,16 +1554,24 @@ dd[data-technical] {
   }
 
   .dossier-row__identity,
-  .dossier-row__metadata {
+  .dossier-row__state {
     grid-column: 1;
   }
 
-  .dossier-row__metadata {
-    grid-template-columns: 1fr;
+  .catalogue-group__heading {
+    grid-template-columns: minmax(0, 1fr);
   }
 
-  .dossier-row__metadata div:last-child {
-    grid-column: auto;
+  /* The state column stacks under the title rather than shrinking: at this
+     width a right-aligned value would sit under its own label. */
+  .chain li,
+  .chain li > a {
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+  }
+
+  .chain__state {
+    grid-column: 2;
+    text-align: left;
   }
 
   .contribution-tracks li {
@@ -1347,8 +1602,7 @@ dd[data-technical] {
   .site-header,
   .site-footer,
   .status-badge,
-  .source-dossier,
-  .demo-readiness {
+  .source-dossier {
     border-color: CanvasText;
     forced-color-adjust: auto;
   }
@@ -1394,13 +1648,133 @@ dd[data-technical] {
 }
 
 /* ---------------------------------------------------------------------------
+   Figures and data tables
+
+   Shared figure and table rules. Every figure here is a `<figure>`
+   holding a caption, a plot, and the same numbers as a table. The table is not
+   a courtesy: exact values are what a screen reader can actually use, and it is
+   what makes the two pale middle steps of the stance scale safe to use at all.
+   --------------------------------------------------------------------------- */
+
+/* Capped rather than full-bleed: six short bars stretched across a 90rem page
+   read as an empty rectangle with marks in the corner. The plot wants a
+   measure, like the prose does. */
+.figure {
+  max-width: 58rem;
+  margin: clamp(1.5rem, 3vw, 2.5rem) 0 0;
+  padding: clamp(1rem, 2.5vw, 1.75rem);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  background: var(--surface);
+}
+
+.figure--inline {
+  padding-bottom: 1rem;
+}
+
+.figure__caption {
+  max-width: 72ch;
+}
+
+.figure__caption h3 {
+  margin: 0;
+  font-size: clamp(1.05rem, 1rem + 0.35vw, 1.25rem);
+}
+
+.figure__caption p {
+  margin: 0.5rem 0 0;
+  color: var(--muted-ink);
+  font-size: 0.925rem;
+}
+
+/* The plot. A explicit block size is set inline per figure so the container
+   never crops its own axis labels into a nested scrollbar. */
+.chart-frame {
+  width: 100%;
+  margin-top: 1.25rem;
+  aspect-ratio: auto;
+}
+
+.chart-frame--strip {
+  height: 8.25rem;
+  margin-top: 1rem;
+}
+
+.figure__data {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--line);
+  padding-top: 0.75rem;
+}
+
+.figure__data > summary {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  color: var(--evidence);
+  font-size: 0.9rem;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.figure__data > summary:hover {
+  color: var(--evidence-hover);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.figure__data[open] > summary {
+  margin-bottom: 0.5rem;
+}
+
+/* A wide table scrolls inside its own container rather than pushing the page
+   sideways; the container is focusable so the scroll is reachable by keyboard. */
+.table-scroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.data-table caption {
+  text-align: left;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.5rem 0.75rem 0.5rem 0;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table thead th {
+  border-bottom: 2px solid var(--line-strong);
+  color: var(--muted-ink);
+  font-size: 0.72rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.data-table tbody th {
+  font-weight: 600;
+}
+
+.data-table tbody tr:last-child th,
+.data-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ---------------------------------------------------------------------------
    Policy Evidence Workbench
 
-   The demo route. Every rule here assumes the page must stay readable with
-   styles off and with JavaScript off: nothing is hidden by default, selection
-   is shown with a border and a text label rather than colour alone, and the
-   stage numbers in an evidence thread are decoration on top of headings that
-   already say the same thing.
+   Dataset working surface. Values remain text and tables rather than relying
+   on colour or shape alone.
    --------------------------------------------------------------------------- */
 
 .workbench-page__breadcrumb {
@@ -1409,30 +1783,154 @@ dd[data-technical] {
 }
 
 .workbench-section {
-  margin-top: clamp(3rem, 6vw, 5.5rem);
+  margin-top: clamp(3rem, 6vw, 5rem);
 }
 
-.demo-banner {
-  margin-top: clamp(2rem, 4vw, 3rem);
-  padding: 1.25rem 1.5rem;
-  border: 2px solid var(--evidence);
-  border-radius: 0.5rem;
-  background: var(--accent);
-  color: var(--accent-foreground);
+/* The working surface reads as a document, so its section headings stack:
+   title, then the provenance label where one applies, then one paragraph at a readable
+   measure. `.section-heading` is a `space-between` pair built for a heading
+   opposite an action, and using it here threw the heading and its own
+   paragraph to opposite edges of a 90rem page. */
+.workbench-heading {
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--line);
 }
 
-.demo-banner h2 {
-  margin: 0.6rem 0 0.5rem;
-  font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.4rem);
+.workbench-heading h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 1.3rem + 1.5vw, 2.6rem);
 }
 
-.demo-banner p {
-  max-width: 76ch;
-  margin: 0 0 0.6rem;
+.workbench-heading > p {
+  max-width: 64ch;
+  margin: 0.6rem 0 0;
+  color: var(--muted-ink);
 }
 
-.demo-banner p:last-child {
+.workbench-heading .provenance-label {
+  margin-top: 0.7rem;
+}
+
+.workbench-header {
+  padding-bottom: clamp(1.5rem, 3vw, 2.25rem);
+  border-bottom: 2px solid var(--line-strong);
+}
+
+.workbench-header h1 {
+  max-width: 24ch;
+  margin: 0;
+  font-size: clamp(2.1rem, 1.6rem + 2.4vw, 3.5rem);
+}
+
+.workbench-header__lede {
+  max-width: 60ch;
+  margin: 1rem 0 0;
+  font-size: clamp(1.05rem, 1rem + 0.45vw, 1.3rem);
+  line-height: 1.5;
+}
+
+/* The provenance strip. Four plain statements, each with its own rule, rather
+   than one paragraph of caveats: a reader scanning the page still collects
+   them, and none of them reads as an apology. */
+.run-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.run-facts li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--muted-ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.run-facts svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--evidence);
+}
+
+/* The ledger and the method statement share the width on a wide screen: the
+   figures are only meaningful next to the sentence that says what produced
+   them, and neither wants the full 90rem measure on its own. */
+.run-grid {
+  display: grid;
+  align-items: start;
+  gap: clamp(1.75rem, 4vw, 3.5rem);
+  /* Capped so neither column becomes a 90-character line of prose at 90rem. */
+  max-width: 72rem;
+  margin-top: 1.5rem;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+}
+
+/* The run ledger. One line per figure so the values align down a single
+   column — that alignment is the whole point, and a multi-column ledger would
+   put one row's value hard against the next row's label. Each line is
+   label + qualification on the left, value hard right against a hairline. */
+.run-ledger {
+  margin: 0;
+  border-top: 1px solid var(--line-strong);
+}
+
+.run-ledger > div {
+  display: grid;
+  align-items: baseline;
+  gap: 0.1rem 1.5rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: minmax(0, 1fr) minmax(0, auto);
+}
+
+.run-ledger dt {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.run-ledger__term {
+  font-weight: 650;
+}
+
+.run-ledger__note {
+  color: var(--muted-ink);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.run-ledger__value {
+  margin: 0;
+  font-family: var(--font-fragment-mono), "Courier New", monospace;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.3;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.method-statement {
+  padding-left: 1rem;
+  border-left: 3px solid var(--evidence);
+}
+
+.method-statement p {
+  margin: 0 0 0.75rem;
+}
+
+.method-statement p:last-child {
   margin-bottom: 0;
+}
+
+.method-statement p:empty {
+  display: none;
 }
 
 /* The synthetic corpus, read end to end. */
@@ -1440,7 +1938,7 @@ dd[data-technical] {
 .corpus-inspector__list {
   display: grid;
   gap: 0.75rem;
-  margin: 1.25rem 0 0;
+  margin: 1.5rem 0 0;
   padding: 0;
   list-style: none;
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 24rem), 1fr));
@@ -1450,8 +1948,17 @@ dd[data-technical] {
   height: 100%;
   padding: 1rem;
   border: 1px solid var(--line);
+  border-left: 3px solid var(--line);
   border-radius: 0.5rem;
   background: var(--surface);
+  transition: border-color 180ms ease-out, background-color 180ms ease-out;
+}
+
+/* A citation's target, arrived at by fragment link. The shift is a left rule
+   and a background, never elevation, so it survives print and forced colours. */
+.corpus-document:target {
+  border-left-color: var(--evidence);
+  background: var(--accent);
 }
 
 .corpus-document h3 {
@@ -1477,6 +1984,36 @@ dd[data-technical] {
   border-radius: 0.25rem;
 }
 
+/* The stance dot repeats the stance scale used in the figure above, so the
+   same word always carries the same colour. The word is the value; the dot is
+   a reminder, which is why it is hidden from assistive technology. */
+.corpus-document__tags [data-stance]::before {
+  content: "";
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-right: 0.35rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  vertical-align: baseline;
+}
+
+.corpus-document__tags [data-stance="critical"]::before {
+  background: var(--stance-critical);
+}
+
+.corpus-document__tags [data-stance="mixed"]::before {
+  background: var(--stance-mixed);
+}
+
+.corpus-document__tags [data-stance="uncertain"]::before {
+  background: var(--stance-uncertain);
+}
+
+.corpus-document__tags [data-stance="supportive"]::before {
+  background: var(--stance-supportive);
+}
+
 .corpus-document blockquote {
   margin: 0;
   padding-left: 0.9rem;
@@ -1488,70 +2025,268 @@ dd[data-technical] {
   font-size: 0.925rem;
 }
 
-/* What the analysis found: one card per theme, each carrying its own
-   citations and its own limits. There is no selected state and no active
-   finding — every finding is open, because there is nothing to click. */
+/* What the analysis found: one section per theme, each carrying its own
+   citations. There is no selected state and no active finding — every finding
+   is open, because there is nothing to click. */
 
+/* Reading content, so it takes a measure like the prose does. The grids below
+   it — the records and the vocabulary — stay full width, because those are for
+   browsing many short items rather than reading one long one. */
 .workbench-finding {
-  margin-top: 2rem;
+  max-width: 58rem;
+  margin-top: 1.25rem;
   padding: 1.25rem 1.5rem;
   border: 1px solid var(--line);
   border-radius: 0.5rem;
   background: var(--surface);
 }
 
-.workbench-finding > h3 {
-  margin: 0;
-  font-size: clamp(1.2rem, 1.1rem + 0.5vw, 1.5rem);
+.workbench-finding__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
 }
 
-.workbench-finding h4 {
-  margin: 1.5rem 0 0.5rem;
+.workbench-finding__head h3 {
+  margin: 0;
+  font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.4rem);
+}
+
+.workbench-finding__count {
+  margin: 0;
   color: var(--muted-ink);
-  font-size: 0.72rem;
-  font-weight: 750;
-  letter-spacing: 0.04em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
 .workbench-finding__summary {
   max-width: 76ch;
+  margin: 0.5rem 0 0;
   font-weight: 600;
 }
 
-/* A citation is one link carrying the response ID and the sentence it
-   matched, so the whole quotation is the target rather than a bare
-   "see SYN-0004" that says nothing about what is being cited. */
-
-.workbench-finding__citations,
-.workbench-finding__limitations {
-  display: grid;
-  gap: 0.6rem;
-  margin: 0;
-  padding: 0 0 0 1.25rem;
-}
+/* A citation is one link carrying the sentence it matched and, underneath, the
+   record and the exact offsets it was sliced from. The quotation is the target,
+   so the link says what is being cited rather than only where it lives. */
 
 .workbench-finding__citations {
-  padding-left: 0;
+  display: grid;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0;
+  padding: 0;
   list-style: none;
 }
 
 .workbench-finding__citations a {
   display: block;
   max-width: 76ch;
-  padding-left: 0.9rem;
-  border-left: 2px solid var(--line-strong);
+  padding: 0.6rem 0.75rem 0.6rem 0.9rem;
+  border-left: 3px solid var(--line);
+  border-radius: 0 0.25rem 0.25rem 0;
+  background: var(--canvas);
   font-size: 0.925rem;
+  text-decoration: none;
+  transition: border-color 180ms ease-out, background-color 180ms ease-out;
 }
 
-.workbench-finding__limitations li {
-  max-width: 76ch;
-  font-size: 0.925rem;
+.workbench-finding__citations a:hover {
+  border-left-color: var(--evidence);
+  background: var(--accent);
+}
+
+.workbench-finding__citations q {
+  display: block;
+  text-decoration: underline;
+  text-decoration-color: var(--line-strong);
+  text-decoration-thickness: 0.06em;
+  text-underline-offset: 0.2em;
+}
+
+.workbench-finding__citations a:hover q {
+  text-decoration-color: var(--evidence);
+}
+
+.workbench-finding__source {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1rem;
+  margin-top: 0.4rem;
+  color: var(--muted-ink);
+  font-size: 0.75rem;
+}
+
+/* The method, phrase by phrase. This is the section that lets a reader
+   disagree with the analysis rather than only accept it. */
+
+.vocabulary {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+}
+
+.vocabulary__theme {
+  padding: 1rem 1.15rem 1.15rem;
+  border: 1px solid var(--line);
+  border-radius: 0.5rem;
+  background: var(--surface);
+}
+
+.vocabulary__heading h4 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.vocabulary__ratio {
+  margin: 0.2rem 0 0.5rem;
+  color: var(--muted-ink);
+  font-size: 0.8rem;
+}
+
+/* A ratio against a limit: the unfilled track is a lighter step of the same
+   ramp, so the state reads across the whole bar rather than only in the fill. */
+.vocabulary__meter {
+  display: block;
+  height: 0.35rem;
+  border-radius: 0.2rem;
+  background: linear-gradient(
+    to right,
+    var(--ramp-4) 0 var(--fill),
+    var(--ramp-1) var(--fill) 100%
+  );
+}
+
+.vocabulary__terms {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.vocabulary__terms li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.85rem;
+}
+
+.vocabulary__terms li:last-child {
+  border-bottom: 0;
+}
+
+/* A phrase that never fired is the point of this table, so it is marked in
+   type rather than only in colour: the count column reads an em dash and the
+   term itself drops to secondary ink. */
+.vocabulary__terms li[data-fired="false"] {
+  color: var(--muted-ink);
+}
+
+.vocabulary__terms li[data-fired="false"] .vocabulary__term {
+  text-decoration: line-through;
+  text-decoration-color: var(--line-strong);
+}
+
+.vocabulary__term {
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.vocabulary__count {
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+}
+
+.vocabulary__terms li[data-fired="true"] .vocabulary__count {
+  font-weight: 700;
+}
+
+/* What this cannot show. Given the weight of a designed block at the end of
+   the page rather than a warning in front of it: the reader has seen the
+   findings by now, so these read as the terms of use rather than a disclaimer
+   to click past. */
+
+.limits {
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 2px solid var(--warning);
+  border-radius: 0.75rem;
+  background: var(--surface);
+}
+
+.limits h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 1.15rem + 0.6vw, 1.7rem);
+}
+
+.limits > p {
+  margin: 0.5rem 0 0;
+  color: var(--muted-ink);
+}
+
+.limits__list {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1.25rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.limits__list li {
+  padding-left: 0.35rem;
+}
+
+@media (max-width: 64rem) {
+  .run-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 44rem) {
+  .figure {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
 }
 
 @media (forced-colors: active) {
-  .demo-banner,
-  .corpus-document {
+  .figure,
+  .corpus-document,
+  .vocabulary__theme,
+  .workbench-finding,
+  .limits {
     border-color: CanvasText;
+  }
+
+  .vocabulary__meter {
+    border: 1px solid CanvasText;
+  }
+}
+
+@media print {
+  .figure__data,
+  .vocabulary,
+  .corpus-document,
+  .workbench-finding,
+  .limits {
+    break-inside: avoid;
+  }
+
+  .chart-frame {
+    display: none;
+  }
+}
+
+/* Neither print nor forced colours can be trusted to carry a plot's fills, so
+   the table beside it is opened rather than left behind a disclosure the
+   reader cannot click on paper. Where `::details-content` is unsupported the
+   summary is still there to open by hand, so nothing is lost. */
+@media print, (forced-colors: active) {
+  .figure__data::details-content {
+    content-visibility: visible;
+    block-size: auto;
   }
 }

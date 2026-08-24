@@ -63,7 +63,7 @@ describe("catalogue query and filtering", () => {
     expect(
       slugsOf(
         filterPlaybooks(summaries, {
-          query: "stand-in",
+          query: "practice tool",
           sectors: ["Education"],
         }),
       ),
@@ -104,11 +104,8 @@ describe("catalogue query and filtering", () => {
     })
   })
 
-  it("orders playbooks with a demo first, then by title", () => {
-    // policy-evidence is the only playbook with an available demo; every
-    // other slug follows in en-GB title order.
+  it("orders playbooks by title", () => {
     expect(slugsOf(filterPlaybooks(summaries, emptyQuery))).toEqual([
-      "policy-evidence",
       "adaptive-tutoring",
       "community-participation",
       "diagnostic-imaging-support",
@@ -120,6 +117,7 @@ describe("catalogue query and filtering", () => {
       "justice-research",
       "offender-learning",
       "lesson-planning-feedback",
+      "policy-evidence",
       "road-maintenance",
       "traffic-flow",
       "violence-risk-research",

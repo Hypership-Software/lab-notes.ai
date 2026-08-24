@@ -1,9 +1,6 @@
 import type { ReactNode } from "react"
 
-import {
-  demoBadgeLabels,
-  syntheticDataBadgeLabels,
-} from "@/lib/playbooks/vocabulary"
+import { syntheticDataBadgeLabels } from "@/lib/playbooks/vocabulary"
 
 /**
  * Says in words whether a playbook has the thing, for both answers. The
@@ -12,16 +9,13 @@ import {
  * screen reader.
  */
 export function AvailabilityBadge({
-  kind,
   available,
 }: {
-  kind: "dataset" | "demo"
   available: boolean
 }): ReactNode {
-  const label =
-    kind === "dataset"
-      ? syntheticDataBadgeLabels[available ? "available" : "not-responsible"]
-      : demoBadgeLabels[available ? "available" : "not-yet"]
+  const label = syntheticDataBadgeLabels[
+    available ? "available" : "not-responsible"
+  ]
 
   return (
     <span className="status-badge" data-available={available}>
