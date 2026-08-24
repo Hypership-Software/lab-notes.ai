@@ -1,0 +1,4 @@
+interface:
+  display_name: "Life Event Services Build Partner"
+  short_description: "Ground a builder in the researched life-event playbook."
+  default_prompt: "Use $build-life-event-services to help me explore this playbook responsibly."
