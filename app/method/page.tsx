@@ -1,106 +1,132 @@
 import type { Metadata } from "next"
 
-import { maturityLadder } from "@/lib/playbooks/vocabulary"
+import { ExternalLink } from "@/components/site/external-link"
+import {
+  strategyDraftReference,
+  strategyDraftUrl,
+} from "@/content/playbooks/strategy-draft"
 
 export const metadata: Metadata = {
-  title: "Method",
+  title: "How this works",
   description:
-    "How the playbooks handle official sources, synthetic data, baselines, evaluation, risk, and evidence maturity.",
+    "Where each playbook's strategy example comes from, how its data sources are chosen, how its synthetic dataset is made, and what a demo can and cannot show.",
 }
 
 export default function MethodPage() {
   return (
     <div className="page-shell method-page">
       <header className="page-intro reading-width">
-        <h1>How to read the evidence</h1>
+        <h1>How this works</h1>
         <p>
-          Each playbook separates a proposal from what has actually been sourced,
-          built, tested, and reviewed. Maturity is a ladder of evidence, not a
-          percentage or confidence score.
+          Every playbook answers the same four questions in the same order. This
+          page says where each answer comes from, and what it is not worth.
         </p>
       </header>
 
-      <section className="method-section" aria-labelledby="maturity-title">
-        <h2 id="maturity-title">Evidence maturity</h2>
-        <ol className="maturity-ladder" aria-label="Evidence maturity">
-          {maturityLadder.map((rung, index) => (
-            <li key={rung.value}>
-              <span aria-hidden="true">{index + 1}</span>
-              <div>
-                <h3>{rung.label}</h3>
-                <p>{rung.description}</p>
-              </div>
-            </li>
-          ))}
-        </ol>
-      </section>
-
-      <section className="method-section method-grid" aria-labelledby="sources-title">
-        <div>
-          <h2 id="sources-title">Official sources, recorded once</h2>
-          <p>
-            A source register records publisher, jurisdiction, canonical URL,
-            access date, reuse status, purpose, transformations, and caveats. A URL
-            on its own is not provenance.
-          </p>
-        </div>
-        <div>
-          <h3>No production data pipeline</h3>
-          <p>
-            A small permissible example may establish fields, units, vocabulary,
-            and constraints. The hosted playbook then reads a checked-in dataset
-            file rather than a changing public endpoint.
-          </p>
-        </div>
-      </section>
-
-      <section className="method-section method-grid" aria-labelledby="synthetic-title">
-        <div>
-          <h2 id="synthetic-title">Synthetic, and visibly so</h2>
-          <p>
-            Synthetic working data stands in for a real source, so an example can
-            be tried without an account, a key, or a data-sharing agreement. It
-            follows that source&rsquo;s published structure, and its approximations,
-            alterations, exclusions, and limitations are all recorded. It cannot
-            establish production performance or fairness.
-          </p>
-        </div>
-        <div>
-          <h3>Recorded output is not a live service</h3>
-          <p>
-            A recorded demonstration must preserve the exact input and prompt
-            hashes, model identifier, date, structured output, citations, known
-            failures, and human review state. The hosted page makes no model call.
-          </p>
-        </div>
-      </section>
-
-      <section className="method-section method-grid" aria-labelledby="comparison-title">
-        <div>
-          <h2 id="comparison-title">A non-AI baseline stays visible</h2>
-          <p>
-            Every interactive exemplar compares the same task with a transparent,
-            deterministic alternative. The answer may be that better data, a rule,
-            or service design is the more credible intervention.
-          </p>
-        </div>
-        <div>
-          <h3>Evaluation explains its denominator</h3>
-          <p>
-            Metrics name the question, labelled fixture, numerator, denominator,
-            result status, and limitations. No result is shown as zero when an
-            evaluation is unavailable.
-          </p>
-        </div>
-      </section>
-
-      <section className="method-section reading-width" aria-labelledby="oversight-title">
-        <h2 id="oversight-title">Risk, oversight, and redress are product fields</h2>
+      <section className="method-section reading-width" aria-labelledby="a-title">
+        <h2 id="a-title">A — the strategy example</h2>
         <p>
-          A playbook names foreseeable harm, the person who remains responsible,
-          the point at which review happens, how a concern escalates, and how an
-          affected person can challenge or correct an output. High-risk proposals
-          may remain assessment-only.
+          Northern Ireland&rsquo;s draft AI strategy went out for public
+          consultation with a list of example projects for public services. Those
+          examples are where the catalogue comes from: one playbook per example,
+          and no playbook for an idea the draft did not raise.
+        </p>
+        <p>
+          Each playbook quotes the example in our own plain English, names the
+          part of the draft it came from &mdash; {strategyDraftReference} &mdash;
+          and links straight to the draft so you can check the reading against
+          the source.
+        </p>
+        <p>
+          <ExternalLink href={strategyDraftUrl}>
+            Read the draft strategy consultation
+          </ExternalLink>
+        </p>
+      </section>
+
+      <section className="method-section method-grid" aria-labelledby="b-title">
+        <div>
+          <h2 id="b-title">B — the data sources investigated</h2>
+          <p>
+            A source earns its place by being real, published, and relevant to
+            the example &mdash; not by being convenient. Each one records who
+            publishes it, what it covers, and why it fits the question the
+            playbook is asking.
+          </p>
+        </div>
+        <div>
+          <h3>Access is stated, not assumed</h3>
+          <p>
+            Every source is classified as open data, registration or key
+            required, or restricted. That answer often matters more than the
+            data: a good idea behind a restricted source is a different project
+            from the same idea behind an open one.
+          </p>
+        </div>
+      </section>
+
+      <section className="method-section method-grid" aria-labelledby="c-title">
+        <div>
+          <h2 id="c-title">C — the synthetic dataset</h2>
+          <p>
+            Where a stand-in is responsible, the playbook ships one: a small
+            dataset authored by AI and shaped by what the real sources actually
+            publish &mdash; their fields, units, categories, and vocabulary. It
+            is committed to the repository, labelled{" "}
+            <strong>Synthetic working data</strong> wherever it appears, and
+            checked against a shared list of person-shaped patterns before it can
+            be merged. There is no generator, no seed, and no hash: an authored
+            dataset is its own original.
+          </p>
+        </div>
+        <div>
+          <h3>What a synthetic dataset can never prove</h3>
+          <p>
+            It cannot show that a system would be accurate, fair, or lawful on
+            real data, because it is not real data. It is a way to try the shape
+            of an idea without an account, a key, or a data-sharing agreement
+            &mdash; and nothing more than that.
+          </p>
+          <h3>When we do not make one</h3>
+          <p>
+            Two playbooks answer C by saying no. Where any useful stand-in would
+            be person-shaped by construction, inventing one would be
+            irresponsible, so the playbook says why and says what a contributor
+            would need instead.
+          </p>
+        </div>
+      </section>
+
+      <section className="method-section method-grid" aria-labelledby="d-title">
+        <div>
+          <h2 id="d-title">D — the demo</h2>
+          <p>
+            A demo computes its result from the committed dataset on every
+            render. No model is called, no key is needed, and the method is
+            ordinary code you can read in the repository. The page shows the
+            whole input before it shows any conclusion, and every citation links
+            back to the record it quotes.
+          </p>
+        </div>
+        <div>
+          <h3>What a demo does not show</h3>
+          <p>
+            That the idea works. A demo run over invented data is evidence about
+            a method, not about a service, and it has been through no
+            operational, legal, equality, or safeguarding review. Where no demo
+            exists, the playbook says so rather than implying one is coming.
+          </p>
+        </div>
+      </section>
+
+      <section className="method-section reading-width" aria-labelledby="honesty-title">
+        <h2 id="honesty-title">Real, synthetic, and computed are kept apart</h2>
+        <p>
+          Linked sources are real and belong to their publishers. Datasets in
+          this repository are invented and are labelled as such everywhere they
+          appear. Demo output is computed from those invented datasets. Nothing
+          on this site is official data, and nothing on it is evidence that a
+          public body should adopt an AI system.
         </p>
       </section>
     </div>

@@ -1,23 +1,24 @@
+/**
+ * The A/B/C/D chain every playbook answers, in the order the pages present
+ * it. The same four names appear as detail-page section headings, so the
+ * strip teaches the structure a reader is about to meet.
+ */
 const stages = [
   {
-    title: "Public problem",
-    description: "Name the task, affected people, and decision before naming a tool.",
+    title: "Strategy example",
+    description: "What the draft strategy proposed for this public service.",
   },
   {
-    title: "Official source sample",
-    description: "Record origin, access, reuse terms, purpose, and known gaps.",
+    title: "Investigated sources",
+    description: "The real published data behind it, and how open each source is.",
   },
   {
-    title: "Synthetic working data",
-    description: "Reproduce only defensible structure using invented, labelled records.",
+    title: "Synthetic dataset",
+    description: "Invented stand-in data, so you can try the idea with no key or agreement.",
   },
   {
-    title: "Bounded demonstration",
-    description: "Show one inspectable task with a transparent non-AI comparison.",
-  },
-  {
-    title: "Evidence and code",
-    description: "Expose evaluation, risks, oversight, limitations, and reusable parts.",
+    title: "Working demo",
+    description: "Where one has been built, see it run end to end and read its method.",
   },
 ]
 
@@ -25,8 +26,11 @@ export function EvidenceChain() {
   return (
     <section className="evidence-chain" aria-labelledby="evidence-chain-title">
       <div className="section-heading section-heading--compact">
-        <h2 id="evidence-chain-title">From proposal to credible starting point</h2>
-        <p>Each stage must remain visible; an attractive result cannot skip its evidence.</p>
+        <h2 id="evidence-chain-title">What every playbook answers</h2>
+        <p>
+          The same four questions in the same order, whether the answer is a
+          working demo or a plain statement that nobody has built one yet.
+        </p>
       </div>
       <ol aria-label="How a playbook is built">
         {stages.map((stage, index) => (

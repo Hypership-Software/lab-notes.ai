@@ -1,29 +1,40 @@
 import type { Metadata } from "next"
+import Link from "next/link"
 
 export const metadata: Metadata = {
   title: "Contribute",
   description:
-    "Contribution paths for improving an assessment, verifying an official source, or building a complete recorded exemplar.",
+    "Four ways to move a playbook forward: improve its plain English, add or verify a data source, contribute a synthetic dataset, or build a demo.",
 }
 
 const tracks = [
   {
-    title: "Improve an assessed playbook",
+    title: "Improve a playbook's plain English",
     description:
-      "Clarify the problem, data reality, non-AI baseline, risks, oversight, limitations, or next validation questions.",
-    requirement: "No demonstration or model output is required.",
+      "Sharpen the summary, the strategy example, or the caveats. If a sentence reads like documentation, or claims more than the evidence supports, rewrite it.",
+    requirement:
+      "No dataset and no demo required. This is the most useful contribution most playbooks need.",
   },
   {
-    title: "Add or verify an official source",
+    title: "Add or verify a data source",
     description:
-      "Record a canonical public source, access date, reuse status, purpose, transformations, and caveats.",
-    requirement: "Do not copy personal responses or material without clear permission.",
+      "Name a real published source, say who publishes it, what it covers, how open it is, and why it fits the example. Or check that a source already listed still resolves and still says what we claim.",
+    requirement:
+      "The URL must be public and current, and the access classification must match what a reader would actually meet.",
   },
   {
-    title: "Build a recorded exemplar",
+    title: "Contribute a synthetic dataset",
     description:
-      "Record the published structure of a real source, add a small synthetic dataset that mirrors it, then a non-AI baseline, recorded output, citations, evaluation, and human review.",
-    requirement: "Every artefact must land together before maturity changes.",
+      "Write a small dataset for a playbook that has none, shaped by the fields, units, and categories the real sources publish. Say plainly what it approximates and what it leaves out.",
+    requirement:
+      "It must use the shared envelope with the Synthetic working data disclosure, and pass the dataset tests in content/playbooks/content.test.ts.",
+  },
+  {
+    title: "Build a demo",
+    description:
+      "Take a playbook that already has a dataset and show the idea running: server-rendered, computed from the committed file, with the method readable in the source.",
+    requirement:
+      "No model call, no API key, no client-side state. If it cannot be read without JavaScript, it is not finished.",
   },
 ]
 
@@ -31,11 +42,11 @@ export default function ContributePage() {
   return (
     <div className="page-shell contribute-page">
       <header className="page-intro reading-width">
-        <h1>Contribute at the evidence level you have</h1>
+        <h1>Four ways to move a playbook forward</h1>
         <p>
-          A useful contribution can improve an assessment without building a demo.
-          The shared schema keeps every route comparable and makes missing evidence
-          explicit.
+          A playbook is a complete, useful contribution long before it has a
+          demo. Pick the track that matches what you can bring, and run{" "}
+          <code>npm run check</code> before opening a pull request.
         </p>
       </header>
 
@@ -48,7 +59,9 @@ export default function ContributePage() {
             <div>
               <h2>{track.title}</h2>
               <p>{track.description}</p>
-              <p className="contribution-tracks__requirement">{track.requirement}</p>
+              <p className="contribution-tracks__requirement">
+                {track.requirement}
+              </p>
             </div>
           </li>
         ))}
@@ -57,9 +70,21 @@ export default function ContributePage() {
       <section className="privacy-rule" aria-labelledby="privacy-title">
         <h2 id="privacy-title">Privacy is a contribution gate</h2>
         <p>
-          Do not commit names, contact details, exact addresses, personal local
-          paths, credentials, private endpoints, or real person-level health,
-          justice, education, housing, benefits, or consultation-response data.
+          Never commit a real person&rsquo;s data or anything shaped like it: no
+          names, email addresses, telephone numbers, National Insurance or health
+          and care numbers, exact residential addresses, or real person-level
+          health, justice, education, housing, benefits, or consultation-response
+          records. No credentials, private endpoints, or personal local paths
+          either.
+        </p>
+        <p>
+          This is enforced, not just asked for. Every committed dataset is walked
+          against the patterns in <code>lib/privacy-patterns.ts</code>, and a
+          match fails the test suite. If you think a pattern is wrong, change the
+          pattern in its own pull request rather than working around it.
+        </p>
+        <p>
+          <Link href="/method">How the four sections work</Link>
         </p>
       </section>
     </div>

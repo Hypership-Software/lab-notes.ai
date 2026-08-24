@@ -4,14 +4,27 @@ import { AvailabilityBadge } from "@/components/site/availability-badge"
 import { formatUtcDate } from "@/lib/format-date"
 import type { PlaybookSummary } from "@/lib/playbooks/schema"
 
-export function PlaybookDossierRow({ playbook }: { playbook: PlaybookSummary }) {
+/**
+ * `headingLevel` exists because the same row appears under a page `h1` in the
+ * catalogue and under a section `h2` on the home page; the title has to sit
+ * one level below whichever heading introduces the list.
+ */
+export function PlaybookDossierRow({
+  playbook,
+  headingLevel = 2,
+}: {
+  playbook: PlaybookSummary
+  headingLevel?: 2 | 3
+}) {
+  const Title = headingLevel === 3 ? "h3" : "h2"
+
   return (
     <article className="dossier-row">
       <div className="dossier-row__identity">
         <p className="dossier-row__sector">{playbook.sector}</p>
-        <h2>
+        <Title>
           <Link href={`/playbooks/${playbook.slug}`}>{playbook.title}</Link>
-        </h2>
+        </Title>
         <p>{playbook.summary}</p>
       </div>
 

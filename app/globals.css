@@ -575,7 +575,7 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   list-style: none;
   border-top: 1px solid var(--line-strong);
   border-bottom: 1px solid var(--line-strong);
@@ -697,6 +697,14 @@
 
 .home-close a {
   color: #ffffff;
+}
+
+/* Two closing prompts, not one: the third grid column holds both so neither
+   reads as the single next step. */
+.home-close__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.75rem;
 }
 
 .catalogue-filters {
@@ -904,7 +912,8 @@
   font-weight: 750;
 }
 
-.dossier-row h2 {
+.dossier-row h2,
+.dossier-row h3 {
   margin: 0;
   font-size: clamp(1.25rem, 2vw, 1.8rem);
 }

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 
 const navigation = [
   { href: "/playbooks", label: "Playbooks" },
-  { href: "/method", label: "Method" },
+  { href: "/method", label: "How this works" },
   { href: "/contribute", label: "Contribute" },
 ]
 
