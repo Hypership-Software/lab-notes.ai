@@ -1,0 +1,4 @@
+interface:
+  display_name: "Road Maintenance Planning Build Partner"
+  short_description: "Explore road maintenance planning responsibly"
+  default_prompt: "Use $build-road-maintenance to explore this playbook responsibly."
