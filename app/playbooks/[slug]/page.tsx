@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { PlaybookDetail } from "@/features/playbooks/detail/playbook-detail"
-import { getReviewStatus } from "@/features/playbooks/detail/review-status"
 import { getPlaybook, getPlaybookSlugs } from "@/lib/playbooks/registry"
 
 export const dynamicParams = false
@@ -33,10 +32,7 @@ export default async function PlaybookPage({
 
   return (
     <div className="page-shell playbook-detail-page">
-      <PlaybookDetail
-        playbook={playbook}
-        reviewStatus={getReviewStatus(playbook.lastReviewed, new Date())}
-      />
+      <PlaybookDetail playbook={playbook} />
     </div>
   )
 }

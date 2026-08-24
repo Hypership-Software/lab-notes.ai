@@ -1145,6 +1145,14 @@
   font-size: 1.125rem;
 }
 
+/* The review date is header metadata, not part of the lede, so it opts out
+   of the `.page-intro p` lede sizing the sector and summary lines also
+   override. */
+.playbook-detail__header .playbook-detail__reviewed {
+  max-width: 60ch;
+  font-size: 0.925rem;
+}
+
 .playbook-detail__toc {
   padding: 1.5rem 0;
   border-top: 3px solid var(--evidence);
