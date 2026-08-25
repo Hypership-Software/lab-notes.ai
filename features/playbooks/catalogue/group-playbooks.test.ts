@@ -1,10 +1,9 @@
 import { describe, expect, it } from "vitest"
 
-import { getPlaybookSummaries } from "@/lib/playbooks/registry"
-
+import { getOpportunityAtlasItems } from "./atlas-model"
 import { groupPlaybooksByArea } from "./group-playbooks"
 
-const all = getPlaybookSummaries()
+const all = getOpportunityAtlasItems()
 const shuffled = [...all].reverse()
 
 describe("groupPlaybooksByArea", () => {
@@ -37,7 +36,7 @@ describe("groupPlaybooksByArea", () => {
 
   it("omits areas with no matching playbook", () => {
     const grouped = groupPlaybooksByArea(
-      shuffled.filter((playbook) => playbook.sector === "Transport"),
+      shuffled.filter((playbook) => playbook.serviceArea === "Transport"),
     )
 
     expect(grouped).toHaveLength(1)

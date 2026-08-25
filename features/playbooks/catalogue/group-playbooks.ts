@@ -1,14 +1,14 @@
-import type { PlaybookSummary } from "@/lib/playbooks/schema"
 import {
-  getServiceArea,
   serviceAreaDescriptions,
   type ServiceArea,
 } from "@/lib/playbooks/service-area"
 
+import type { OpportunityAtlasItem } from "./atlas-model"
+
 export type PlaybookGroup = {
   area: ServiceArea
   description: string
-  playbooks: PlaybookSummary[]
+  playbooks: OpportunityAtlasItem[]
 }
 
 /**
@@ -19,12 +19,12 @@ export type PlaybookGroup = {
  * with nothing under it tells a reader nothing.
  */
 export function groupPlaybooksByArea(
-  playbooks: readonly PlaybookSummary[],
+  playbooks: readonly OpportunityAtlasItem[],
 ): PlaybookGroup[] {
-  const byArea = new Map<ServiceArea, PlaybookSummary[]>()
+  const byArea = new Map<ServiceArea, OpportunityAtlasItem[]>()
 
   for (const playbook of playbooks) {
-    const area = getServiceArea(playbook.sector)
+    const area = playbook.serviceArea
     const existing = byArea.get(area)
     if (existing) existing.push(playbook)
     else byArea.set(area, [playbook])
@@ -39,6 +39,9 @@ export function groupPlaybooksByArea(
     .sort((left, right) => left.area.localeCompare(right.area, "en-GB"))
 }
 
-function compareWithinArea(left: PlaybookSummary, right: PlaybookSummary) {
+function compareWithinArea(
+  left: OpportunityAtlasItem,
+  right: OpportunityAtlasItem,
+) {
   return left.title.localeCompare(right.title, "en-GB")
 }
