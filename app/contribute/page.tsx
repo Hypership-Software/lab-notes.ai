@@ -72,7 +72,7 @@ export default function ContributePage() {
           </div>
           <aside className="border-t-2 border-surface bg-synthetic p-5 text-synthetic-ink sm:p-8 lg:col-span-3 lg:border-t-0 lg:border-l-2 lg:p-10">
             <p className="font-mono text-xs font-bold tracking-[0.14em] uppercase">
-              Contribution gate
+              One rule before you start
             </p>
             <p className="mt-6 text-2xl leading-snug font-semibold">
               Never commit person-level data, secrets, private endpoints or
@@ -94,7 +94,7 @@ export default function ContributePage() {
               playbook you are changing.
             </p>
             <p className="mt-5 font-mono text-sm font-bold text-evidence-strong">
-              Final gate / npm run check
+              Final check / npm run check
             </p>
           </div>
         </div>
@@ -135,7 +135,7 @@ export default function ContributePage() {
               Non-negotiable
             </p>
             <h2 className="mt-4 text-4xl text-surface sm:text-6xl" id="privacy-title">
-              Privacy is a build gate.
+              Privacy comes first.
             </h2>
           </div>
           <div className="bg-surface p-6 sm:p-10">

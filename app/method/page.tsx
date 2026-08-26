@@ -62,12 +62,12 @@ export default function MethodPage() {
               Method / evidence before invention
             </p>
             <h1 className="mt-5 max-w-5xl text-[clamp(3.5rem,9vw,9rem)] leading-[0.84] tracking-[-0.065em]">
-              Research once. Build from a clearer starting line.
+              Research once. Build from a clear starting point.
             </h1>
           </div>
           <aside className="border-t-2 border-peat bg-peat p-5 text-surface sm:p-8 lg:col-span-3 lg:border-t-0 lg:border-l-2 lg:p-10">
             <p className="font-mono text-xs font-bold tracking-[0.14em] text-synthetic uppercase">
-              The governing rule
+              The one rule
             </p>
             <p className="mt-6 text-2xl leading-snug font-semibold">
               The project accelerates investigation. It does not choose a product,
@@ -81,15 +81,16 @@ export default function MethodPage() {
         <div className="grid gap-10 border-b-2 border-peat pb-12 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-16">
           <div>
             <p className="font-mono text-xs font-bold tracking-[0.14em] text-signal-strong uppercase">
-              Five-stage research chain
+              Five stages
             </p>
             <h2 className="mt-4 text-[clamp(2.75rem,6vw,6.5rem)] leading-[0.9] tracking-[-0.055em]">
               What is already done for you.
             </h2>
           </div>
           <p className="self-end border-l-8 border-synthetic pl-5 text-xl leading-relaxed text-peat-muted">
-            Source links stay visible because this is assisted research, not formal
-            assurance. The fastest route to trust is being able to inspect the trail.
+            Source links stay visible because this is AI-assisted research, not
+            formal assurance. The quickest way to trust it is to check the trail
+            yourself.
           </p>
         </div>
 
@@ -118,7 +119,7 @@ export default function MethodPage() {
         <section className="grid border-b-2 border-peat lg:grid-cols-2" aria-labelledby="verify-title">
           <div className="py-12 lg:border-r-2 lg:border-peat lg:pr-12">
             <p className="font-mono text-xs font-bold tracking-[0.14em] text-evidence-strong uppercase">
-              Verify the foundation
+              Check the source
             </p>
             <h2 className="mt-4 text-4xl sm:text-5xl" id="verify-title">
               Follow the evidence yourself.
@@ -133,7 +134,7 @@ export default function MethodPage() {
           </div>
           <div className="border-t-2 border-peat bg-synthetic p-6 text-synthetic-ink sm:p-10 lg:border-t-0">
             <p className="font-mono text-xs font-bold tracking-[0.14em] uppercase">
-              Inspect the agent contract
+              Look inside a skill
             </p>
             <h2 className="mt-4 text-4xl text-synthetic-ink sm:text-5xl">
               The skill is part of the product.
@@ -157,7 +158,7 @@ export default function MethodPage() {
               Ready to inspect the work?
             </p>
             <h2 className="mt-3 max-w-4xl text-4xl text-surface sm:text-6xl">
-              All 17 opportunities are available at once.
+              All 17 opportunities, on one page.
             </h2>
           </div>
           <Link

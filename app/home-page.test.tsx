@@ -48,7 +48,7 @@ describe("HomePage", () => {
     const steps = within(workflow).getAllByRole("listitem")
     expect(steps).toHaveLength(4)
     expect(steps[0]).toHaveTextContent("Choose an opportunity")
-    expect(steps[1]).toHaveTextContent("Inspect sources and starter data")
+    expect(steps[1]).toHaveTextContent("Inspect the sources and starter data")
     expect(steps[2]).toHaveTextContent("git clone")
     expect(steps[3]).toHaveTextContent("$build-life-event-services")
 
@@ -62,7 +62,7 @@ describe("HomePage", () => {
     render(<HomePage />)
 
     const handoff = screen.getByRole("region", {
-      name: "Research becomes working context.",
+      name: "One playbook, end to end.",
     })
     for (const link of within(handoff).getAllByRole("link")) {
       expect(link).toHaveClass("transition-transform")

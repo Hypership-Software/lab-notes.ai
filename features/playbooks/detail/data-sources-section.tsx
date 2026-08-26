@@ -83,7 +83,7 @@ export function DataSourcesSection({
                   </div>
                 </dl>
                 <p className="mt-6 font-semibold text-evidence-strong">
-                  <ExternalLink href={source.url}>Open source</ExternalLink>
+                  <ExternalLink href={source.url}>Open the source</ExternalLink>
                 </p>
               </div>
             </article>

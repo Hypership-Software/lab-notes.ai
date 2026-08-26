@@ -22,6 +22,15 @@ export default function HomePage() {
   }
 
   const cloneCommand = "git clone " + repositoryUrl + ".git"
+  const workflow = [
+    { label: "Choose an opportunity" },
+    { label: "Inspect the sources and starter data" },
+    { label: "Clone the repository", command: cloneCommand },
+    {
+      label: "Ask your coding agent to load the build partner",
+      command: partner.invocation,
+    },
+  ]
 
   return (
     <div>
@@ -34,7 +43,7 @@ export default function HomePage() {
         <div className="mx-auto w-full max-w-[96rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
           <div className="grid gap-6 border-b-2 border-surface/40 pb-8 lg:grid-cols-[1fr_2fr]">
             <p className="font-mono text-xs font-semibold tracking-[0.12em] text-synthetic uppercase">
-              Builder workflow / 01—04
+              Builder workflow / four steps
             </p>
             <h2
               id="workflow-title"
@@ -44,28 +53,24 @@ export default function HomePage() {
             </h2>
           </div>
           <ol className="mt-8 grid list-none gap-0 p-0 lg:grid-cols-4">
-            {[
-              "Choose an opportunity",
-              "Inspect sources and starter data",
-              cloneCommand,
-              partner.invocation,
-            ].map((step, index) => (
+            {workflow.map((step, index) => (
               <li
-                className="relative flex min-h-36 flex-col justify-between border-b border-surface/40 py-5 lg:border-r lg:border-b-0 lg:px-6 lg:first:pl-0 lg:last:border-r-0"
-                key={step}
+                className="relative flex min-h-36 flex-col border-b border-surface/40 py-5 pr-10 lg:border-r lg:border-b-0 lg:px-6 lg:pr-12 lg:first:pl-0 lg:last:border-r-0"
+                key={step.label}
               >
                 <span className="font-mono text-xs text-synthetic">
                   {String(index + 1).padStart(2, "0")}
                 </span>
-                {index < 2 ? (
-                  <span className="mt-8 text-lg leading-snug font-semibold text-surface">
-                    {step}
+                <span className="mt-8 flex flex-col gap-3">
+                  <span className="text-lg leading-snug font-semibold text-surface">
+                    {step.label}
                   </span>
-                ) : (
-                  <code className="mt-8 break-words font-mono text-base leading-snug text-surface sm:text-lg">
-                    {step}
-                  </code>
-                )}
+                  {step.command ? (
+                    <code className="[overflow-wrap:anywhere] font-mono text-sm leading-snug text-synthetic">
+                      {step.command}
+                    </code>
+                  ) : null}
+                </span>
                 {index < 3 ? (
                   <ArrowRight
                     className="absolute right-4 bottom-5 hidden size-5 text-synthetic lg:block"
@@ -82,20 +87,21 @@ export default function HomePage() {
         <div className="grid gap-10 lg:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)] lg:gap-16">
           <div>
             <p className="font-mono text-xs font-semibold tracking-[0.12em] text-signal-strong uppercase">
-              One real accelerator handoff
+              Worked example
             </p>
             <h2
               id="handoff-title"
               className="mt-4 max-w-5xl font-display text-[clamp(3rem,7vw,7.5rem)] leading-[0.88] font-extrabold tracking-[-0.06em] text-peat"
             >
-              Research becomes working context.
+              One playbook, end to end.
             </h2>
           </div>
           <p className="self-end border-l-8 border-synthetic pl-5 text-lg leading-relaxed text-peat-muted">
-            Joined-up Support after a Life Event moves from two investigated
-            sources to {dataset.recordCount} safe sample records, then into a
-            checked-in build partner. It offers context, not a prescribed
-            application.
+            Take {exemplar.title}. We investigated{" "}
+            {exemplar.dataSources.length} published sources, wrote{" "}
+            {dataset.recordCount} safe synthetic records, and packaged a build
+            partner that ships in the repository. It gives your coding agent
+            context, not a product to build.
           </p>
         </div>
 
@@ -108,7 +114,7 @@ export default function HomePage() {
           />
           <HandoffRow
             index="02"
-            label="Starter material"
+            label="Starter data"
             value={dataset.recordCount + " synthetic records ready to inspect"}
             href={"/playbooks/" + exemplarSlug + "/dataset"}
           />
@@ -134,20 +140,20 @@ export default function HomePage() {
           <div className="flex flex-col items-start justify-between gap-7 border-b-2 border-peat pb-8 sm:flex-row sm:items-end">
             <div>
               <p className="font-mono text-xs font-semibold tracking-[0.12em] text-evidence uppercase">
-                Across the atlas
+                From the atlas
               </p>
               <h2
                 id="atlas-preview-title"
                 className="mt-3 font-display text-[clamp(2.75rem,5vw,5.5rem)] leading-[0.9] font-extrabold tracking-[-0.055em] text-peat"
               >
-                Four of seventeen.
+                Four places to start.
               </h2>
             </div>
             <Link
               className="inline-flex min-h-12 items-center gap-3 border-2 border-peat bg-synthetic px-5 py-3 text-sm font-bold text-synthetic-ink no-underline transition-transform duration-150 hover:-translate-y-0.5 focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-evidence motion-reduce:transition-none"
               href="/playbooks"
             >
-              Open all 17 opportunities
+              See all 17 opportunities
               <ArrowRight className="size-4" aria-hidden="true" />
             </Link>
           </div>

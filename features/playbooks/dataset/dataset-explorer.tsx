@@ -78,7 +78,6 @@ export function DatasetExplorer({
         <TabsList
           aria-label="Dataset views"
           className="grid min-h-11 w-full grid-cols-3 gap-0 rounded-none bg-transparent p-0 sm:w-auto"
-          variant="line"
         >
           {(
             [
@@ -88,7 +87,7 @@ export function DatasetExplorer({
             ] as const
           ).map(([item, label]) => (
             <TabsTrigger
-              className="relative min-h-11 rounded-none border border-surface/60 px-3 py-2 font-mono text-xs font-bold uppercase tracking-[0.1em] text-surface transition-none after:transition-none hover:bg-surface hover:text-peat focus-visible:z-10 focus-visible:border-surface focus-visible:ring-0 focus-visible:ring-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface data-active:bg-synthetic data-active:text-synthetic-ink data-active:shadow-none sm:min-w-28"
+              className="relative min-h-11 rounded-none border border-surface/60 px-3 py-2 font-mono text-xs font-bold uppercase tracking-[0.1em] text-surface transition-none after:transition-none hover:bg-surface hover:text-peat focus-visible:z-10 focus-visible:border-surface focus-visible:ring-0 focus-visible:ring-transparent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface data-active:border-synthetic data-active:bg-synthetic data-active:text-synthetic-ink data-active:shadow-none group-data-[variant=default]/tabs-list:data-active:shadow-none sm:min-w-28"
               key={item}
               value={item}
             >

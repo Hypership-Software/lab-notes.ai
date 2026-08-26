@@ -6,7 +6,7 @@ export default function NotFound() {
     <div className="grid min-h-[70vh] border-y-2 border-peat bg-surface lg:grid-cols-10">
       <div className="flex flex-col justify-between bg-peat p-6 text-surface sm:p-10 lg:col-span-3">
         <p className="font-mono text-sm font-bold tracking-[0.16em] text-synthetic uppercase">
-          Route status
+          Page not found
         </p>
         <p className="mt-24 font-display text-[clamp(8rem,24vw,20rem)] leading-[0.7] font-extrabold tracking-[-0.08em] text-synthetic lg:mt-0">
           404

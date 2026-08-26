@@ -29,7 +29,7 @@ function datasetBody(
               </p>
               <p className="mt-5 max-w-3xl text-peat-muted">{transparencyCopy}</p>
             </div>
-            <dl className="grid grid-cols-2 border-2 border-peat bg-surface">
+            <dl className="grid grid-cols-2 self-start border-2 border-peat bg-surface">
               <div className="border-r border-structure p-4">
                 <dt className="font-mono text-xs uppercase tracking-[0.12em] text-peat-muted">
                   Records
@@ -161,7 +161,7 @@ export function SyntheticDataSection({
       aria-labelledby={headingId}
     >
       <p className="font-mono text-xs uppercase tracking-[0.18em] text-evidence-strong">
-        Working material
+        Starter data
       </p>
       <h2
         id={headingId}

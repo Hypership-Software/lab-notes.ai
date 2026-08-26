@@ -21,7 +21,7 @@ export function BuilderPackLedger({
   const datasetLabel = dataset
     ? `${dataset.recordCount} synthetic records`
     : datasetState === "not-responsible"
-      ? "Responsible refusal"
+      ? "None — by design"
       : "Dataset file unavailable"
 
   return (

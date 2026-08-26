@@ -41,7 +41,7 @@ export function PlaybookDetail({
   return (
     <article>
       <header className="border-y-2 border-peat bg-surface">
-        <div className="grid lg:grid-cols-10">
+        <div className="mx-auto grid w-full max-w-[96rem] lg:grid-cols-10">
           <div className="p-5 sm:p-8 lg:col-span-7 lg:p-12">
             <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs uppercase tracking-[0.15em] text-peat-muted">
               <span className="text-evidence-strong">
@@ -73,7 +73,7 @@ export function PlaybookDetail({
                 className="inline-flex min-h-12 items-center gap-2 border-2 border-peat px-5 py-3 font-bold no-underline hover:bg-synthetic"
                 href="#build-partner"
               >
-                {dataset ? "Load build partner" : "Start with the build partner"}
+                {dataset ? "Set up the build partner" : "Start with the build partner"}
                 {dataset ? (
                   <ArrowDown className="size-4" aria-hidden="true" />
                 ) : (
@@ -94,7 +94,7 @@ export function PlaybookDetail({
         </div>
       </header>
 
-      <div className="grid gap-10 px-4 sm:px-6 lg:grid-cols-10 lg:gap-16 lg:px-10">
+      <div className="mx-auto grid w-full max-w-[96rem] gap-10 px-4 sm:px-6 lg:grid-cols-10 lg:gap-16 lg:px-10">
         <aside className="pt-10 lg:col-span-3 lg:col-start-8 lg:row-start-1 lg:pt-0">
           <div className="lg:sticky lg:top-24 lg:py-16">
             <SectionNavigator sections={sections} />

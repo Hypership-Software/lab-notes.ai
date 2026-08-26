@@ -37,7 +37,7 @@ export function DomainBuildPartnerPanel({
       aria-labelledby={headingId}
     >
       <p className="font-mono text-xs uppercase tracking-[0.18em] text-evidence-strong">
-        Repository handoff
+        Clone and build
       </p>
       <h2
         id={headingId}
@@ -52,9 +52,10 @@ export function DomainBuildPartnerPanel({
             Build with a domain-aware coding agent
           </h3>
           <p className="mt-4 max-w-3xl text-lg text-peat-muted">
-            Clone the repository, then ask Codex to load the checked-in skill.
-            It brings the opportunity, sources, starter data, known unknowns,
-            and constraints into the conversation before anything is proposed.
+            Clone the repository, then ask Codex to load the skill that ships
+            with it. The skill brings the opportunity, sources, starter data,
+            known unknowns and constraints into the conversation before
+            anything is proposed.
           </p>
 
           <div className="mt-8 grid gap-px border-2 border-peat bg-peat">
@@ -114,7 +115,7 @@ export function DomainBuildPartnerPanel({
 
         <aside className="border-l-2 border-peat pl-5">
           <GitFork className="size-8 text-evidence" aria-hidden="true" />
-          <h3 className="mt-4 text-xl">Context loaded by the skill</h3>
+          <h3 className="mt-4 text-xl">What the skill loads</h3>
           <ul className="mt-4 flex list-[square] flex-col gap-2 pl-5 text-peat-muted marker:text-signal">
             <li>The opportunity and its source trail</li>
             <li>The synthetic-data state and its limits</li>

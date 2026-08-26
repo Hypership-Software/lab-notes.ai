@@ -21,8 +21,8 @@ export function SiteFooter() {
               Independent open-source accelerator
             </p>
             <p className="max-w-[62ch] text-base leading-relaxed text-paper/80">
-              Built for scrutiny, adaptation, and reuse. These playbooks do not
-              represent deployed services or government endorsement.
+              Made to be checked, adapted and reused. These playbooks are not
+              live services and carry no government endorsement.
             </p>
           </div>
         </div>

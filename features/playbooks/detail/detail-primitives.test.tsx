@@ -141,7 +141,7 @@ describe("DataSourcesSection", () => {
       const article = articles[index]
       expect(
         within(article).getByRole("link", {
-          name: /^Open source/,
+          name: /^Open the source/,
         }),
       ).toHaveAttribute("href", source.url)
       // Publisher and access are the source's identity, not two more rows of a

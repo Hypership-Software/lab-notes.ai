@@ -2,7 +2,7 @@
 
 import { ArrowUpRight, Database, Files, Terminal } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { type CSSProperties, useState } from "react"
 
 import { cn } from "@/lib/utils"
 
@@ -16,6 +16,11 @@ export function OpportunityAtlas({
 }) {
   const groups = groupPlaybooksByArea(items)
   const orderedItems = groups.flatMap((group) => group.playbooks)
+  // One grid row per group heading and per opportunity row. The preview pane
+  // spans every row (plus a trailing 1fr row that absorbs any height the
+  // preview needs beyond the list), so it can sit sticky beside the whole list
+  // instead of pinning itself to row one and pushing the list beneath it.
+  const rowCount = groups.length + orderedItems.length
   const [selectedSlug, setSelectedSlug] = useState(
     orderedItems[0]?.slug ?? "",
   )
@@ -33,8 +38,8 @@ export function OpportunityAtlas({
         </div>
         <div className="flex max-w-3xl flex-col justify-end gap-5 lg:pb-2">
           <p className="border-l-8 border-signal pl-5 text-xl leading-snug font-semibold text-peat sm:text-2xl">
-            Seventeen opportunities from Northern Ireland&rsquo;s draft AI
-            strategy, each connected to the research and working material a
+            17 opportunities from Northern Ireland&rsquo;s draft AI strategy,
+            each connected to the published research and starter data a
             builder needs to begin.
           </p>
           <p className="max-w-2xl text-base leading-relaxed text-peat-muted">
@@ -45,14 +50,22 @@ export function OpportunityAtlas({
         </div>
       </header>
 
-      <div className="mt-10 border-t-2 border-peat lg:grid lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:items-start lg:gap-x-10">
-        {groups.map((group) => (
+      <div
+        className="mt-10 border-t-2 border-peat lg:grid lg:grid-cols-[minmax(0,42fr)_minmax(0,58fr)] lg:grid-rows-[repeat(var(--atlas-rows),auto)_1fr] lg:items-start lg:gap-x-10"
+        style={{ "--atlas-rows": rowCount } as CSSProperties}
+      >
+        {groups.map((group, groupIndex) => (
           <section
             key={group.area}
             className="border-b-2 border-peat lg:contents"
             aria-labelledby={`atlas-${toId(group.area)}`}
           >
-            <div className="flex items-baseline justify-between gap-4 bg-peat px-3 py-2.5 text-surface lg:col-start-1 lg:mt-8 lg:first:mt-0">
+            <div
+              className={cn(
+                "flex items-baseline justify-between gap-4 bg-peat px-3 py-2.5 text-surface lg:col-start-1",
+                groupIndex > 0 && "lg:mt-6",
+              )}
+            >
               <h2
                 id={`atlas-${toId(group.area)}`}
                 className="font-mono text-[0.6875rem] leading-tight font-semibold tracking-[0.1em] text-inherit uppercase"
@@ -130,7 +143,7 @@ function OpportunityPreview({
   return (
     <aside
       id={`opportunity-preview-${item.slug}`}
-      className="relative overflow-hidden border-t-2 border-peat bg-surface p-5 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-200 motion-reduce:transition-none sm:p-8 lg:sticky lg:top-6 lg:col-start-2 lg:row-start-1 lg:mt-8 lg:border-2 lg:p-10 xl:p-14"
+      className="relative overflow-hidden border-t-2 border-peat bg-surface p-5 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-200 motion-reduce:transition-none sm:p-8 lg:sticky lg:top-6 lg:col-start-2 lg:row-span-full lg:border-2 lg:p-10 xl:p-14"
       aria-label="Selected opportunity"
     >
       <div
@@ -167,7 +180,7 @@ function OpportunityPreview({
           <dd className="mt-2 font-display text-3xl font-extrabold text-peat">
             {item.dataset.status === "available"
               ? `${item.dataset.recordCount} records`
-              : "Not responsible here"}
+              : "None — by design"}
           </dd>
         </div>
       </dl>

@@ -16,7 +16,7 @@ export function StrategyExampleSection({
       aria-labelledby={headingId}
     >
       <p className="font-mono text-xs uppercase tracking-[0.18em] text-evidence-strong">
-        Strategy signal
+        From the draft strategy
       </p>
       <h2
         id={headingId}
@@ -29,7 +29,7 @@ export function StrategyExampleSection({
       </p>
       <div className="mt-8 border-l-4 border-signal pl-4">
         <p className="font-mono text-xs uppercase tracking-[0.14em] text-peat-muted">
-          Draft reference
+          Where the draft says it
         </p>
         <p className="mt-2">
           <cite>{strategyExample.draftReference}</cite>

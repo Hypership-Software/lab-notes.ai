@@ -45,14 +45,14 @@ export function ResearchStackHero() {
           <div className="mt-12 grid items-end gap-8 border-t-2 border-peat pt-8 xl:grid-cols-[minmax(0,1fr)_auto]">
             <div>
               <p className="max-w-3xl text-xl leading-relaxed font-medium text-peat sm:text-2xl">
-                Explore the projects named in Northern Ireland&rsquo;s draft AI
-                strategy. Each playbook includes published sources, safe
-                starter data, honest constraints, and a domain build partner
-                for your coding agent.
+                Explore the public-service opportunities named in Northern
+                Ireland&rsquo;s draft AI strategy. Each playbook includes
+                published sources, safe starter data, honest constraints, and a
+                domain build partner for your coding agent.
               </p>
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-peat-muted">
-                An independent open-source project, not a government service,
-                product recommendation, or claim that AI is required.
+                An independent open-source project, not a government service.
+                It does not recommend products or claim that AI is required.
               </p>
             </div>
             <div className="flex flex-col items-stretch gap-3 sm:flex-row xl:flex-col">
@@ -75,7 +75,7 @@ export function ResearchStackHero() {
         </div>
 
         <aside
-          className="relative min-h-[42rem] overflow-hidden bg-surface p-4 sm:p-8 lg:min-h-full"
+          className="relative flex min-h-[42rem] flex-col justify-center overflow-hidden bg-surface p-4 sm:p-8 lg:min-h-full"
           aria-label="Life event research stack"
         >
           <div className="absolute inset-y-0 left-9 w-0.5 bg-peat sm:left-14" aria-hidden="true" />
