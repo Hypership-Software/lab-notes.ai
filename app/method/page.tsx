@@ -71,11 +71,12 @@ export default function MethodPage() {
           </div>
           <aside className="border-t-2 border-peat bg-peat p-5 text-surface sm:p-8 lg:col-span-3 lg:border-t-0 lg:border-l-2 lg:p-10">
             <p className="font-mono text-xs font-bold tracking-[0.14em] text-synthetic uppercase">
-              The one rule
+              What you get, and what you don’t
             </p>
             <p className="mt-6 text-2xl leading-snug font-semibold">
-              The project accelerates investigation. It does not choose a product,
-              prove an outcome or make AI necessary.
+              Published sources, safe sample data and a domain build partner for
+              your coding agent. Not a product pick, a proven outcome, or a claim
+              that AI is needed. Deciding what to build stays with you.
             </p>
           </aside>
         </div>
