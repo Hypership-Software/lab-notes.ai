@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Local agent settings
+.claude/settings.local.json
+
 # Local Superpowers working specifications
 /docs/superpowers/
 
@@ -51,4 +54,3 @@ next-env.d.ts
 
 # Local Superpowers SDD workspace
 /.superpowers/
-bash.exe.stackdump

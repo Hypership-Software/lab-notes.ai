@@ -21,8 +21,7 @@ maintained release branches.
 ## Scope
 
 This project has no runtime model call, no database, no authentication, no
-uploads, and no API keys. It builds to a set of static pages plus one
-server-rendered catalogue route, computed from data committed in this
+uploads, and no API keys. It builds to a set of static pages computed from data committed in this
 repository.
 
 The findings most likely to matter here are therefore:
