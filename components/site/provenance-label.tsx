@@ -24,7 +24,14 @@ export function ProvenanceLabel({
   const Icon = item.icon
 
   return (
-    <span className={cn("provenance-label", className)} data-provenance={kind}>
+    <span
+      className={cn(
+        "inline-flex w-fit items-center gap-1.5 text-[0.8125rem] font-bold [&_svg]:size-[1em] [&_svg]:shrink-0",
+        kind === "source" ? "text-evidence-strong" : "text-signal-strong",
+        className,
+      )}
+      data-provenance={kind}
+    >
       <Icon aria-hidden="true" />
       {item.label}
     </span>

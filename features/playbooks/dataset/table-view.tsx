@@ -11,7 +11,7 @@ import {
 import type { SyntheticDataset } from "@/lib/playbooks/dataset"
 import { getDatasetFields } from "@/lib/playbooks/dataset-registry"
 
-import { datasetValueText, fieldLabel } from "./dataset-viewer"
+import { datasetValueText, fieldLabel } from "./dataset-format"
 
 export type SortDirection = "ascending" | "descending"
 

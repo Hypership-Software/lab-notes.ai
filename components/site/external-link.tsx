@@ -10,7 +10,10 @@ export function ExternalLink({
 }: ComponentProps<"a">) {
   return (
     <a
-      className={cn("external-link", className)}
+      className={cn(
+        "inline-flex min-h-11 items-center gap-1.5 font-bold text-evidence-strong [&_svg]:size-[1em] [&_svg]:shrink-0",
+        className,
+      )}
       {...props}
       target="_blank"
       rel="noreferrer noopener"

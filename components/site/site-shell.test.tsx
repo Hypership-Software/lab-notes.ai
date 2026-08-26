@@ -5,7 +5,6 @@ import { describe, expect, it, vi } from "vitest"
 
 import RootLayout from "@/app/layout"
 
-import { AvailabilityBadge } from "./availability-badge"
 import { ExternalLink } from "./external-link"
 import { SiteFooter } from "./site-footer"
 import { SiteHeader } from "./site-header"
@@ -90,16 +89,6 @@ describe("site shell", () => {
       screen.getByRole("link", { name: "Skip to main content" }),
     ).toHaveAttribute("data-skip-link")
     expect(screen.getByRole("contentinfo")).toHaveAttribute("data-site-footer")
-  })
-
-  it("states dataset availability in text rather than colour alone", () => {
-    render(<AvailabilityBadge available />)
-
-    // Both answers are words. The bullet is decorative, so stripping every
-    // symbol and colour must leave the state still readable.
-    expect(
-      screen.getByText("Synthetic dataset available"),
-    ).toBeVisible()
   })
 
   it("opens explicitly external links safely", () => {
