@@ -27,15 +27,19 @@ describe("HomePage", () => {
     render(<HomePage />)
 
     const stack = screen.getByRole("complementary", {
-      name: "Life event research stack",
+      name: "Traffic Flow Management research trail",
     })
     expect(within(stack).getByText("Real published source")).toBeVisible()
     expect(within(stack).getByText("Synthetic working data")).toBeVisible()
-    expect(within(stack).getByText("journeyStep")).toBeVisible()
+    expect(within(stack).getByText("Vehicles counted")).toBeVisible()
+    expect(within(stack).getByText("1840")).toBeVisible()
     expect(
-      within(stack).getByText("build-life-event-services"),
+      within(stack).getByText("build-traffic-flow"),
     ).toBeVisible()
-    expect(within(stack).getByText("Authority comes first")).toBeVisible()
+    expect(
+      within(stack).getByText("Signal changes have wider effects"),
+    ).toBeVisible()
+    expect(within(stack).getAllByRole("listitem")).toHaveLength(5)
 
     const caveat = within(stack).getByText("Before you build").parentElement
     expect(caveat).toHaveClass("bg-signal-strong", "text-surface")
@@ -50,7 +54,7 @@ describe("HomePage", () => {
     expect(steps[0]).toHaveTextContent("Choose an opportunity")
     expect(steps[1]).toHaveTextContent("Inspect the sources and starter data")
     expect(steps[2]).toHaveTextContent("git clone")
-    expect(steps[3]).toHaveTextContent("build-life-event-services")
+    expect(steps[3]).toHaveTextContent("build-traffic-flow")
 
     expect(steps[0].querySelector("code")).toBeNull()
     expect(steps[1].querySelector("code")).toBeNull()

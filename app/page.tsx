@@ -5,10 +5,11 @@ import { ResearchStackHero } from "@/components/site/research-stack-hero"
 import { getOpportunityAtlasItems } from "@/features/playbooks/catalogue/atlas-model"
 import { getBuildPartnerDescriptor } from "@/lib/playbooks/build-partner"
 import { getDatasetSummary } from "@/lib/playbooks/dataset-registry"
+import { homepageExemplar } from "@/lib/playbooks/exemplar"
 import { getPlaybook } from "@/lib/playbooks/registry"
 import { repositoryFileUrl, repositoryUrl } from "@/lib/repository"
 
-const exemplarSlug = "life-event-services"
+const exemplarSlug = homepageExemplar.slug
 
 export default function HomePage() {
   const opportunities = getOpportunityAtlasItems()

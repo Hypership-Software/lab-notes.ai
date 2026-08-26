@@ -6,6 +6,8 @@ import {
   strategyDraftReference,
   strategyDraftUrl,
 } from "@/content/playbooks/strategy-draft"
+import { getBuildPartnerDescriptor } from "@/lib/playbooks/build-partner"
+import { homepageExemplar } from "@/lib/playbooks/exemplar"
 import { repositoryFileUrl } from "@/lib/repository"
 
 export const metadata: Metadata = {
@@ -51,6 +53,8 @@ const stages = [
     output: "A credible place to start—not permission to deploy",
   },
 ] as const
+
+const exemplarSkill = getBuildPartnerDescriptor(homepageExemplar.slug)
 
 export default function MethodPage() {
   return (
@@ -147,7 +151,7 @@ export default function MethodPage() {
             </p>
             <ExternalLink
               className="mt-6 text-synthetic-ink"
-              href={repositoryFileUrl(".agents/skills/build-life-event-services/SKILL.md")}
+              href={repositoryFileUrl(exemplarSkill.skillPath)}
             >
               Inspect an example build-partner skill
             </ExternalLink>

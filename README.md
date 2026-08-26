@@ -13,9 +13,9 @@ a product or claim that AI is required.
 1. Clone the repository.
 2. Run `npm install` and `npm run dev`.
 3. Choose a playbook at `/playbooks`.
-4. Invoke its checked-in skill: `/build-life-event-services` in Claude Code,
-   `$build-life-event-services` in Codex, or ask any skills-aware agent for
-   the `build-life-event-services` skill.
+4. Invoke its checked-in skill: `/build-traffic-flow` in Claude Code,
+   `$build-traffic-flow` in Codex, or ask any skills-aware agent for the
+   `build-traffic-flow` skill.
 5. Inspect the published sources and synthetic dataset before choosing what to build.
 
 ```bash

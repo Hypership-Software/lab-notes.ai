@@ -1,6 +1,9 @@
 import type { Metadata } from "next"
 
 import { ExternalLink } from "@/components/site/external-link"
+import { getBuildPartnerDescriptor } from "@/lib/playbooks/build-partner"
+import { homepageExemplar } from "@/lib/playbooks/exemplar"
+import { getPlaybook } from "@/lib/playbooks/registry"
 import { repositoryFileUrl } from "@/lib/repository"
 
 export const metadata: Metadata = {
@@ -9,13 +12,17 @@ export const metadata: Metadata = {
     "Improve an opportunity, its published sources, synthetic data, domain brief or agent skill.",
 }
 
+// Every example path points at the same playbook the homepage walks through.
+const exemplarSlug = homepageExemplar.slug
+const exemplarSkill = getBuildPartnerDescriptor(exemplarSlug)
+
 const contributions = [
   {
     index: "01",
     title: "Opportunity copy",
     description:
       "Make the strategy opportunity clearer, more bounded and easier for a builder to understand. Keep product choices open and claims no stronger than the evidence.",
-    path: "content/playbooks/life-event-services/playbook.ts",
+    path: `content/playbooks/${exemplarSlug}/playbook.ts`,
     action: "Open an example playbook definition",
     command: "npm run test -- content/playbooks/content.test.ts",
   },
@@ -24,7 +31,7 @@ const contributions = [
     title: "Source verification",
     description:
       "Check that a registered source still resolves, that its access label is accurate and that the stated coverage and relevance match what it publishes.",
-    path: "content/playbooks/life-event-services/playbook.ts",
+    path: `content/playbooks/${exemplarSlug}/playbook.ts`,
     action: "Inspect the registered source format",
     command: "npm run test -- content/playbooks/content.test.ts",
   },
@@ -33,7 +40,7 @@ const contributions = [
     title: "Synthetic working data",
     description:
       "Improve a safe stand-in using only structures and vocabulary supported by published sources. Preserve the disclosure and state what the file cannot prove.",
-    path: "content/playbooks/life-event-services/life-event-services.data.json",
+    path: `content/playbooks/${exemplarSlug}/${exemplarSlug}.data.json`,
     action: "Inspect an example dataset",
     command: "npm run test -- content/playbooks/content.test.ts",
   },
@@ -42,7 +49,7 @@ const contributions = [
     title: "Domain brief",
     description:
       "Strengthen vocabulary, stakeholder context, source boundaries, known unknowns and the questions a builder should answer before choosing an approach.",
-    path: ".agents/skills/build-life-event-services/references/domain-brief.md",
+    path: exemplarSkill.briefPath,
     action: "Inspect an example domain brief",
     command: "npm run validate:skills",
   },
@@ -51,13 +58,16 @@ const contributions = [
     title: "Build-partner instructions",
     description:
       "Improve how the checked-in skill distinguishes fact, interpretation and synthetic data; explores unranked directions; and stops when outside authority is needed.",
-    path: ".agents/skills/build-life-event-services/SKILL.md",
+    path: exemplarSkill.skillPath,
     action: "Inspect an example skill",
     command: "npm run validate:skills",
   },
 ] as const
 
 export default function ContributePage() {
+  const exemplar = getPlaybook(exemplarSlug)
+  if (!exemplar) throw new Error("The contribute page exemplar is not registered")
+
   return (
     <div className="w-full overflow-x-clip">
       <header className="border-y-2 border-peat bg-evidence text-surface">
@@ -89,7 +99,7 @@ export default function ContributePage() {
           </h2>
           <div className="self-end border-l-8 border-signal pl-5">
             <p className="text-xl leading-relaxed text-peat-muted">
-              Choose the layer you can improve. The linked Life Event Services
+              Choose the layer you can improve. The linked {exemplar.title}
               files are concrete examples; use the equivalent path for the
               playbook you are changing.
             </p>

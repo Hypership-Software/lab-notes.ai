@@ -63,7 +63,7 @@ Use a full-bleed asymmetric 70/30 hero. Its headline is:
 
 The lede says that each playbook includes published sources, safe starter data, honest constraints, and a domain build partner for a coding agent. The primary action is **Open the opportunity atlas** and the secondary action is **Clone the reference**.
 
-The signature visual is a layered composition of real product artefacts: a published-source excerpt, a synthetic dataset row, a repository path, the `build-<slug>` skill name, and a constraint annotation. It assembles once with transform, opacity, and clip animations; reduced-motion mode shows the completed composition immediately. Follow with the builder workflow, one real accelerator handoff, and a compact atlas preview.
+The signature visual is a layered composition of real product artefacts: a published-source excerpt, a synthetic dataset row, a repository path, the `build-<slug>` skill name, and a constraint annotation. Each artefact carries a numbered one-line plain-English gloss so a first-time visitor can read the trail top to bottom. The exemplar playbook is chosen for how easily a cold reader can follow it (currently Traffic Flow Management) and is configured once in `lib/playbooks/exemplar.ts`, which the hero and the worked example both read. It assembles once with transform, opacity, and clip animations; reduced-motion mode shows the completed composition immediately. Follow with the builder workflow, one real accelerator handoff, and a compact atlas preview.
 
 ## 7. Opportunity Atlas
 
