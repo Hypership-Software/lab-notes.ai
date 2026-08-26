@@ -17,7 +17,7 @@ export function fieldLabel(field: string): string {
   return spaced.charAt(0).toUpperCase() + spaced.slice(1).toLowerCase()
 }
 
-function cellText(value: unknown): string {
+export function datasetValueText(value: unknown): string {
   if (value === null || value === undefined) return "—"
   if (typeof value === "number") return String(value)
   if (typeof value === "boolean") return value ? "Yes" : "No"
@@ -45,16 +45,22 @@ export function DatasetViewer({
 
   if (hasLongFormFields(dataset)) {
     return (
-      <ol className="record-stack">
+      <ol className="border-x-2 border-b-2 border-peat bg-surface px-4">
         {dataset.records.map((record, index) => (
-          <li key={cellText(record[identifier]) || index}>
-            <article className="record-stack__item">
-              <h3 data-technical>{cellText(record[identifier])}</h3>
-              <dl>
+          <li key={datasetValueText(record[identifier]) || index}>
+            <article className="border-t-2 border-peat py-5 first:border-t-0">
+              <h3 className="break-words font-mono text-lg" data-technical>
+                {datasetValueText(record[identifier])}
+              </h3>
+              <dl className="mt-4 grid gap-4 sm:grid-cols-2">
                 {rest.map((field) => (
-                  <div key={field}>
-                    <dt>{fieldLabel(field)}</dt>
-                    <dd>{cellText(record[field])}</dd>
+                  <div className="min-w-0" key={field}>
+                    <dt className="font-mono text-xs uppercase tracking-[0.12em] text-peat-muted">
+                      {fieldLabel(field)}
+                    </dt>
+                    <dd className="mt-1 break-words whitespace-pre-wrap">
+                      {datasetValueText(record[field])}
+                    </dd>
                   </div>
                 ))}
               </dl>
@@ -70,22 +76,26 @@ export function DatasetViewer({
     // named so it is announced as something scrollable rather than as an
     // unlabelled stop.
     <div
-      className="table-scroll"
+      className="overflow-x-auto border-2 border-peat bg-surface [&_[data-table]]:min-w-max"
       tabIndex={0}
       role="region"
       aria-label="Dataset records, scrollable"
     >
-      <table className="data-table data-table--records">
-        <caption>
-          <ProvenanceLabel kind="synthetic" />
-          <span>
+      <table className="min-w-full border-collapse text-left text-sm" data-table>
+        <caption className="border-b-2 border-peat p-4 text-left">
+          <ProvenanceLabel kind="synthetic" className="mr-3" />
+          <span className="font-mono text-xs text-peat-muted">
             {dataset.records.length} records, {fields.length} fields
           </span>
         </caption>
         <thead>
           <tr>
             {fields.map((field) => (
-              <th key={field} scope="col">
+              <th
+                className="border-r border-structure bg-paper px-3 py-3 font-mono text-xs uppercase tracking-[0.1em] last:border-r-0"
+                key={field}
+                scope="col"
+              >
                 {fieldLabel(field)}
               </th>
             ))}
@@ -93,18 +103,27 @@ export function DatasetViewer({
         </thead>
         <tbody>
           {dataset.records.map((record, index) => (
-            <tr key={cellText(record[identifier]) || index}>
+            <tr
+              className="border-t border-structure"
+              key={datasetValueText(record[identifier]) || index}
+            >
               {fields.map((field) =>
                 field === identifier ? (
-                  <th key={field} scope="row" data-technical>
-                    {cellText(record[field])}
+                  <th
+                    className="border-r border-structure px-3 py-3 font-mono font-bold whitespace-nowrap"
+                    key={field}
+                    scope="row"
+                    data-technical
+                  >
+                    {datasetValueText(record[field])}
                   </th>
                 ) : (
                   <td
+                    className="border-r border-structure px-3 py-3 whitespace-nowrap last:border-r-0"
                     key={field}
                     data-numeric={typeof record[field] === "number"}
                   >
-                    {cellText(record[field])}
+                    {datasetValueText(record[field])}
                   </td>
                 ),
               )}
