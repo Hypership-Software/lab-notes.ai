@@ -48,7 +48,9 @@ describe("HomePage", () => {
   it("shows the handoff as an ordered builder sequence", () => {
     render(<HomePage />)
 
-    const workflow = screen.getByRole("region", { name: "From atlas to agent" })
+    const workflow = screen.getByRole("region", {
+      name: "Start building in four steps.",
+    })
     const steps = within(workflow).getAllByRole("listitem")
     expect(steps).toHaveLength(4)
     expect(steps[0]).toHaveTextContent("Choose an opportunity")

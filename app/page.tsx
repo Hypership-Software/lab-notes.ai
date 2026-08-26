@@ -44,13 +44,13 @@ export default function HomePage() {
         <div className="mx-auto w-full max-w-[96rem] px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
           <div className="grid gap-6 border-b-2 border-surface/40 pb-8 lg:grid-cols-[1fr_2fr]">
             <p className="font-mono text-xs font-semibold tracking-[0.12em] text-synthetic uppercase">
-              Builder workflow / four steps
+              How to use this
             </p>
             <h2
               id="workflow-title"
               className="font-display text-[clamp(2.75rem,6vw,6.5rem)] leading-[0.9] font-extrabold tracking-[-0.055em] text-surface"
             >
-              From atlas to agent
+              Start building in four steps.
             </h2>
           </div>
           <ol className="mt-8 grid list-none gap-0 p-0 lg:grid-cols-4">
