@@ -131,7 +131,7 @@ export function ResearchStackHero() {
               Domain build partner
             </span>
             <strong className="mt-2 block break-all text-base">
-              {partner.invocation}
+              {partner.name}
             </strong>
           </a>
 

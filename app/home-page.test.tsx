@@ -33,7 +33,7 @@ describe("HomePage", () => {
     expect(within(stack).getByText("Synthetic working data")).toBeVisible()
     expect(within(stack).getByText("journeyStep")).toBeVisible()
     expect(
-      within(stack).getByText("$build-life-event-services"),
+      within(stack).getByText("build-life-event-services"),
     ).toBeVisible()
     expect(within(stack).getByText("Authority comes first")).toBeVisible()
 
@@ -50,7 +50,7 @@ describe("HomePage", () => {
     expect(steps[0]).toHaveTextContent("Choose an opportunity")
     expect(steps[1]).toHaveTextContent("Inspect the sources and starter data")
     expect(steps[2]).toHaveTextContent("git clone")
-    expect(steps[3]).toHaveTextContent("$build-life-event-services")
+    expect(steps[3]).toHaveTextContent("build-life-event-services")
 
     expect(steps[0].querySelector("code")).toBeNull()
     expect(steps[1].querySelector("code")).toBeNull()

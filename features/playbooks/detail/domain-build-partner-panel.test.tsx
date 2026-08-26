@@ -5,11 +5,14 @@ import { afterEach, describe, expect, it, vi } from "vitest"
 import { DomainBuildPartnerPanel } from "./domain-build-partner-panel"
 
 const prompt =
-  "Use $build-policy-evidence as my domain build partner.\n\nHelp me understand the opportunity, sources, synthetic dataset and constraints before we decide what—if anything—is worth prototyping."
+  "Use the build-policy-evidence skill as my domain build partner.\n\nHelp me understand the opportunity, sources, synthetic dataset and constraints before we decide what—if anything—is worth prototyping."
 
 const partner = {
   name: "build-policy-evidence",
-  invocation: "$build-policy-evidence" as const,
+  invocations: [
+    { agent: "Claude Code" as const, command: "/build-policy-evidence" },
+    { agent: "Codex" as const, command: "$build-policy-evidence" },
+  ],
   skillPath: ".agents/skills/build-policy-evidence/SKILL.md" as const,
   briefPath:
     ".agents/skills/build-policy-evidence/references/domain-brief.md" as const,
@@ -26,7 +29,10 @@ describe("DomainBuildPartnerPanel", () => {
 
     render(<DomainBuildPartnerPanel partner={partner} starterPrompt={prompt} />)
 
+    expect(screen.getByText("/build-policy-evidence")).toBeVisible()
     expect(screen.getByText("$build-policy-evidence")).toBeVisible()
+    expect(screen.getByText("Claude Code")).toBeVisible()
+    expect(screen.getByText("Codex")).toBeVisible()
     expect(screen.getByRole("textbox", { name: "Starter prompt" })).toHaveValue(
       prompt,
     )

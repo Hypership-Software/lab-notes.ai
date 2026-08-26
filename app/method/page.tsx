@@ -141,7 +141,9 @@ export default function MethodPage() {
             </h2>
             <p className="mt-5 max-w-2xl text-lg">
               Skills are checked into the repository, reviewed like code and
-              validated against every registered playbook.
+              validated against every registered playbook. They follow the
+              open Agent Skills standard, so Claude Code, Codex and other
+              compatible agents can load them.
             </p>
             <ExternalLink
               className="mt-6 text-synthetic-ink"

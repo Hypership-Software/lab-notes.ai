@@ -192,7 +192,7 @@ function OpportunityPreview({
             Domain build partner
           </p>
           <code className="mt-2 block break-all font-mono text-sm text-surface sm:text-base">
-            {item.buildPartner.invocation}
+            {item.buildPartner.name}
           </code>
         </div>
         <Link

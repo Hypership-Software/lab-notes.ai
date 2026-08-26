@@ -16,7 +16,10 @@ const items: readonly OpportunityAtlasItem[] = [
     dataset: { status: "available", recordCount: 16 },
     buildPartner: {
       name: "build-first-opportunity",
-      invocation: "$build-first-opportunity",
+      invocations: [
+        { agent: "Claude Code" as const, command: "/build-first-opportunity" },
+        { agent: "Codex" as const, command: "$build-first-opportunity" },
+      ],
       skillPath: ".agents/skills/build-first-opportunity/SKILL.md",
       briefPath:
         ".agents/skills/build-first-opportunity/references/domain-brief.md",
@@ -32,7 +35,10 @@ const items: readonly OpportunityAtlasItem[] = [
     dataset: { status: "not-responsible" },
     buildPartner: {
       name: "build-second-opportunity",
-      invocation: "$build-second-opportunity",
+      invocations: [
+        { agent: "Claude Code" as const, command: "/build-second-opportunity" },
+        { agent: "Codex" as const, command: "$build-second-opportunity" },
+      ],
       skillPath: ".agents/skills/build-second-opportunity/SKILL.md",
       briefPath:
         ".agents/skills/build-second-opportunity/references/domain-brief.md",
@@ -48,7 +54,10 @@ const items: readonly OpportunityAtlasItem[] = [
     dataset: { status: "available", recordCount: 8 },
     buildPartner: {
       name: "build-third-opportunity",
-      invocation: "$build-third-opportunity",
+      invocations: [
+        { agent: "Claude Code" as const, command: "/build-third-opportunity" },
+        { agent: "Codex" as const, command: "$build-third-opportunity" },
+      ],
       skillPath: ".agents/skills/build-third-opportunity/SKILL.md",
       briefPath:
         ".agents/skills/build-third-opportunity/references/domain-brief.md",

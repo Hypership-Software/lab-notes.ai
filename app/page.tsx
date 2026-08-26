@@ -28,7 +28,7 @@ export default function HomePage() {
     { label: "Clone the repository", command: cloneCommand },
     {
       label: "Ask your coding agent to load the build partner",
-      command: partner.invocation,
+      command: partner.name,
     },
   ]
 
@@ -128,7 +128,7 @@ export default function HomePage() {
           <HandoffRow
             index="04"
             label="Domain build partner"
-            value={partner.invocation}
+            value={partner.name}
             href={repositoryFileUrl(partner.skillPath)}
             technical
           />

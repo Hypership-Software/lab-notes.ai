@@ -1,7 +1,7 @@
 "use client"
 
 import { Check, Copy, GitFork } from "lucide-react"
-import { useState } from "react"
+import { Fragment, useState } from "react"
 
 import { ExternalLink } from "@/components/site/external-link"
 import { Button } from "@/components/ui/button"
@@ -52,10 +52,12 @@ export function DomainBuildPartnerPanel({
             Build with a domain-aware coding agent
           </h3>
           <p className="mt-4 max-w-3xl text-lg text-peat-muted">
-            Clone the repository, then ask Codex to load the skill that ships
-            with it. The skill brings the opportunity, sources, starter data,
-            known unknowns and constraints into the conversation before
-            anything is proposed.
+            Clone the repository, then ask your coding agent to load the skill
+            that ships with it. The skill brings the opportunity, sources,
+            starter data, known unknowns and constraints into the conversation
+            before anything is proposed. It follows the open Agent Skills
+            standard, so it works in Claude Code, Codex and any other agent
+            that reads skills.
           </p>
 
           <div className="mt-8 grid gap-px border-2 border-peat bg-peat">
@@ -71,9 +73,18 @@ export function DomainBuildPartnerPanel({
               <p className="font-mono text-[0.7rem] uppercase tracking-[0.16em] opacity-70">
                 02 / Invoke
               </p>
-              <code className="mt-2 block break-words font-mono text-lg font-bold">
-                {partner.invocation}
-              </code>
+              <dl className="mt-2 grid gap-x-6 gap-y-1 sm:grid-cols-[auto_minmax(0,1fr)] sm:items-baseline">
+                {partner.invocations.map((invocation) => (
+                  <Fragment key={invocation.agent}>
+                    <dt className="text-sm font-semibold">{invocation.agent}</dt>
+                    <dd className="m-0 mb-2 sm:mb-0">
+                      <code className="break-words font-mono text-lg font-bold">
+                        {invocation.command}
+                      </code>
+                    </dd>
+                  </Fragment>
+                ))}
+              </dl>
             </div>
           </div>
 

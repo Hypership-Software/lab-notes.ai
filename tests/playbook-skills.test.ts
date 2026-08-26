@@ -1,11 +1,15 @@
-import { readFile, readdir } from "node:fs/promises"
+import { readFile, readdir, realpath } from "node:fs/promises"
 import { join } from "node:path"
 import { describe, expect, it } from "vitest"
 
-import { getBuildPartnerDescriptor } from "@/lib/playbooks/build-partner"
+import {
+  buildPartnerAgents,
+  getBuildPartnerDescriptor,
+} from "@/lib/playbooks/build-partner"
 import { getPlaybookSlugs } from "@/lib/playbooks/registry"
 
 const skillsRoot = join(process.cwd(), ".agents", "skills")
+const claudeSkillsRoot = join(process.cwd(), ".claude", "skills")
 
 function frontmatterValue(source: string, key: string) {
   const match = source.match(new RegExp(`^${key}:\\s*["']?([^"'\\n]+)`, "m"))
@@ -20,6 +24,30 @@ describe("playbook domain build partners", () => {
     const expected = getPlaybookSlugs().map((slug) => `build-${slug}`).sort()
 
     expect(actual).toEqual(expected)
+  })
+
+  it("exposes the same skill folder to every supported agent", async () => {
+    expect(buildPartnerAgents.map((agent) => agent.skillsRoot)).toEqual([
+      ".claude/skills",
+      ".agents/skills",
+    ])
+
+    const actual = (await readdir(claudeSkillsRoot))
+      .filter((name) => name.startsWith("build-"))
+      .sort()
+    const expected = getPlaybookSlugs().map((slug) => `build-${slug}`).sort()
+    expect(actual).toEqual(expected)
+
+    for (const name of expected) {
+      // One skill, two discovery paths: the Claude Code entry must be a link
+      // to the Codex folder, not a copy that could drift.
+      expect(await realpath(join(claudeSkillsRoot, name))).toBe(
+        await realpath(join(skillsRoot, name)),
+      )
+      expect(
+        await readFile(join(claudeSkillsRoot, name, "SKILL.md"), "utf8"),
+      ).toContain(`name: ${name}`)
+    }
   })
 
   it("validates every checked-in playbook skill", async () => {

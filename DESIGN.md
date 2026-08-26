@@ -2,7 +2,7 @@
 
 ## 1. Purpose
 
-This project is the fastest credible starting point for builders exploring the public-service opportunities named in Northern Ireland's draft AI strategy. The website helps a builder choose an opportunity, understand the completed research, and inspect safe starter data. The cloned repository supplies a dedicated Codex skill so a coding agent can work as a domain-aware build partner.
+This project is the fastest credible starting point for builders exploring the public-service opportunities named in Northern Ireland's draft AI strategy. The website helps a builder choose an opportunity, understand the completed research, and inspect safe starter data. The cloned repository supplies a dedicated repository skill so a coding agent can work as a domain-aware build partner.
 
 > Choose a playbook → inspect the evidence → clone the repository → invoke the domain build partner → decide what is worth building.
 
@@ -63,7 +63,7 @@ Use a full-bleed asymmetric 70/30 hero. Its headline is:
 
 The lede says that each playbook includes published sources, safe starter data, honest constraints, and a domain build partner for a coding agent. The primary action is **Open the opportunity atlas** and the secondary action is **Clone the reference**.
 
-The signature visual is a layered composition of real product artefacts: a published-source excerpt, a synthetic dataset row, a repository path, a `$build-<slug>` invocation, and a constraint annotation. It assembles once with transform, opacity, and clip animations; reduced-motion mode shows the completed composition immediately. Follow with the builder workflow, one real accelerator handoff, and a compact atlas preview.
+The signature visual is a layered composition of real product artefacts: a published-source excerpt, a synthetic dataset row, a repository path, the `build-<slug>` skill name, and a constraint annotation. It assembles once with transform, opacity, and clip animations; reduced-motion mode shows the completed composition immediately. Follow with the builder workflow, one real accelerator handoff, and a compact atlas preview.
 
 ## 7. Opportunity Atlas
 
@@ -97,9 +97,9 @@ Use this shared transparency copy:
 
 ### Domain build partner
 
-This section is the handoff from website to repository. Its headline is **Build with a domain-aware coding agent**. Explain that the checked-in skill supplies the playbook, sources, dataset, known unknowns, and constraints to Codex. Call it a **domain build partner**, never a domain expert, accredited adviser, or source of professional assurance.
+This section is the handoff from website to repository. Its headline is **Build with a domain-aware coding agent**. Explain that the checked-in skill supplies the playbook, sources, dataset, known unknowns, and constraints to the builder's coding agent. Call it a **domain build partner**, never a domain expert, accredited adviser, or source of professional assurance.
 
-Render a clone command, skill invocation, copyable starter prompt, copy feedback, links to `SKILL.md` and the domain brief, and a concise list of loaded context. JavaScript may support clipboard feedback and instruction switching where instructions genuinely differ.
+Render a clone command, the skill invocation for each supported agent (Claude Code and Codex), a copyable starter prompt that asks for the skill by name, copy feedback, links to `SKILL.md` and the domain brief, and a concise list of loaded context. JavaScript may support clipboard feedback and instruction switching where instructions genuinely differ.
 
 ### Before you build
 
@@ -119,7 +119,7 @@ Long documents default to Records; short-field datasets default to Table. Schema
 
 ## 11. Repository-scoped domain skills
 
-Codex discovers repository skills from `$REPO_ROOT/.agents/skills`. Each registered playbook has `build-<playbook-slug>/SKILL.md`, `agents/openai.yaml`, and `references/domain-brief.md`; do not add duplicated playbook content, a README, installation guide, or changelog inside a skill.
+Skills follow the open Agent Skills standard and are agent-agnostic. Each lives once at `$REPO_ROOT/.agents/skills/build-<playbook-slug>/`, where Codex discovers it, with `SKILL.md`, `agents/openai.yaml` (Codex-only display metadata), and `references/domain-brief.md`. `$REPO_ROOT/.claude/skills/build-<playbook-slug>` is a relative symlink to that folder so Claude Code discovers the same skill; never copy skill content into `.claude/skills`. Do not add duplicated playbook content, a README, installation guide, or changelog inside a skill. Public copy names no single agent as required: show the skill name, and where an invocation is shown, show it for every supported agent.
 
 The skill reads its matching typed playbook, available dataset, and domain brief; establishes the builder's intended outcome; distinguishes published facts, project interpretation, synthetic data, and unsupported assumptions; explains constraints before implementation choices; explores multiple approaches without recommending a prewritten application; and stops where professional review, restricted data, or outside authority is needed.
 

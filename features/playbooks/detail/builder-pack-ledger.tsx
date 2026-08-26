@@ -49,7 +49,7 @@ export function BuilderPackLedger({
             Domain build partner
           </dt>
           <dd className="mt-1 break-words font-mono text-sm text-evidence-strong">
-            {partner.invocation}
+            {partner.name}
           </dd>
         </div>
         <div className="p-4">

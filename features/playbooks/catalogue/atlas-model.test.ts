@@ -12,7 +12,13 @@ describe("getOpportunityAtlasItems", () => {
       serviceArea: "Citizen services and government",
       dataSourceCount: 2,
       dataset: { status: "available", recordCount: 16 },
-      buildPartner: { invocation: "$build-life-event-services" },
+      buildPartner: {
+        name: "build-life-event-services",
+        invocations: [
+          { agent: "Claude Code", command: "/build-life-event-services" },
+          { agent: "Codex", command: "$build-life-event-services" },
+        ],
+      },
     })
   })
 

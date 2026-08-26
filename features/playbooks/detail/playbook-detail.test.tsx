@@ -54,7 +54,7 @@ describe("PlaybookDetail", () => {
     expect(within(ledger).getByText(`${playbook.dataSources.length}`)).toBeVisible()
     expect(within(ledger).getByText("Published sources")).toBeVisible()
     expect(within(ledger).getByText("20 synthetic records")).toBeVisible()
-    expect(within(ledger).getByText("$build-policy-evidence")).toBeVisible()
+    expect(within(ledger).getByText("build-policy-evidence")).toBeVisible()
     expect(
       within(ledger).getByText(formatUtcDate(playbook.lastReviewed)),
     ).toBeVisible()

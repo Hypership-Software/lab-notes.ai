@@ -13,7 +13,9 @@ a product or claim that AI is required.
 1. Clone the repository.
 2. Run `npm install` and `npm run dev`.
 3. Choose a playbook at `/playbooks`.
-4. Invoke its checked-in skill, for example `$build-life-event-services`.
+4. Invoke its checked-in skill: `/build-life-event-services` in Claude Code,
+   `$build-life-event-services` in Codex, or ask any skills-aware agent for
+   the `build-life-event-services` skill.
 5. Inspect the published sources and synthetic dataset before choosing what to build.
 
 ```bash
@@ -23,9 +25,11 @@ npm install
 npm run dev
 ```
 
-Codex discovers the repository skills from `.agents/skills`. Every registered
-playbook has a matching `build-<slug>` skill plus a domain brief. Run
-`npm run validate:skills` to verify that contract.
+Every registered playbook has a matching `build-<slug>` skill plus a domain
+brief. The skills follow the open [Agent Skills](https://agentskills.io)
+standard and live once, in `.agents/skills`, where Codex discovers them;
+`.claude/skills` holds one symlink per skill so Claude Code discovers the same
+folders. Run `npm run validate:skills` to verify that contract.
 
 The website makes no runtime model calls and requires no model key, account,
 database or private data integration. No hosted example or production service is
