@@ -40,6 +40,15 @@ const dataSources = [
     access: "registration-or-key",
     relevance: "Applications are matched to an address before anything else.",
   },
+  {
+    id: "case-records",
+    publisher: "Local planning authorities",
+    title: "Live planning case records",
+    url: "https://example.gov.uk/restricted-planning-records",
+    covers: "Person-level case records held inside operational planning systems.",
+    access: "restricted",
+    relevance: "They show the operational context that public statistics omit.",
+  },
 ] satisfies Playbook["dataSources"]
 
 const availableDataset = {
@@ -63,6 +72,25 @@ const withheldDataset = {
     "A data-sharing agreement with the holding department and an approved research protocol.",
 } satisfies Playbook["syntheticData"]
 
+const datasetSummary = {
+  recordCount: 20,
+  defaultView: "records",
+  fields: [
+    {
+      name: "response_id",
+      types: ["string"],
+      populatedCount: 20,
+      sampleValues: ["response-01", "response-02"],
+    },
+    {
+      name: "theme",
+      types: ["string"],
+      populatedCount: 20,
+      sampleValues: ["skills", "investment"],
+    },
+  ],
+} as const
+
 // Reads the value rendered beside a definition-list term.
 function definitionValue(container: HTMLElement, term: string) {
   const value = within(container).getByText(term).nextElementSibling
@@ -81,9 +109,7 @@ describe("StrategyExampleSection", () => {
       />,
     )
 
-    const section = screen.getByRole("region", {
-      name: "What the strategy draft proposed",
-    })
+    const section = screen.getByRole("region", { name: "Opportunity" })
     expect(within(section).getByText(strategyExample.proposal)).toBeVisible()
     expect(
       within(section).getByText(strategyExample.draftReference),
@@ -103,37 +129,55 @@ describe("DataSourcesSection", () => {
       <DataSourcesSection dataSources={dataSources} headingId="data-sources" />,
     )
 
-    const section = screen.getByRole("region", {
-      name: "Data sources investigated",
-    })
+    const section = screen.getByRole("region", { name: "Research already done" })
     // These are the one kind of material on the page that is not invented.
     expect(within(section).getByText("Real published source")).toBeVisible()
 
     const articles = within(section).getAllByRole("article")
     expect(articles).toHaveLength(dataSources.length)
 
-    const accessLabels = ["Open data", "Registration or key required"]
+    const accessLabels = ["Open", "Registration or key", "Restricted"]
     dataSources.forEach((source, index) => {
       const article = articles[index]
-      const escapedTitle = source.title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
       expect(
         within(article).getByRole("link", {
-          name: new RegExp(`^${escapedTitle}`),
+          name: /^Open source/,
         }),
       ).toHaveAttribute("href", source.url)
-      expect(definitionValue(article, "Publisher")).toHaveTextContent(
-        source.publisher,
-      )
+      // Publisher and access are the source's identity, not two more rows of a
+      // definition list, so they are asserted as rendered text.
+      expect(within(article).getByText(source.publisher)).toBeVisible()
+      expect(within(article).getByText(accessLabels[index])).toBeVisible()
       expect(definitionValue(article, "What it covers")).toHaveTextContent(
         source.covers,
       )
-      expect(definitionValue(article, "Access")).toHaveTextContent(
-        accessLabels[index],
-      )
-      expect(definitionValue(article, "Why it is relevant")).toHaveTextContent(
+      expect(definitionValue(article, "Why it matters here")).toHaveTextContent(
         source.relevance,
       )
     })
+  })
+
+  it("counts the sources, so the section states its own scope", () => {
+    render(
+      <DataSourcesSection dataSources={dataSources} headingId="data-sources" />,
+    )
+
+    expect(screen.getByText(/^3 sources/)).toBeVisible()
+  })
+
+  it("states access as a literal fact rather than a score or scale", () => {
+    render(
+      <DataSourcesSection dataSources={dataSources} headingId="data-sources" />,
+    )
+
+    const [open, keyed, restricted] = within(
+      screen.getByRole("region", { name: "Research already done" }),
+    ).getAllByRole("article")
+
+    expect(within(open).getByText("Open")).toBeVisible()
+    expect(within(keyed).getByText("Registration or key")).toBeVisible()
+    expect(within(restricted).getByText("Restricted")).toBeVisible()
+    expect(document.querySelector(".access-scale")).toBeNull()
   })
 })
 
@@ -143,14 +187,20 @@ describe("SyntheticDataSection", () => {
       <SyntheticDataSection
         syntheticData={availableDataset}
         slug="policy-evidence"
-        headingId="synthetic-dataset"
+        headingId="starter-dataset"
+        dataset={datasetSummary}
       />,
     )
 
-    const section = screen.getByRole("region", { name: "Synthetic dataset" })
+    const section = screen.getByRole("region", { name: "Starter dataset" })
     expect(within(section).getByText("Synthetic working data")).toBeVisible()
     expect(within(section).getByText(availableDataset.purpose)).toBeVisible()
     expect(within(section).getByText(availableDataset.preparation)).toBeVisible()
+    expect(
+      within(section).getByText(availableDataset.purpose).compareDocumentPosition(
+        within(section).getByText(availableDataset.preparation),
+      ) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
     for (const limitation of availableDataset.limitations) {
       expect(within(section).getByText(limitation)).toBeVisible()
     }
@@ -161,44 +211,49 @@ describe("SyntheticDataSection", () => {
       <SyntheticDataSection
         syntheticData={availableDataset}
         slug="policy-evidence"
-        headingId="synthetic-dataset"
+        headingId="starter-dataset"
+        dataset={datasetSummary}
       />,
     )
 
-    const section = screen.getByRole("region", { name: "Synthetic dataset" })
+    const section = screen.getByRole("region", { name: "Starter dataset" })
 
     // The path used to be inert text. It is now three real destinations, and
     // the on-site one names the number of records it will show.
     expect(
-      within(section).getByRole("link", { name: /^Read all 20 records/ }),
+      within(section).getByRole("link", { name: /^Inspect all 20 records/ }),
     ).toHaveAttribute("href", "/playbooks/policy-evidence/dataset")
     expect(
+      within(section).getByRole("link", { name: /^Inspect all 20 records/ }),
+    ).not.toHaveClass("transition-colors")
+    expect(
       within(section).getByRole("link", {
-        name: new RegExp(availableDataset.dataPath.replace(/[.]/g, "\\.")),
+        name: /^View repository file/,
       }),
     ).toHaveAttribute(
       "href",
       `https://github.com/Hypership-Software/ats-us-nai/blob/main/${availableDataset.dataPath}`,
     )
     expect(
-      within(section).getByRole("link", { name: /^Download the raw JSON/ }),
+      within(section).getByRole("link", { name: /^Download JSON/ }),
     ).toHaveAttribute(
       "href",
       `https://github.com/Hypership-Software/ats-us-nai/raw/main/${availableDataset.dataPath}`,
     )
   })
 
-  it("still offers the records link when no dataset is registered for the slug", () => {
+  it("still offers the records link when summary metadata is unavailable", () => {
     render(
       <SyntheticDataSection
         syntheticData={availableDataset}
         slug="not-a-playbook"
-        headingId="synthetic-dataset"
+        headingId="starter-dataset"
+        dataset={undefined}
       />,
     )
 
     expect(
-      screen.getByRole("link", { name: /^Read all the records/ }),
+      screen.getByRole("link", { name: /^Inspect all records/ }),
     ).toHaveAttribute("href", "/playbooks/not-a-playbook/dataset")
   })
 
@@ -207,16 +262,23 @@ describe("SyntheticDataSection", () => {
       <SyntheticDataSection
         syntheticData={withheldDataset}
         slug="violence-risk-research"
-        headingId="synthetic-dataset"
+        headingId="starter-dataset"
+        dataset={undefined}
       />,
     )
 
-    const section = screen.getByRole("region", { name: "Synthetic dataset" })
+    const section = screen.getByRole("region", { name: "Starter dataset" })
     expect(within(section).getByText(withheldDataset.reason)).toBeVisible()
     expect(
-      definitionValue(section, "What a contributor would need instead"),
-    ).toHaveTextContent(withheldDataset.whatContributorsNeed)
+      within(section).getByText(withheldDataset.whatContributorsNeed),
+    ).toBeVisible()
     expect(within(section).queryByRole("link")).toBeNull()
     expect(within(section).queryByText("Synthetic working data")).toBeNull()
+    expect(
+      within(section).getByText("No synthetic dataset — by design"),
+    ).toHaveClass("bg-signal-strong", "text-paper")
+    expect(
+      within(section).getByText("No synthetic dataset — by design"),
+    ).not.toHaveClass("bg-signal")
   })
 })

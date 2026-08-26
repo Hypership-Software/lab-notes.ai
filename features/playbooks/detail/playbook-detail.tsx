@@ -1,131 +1,133 @@
+import { ArrowDown, ArrowRight, GitBranch } from "lucide-react"
 import Link from "next/link"
 import type { ReactNode } from "react"
 
-import { AvailabilityBadge } from "@/components/site/availability-badge"
-import { ExternalLink } from "@/components/site/external-link"
-import { ProvenanceLabel } from "@/components/site/provenance-label"
-import { assertNever } from "@/lib/assert-never"
-import { formatUtcDate } from "@/lib/format-date"
+import {
+  getBuildPartnerDescriptor,
+  getBuildPartnerStarterPrompt,
+} from "@/lib/playbooks/build-partner"
+import { getDatasetSummary } from "@/lib/playbooks/dataset-registry"
+import { getPlaybookSlugs } from "@/lib/playbooks/registry"
 import type { Playbook } from "@/lib/playbooks/schema"
 import { getServiceArea } from "@/lib/playbooks/service-area"
 
-function StarterDataset({ playbook }: { playbook: Playbook }): ReactNode {
-  switch (playbook.syntheticData.status) {
-    case "available":
-      return (
-        <>
-          <AvailabilityBadge available />
-          <ProvenanceLabel kind="synthetic" />
-          <p>{playbook.syntheticData.purpose}</p>
-          <p>{playbook.syntheticData.preparation}</p>
-          <p>
-            <Link href={`/playbooks/${playbook.slug}/dataset`}>
-              Inspect the starter dataset
-            </Link>
-          </p>
-          <ul>
-            {playbook.syntheticData.limitations.map((limitation) => (
-              <li key={limitation}>{limitation}</li>
-            ))}
-          </ul>
-        </>
-      )
-    case "not-responsible":
-      return (
-        <>
-          <AvailabilityBadge available={false} />
-          <p>{playbook.syntheticData.reason}</p>
-          <p>{playbook.syntheticData.whatContributorsNeed}</p>
-        </>
-      )
-    default:
-      return assertNever(playbook.syntheticData)
-  }
-}
+import { BuildConstraintList } from "./build-constraint-list"
+import { BuilderPackLedger } from "./builder-pack-ledger"
+import { DataSourcesSection } from "./data-sources-section"
+import { DomainBuildPartnerPanel } from "./domain-build-partner-panel"
+import { SectionNavigator } from "./section-navigator"
+import { StrategyExampleSection } from "./strategy-example-section"
+import { SyntheticDataSection } from "./synthetic-data-section"
 
-/**
- * The smallest v3 detail shell. Later visual work can reshape it, but this
- * intermediate page exposes every surviving part of the typed contract.
- */
+const sections = [
+  { id: "opportunity", label: "Opportunity" },
+  { id: "research", label: "Research already done" },
+  { id: "starter-dataset", label: "Starter dataset" },
+  { id: "build-partner", label: "Domain build partner" },
+  { id: "before-you-build", label: "Before you build" },
+] as const
+
 export function PlaybookDetail({
   playbook,
 }: {
   playbook: Playbook
 }): ReactNode {
+  const dataset = getDatasetSummary(playbook.slug)
+  const partner = getBuildPartnerDescriptor(playbook.slug)
+  const starterPrompt = getBuildPartnerStarterPrompt(playbook.slug)
+  const playbookSlugs = getPlaybookSlugs()
+  const index = playbookSlugs.indexOf(playbook.slug) + 1
+
   return (
-    <article className="playbook-detail">
-      <header className="playbook-detail__header">
-        <p className="playbook-detail__eyebrow">
-          <Link href={`/playbooks?sector=${encodeURIComponent(playbook.sector)}`}>
-            {playbook.sector}
-          </Link>
-          <span aria-hidden="true">·</span>
-          <span>{getServiceArea(playbook.sector)}</span>
-        </p>
-        <h1>{playbook.title}</h1>
-        <p className="playbook-detail__summary">{playbook.summary}</p>
-        <p className="playbook-detail__reviewed">
-          Last reviewed{" "}
-          <time dateTime={playbook.lastReviewed}>
-            {formatUtcDate(playbook.lastReviewed)}
-          </time>
-        </p>
+    <article>
+      <header className="border-y-2 border-peat bg-surface">
+        <div className="grid lg:grid-cols-10">
+          <div className="p-5 sm:p-8 lg:col-span-7 lg:p-12">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs uppercase tracking-[0.15em] text-peat-muted">
+              <span className="text-evidence-strong">
+                Opportunity {String(index).padStart(2, "0")}/
+                {String(playbookSlugs.length).padStart(2, "0")}
+              </span>
+              <span aria-hidden="true">/</span>
+              <span>{playbook.sector}</span>
+              <span aria-hidden="true">/</span>
+              <span>{getServiceArea(playbook.sector)}</span>
+            </div>
+            <h1 className="mt-7 max-w-5xl text-[clamp(3.4rem,8vw,8.5rem)] leading-[0.88] tracking-[-0.055em]">
+              {playbook.title}
+            </h1>
+            <p className="mt-8 max-w-3xl text-xl leading-relaxed text-peat-muted sm:text-2xl">
+              {playbook.summary}
+            </p>
+            <div className="mt-9 flex flex-wrap gap-3">
+              {dataset && (
+                <Link
+                  className="inline-flex min-h-12 items-center gap-2 bg-evidence px-5 py-3 font-bold text-paper no-underline hover:bg-evidence-strong"
+                  href={`/playbooks/${playbook.slug}/dataset`}
+                >
+                  Inspect starter data
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
+              )}
+              <a
+                className="inline-flex min-h-12 items-center gap-2 border-2 border-peat px-5 py-3 font-bold no-underline hover:bg-synthetic"
+                href="#build-partner"
+              >
+                {dataset ? "Load build partner" : "Start with the build partner"}
+                {dataset ? (
+                  <ArrowDown className="size-4" aria-hidden="true" />
+                ) : (
+                  <GitBranch className="size-4" aria-hidden="true" />
+                )}
+              </a>
+            </div>
+          </div>
+          <div className="border-t-2 border-peat p-5 sm:p-8 lg:col-span-3 lg:border-t-0 lg:border-l-2 lg:p-8">
+            <BuilderPackLedger
+              sourceCount={playbook.dataSources.length}
+              dataset={dataset}
+              datasetState={playbook.syntheticData.status}
+              partner={partner}
+              lastReviewed={playbook.lastReviewed}
+            />
+          </div>
+        </div>
       </header>
 
-      <div className="playbook-detail__sections">
-        <section className="playbook-detail__section" aria-labelledby="opportunity">
-          <h2 id="opportunity">Opportunity</h2>
-          <p className="reading-width">{playbook.strategyExample.proposal}</p>
-          <p>
-            <ExternalLink href={playbook.strategyExample.url}>
-              Read {playbook.strategyExample.draftReference}
-            </ExternalLink>
-          </p>
-        </section>
-
-        <section className="playbook-detail__section" aria-labelledby="research">
-          <h2 id="research">Research already done</h2>
-          <ProvenanceLabel kind="source" />
-          <ol className="source-register">
-            {playbook.dataSources.map((source) => (
-              <li key={source.id}>
-                <article className="source-dossier">
-                  <h3>{source.title}</h3>
-                  <p>{source.publisher}</p>
-                  <p>{source.covers}</p>
-                  <p>{source.relevance}</p>
-                  <ExternalLink href={source.url}>Open the source</ExternalLink>
-                </article>
-              </li>
-            ))}
-          </ol>
-        </section>
-
-        <section
-          className="playbook-detail__section"
-          aria-labelledby="starter-dataset"
-        >
-          <h2 id="starter-dataset">Starter dataset</h2>
-          <div className="synthetic-data-method">
-            <StarterDataset playbook={playbook} />
+      <div className="grid gap-10 px-4 sm:px-6 lg:grid-cols-10 lg:gap-16 lg:px-10">
+        <aside className="pt-10 lg:col-span-3 lg:col-start-8 lg:row-start-1 lg:pt-0">
+          <div className="lg:sticky lg:top-24 lg:py-16">
+            <SectionNavigator sections={sections} />
           </div>
-        </section>
+        </aside>
 
-        <section
-          className="playbook-detail__section"
-          aria-labelledby="before-you-build"
-        >
-          <h2 id="before-you-build">Before you build</h2>
-          <ul className="reading-width">
-            {playbook.caveats.map((caveat) => (
-              <li key={caveat.title}>
-                <strong>{caveat.title}</strong>
-                <p>{caveat.detail}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <div className="min-w-0 lg:col-span-7 lg:col-start-1 lg:row-start-1">
+          <StrategyExampleSection
+            strategyExample={playbook.strategyExample}
+            headingId="opportunity"
+          />
+          <DataSourcesSection
+            dataSources={playbook.dataSources}
+            headingId="research"
+          />
+          <SyntheticDataSection
+            syntheticData={playbook.syntheticData}
+            slug={playbook.slug}
+            headingId="starter-dataset"
+            dataset={dataset}
+          />
+          <DomainBuildPartnerPanel
+            partner={partner}
+            starterPrompt={starterPrompt}
+            headingId="build-partner"
+          />
+        </div>
       </div>
+
+      <BuildConstraintList
+        caveats={playbook.caveats}
+        headingId="before-you-build"
+      />
     </article>
   )
 }

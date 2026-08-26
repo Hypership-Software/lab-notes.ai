@@ -31,7 +31,7 @@ export default async function PlaybookPage({
   if (!playbook) notFound()
 
   return (
-    <div className="page-shell playbook-detail-page">
+    <div className="w-full overflow-x-clip">
       <PlaybookDetail playbook={playbook} />
     </div>
   )
