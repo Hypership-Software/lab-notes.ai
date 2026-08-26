@@ -1,4 +1,7 @@
+import { ExternalLinkIcon } from "lucide-react"
 import Link from "next/link"
+
+import { HypershipMark } from "@/components/site/hypership-mark"
 
 export function SiteFooter() {
   return (
@@ -56,6 +59,24 @@ export function SiteFooter() {
               </li>
             </ul>
           </nav>
+        </div>
+      </div>
+      <div className="border-t-2 border-paper/40">
+        <div className="mx-auto flex w-full max-w-[96rem] flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-4 sm:px-6 lg:px-8">
+          <a
+            className="inline-flex min-h-11 items-center gap-2 font-mono text-[0.6875rem] font-semibold tracking-[0.12em] text-paper/80 uppercase no-underline transition-colors hover:text-synthetic"
+            href="https://hypership.tech"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
+            <HypershipMark className="size-4 shrink-0" />
+            Built by Hypership
+            <ExternalLinkIcon className="size-3" aria-hidden="true" />
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
+          <p className="m-0 font-mono text-[0.6875rem] tracking-[0.12em] text-paper/60 uppercase">
+            Apache-2.0
+          </p>
         </div>
       </div>
     </footer>

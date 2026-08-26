@@ -114,4 +114,13 @@ describe("site shell", () => {
     expect(screen.getByText(/independent open-source accelerator/i)).toBeVisible()
     expect(screen.queryByText(/official government service/i)).not.toBeInTheDocument()
   })
+
+  it("credits Hypership with a safe external link", () => {
+    render(<SiteFooter />)
+
+    const credit = screen.getByRole("link", { name: /^Built by Hypership/ })
+    expect(credit).toHaveAttribute("href", "https://hypership.tech")
+    expect(credit).toHaveAttribute("target", "_blank")
+    expect(credit).toHaveAttribute("rel", "noreferrer noopener")
+  })
 })
