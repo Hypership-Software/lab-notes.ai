@@ -5,7 +5,7 @@ import { strategyDraftReference, strategyDraftUrl } from "../strategy-draft"
 export const policyEvidence = definePlaybook({
   schemaVersion: 3,
   slug: "policy-evidence",
-  title: "Policy Evidence Workbench",
+  title: "Policy Evidence and Consultation Analysis",
   summary:
     "Explore how consultation responses might be grouped into themes for further investigation while keeping the supporting passages visible.",
   sector: "Cross-government", // the sector string this playbook already uses

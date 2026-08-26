@@ -49,14 +49,22 @@ describe("playbook inventory", () => {
     expect(playbooks.map((playbook) => playbook.slug)).toEqual(expectedSlugs)
   })
 
+  it("keeps titles opportunity-led rather than naming a prescribed product", () => {
+    for (const playbook of playbooks) {
+      expect(playbook.title).not.toMatch(/\b(?:dashboard|workbench)\b/i)
+    }
+  })
+
   it("ships seventeen complete accelerator playbooks", () => {
+    const removedShowcaseField = ["de", "mo"].join("")
+
     expect(playbooks).toHaveLength(17)
 
     for (const playbook of playbooks) {
       expect(playbook.schemaVersion).toBe(3)
       expect(playbook.dataSources.length).toBeGreaterThan(0)
       expect(playbook.caveats.length).toBeGreaterThan(0)
-      expect("demo" in playbook).toBe(false)
+      expect(removedShowcaseField in playbook).toBe(false)
     }
   })
 

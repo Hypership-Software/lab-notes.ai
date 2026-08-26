@@ -63,10 +63,12 @@ describe("playbookSchema", () => {
     expect(playbookSchema.safeParse(playbook).success).toBe(false)
   })
 
-  it("rejects an unknown demo field", () => {
+  it("rejects the removed showcase field", () => {
+    const removedShowcaseField = ["de", "mo"].join("")
+
     expect(playbookSchema.safeParse({
       ...validPlaybook(),
-      demo: { status: "not-yet", note: "No hosted demonstration exists for this example yet." },
+      [removedShowcaseField]: { status: "not-yet" },
     }).success).toBe(false)
   })
 

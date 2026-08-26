@@ -161,7 +161,7 @@ export default function MethodPage() {
             </h2>
           </div>
           <Link
-            className="inline-flex min-h-12 shrink-0 items-center border-2 border-synthetic bg-synthetic px-5 py-3 font-bold text-synthetic-ink no-underline hover:-translate-y-0.5 focus-visible:outline-surface motion-reduce:transform-none"
+            className="inline-flex min-h-12 shrink-0 items-center border-2 border-synthetic bg-synthetic px-5 py-3 font-bold text-synthetic-ink no-underline transition-transform duration-150 hover:-translate-y-0.5 focus-visible:outline-surface motion-reduce:transition-none"
             href="/playbooks"
           >
             Open the opportunity atlas

@@ -28,9 +28,9 @@ playbook has a matching `build-<slug>` skill plus a domain brief. Run
 `npm run validate:skills` to verify that contract.
 
 The website makes no runtime model calls and requires no model key, account,
-database or private data integration. No demo or production service is included:
-the repository is a researched starting point for deciding what, if anything,
-is worth prototyping.
+database or private data integration. No hosted example or production service is
+included: the repository is a researched starting point for deciding what, if
+anything, is worth prototyping.
 
 ## What a playbook contains
 

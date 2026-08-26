@@ -27,38 +27,23 @@ The detailed working plan lives in `docs/superpowers/plans/2026-08-24-agent-nati
 
 ## Ordered tasks
 
-### Task 1: Replace the tracked product contract
-
-### Task 2: Introduce the demo-free schema v3
-
-### Task 3: Migrate all seventeen playbooks to concise builder copy
-
-### Task 4: Delete the demo subsystem and restore a green application shell
-
-### Task 5: Derive dataset summaries and build-partner descriptors
-
-### Task 6: Establish the skill contract with Life Event Services
-
-### Task 7: Author citizen, community, and policy build partners
-
-### Task 8: Author health and education build partners
-
-### Task 9: Author environment, land, water, and transport build partners
-
-### Task 10: Author justice, community-safety, and housing build partners
-
-### Task 11: Install the bold Tailwind and shadcn foundation
-
-### Task 12: Build the homepage and Opportunity Atlas
-
-### Task 13: Rebuild the playbook page as a builder handoff
-
-### Task 14: Turn dataset pages into interactive working surfaces
-
-### Task 15: Complete supporting routes and remove legacy CSS
-
-### Task 16: Complete accessibility, production, and content verification
+- [x] **Task 1:** Replace the tracked product contract
+- [x] **Task 2:** Introduce the accelerator schema v3
+- [x] **Task 3:** Migrate all seventeen playbooks to concise builder copy
+- [x] **Task 4:** Delete the obsolete showcase subsystem and restore a green application shell
+- [x] **Task 5:** Derive dataset summaries and build-partner descriptors
+- [x] **Task 6:** Establish the skill contract with Life Event Services
+- [x] **Task 7:** Author citizen, community, and policy build partners
+- [x] **Task 8:** Author health and education build partners
+- [x] **Task 9:** Author environment, land, water, and transport build partners
+- [x] **Task 10:** Author justice, community-safety, and housing build partners
+- [x] **Task 11:** Install the bold Tailwind and shadcn foundation
+- [x] **Task 12:** Build the homepage and Opportunity Atlas
+- [x] **Task 13:** Rebuild the playbook page as a builder handoff
+- [x] **Task 14:** Turn dataset pages into interactive working surfaces
+- [x] **Task 15:** Complete supporting routes and remove legacy CSS
+- [x] **Task 16:** Complete accessibility, production, and content verification
 
 ## Completion
 
-The work is complete when the site is a builder accelerator rather than a demo gallery; all 17 playbooks use schema version 3 and have a validated repository skill; the Opportunity Atlas, playbook, dataset, method, contribution, and not-found routes use the approved field-manual design; obsolete catalogue filtering, demo, chart, and page-specific global styling machinery is gone; and the complete automated and manual accessibility quality gate passes.
+Complete. The site is a builder accelerator rather than a prototype gallery; all 17 playbooks use schema version 3 and have a validated repository skill; the Opportunity Atlas, playbook, dataset, method, contribution, and not-found routes use the approved field-manual design; obsolete catalogue filtering, showcase, chart, and page-specific global styling machinery is gone; and the automated and manual accessibility quality gates pass.

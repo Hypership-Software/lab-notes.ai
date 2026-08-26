@@ -24,7 +24,7 @@ The website helps a builder choose and inspect an opportunity. The cloned reposi
 
 ## Positioning
 
-The product is an independent, annotated open-source field manual rather than a procurement catalogue, model leaderboard, government marketing site, or demo gallery. It does not imply government endorsement or imitate an official government service.
+The product is an independent, annotated open-source field manual rather than a procurement catalogue, model leaderboard, government marketing site, or prototype gallery. It does not imply government endorsement or imitate an official government service.
 
 Its primary proposition is: **17 public-service opportunities. The desk research is already done.** Builders start with published sources, safe sample data, and a domain build partner that ships with the repository.
 

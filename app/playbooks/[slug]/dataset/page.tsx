@@ -130,8 +130,19 @@ export default async function PlaybookDatasetPage({
               Explore the working data
             </h1>
             <p className="mt-7 max-w-3xl text-xl leading-relaxed text-peat-muted sm:text-2xl">
-              {dataset.description}
+              We used AI-assisted research to investigate the published sources,
+              then created {summary.recordCount} non-sensitive synthetic records
+              shaped by what those sources expose. This is working material—not
+              real service data or evidence.
             </p>
+            <details className="mt-7 max-w-3xl border-l-4 border-synthetic pl-4">
+              <summary className="w-fit cursor-pointer font-mono text-xs font-bold tracking-[0.1em] text-evidence-strong uppercase">
+                Read the dataset-specific note
+              </summary>
+              <p className="mt-3 text-base leading-relaxed text-peat-muted">
+                {dataset.description}
+              </p>
+            </details>
           </div>
 
           <aside className="border-t-2 border-peat bg-paper p-4 sm:p-8 lg:col-span-3 lg:border-t-0 lg:border-l-2 lg:p-10">

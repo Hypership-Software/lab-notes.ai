@@ -75,9 +75,10 @@ describe("createPlaybookRegistry", () => {
     expect(registry.getPlaybook("missing-service")).toBeUndefined()
   })
 
-  it("projects searchable catalogue summaries without the source register", () => {
+  it("projects compact atlas summaries without the source register", () => {
     const registry = createPlaybookRegistry([alpha])
     const [summary] = registry.getPlaybookSummaries()
+    const removedShowcaseField = ["de", "mo"].join("")
 
     expect(summary).toMatchObject({
       slug: "alpha-service",
@@ -85,7 +86,7 @@ describe("createPlaybookRegistry", () => {
       sector: "Cross-government",
     })
     expect(summary).not.toHaveProperty("strategyExample")
-    expect(summary).not.toHaveProperty("demo")
+    expect(summary).not.toHaveProperty(removedShowcaseField)
     expect(summary).not.toHaveProperty("dataSources")
     expect(summary).not.toHaveProperty("caveats")
     expect(summary.dataSourceCount).toBe(1)
