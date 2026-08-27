@@ -2,6 +2,11 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* The site ships one fixed palette. Scope `dark:` utilities inside shadcn
+   primitives to an explicit `.dark` class (never set) instead of the OS
+   colour-scheme preference, so they cannot override the designed tokens. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme inline {
   --color-paper: #f4f1e8;
   --color-surface: #fffdf5;
