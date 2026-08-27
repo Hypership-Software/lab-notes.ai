@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -35,18 +36,20 @@ export function SiteHeader() {
           className="group flex min-h-24 items-center gap-3 py-4 no-underline sm:mr-auto sm:pr-8"
           href="/"
         >
-          <span
-            className="grid size-12 shrink-0 place-items-center border-2 border-peat bg-synthetic font-mono text-[0.6875rem] leading-none font-bold tracking-[-0.04em] text-synthetic-ink transition-transform duration-150 group-hover:-translate-y-0.5"
-            aria-hidden="true"
-          >
-            NI/17
-          </span>
+          <Image
+            alt=""
+            className="size-12 shrink-0 transition-transform duration-150 group-hover:-translate-y-0.5"
+            height={48}
+            priority
+            src="/lab-notes-mark.png"
+            width={48}
+          />
           <span className="flex flex-col gap-0.5">
             <span className="font-display text-lg leading-none font-extrabold tracking-[-0.035em] sm:text-xl">
-              Public-Service AI Playbooks
+              lab-notes.ai
             </span>
             <span className="font-mono text-[0.625rem] leading-tight font-semibold tracking-[0.1em] text-peat-muted uppercase">
-              Open-source builder reference
+              Public-service AI playbooks
             </span>
           </span>
         </Link>

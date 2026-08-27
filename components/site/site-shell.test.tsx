@@ -30,7 +30,7 @@ describe("site shell", () => {
     expect(screen.getByRole("link", { name: "Skip to main content" })).toHaveFocus()
     expect(screen.getByRole("navigation", { name: "Primary" })).toBeVisible()
     expect(
-      screen.getByRole("link", { name: /Public-Service AI Playbooks/ }),
+      screen.getByRole("link", { name: /lab-notes\.ai/ }),
     ).toHaveAttribute("href", "/")
 
     for (const label of ["Playbooks", "How this works", "Contribute"]) {

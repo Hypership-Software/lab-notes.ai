@@ -10,15 +10,7 @@ export function SiteFooter() {
       data-site-footer
     >
       <div className="mx-auto grid w-full max-w-[96rem] lg:grid-cols-[minmax(0,3fr)_minmax(16rem,1fr)]">
-        <div className="grid gap-8 border-b-2 border-paper/40 px-4 py-12 sm:grid-cols-[5rem_minmax(0,1fr)] sm:px-6 lg:border-r-2 lg:border-b-0 lg:px-8 lg:py-16">
-          <p
-            className="font-mono text-xs leading-none font-bold tracking-[0.14em] text-synthetic uppercase"
-            aria-hidden="true"
-          >
-            REF/NI
-            <br />
-            2026
-          </p>
+        <div className="border-b-2 border-paper/40 px-4 py-12 sm:px-6 lg:border-r-2 lg:border-b-0 lg:px-8 lg:py-16">
           <div className="flex max-w-3xl flex-col gap-5">
             <p className="font-display text-3xl leading-[0.95] font-extrabold tracking-[-0.045em] text-surface sm:text-5xl">
               Independent open-source accelerator

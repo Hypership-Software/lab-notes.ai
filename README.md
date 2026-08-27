@@ -1,4 +1,4 @@
-# Public-Service AI Playbooks
+# lab-notes.ai
 
 An independent, open-source accelerator for builders exploring the 17
 public-service opportunities named in Northern Ireland's draft AI strategy.
