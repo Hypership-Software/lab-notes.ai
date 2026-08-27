@@ -6,7 +6,7 @@
  * public repository URL and nothing else: no token, no private endpoint, and
  * no path that depends on where a contributor happens to have checked out.
  */
-export const repositoryUrl = "https://github.com/Hypership-Software/ats-us-nai"
+export const repositoryUrl = "https://github.com/Hypership-Software/lab-notes.ai"
 
 const defaultBranch = "main"
 

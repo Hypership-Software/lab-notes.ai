@@ -38,11 +38,11 @@ describe("DomainBuildPartnerPanel", () => {
     )
     expect(screen.getByRole("link", { name: /^Open SKILL.md/ })).toHaveAttribute(
       "href",
-      "https://github.com/Hypership-Software/ats-us-nai/blob/main/.agents/skills/build-policy-evidence/SKILL.md",
+      "https://github.com/Hypership-Software/lab-notes.ai/blob/main/.agents/skills/build-policy-evidence/SKILL.md",
     )
     expect(screen.getByRole("link", { name: /^Open domain brief/ })).toHaveAttribute(
       "href",
-      "https://github.com/Hypership-Software/ats-us-nai/blob/main/.agents/skills/build-policy-evidence/references/domain-brief.md",
+      "https://github.com/Hypership-Software/lab-notes.ai/blob/main/.agents/skills/build-policy-evidence/references/domain-brief.md",
     )
 
     await user.click(screen.getByRole("button", { name: "Copy starter prompt" }))

@@ -232,13 +232,13 @@ describe("SyntheticDataSection", () => {
       }),
     ).toHaveAttribute(
       "href",
-      `https://github.com/Hypership-Software/ats-us-nai/blob/main/${availableDataset.dataPath}`,
+      `https://github.com/Hypership-Software/lab-notes.ai/blob/main/${availableDataset.dataPath}`,
     )
     expect(
       within(section).getByRole("link", { name: /^Download JSON/ }),
     ).toHaveAttribute(
       "href",
-      `https://github.com/Hypership-Software/ats-us-nai/raw/main/${availableDataset.dataPath}`,
+      `https://github.com/Hypership-Software/lab-notes.ai/raw/main/${availableDataset.dataPath}`,
     )
   })
 

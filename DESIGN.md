@@ -1,8 +1,8 @@
-# Agent-native Opportunity Atlas — Design Source of Truth
+# lab-notes.ai — Design
 
 ## 1. Purpose
 
-This project is the fastest credible starting point for builders exploring the public-service opportunities named in Northern Ireland's draft AI strategy. The website helps a builder choose an opportunity, understand the completed research, and inspect safe starter data. The cloned repository supplies a dedicated repository skill so a coding agent can work as a domain-aware build partner.
+lab-notes.ai is the fastest credible starting point for builders exploring the public-service opportunities named in Northern Ireland's draft AI strategy. The website helps a builder choose an opportunity, understand the completed research, and inspect safe starter data. The cloned repository supplies a dedicated repository skill so a coding agent can work as a domain-aware build partner.
 
 > Choose a playbook → inspect the evidence → clone the repository → invoke the domain build partner → decide what is worth building.
 
@@ -127,7 +127,7 @@ Each domain brief covers vocabulary, affected organisations and stakeholder grou
 
 ## 12. Content model
 
-The shared contract is `schemaVersion: 3`. All 17 definitions migrate together; do not support schema versions 2 and 3 simultaneously.
+The shared contract is `schemaVersion: 3`, and all 17 definitions use it.
 
 `summary` is a concise builder-oriented opportunity statement that neither claims an outcome nor asserts that AI is necessarily the answer. An available synthetic-data answer has `dataPath`, `purpose`, `preparation`, and `limitations`; record count and fields are derived from the committed dataset. A refusal retains its explanation and what contributors would need.
 
@@ -153,29 +153,35 @@ Content validation asserts the derived folder, `SKILL.md`, metadata, and domain 
 
 The design language is an **annotated open-source field manual**: editorial, industrial, exact, and energetic. Use an asymmetric composition, 2px structural rules, large indexes, margin annotations, brackets, connector lines, highlighted source fragments, dataset cells, and command blocks derived from real content. Avoid stock AI imagery, glowing networks, glass panels, repetitive icon cards, uniform card walls, decorative shadows, government imitation, gradients, pure black, and pure white.
 
-Use Paper `#F4F1E8`, Surface `#FFFDF5`, Peat `#15211B`, Muted peat `#4F5B54`, Ultramarine `#2746D7`, Dark ultramarine `#1931A8`, Acid `#C8E84A`, Acid ink `#1B2600`, Signal orange `#E7502C`, Dark orange `#8F2A17`, and Structural line `#A8A79F`, expressed as equivalent OKLCH theme tokens. Verify every text/background pairing; hue roles remain fixed.
+Use Paper `#F4F1E8`, Surface `#FFFDF5`, Peat `#15211B`, Muted peat `#4F5B54`, Ultramarine `#2746D7`, Dark ultramarine `#1931A8`, Acid `#C8E84A`, Acid ink `#1B2600`, Signal orange `#E7502C`, Dark orange `#8F2A17`, and Structural line `#A8A79F`, defined as theme tokens in `app/globals.css`. Verify every text/background pairing; hue roles remain fixed. There is one palette: no dark theme, and no colour that changes with the operating system's preference.
 
 Use Bricolage Grotesque for display headings, Spline Sans for body and controls, and Fragment Mono only for identifiers, commands, fields, records, and repository paths. Important display text is three to five times nearby metadata. Motion is restrained: hero assembly, atlas previews, active-section tracking, dataset view changes, copy confirmation, and instruction switching; reduced motion makes changes immediate.
 
+The identity is the lab-notes mark in `public/lab-notes-mark.png`: a peat notebook page with an acid corner and a plotted point. It sits in the header beside the `lab-notes.ai` wordmark set in Bricolage Grotesque, supplies the favicon and app icons in `app/`, and anchors every social-preview image. Keep the mark on Paper or Surface; on peat or any dark ground its ink disappears. Do not reintroduce a text badge, index code, or reference number in its place.
+
 ## 14. Styling, rendering, and interaction
 
-`app/globals.css` contains only Tailwind imports, theme and shadcn semantic tokens, minimal base rules, font variables, and print and forced-colours overrides. Page styling belongs to the owning component's Tailwind utilities; repeated variants use `cva` and `cn`. Add shadcn primitives through the CLI and keep generated primitives unmodified in `components/ui/`.
+`app/globals.css` contains only Tailwind imports, the class-scoped `dark` variant that keeps generated shadcn primitives on the single palette whatever the operating system prefers, theme and shadcn semantic tokens, minimal base rules, font variables, and print and forced-colours overrides. Page styling belongs to the owning component's Tailwind utilities; repeated variants use `cva` and `cn`. Add shadcn primitives through the CLI and keep generated primitives unmodified in `components/ui/`.
 
 Server Components load validated content, metadata, and initial HTML. Focused client components own the atlas, dataset explorer, section navigator, and clipboard feedback. They receive serializable validated data and do not perform domain computation, fetch production services, or call a model.
 
-## 15. States and failure handling
+## 15. Metadata and sharing
+
+Every route sets its title, description, canonical URL, and Open Graph URL through `pageMetadata` in `lib/site.ts`, which also holds the site origin and description. `app/robots.ts`, `app/sitemap.ts`, and `app/manifest.ts` derive from the same constants and the playbook registry, so a new playbook appears in the sitemap without a separate edit. Social-preview images are generated at build time by `app/opengraph-image.tsx` and `app/playbooks/[slug]/opengraph-image.tsx` through `lib/open-graph/card.tsx`, using the mark and the tracked fonts in `assets/fonts/`; nothing is fetched at request time.
+
+## 16. States and failure handling
 
 For a missing synthetic dataset, render the responsible-refusal explanation and contributor requirements; never show controls or imply a safe stand-in exists. An invalid or missing skill fails content validation and the production build. Keep an unavailable external source record with its last-reviewed context, without claiming live availability. Clipboard failures leave commands selectable and show concise feedback. Interactive failures retain equivalent labels, values, links, and source material in the document.
 
-## 16. Accessibility and responsive behaviour
+## 17. Accessibility and responsive behaviour
 
 Keep one `h1`, logical heading order, labelled landmarks, and a working skip link. Use buttons for atlas selection and links for navigation. Expose selected, expanded, copied, and current-section states semantically. Support keyboard traversal without hover, prevent sticky elements from obscuring focus, meet 44px touch targets, pair provenance colours with literal text, honour reduced motion and forced colours, and retain all core content and actions at 200% zoom and 320 CSS pixels.
 
-## 17. Privacy, security, and integrity
+## 18. Privacy, security, and integrity
 
 No runtime model calls, production data pipeline, API key, account, upload, database, or private departmental integration is in scope. Do not commit person-level synthetic records where a responsible stand-in is not possible. Published sources and synthetic working data remain visibly distinct. Build partners stop when professional review, safeguarding, legal authority, restricted data, or data-controller decisions are required.
 
-## 18. Testing and validation
+## 19. Testing and validation
 
 - Parse all 17 playbooks through the shared schema, validate every available dataset envelope and privacy walk, validate unique source IDs, and validate titled caveats and split synthetic-data copy.
 - Assert every registered slug resolves to a skill folder, `SKILL.md`, `agents/openai.yaml`, and domain brief, and that no orphan playbook skill exists.
@@ -183,14 +189,6 @@ No runtime model calls, production data pipeline, API key, account, upload, data
 - Test atlas selection and keyboard navigation, builder-pack states, dataset views and full-record availability, build-partner copy feedback, and semantic source access labels and constraints.
 - Run `npm run typecheck`, `npm run lint`, `npm run test`, and `npm run build`, followed by desktop/mobile, keyboard, reduced-motion, forced-colours, and 200% zoom review. Do not add Playwright or another browser-test harness.
 
-## 19. Definition of done
-
-The redesign is complete when the homepage communicates the builder proposition and agent workflow above the fold; `/playbooks` shows all 17 opportunities without refinement; each playbook exposes research, starter-data state, build-partner skill, and constraints; every available dataset has purpose-led copy and usable actions; each playbook has one validated repository skill and domain brief; provenance remains distinct; `globals.css` has no page-specific styling; and all quality gates pass.
-
 ## 20. Explicit non-goals
 
 No published recommended or ranked applications, hosted reference implementations, professional-authority claims for skills, autonomous production deployment workflows inside skills, runtime model calls, production integrations, person-level stand-ins where irresponsible, risk scores, maturity ladders, approval workflows, governance dashboards, dark theme, plugin packaging, or broad unrelated refactor.
-
-## 21. Delivery boundaries
-
-Deliver the work in ordered slices: tracked product/design documents and content contract; Tailwind and shadcn foundation; skill template and representative skill; remaining skills and briefs; homepage and Opportunity Atlas; playbook detail and dataset explorer; method and contribution routes; removal of obsolete machinery; then global CSS, accessibility review, and the complete quality gate. Preserve the existing dirty worktree and inspect overlapping changes before superseding them.

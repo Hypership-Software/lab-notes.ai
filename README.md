@@ -19,8 +19,8 @@ a product or claim that AI is required.
 5. Inspect the published sources and synthetic dataset before choosing what to build.
 
 ```bash
-git clone https://github.com/Hypership-Software/ats-us-nai.git
-cd ats-us-nai
+git clone https://github.com/Hypership-Software/lab-notes.ai.git
+cd lab-notes.ai
 npm install
 npm run dev
 ```
@@ -30,6 +30,10 @@ brief. The skills follow the open [Agent Skills](https://agentskills.io)
 standard and live once, in `.agents/skills`, where Codex discovers them;
 `.claude/skills` holds one symlink per skill so Claude Code discovers the same
 folders. Run `npm run validate:skills` to verify that contract.
+
+On Windows, enable symlinks before cloning (turn on Developer Mode, then
+`git config --global core.symlinks true`); otherwise the `.claude/skills`
+entries check out as plain files and `npm run validate:skills` fails.
 
 The website makes no runtime model calls and requires no model key, account,
 database or private data integration. No hosted example or production service is
