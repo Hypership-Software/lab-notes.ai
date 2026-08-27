@@ -1,4 +1,4 @@
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import {
   Bricolage_Grotesque,
   Fragment_Mono,
@@ -7,6 +7,7 @@ import {
 
 import { SiteFooter } from "@/components/site/site-footer"
 import { SiteHeader } from "@/components/site/site-header"
+import { siteDescription, siteName, siteUrl } from "@/lib/site"
 
 import "./globals.css"
 
@@ -30,12 +31,22 @@ const fragmentMono = Fragment_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: siteUrl,
   title: {
-    default: "Public-Service AI Playbooks",
-    template: "%s | Public-Service AI Playbooks",
+    default: siteName,
+    template: `%s | ${siteName}`,
   },
-  description:
-    "An independent open-source accelerator for exploring 17 public-service opportunities with published sources, safe starter data, and domain build partners.",
+  description: siteDescription,
+  applicationName: siteName,
+  creator: "Hypership",
+  robots: { index: true, follow: true },
+  openGraph: { type: "website", siteName, locale: "en_GB" },
+  twitter: { card: "summary_large_image" },
+}
+
+export const viewport: Viewport = {
+  themeColor: "#f4f1e8",
+  colorScheme: "light",
 }
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

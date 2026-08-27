@@ -1,16 +1,16 @@
-import type { Metadata } from "next"
-
 import { ExternalLink } from "@/components/site/external-link"
 import { getBuildPartnerDescriptor } from "@/lib/playbooks/build-partner"
 import { homepageExemplar } from "@/lib/playbooks/exemplar"
 import { getPlaybook } from "@/lib/playbooks/registry"
 import { repositoryFileUrl } from "@/lib/repository"
+import { pageMetadata } from "@/lib/site"
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
+  path: "/contribute",
   title: "Contribute",
   description:
     "Improve an opportunity, its published sources, synthetic data, domain brief or agent skill.",
-}
+})
 
 // Every example path points at the same playbook the homepage walks through.
 const exemplarSlug = homepageExemplar.slug

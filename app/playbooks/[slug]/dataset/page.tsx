@@ -11,6 +11,7 @@ import {
   getSyntheticDataset,
 } from "@/lib/playbooks/dataset-registry"
 import { getPlaybook, getPlaybookSlugs } from "@/lib/playbooks/registry"
+import { pageMetadata } from "@/lib/site"
 import { repositoryFileUrl, repositoryRawUrl } from "@/lib/repository"
 
 export const dynamicParams = false
@@ -36,14 +37,15 @@ export async function generateMetadata({
 
   const available = playbook.syntheticData.status === "available"
 
-  return {
+  return pageMetadata({
+    path: `/playbooks/${slug}/dataset`,
     title: available
       ? `${playbook.title}: synthetic dataset`
       : `${playbook.title}: no synthetic dataset`,
     description: available
       ? `Inspect every record, field, and limitation in the synthetic working data for ${playbook.title}.`
       : `Why ${playbook.title} has no synthetic dataset.`,
-  }
+  })
 }
 
 export default async function PlaybookDatasetPage({

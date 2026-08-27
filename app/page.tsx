@@ -8,6 +8,9 @@ import { getDatasetSummary } from "@/lib/playbooks/dataset-registry"
 import { homepageExemplar } from "@/lib/playbooks/exemplar"
 import { getPlaybook } from "@/lib/playbooks/registry"
 import { repositoryFileUrl, repositoryUrl } from "@/lib/repository"
+import { pageMetadata } from "@/lib/site"
+
+export const metadata = pageMetadata({ path: "/" })
 
 const exemplarSlug = homepageExemplar.slug
 

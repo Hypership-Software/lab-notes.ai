@@ -1,4 +1,3 @@
-import type { Metadata } from "next"
 import Link from "next/link"
 
 import { ExternalLink } from "@/components/site/external-link"
@@ -9,12 +8,14 @@ import {
 import { getBuildPartnerDescriptor } from "@/lib/playbooks/build-partner"
 import { homepageExemplar } from "@/lib/playbooks/exemplar"
 import { repositoryFileUrl } from "@/lib/repository"
+import { pageMetadata } from "@/lib/site"
 
-export const metadata: Metadata = {
+export const metadata = pageMetadata({
+  path: "/method",
   title: "How this works",
   description:
     "How strategy opportunities become researched, agent-ready builder playbooks without becoming product recommendations.",
-}
+})
 
 const stages = [
   {
